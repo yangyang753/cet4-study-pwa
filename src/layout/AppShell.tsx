@@ -1,0 +1,39 @@
+import type { PropsWithChildren } from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
+import '../styles/global.css';
+
+const primaryLinks = [
+  { to: '/today', label: '今日学习', icon: '⌂' },
+  { to: '/listen', label: '听力精练', icon: '◉' },
+  { to: '/practice', label: '专项练习', icon: '✎' },
+  { to: '/print', label: 'A4 打印', icon: '▤' },
+];
+
+function PrimaryNav({ mobile = false }: { mobile?: boolean }) {
+  return (
+    <nav className={mobile ? 'mobile-nav' : 'desktop-nav'} aria-label={mobile ? '移动端主导航' : '主导航'}>
+      {primaryLinks.map((item) => (
+        <NavLink key={item.to} to={item.to}>
+          <span aria-hidden="true">{item.icon}</span>
+          {item.label}
+        </NavLink>
+      ))}
+    </nav>
+  );
+}
+
+export function AppShell({ children }: PropsWithChildren) {
+  return (
+    <div className="app-shell">
+      <aside className="sidebar">
+        <NavLink className="brand" to="/today" aria-label="四级向前首页">
+          <span className="brand-mark">4</span>
+          <span><strong>四级向前</strong><small>CET-4 Study Lab</small></span>
+        </NavLink>
+        <PrimaryNav />
+      </aside>
+      <main className="main-content">{children ?? <Outlet />}</main>
+      <PrimaryNav mobile />
+    </div>
+  );
+}

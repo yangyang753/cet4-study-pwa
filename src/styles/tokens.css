@@ -1,0 +1,14 @@
+:root {
+  --color-ink: #18251f;
+  --color-muted: #6f7d75;
+  --color-paper: #f7f4ec;
+  --color-panel: #fffdf7;
+  --color-green-dark: #183f33;
+  --color-green: #236b52;
+  --color-green-soft: #d8eadf;
+  --color-yellow: #f2c269;
+  --color-orange: #e68145;
+  --color-line: #dfe4dc;
+  --radius-card: 22px;
+  --shadow-card: 0 18px 45px rgb(32 61 49 / 12%);
+}

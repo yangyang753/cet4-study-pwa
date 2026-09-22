@@ -1,0 +1,31 @@
+@import './tokens.css';
+
+* { box-sizing: border-box; }
+html { color-scheme: light; }
+body { margin: 0; color: var(--color-ink); background: var(--color-paper); font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif; }
+a { color: inherit; text-decoration: none; }
+button, input, textarea { font: inherit; }
+:focus-visible { outline: 3px solid var(--color-yellow); outline-offset: 3px; }
+
+.app-shell { min-height: 100vh; display: grid; grid-template-columns: 246px minmax(0, 1fr); }
+.sidebar { position: sticky; top: 0; height: 100vh; padding: 30px 22px; color: white; background: var(--color-green-dark); }
+.brand { display: flex; gap: 12px; align-items: center; margin-bottom: 36px; }
+.brand-mark { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; color: var(--color-green-dark); background: var(--color-yellow); font-weight: 900; }
+.brand strong, .brand small { display: block; }
+.brand small { color: #bcd1c7; font-size: 11px; }
+.desktop-nav { display: grid; gap: 8px; }
+.desktop-nav a { padding: 13px 14px; border-radius: 12px; color: #cfe0d8; }
+.desktop-nav a span { margin-right: 10px; }
+.desktop-nav a.active, .desktop-nav a:hover { color: white; background: rgb(255 255 255 / 12%); }
+.main-content { width: min(100%, 1500px); margin: 0 auto; padding: 34px clamp(24px, 5vw, 70px) 55px; }
+.mobile-nav { display: none; }
+
+@media (max-width: 900px) {
+  .app-shell { display: block; padding-bottom: 76px; }
+  .sidebar { display: none; }
+  .main-content { padding: 22px 16px 36px; }
+  .mobile-nav { position: fixed; z-index: 20; right: 0; bottom: 0; left: 0; display: grid; grid-template-columns: repeat(4, 1fr); min-height: 68px; padding: 8px; border-top: 1px solid var(--color-line); background: rgb(255 253 247 / 96%); backdrop-filter: blur(12px); }
+  .mobile-nav a { display: grid; place-items: center; gap: 2px; color: var(--color-muted); font-size: 11px; }
+  .mobile-nav a span { font-size: 18px; }
+  .mobile-nav a.active { color: var(--color-green); font-weight: 800; }
+}
