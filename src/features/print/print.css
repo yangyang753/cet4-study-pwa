@@ -1,0 +1,14 @@
+@page { size: A4 portrait; margin: 16mm; }
+.print-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.print-toolbar button { padding: 12px 18px; border: 0; border-radius: 12px; background: var(--color-yellow); font-weight: 800; }
+.print-sheet { width: min(100%, 210mm); min-height: 297mm; margin: 0 auto 28px; padding: 18mm; color: #111; background: white; box-shadow: var(--shadow-card); font-family: Georgia, "Noto Serif SC", serif; }
+.print-sheet > h1 { text-align: center; font-size: 22px; }
+.print-meta { display: flex; justify-content: space-between; padding-bottom: 12px; margin-bottom: 24px; border-bottom: 1px solid #333; }
+.print-block { break-inside: avoid; margin: 0 0 24px; }
+.print-block h2 { font-size: 16px; line-height: 1.7; }
+.print-block p { margin-left: 24px; }
+.writing-space { min-height: 140px; margin: 12px 0 28px; break-inside: avoid; background: repeating-linear-gradient(to bottom, transparent 0, transparent 27px, #bbb 28px); }
+.answer-sheet { break-before: page; }
+.print-sheet footer { margin-top: 30px; text-align: center; color: #666; font-size: 12px; }
+@media print { .sidebar, .mobile-nav, .print-toolbar { display: none !important; } .app-shell { display: block; } .main-content { padding: 0; } .print-sheet { width: 100%; min-height: auto; margin: 0; padding: 0; box-shadow: none; } }
+@media (max-width: 700px) { .print-toolbar { align-items: flex-start; gap: 14px; } .print-sheet { padding: 28px 22px; } .print-meta { display: grid; gap: 8px; } }

@@ -4,6 +4,8 @@ import { TodayPage } from '../features/dashboard/TodayPage';
 import { ExerciseRunner } from '../features/practice/ExerciseRunner';
 import { ListeningPage } from '../features/listening/ListeningPage';
 import { ReviewPage } from '../features/review/ReviewPage';
+import { PrintPage } from '../features/print/PrintPage';
+import { ExamSession } from '../features/exam/ExamSession';
 
 function Placeholder({ title }: { title: string }) {
   return <section><h1>{title}</h1><p>模块正在准备中。</p></section>;
@@ -20,7 +22,8 @@ export const router = createBrowserRouter([
       { path: 'listen', element: <ListeningPage /> },
       { path: 'practice', element: <ExerciseRunner setId="set-starter" /> },
       { path: 'review', element: <ReviewPage /> },
-      { path: 'print', element: <Placeholder title="A4 打印中心" /> },
+      { path: 'print', element: <PrintPage /> },
+      { path: 'exam', element: <ExamSession /> },
     ],
   },
 ]);
