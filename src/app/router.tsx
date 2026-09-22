@@ -3,6 +3,7 @@ import { AppShell } from '../layout/AppShell';
 import { TodayPage } from '../features/dashboard/TodayPage';
 import { ExerciseRunner } from '../features/practice/ExerciseRunner';
 import { ListeningPage } from '../features/listening/ListeningPage';
+import { ReviewPage } from '../features/review/ReviewPage';
 
 function Placeholder({ title }: { title: string }) {
   return <section><h1>{title}</h1><p>模块正在准备中。</p></section>;
@@ -18,7 +19,7 @@ export const router = createBrowserRouter([
       { path: 'today', element: <TodayPage /> },
       { path: 'listen', element: <ListeningPage /> },
       { path: 'practice', element: <ExerciseRunner setId="set-starter" /> },
-      { path: 'review', element: <Placeholder title="错题复习" /> },
+      { path: 'review', element: <ReviewPage /> },
       { path: 'print', element: <Placeholder title="A4 打印中心" /> },
     ],
   },
