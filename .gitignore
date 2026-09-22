@@ -11,3 +11,4 @@ vite.config.js
 vite.config.d.ts
 tmp/
 dev-dist/
+.vercel
