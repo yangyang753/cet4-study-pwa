@@ -1,0 +1,11 @@
+.exercise-runner { max-width: 820px; margin: 0 auto; padding: 28px; border-radius: var(--radius-card); background: var(--color-panel); box-shadow: var(--shadow-card); }
+.exercise-runner > header { display: flex; justify-content: space-between; margin-bottom: 24px; color: var(--color-muted); }
+.exercise-runner fieldset { border: 0; padding: 0; }
+.exercise-runner legend { margin-bottom: 20px; font-size: 24px; font-weight: 800; }
+.answer-option { display: flex; gap: 12px; padding: 14px; margin: 10px 0; border: 1px solid var(--color-line); border-radius: 14px; }
+.answer-option:has(input:checked) { border-color: var(--color-green); background: var(--color-green-soft); }
+.primary-action { margin-top: 18px; padding: 12px 18px; border: 0; border-radius: 12px; color: var(--color-green-dark); background: var(--color-yellow); font-weight: 800; }
+.explanation { margin-top: 22px; padding: 20px; border-radius: 16px; background: var(--color-green-soft); }
+.explanation.incorrect { background: #f8e5d6; }
+.reason-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.reason-row button { padding: 8px 12px; border: 1px solid var(--color-line); border-radius: 999px; background: white; }
