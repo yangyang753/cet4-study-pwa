@@ -1,0 +1,134 @@
+[
+  {
+    "id": "trans-01",
+    "theme": "志愿服务",
+    "prompt": "近年来，志愿服务受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 志愿服务 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  },
+  {
+    "id": "trans-02",
+    "theme": "传统节日",
+    "prompt": "近年来，传统节日受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 传统节日 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  },
+  {
+    "id": "trans-03",
+    "theme": "公共交通",
+    "prompt": "近年来，公共交通受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 公共交通 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  },
+  {
+    "id": "trans-04",
+    "theme": "数字支付",
+    "prompt": "近年来，数字支付受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 数字支付 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  },
+  {
+    "id": "trans-05",
+    "theme": "在线教育",
+    "prompt": "近年来，在线教育受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 在线教育 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  },
+  {
+    "id": "trans-06",
+    "theme": "环境保护",
+    "prompt": "近年来，环境保护受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 环境保护 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  },
+  {
+    "id": "trans-07",
+    "theme": "中国茶文化",
+    "prompt": "近年来，中国茶文化受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 中国茶文化 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  },
+  {
+    "id": "trans-08",
+    "theme": "城市公园",
+    "prompt": "近年来，城市公园受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 城市公园 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  },
+  {
+    "id": "trans-09",
+    "theme": "科技创新",
+    "prompt": "近年来，科技创新受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 科技创新 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  },
+  {
+    "id": "trans-10",
+    "theme": "全民健身",
+    "prompt": "近年来，全民健身受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 全民健身 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  },
+  {
+    "id": "trans-11",
+    "theme": "文化遗产",
+    "prompt": "近年来，文化遗产受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 文化遗产 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  },
+  {
+    "id": "trans-12",
+    "theme": "乡村发展",
+    "prompt": "近年来，乡村发展受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。",
+    "referenceAnswer": "In recent years, 乡村发展 has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.",
+    "rubric": [
+      "主干完整",
+      "not only...but also... 使用正确",
+      "时态和主谓一致正确"
+    ]
+  }
+]

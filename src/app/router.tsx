@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react';
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import { AppShell } from '../layout/AppShell';
 import { TodayPage } from '../features/dashboard/TodayPage';
@@ -6,6 +7,7 @@ import { ListeningPage } from '../features/listening/ListeningPage';
 import { ReviewPage } from '../features/review/ReviewPage';
 import { PrintPage } from '../features/print/PrintPage';
 import { ExamSession } from '../features/exam/ExamSession';
+const KnowledgePage = lazy(() => import('../features/knowledge/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
 
 function Placeholder({ title }: { title: string }) {
   return <section><h1>{title}</h1><p>模块正在准备中。</p></section>;
@@ -24,6 +26,7 @@ export const router = createBrowserRouter([
       { path: 'review', element: <ReviewPage /> },
       { path: 'print', element: <PrintPage /> },
       { path: 'exam', element: <ExamSession /> },
+      { path: 'knowledge', element: <Suspense fallback={<p>正在加载高频知识库…</p>}><KnowledgePage /></Suspense> },
     ],
   },
 ]);

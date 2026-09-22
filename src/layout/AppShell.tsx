@@ -6,13 +6,14 @@ const primaryLinks = [
   { to: '/today', label: '今日学习', icon: '⌂' },
   { to: '/listen', label: '听力精练', icon: '◉' },
   { to: '/practice', label: '专项练习', icon: '✎' },
+  { to: '/knowledge', label: '高频知识', icon: 'Aa', desktopOnly: true },
   { to: '/print', label: 'A4 打印', icon: '▤' },
 ];
 
 function PrimaryNav({ mobile = false }: { mobile?: boolean }) {
   return (
     <nav className={mobile ? 'mobile-nav' : 'desktop-nav'} aria-label={mobile ? '移动端主导航' : '主导航'}>
-      {primaryLinks.map((item) => (
+      {primaryLinks.filter((item) => !(mobile && item.desktopOnly)).map((item) => (
         <NavLink key={item.to} to={item.to}>
           <span aria-hidden="true">{item.icon}</span>
           {item.label}

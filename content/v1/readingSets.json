@@ -1,0 +1,602 @@
+[
+  {
+    "id": "read-01",
+    "type": "cloze",
+    "theme": "校园志愿活动",
+    "difficulty": "foundation",
+    "passage": "校园志愿活动 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-02",
+    "type": "matching",
+    "theme": "图书馆服务",
+    "difficulty": "foundation",
+    "passage": "图书馆服务 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-03",
+    "type": "reading",
+    "theme": "课程选择",
+    "difficulty": "foundation",
+    "passage": "课程选择 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-04",
+    "type": "cloze",
+    "theme": "宿舍生活",
+    "difficulty": "foundation",
+    "passage": "宿舍生活 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-05",
+    "type": "matching",
+    "theme": "学生社团",
+    "difficulty": "foundation",
+    "passage": "学生社团 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-06",
+    "type": "reading",
+    "theme": "实习安排",
+    "difficulty": "foundation",
+    "passage": "实习安排 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-07",
+    "type": "cloze",
+    "theme": "城市交通",
+    "difficulty": "foundation",
+    "passage": "城市交通 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-08",
+    "type": "matching",
+    "theme": "环境保护",
+    "difficulty": "foundation",
+    "passage": "环境保护 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-09",
+    "type": "reading",
+    "theme": "健康饮食",
+    "difficulty": "foundation",
+    "passage": "健康饮食 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-10",
+    "type": "cloze",
+    "theme": "运动习惯",
+    "difficulty": "foundation",
+    "passage": "运动习惯 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-11",
+    "type": "matching",
+    "theme": "数字学习",
+    "difficulty": "standard",
+    "passage": "数字学习 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-12",
+    "type": "reading",
+    "theme": "时间管理",
+    "difficulty": "standard",
+    "passage": "时间管理 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-13",
+    "type": "cloze",
+    "theme": "社区服务",
+    "difficulty": "standard",
+    "passage": "社区服务 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-14",
+    "type": "matching",
+    "theme": "旅游计划",
+    "difficulty": "standard",
+    "passage": "旅游计划 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-15",
+    "type": "reading",
+    "theme": "文化节日",
+    "difficulty": "standard",
+    "passage": "文化节日 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-16",
+    "type": "cloze",
+    "theme": "科技创新",
+    "difficulty": "standard",
+    "passage": "科技创新 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-17",
+    "type": "matching",
+    "theme": "就业准备",
+    "difficulty": "standard",
+    "passage": "就业准备 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-18",
+    "type": "reading",
+    "theme": "团队合作",
+    "difficulty": "standard",
+    "passage": "团队合作 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-19",
+    "type": "cloze",
+    "theme": "公共安全",
+    "difficulty": "standard",
+    "passage": "公共安全 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-20",
+    "type": "matching",
+    "theme": "消费选择",
+    "difficulty": "standard",
+    "passage": "消费选择 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-21",
+    "type": "reading",
+    "theme": "气候变化",
+    "difficulty": "standard",
+    "passage": "气候变化 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-22",
+    "type": "cloze",
+    "theme": "博物馆活动",
+    "difficulty": "standard",
+    "passage": "博物馆活动 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-23",
+    "type": "matching",
+    "theme": "学术讲座",
+    "difficulty": "challenge",
+    "passage": "学术讲座 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-24",
+    "type": "reading",
+    "theme": "在线会议",
+    "difficulty": "challenge",
+    "passage": "在线会议 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-25",
+    "type": "cloze",
+    "theme": "人工智能",
+    "difficulty": "challenge",
+    "passage": "人工智能 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-26",
+    "type": "matching",
+    "theme": "终身学习",
+    "difficulty": "challenge",
+    "passage": "终身学习 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-27",
+    "type": "reading",
+    "theme": "传统手工艺",
+    "difficulty": "challenge",
+    "passage": "传统手工艺 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-28",
+    "type": "cloze",
+    "theme": "食品浪费",
+    "difficulty": "challenge",
+    "passage": "食品浪费 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-29",
+    "type": "matching",
+    "theme": "心理健康",
+    "difficulty": "challenge",
+    "passage": "心理健康 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  },
+  {
+    "id": "read-30",
+    "type": "reading",
+    "theme": "阅读习惯",
+    "difficulty": "challenge",
+    "passage": "阅读习惯 has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.",
+    "questions": [
+      {
+        "prompt": "What helped participants continue?",
+        "options": [
+          "Higher costs",
+          "Clear goals and feedback",
+          "Less communication",
+          "A shorter semester"
+        ],
+        "answer": 1,
+        "explanationZh": "第三句直接说明 clear goals and timely feedback 帮助参与者坚持。"
+      }
+    ]
+  }
+]

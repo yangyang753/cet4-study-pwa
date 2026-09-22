@@ -10,7 +10,11 @@
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "e2e": "playwright test",
-    "content:validate": "tsx scripts/validate-content.mts"
+    "content:validate": "tsx scripts/validate-content.mts",
+    "content:generate": "tsx scripts/generate-content.mts",
+    "content:audit": "tsx scripts/audit-content.mts",
+    "audio:generate": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/generate-audio.ps1",
+    "audio:audit": "tsx scripts/audio-manifest.mts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

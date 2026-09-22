@@ -1,0 +1,27 @@
+.knowledge-page { display: grid; gap: 22px; }
+.knowledge-heading { display: flex; justify-content: space-between; gap: 24px; align-items: end; }
+.knowledge-heading span { color: var(--color-orange); font-size: 12px; font-weight: 900; letter-spacing: .14em; }
+.knowledge-heading h1 { margin: 7px 0; font-size: clamp(30px, 4vw, 48px); }
+.knowledge-heading p, .word-card small, .phrase-list small { color: var(--color-muted); }
+.knowledge-heading a { padding: 12px 16px; border-radius: 12px; color: white; background: var(--color-green); font-weight: 800; white-space: nowrap; }
+.inventory { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.inventory article { padding: 18px 22px; border: 1px solid var(--color-line); border-radius: 18px; background: var(--color-panel); }
+.inventory strong { display: block; color: var(--color-green); font: 800 34px/1 Georgia, serif; }
+.inventory span { color: var(--color-muted); font-size: 13px; }
+.knowledge-tabs { display: flex; gap: 8px; padding: 6px; width: max-content; max-width: 100%; border-radius: 14px; background: var(--color-green-soft); }
+.knowledge-tabs button { padding: 10px 16px; border: 0; border-radius: 10px; color: var(--color-green-dark); background: transparent; font-weight: 800; }
+.knowledge-tabs button[aria-selected="true"] { color: white; background: var(--color-green); }
+.knowledge-search { display: grid; gap: 7px; color: var(--color-muted); font-size: 13px; font-weight: 700; }
+.knowledge-search input { width: min(100%, 520px); padding: 13px 15px; border: 1px solid var(--color-line); border-radius: 12px; background: white; }
+.word-grid, .grammar-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.word-card, .grammar-grid article, .phrase-list article { padding: 20px; border: 1px solid var(--color-line); border-radius: 18px; background: var(--color-panel); }
+.word-card > span, .grammar-grid article > span { float: right; color: var(--color-orange); font-size: 11px; font-weight: 900; }
+.word-card h2, .phrase-list h2, .grammar-grid h2 { margin: 0 0 5px; font-size: 20px; }
+.word-card p { margin: 6px 0; }
+.word-card .phonetic { color: var(--color-green); }
+.phrase-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.phrase-list p { margin: 4px 0 10px; color: var(--color-green); }
+.grammar-grid ul { padding-left: 18px; color: var(--color-muted); }
+.empty-result { padding: 24px; border-radius: 16px; background: var(--color-green-soft); }
+@media (max-width: 900px) { .word-grid, .grammar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 620px) { .knowledge-heading { align-items: flex-start; flex-direction: column; } .inventory { grid-template-columns: repeat(3, 1fr); } .inventory article { padding: 14px 10px; } .inventory strong { font-size: 26px; } .word-grid, .grammar-grid, .phrase-list { grid-template-columns: 1fr; } .knowledge-tabs { width: 100%; } .knowledge-tabs button { flex: 1; padding-inline: 8px; } }

@@ -1,0 +1,938 @@
+[
+  {
+    "id": "listen-01",
+    "type": "news",
+    "theme": "校园志愿活动",
+    "themeEn": "campus volunteering",
+    "difficulty": "foundation",
+    "transcript": "A university program about campus volunteering has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about campus volunteering has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-01.wav"
+  },
+  {
+    "id": "listen-02",
+    "type": "conversation",
+    "theme": "图书馆服务",
+    "themeEn": "library services",
+    "difficulty": "foundation",
+    "transcript": "A university program about library services has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about library services has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-02.wav"
+  },
+  {
+    "id": "listen-03",
+    "type": "passage",
+    "theme": "课程选择",
+    "themeEn": "course selection",
+    "difficulty": "foundation",
+    "transcript": "A university program about course selection has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about course selection has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-03.wav"
+  },
+  {
+    "id": "listen-04",
+    "type": "news",
+    "theme": "宿舍生活",
+    "themeEn": "dormitory life",
+    "difficulty": "foundation",
+    "transcript": "A university program about dormitory life has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about dormitory life has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-04.wav"
+  },
+  {
+    "id": "listen-05",
+    "type": "conversation",
+    "theme": "学生社团",
+    "themeEn": "student clubs",
+    "difficulty": "foundation",
+    "transcript": "A university program about student clubs has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about student clubs has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-05.wav"
+  },
+  {
+    "id": "listen-06",
+    "type": "passage",
+    "theme": "实习安排",
+    "themeEn": "internship arrangements",
+    "difficulty": "foundation",
+    "transcript": "A university program about internship arrangements has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about internship arrangements has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-06.wav"
+  },
+  {
+    "id": "listen-07",
+    "type": "news",
+    "theme": "城市交通",
+    "themeEn": "urban transport",
+    "difficulty": "foundation",
+    "transcript": "A university program about urban transport has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about urban transport has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-07.wav"
+  },
+  {
+    "id": "listen-08",
+    "type": "conversation",
+    "theme": "环境保护",
+    "themeEn": "environmental protection",
+    "difficulty": "foundation",
+    "transcript": "A university program about environmental protection has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about environmental protection has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-08.wav"
+  },
+  {
+    "id": "listen-09",
+    "type": "passage",
+    "theme": "健康饮食",
+    "themeEn": "healthy eating",
+    "difficulty": "standard",
+    "transcript": "A university program about healthy eating has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about healthy eating has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-09.wav"
+  },
+  {
+    "id": "listen-10",
+    "type": "news",
+    "theme": "运动习惯",
+    "themeEn": "exercise habits",
+    "difficulty": "standard",
+    "transcript": "A university program about exercise habits has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about exercise habits has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-10.wav"
+  },
+  {
+    "id": "listen-11",
+    "type": "conversation",
+    "theme": "数字学习",
+    "themeEn": "digital learning",
+    "difficulty": "standard",
+    "transcript": "A university program about digital learning has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about digital learning has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-11.wav"
+  },
+  {
+    "id": "listen-12",
+    "type": "passage",
+    "theme": "时间管理",
+    "themeEn": "time management",
+    "difficulty": "standard",
+    "transcript": "A university program about time management has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about time management has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-12.wav"
+  },
+  {
+    "id": "listen-13",
+    "type": "news",
+    "theme": "社区服务",
+    "themeEn": "community service",
+    "difficulty": "standard",
+    "transcript": "A university program about community service has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about community service has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-13.wav"
+  },
+  {
+    "id": "listen-14",
+    "type": "conversation",
+    "theme": "旅游计划",
+    "themeEn": "travel planning",
+    "difficulty": "standard",
+    "transcript": "A university program about travel planning has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about travel planning has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-14.wav"
+  },
+  {
+    "id": "listen-15",
+    "type": "passage",
+    "theme": "文化节日",
+    "themeEn": "cultural festivals",
+    "difficulty": "standard",
+    "transcript": "A university program about cultural festivals has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about cultural festivals has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-15.wav"
+  },
+  {
+    "id": "listen-16",
+    "type": "news",
+    "theme": "科技创新",
+    "themeEn": "technological innovation",
+    "difficulty": "standard",
+    "transcript": "A university program about technological innovation has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about technological innovation has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-16.wav"
+  },
+  {
+    "id": "listen-17",
+    "type": "conversation",
+    "theme": "就业准备",
+    "themeEn": "career preparation",
+    "difficulty": "standard",
+    "transcript": "A university program about career preparation has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about career preparation has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-17.wav"
+  },
+  {
+    "id": "listen-18",
+    "type": "passage",
+    "theme": "团队合作",
+    "themeEn": "teamwork",
+    "difficulty": "standard",
+    "transcript": "A university program about teamwork has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about teamwork has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-18.wav"
+  },
+  {
+    "id": "listen-19",
+    "type": "news",
+    "theme": "公共安全",
+    "themeEn": "public safety",
+    "difficulty": "challenge",
+    "transcript": "A university program about public safety has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about public safety has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-19.wav"
+  },
+  {
+    "id": "listen-20",
+    "type": "conversation",
+    "theme": "消费选择",
+    "themeEn": "consumer choices",
+    "difficulty": "challenge",
+    "transcript": "A university program about consumer choices has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about consumer choices has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-20.wav"
+  },
+  {
+    "id": "listen-21",
+    "type": "passage",
+    "theme": "气候变化",
+    "themeEn": "climate change",
+    "difficulty": "challenge",
+    "transcript": "A university program about climate change has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about climate change has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-21.wav"
+  },
+  {
+    "id": "listen-22",
+    "type": "news",
+    "theme": "博物馆活动",
+    "themeEn": "museum activities",
+    "difficulty": "challenge",
+    "transcript": "A university program about museum activities has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about museum activities has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-22.wav"
+  },
+  {
+    "id": "listen-23",
+    "type": "conversation",
+    "theme": "学术讲座",
+    "themeEn": "academic lectures",
+    "difficulty": "challenge",
+    "transcript": "A university program about academic lectures has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about academic lectures has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-23.wav"
+  },
+  {
+    "id": "listen-24",
+    "type": "passage",
+    "theme": "在线会议",
+    "themeEn": "online meetings",
+    "difficulty": "challenge",
+    "transcript": "A university program about online meetings has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "segments": [
+      {
+        "start": 0,
+        "end": 7,
+        "text": "A university program about online meetings has introduced a new weekly activity."
+      },
+      {
+        "start": 7,
+        "end": 15,
+        "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
+      },
+      {
+        "start": 15,
+        "end": 23,
+        "text": "Students are advised to register early and bring the materials listed in the notice."
+      }
+    ],
+    "questions": [
+      {
+        "prompt": "When is the additional session available?",
+        "options": [
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
+        ],
+        "answer": 1,
+        "explanationZh": "but 后说明新增场次在周日下午。"
+      }
+    ],
+    "audioSrc": "/audio/v1/listen-24.wav"
+  }
+]

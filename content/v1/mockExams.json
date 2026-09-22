@@ -1,0 +1,122 @@
+[
+  {
+    "id": "mock-1",
+    "title": "阶段模拟卷 1",
+    "listeningSetIds": [
+      "listen-01",
+      "listen-02",
+      "listen-03",
+      "listen-04"
+    ],
+    "readingSetIds": [
+      "read-01",
+      "read-02",
+      "read-03",
+      "read-04",
+      "read-05"
+    ],
+    "translationId": "trans-01",
+    "writingId": "write-01",
+    "timingMinutes": 125
+  },
+  {
+    "id": "mock-2",
+    "title": "阶段模拟卷 2",
+    "listeningSetIds": [
+      "listen-05",
+      "listen-06",
+      "listen-07",
+      "listen-08"
+    ],
+    "readingSetIds": [
+      "read-06",
+      "read-07",
+      "read-08",
+      "read-09",
+      "read-10"
+    ],
+    "translationId": "trans-03",
+    "writingId": "write-03",
+    "timingMinutes": 125
+  },
+  {
+    "id": "mock-3",
+    "title": "阶段模拟卷 3",
+    "listeningSetIds": [
+      "listen-09",
+      "listen-10",
+      "listen-11",
+      "listen-12"
+    ],
+    "readingSetIds": [
+      "read-11",
+      "read-12",
+      "read-13",
+      "read-14",
+      "read-15"
+    ],
+    "translationId": "trans-05",
+    "writingId": "write-05",
+    "timingMinutes": 125
+  },
+  {
+    "id": "mock-4",
+    "title": "阶段模拟卷 4",
+    "listeningSetIds": [
+      "listen-13",
+      "listen-14",
+      "listen-15",
+      "listen-16"
+    ],
+    "readingSetIds": [
+      "read-16",
+      "read-17",
+      "read-18",
+      "read-19",
+      "read-20"
+    ],
+    "translationId": "trans-07",
+    "writingId": "write-07",
+    "timingMinutes": 125
+  },
+  {
+    "id": "mock-5",
+    "title": "阶段模拟卷 5",
+    "listeningSetIds": [
+      "listen-17",
+      "listen-18",
+      "listen-19",
+      "listen-20"
+    ],
+    "readingSetIds": [
+      "read-21",
+      "read-22",
+      "read-23",
+      "read-24",
+      "read-25"
+    ],
+    "translationId": "trans-09",
+    "writingId": "write-09",
+    "timingMinutes": 125
+  },
+  {
+    "id": "mock-6",
+    "title": "阶段模拟卷 6",
+    "listeningSetIds": [
+      "listen-21",
+      "listen-22",
+      "listen-23",
+      "listen-24"
+    ],
+    "readingSetIds": [
+      "read-26",
+      "read-27",
+      "read-28",
+      "read-29",
+      "read-30"
+    ],
+    "translationId": "trans-11",
+    "writingId": "write-11",
+    "timingMinutes": 125
+  }
+]
