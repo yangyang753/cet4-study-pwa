@@ -69,4 +69,6 @@ pnpm e2e
 
 `pnpm build` 生成 `dist/` 静态站点，可部署到任意 HTTPS 静态托管服务。托管平台需要将未知路径回退到 `index.html`，以支持 `/today`、`/knowledge` 等前端路由。PWA 与服务工作线程在 HTTPS 或 localhost 下启用。
 
+仓库已提供 `vercel.json`，可直接运行 `vercel --prod` 发布到 Vercel。
+
 官方考试信息：[全国大学英语四、六级考试报名网](https://cet-kw.neea.edu.cn/)。
