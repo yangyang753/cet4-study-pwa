@@ -17,7 +17,7 @@ export function KnowledgePage() {
   const words = filteredWords.slice(0, visibleCount);
 
   return <section className="knowledge-page">
-    <header className="knowledge-heading"><div><span>HIGH-FREQUENCY LIBRARY</span><h1>四级高频知识库</h1><p>按历年公开词频数据整理，先掌握高频，再补齐薄弱点。</p></div><a href="/print">打印今日练习 →</a></header>
+    <header className="knowledge-heading"><div><span>HIGH-FREQUENCY LIBRARY</span><h1>四级高频知识库</h1><p>按历年公开词频数据整理，先掌握高频，再补齐薄弱点。</p></div><a href={`${import.meta.env.BASE_URL}print`}>打印今日练习 →</a></header>
     <div className="inventory" aria-label="内容规模"><article><strong>800</strong><span>高频词</span></article><article><strong>126</strong><span>重点搭配</span></article><article><strong>15</strong><span>语法专题</span></article></div>
     <div className="knowledge-tabs" role="tablist" aria-label="知识类型">
       <button role="tab" aria-selected={tab === 'vocabulary'} onClick={() => setTab('vocabulary')}>高频词汇</button>

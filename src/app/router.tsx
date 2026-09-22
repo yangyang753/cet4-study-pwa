@@ -10,12 +10,13 @@ import { AccountPage } from '../features/auth/AccountPage';
 import { supabaseClient } from '../lib/runtime';
 const KnowledgePage = lazy(() => import('../features/knowledge/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
 const PrintPage = lazy(() => import('../features/print/PrintPage').then((module) => ({ default: module.PrintPage })));
+const basename = import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL.replace(/\/$/, '');
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <AppShell />,
-    errorElement: <main><h1>页面暂时无法显示</h1><a href="/today">返回今日学习</a></main>,
+    errorElement: <main><h1>页面暂时无法显示</h1><a href={`${import.meta.env.BASE_URL}today`}>返回今日学习</a></main>,
     children: [
       { index: true, element: <Navigate replace to="/today" /> },
       { path: 'today', element: <TodayPage /> },
@@ -28,4 +29,4 @@ export const router = createBrowserRouter([
       { path: 'account', element: <AccountPage cloudConfigured={Boolean(supabaseClient)} /> },
     ],
   },
-]);
+], { basename });
