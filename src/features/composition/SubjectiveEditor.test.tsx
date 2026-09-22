@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { SubjectiveQuestion } from '../../domain/content';
 import { SubjectiveEditor } from './SubjectiveEditor';
+import type { LearningRepository } from '../../data/repositories/LearningRepository';
 
 const question: SubjectiveQuestion = { id: 'write-1', version: 1, type: 'writing', difficulty: 'foundation', prompt: 'Write about study habits.', knowledgePointIds: ['kp'], explanationZh: '结构完整。', sourceNote: 'Original exercise modeled on the official CET-4 format', rubric: ['观点明确', '结构完整'], referenceAnswer: 'Daily practice is useful.' };
 
@@ -25,5 +26,14 @@ describe('SubjectiveEditor', () => {
     await user.click(screen.getByRole('button', { name: '提交自查' }));
     expect(screen.getByText('Daily practice is useful.')).toBeInTheDocument();
     expect(screen.queryByText(/官方分数/)).not.toBeInTheDocument();
+  });
+
+  it('queues the autosaved draft for cross-device sync', async () => {
+    vi.useFakeTimers();
+    const repository = { saveDraft: vi.fn().mockResolvedValue(undefined) } as unknown as LearningRepository;
+    render(<SubjectiveEditor question={question} kind="writing" repository={repository} />);
+    fireEvent.change(screen.getByLabelText('写作答题区'), { target: { value: 'A synced draft.' } });
+    await act(() => vi.advanceTimersByTimeAsync(2000));
+    expect(repository.saveDraft).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'write-1', body: 'A synced draft.' }));
   });
 });

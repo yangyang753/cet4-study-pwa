@@ -10,16 +10,19 @@ export class DexieLearningRepository implements LearningRepository {
       await this.db.attempts.put(attempt);
       await this.put({ id: `attempt:${attempt.id}`, entityId: attempt.id, kind: 'attempt', payload: attempt as unknown as Record<string, unknown>, createdAt: attempt.createdAt, attempts: 0 });
     });
+    this.requestSync();
   }
   async saveDraft(draft: DraftRecord) {
     await this.db.transaction('rw', this.db.drafts, this.db.syncQueue, async () => {
       await this.db.drafts.put(draft);
       await this.put({ id: `draft:${draft.id}:${draft.updatedAt}`, entityId: draft.id, kind: 'draft', payload: draft as unknown as Record<string, unknown>, createdAt: draft.updatedAt, attempts: 0 });
     });
+    this.requestSync();
   }
   getPendingOperations() { return this.list(); }
   list() { return this.db.syncQueue.toArray(); }
   async put(operation: PendingOperation) { if (!await this.db.syncQueue.get(operation.id)) await this.db.syncQueue.put(operation); }
   async remove(id: string) { await this.db.syncQueue.delete(id); }
   async replace(operation: PendingOperation) { await this.db.syncQueue.put(operation); }
+  private requestSync() { if (typeof window !== 'undefined') window.dispatchEvent(new Event('cet4:sync-needed')); }
 }

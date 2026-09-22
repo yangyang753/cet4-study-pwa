@@ -10,5 +10,15 @@
 .writing-space { min-height: 140px; margin: 12px 0 28px; break-inside: avoid; background: repeating-linear-gradient(to bottom, transparent 0, transparent 27px, #bbb 28px); }
 .answer-sheet { break-before: page; }
 .print-sheet footer { margin-top: 30px; text-align: center; color: #666; font-size: 12px; }
+.knowledge-print { break-after: page; }
+.print-instruction { padding: 8px 12px; border: 1px solid #bbb; }
+.print-word-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 18px; }
+.print-word-grid > div { display: grid; grid-template-columns: 18px 1fr auto; align-items: baseline; border-bottom: 1px dotted #aaa; font-size: 11px; }
+.print-word-grid p { grid-column: 2 / 4; margin: 2px 0 5px; }
+.print-word-grid span, .print-knowledge-columns span { color: #555; }
+.print-knowledge-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.print-knowledge-columns h2 { border-bottom: 2px solid #222; font-size: 16px; }
+.print-knowledge-columns p { margin: 0 0 8px; font-size: 11px; }
+.print-knowledge-columns b, .print-knowledge-columns span { display: block; }
 @media print { .sidebar, .mobile-nav, .print-toolbar { display: none !important; } .app-shell { display: block; } .main-content { padding: 0; } .print-sheet { width: 100%; min-height: auto; margin: 0; padding: 0; box-shadow: none; } }
-@media (max-width: 700px) { .print-toolbar { align-items: flex-start; gap: 14px; } .print-sheet { padding: 28px 22px; } .print-meta { display: grid; gap: 8px; } }
+@media (max-width: 700px) { .print-toolbar { align-items: flex-start; gap: 14px; } .print-sheet { padding: 28px 22px; } .print-meta { display: grid; gap: 8px; } .print-word-grid, .print-knowledge-columns { grid-template-columns: 1fr; } }

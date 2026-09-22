@@ -7,6 +7,7 @@ const primaryLinks = [
   { to: '/listen', label: '听力精练', icon: '◉' },
   { to: '/practice', label: '专项练习', icon: '✎' },
   { to: '/knowledge', label: '高频知识', icon: 'Aa', desktopOnly: true },
+  { to: '/account', label: '账户同步', icon: '◎', desktopOnly: true },
   { to: '/print', label: 'A4 打印', icon: '▤' },
 ];
 

@@ -23,5 +23,6 @@
 .phrase-list p { margin: 4px 0 10px; color: var(--color-green); }
 .grammar-grid ul { padding-left: 18px; color: var(--color-muted); }
 .empty-result { padding: 24px; border-radius: 16px; background: var(--color-green-soft); }
+.load-more { justify-self: center; padding: 12px 18px; border: 0; border-radius: 12px; color: white; background: var(--color-green); font-weight: 800; }
 @media (max-width: 900px) { .word-grid, .grammar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 620px) { .knowledge-heading { align-items: flex-start; flex-direction: column; } .inventory { grid-template-columns: repeat(3, 1fr); } .inventory article { padding: 14px 10px; } .inventory strong { font-size: 26px; } .word-grid, .grammar-grid, .phrase-list { grid-template-columns: 1fr; } .knowledge-tabs { width: 100%; } .knowledge-tabs button { flex: 1; padding-inline: 8px; } }

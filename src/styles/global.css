@@ -19,6 +19,12 @@ button, input, textarea { font: inherit; }
 .desktop-nav a.active, .desktop-nav a:hover { color: white; background: rgb(255 255 255 / 12%); }
 .main-content { width: min(100%, 1500px); margin: 0 auto; padding: 34px clamp(24px, 5vw, 70px) 55px; }
 .mobile-nav { display: none; }
+.pwa-update { position: fixed; z-index: 40; right: 22px; bottom: 22px; display: flex; gap: 10px; align-items: center; padding: 14px 16px; border-radius: 14px; color: white; background: var(--color-green-dark); box-shadow: var(--shadow-card); }
+.pwa-update button { padding: 7px 10px; border: 0; border-radius: 8px; background: var(--color-yellow); font-weight: 800; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
 
 @media (max-width: 900px) {
   .app-shell { display: block; padding-bottom: 76px; }
@@ -28,4 +34,5 @@ button, input, textarea { font: inherit; }
   .mobile-nav a { display: grid; place-items: center; gap: 2px; color: var(--color-muted); font-size: 11px; }
   .mobile-nav a span { font-size: 18px; }
   .mobile-nav a.active { color: var(--color-green); font-weight: 800; }
+  .pwa-update { right: 12px; bottom: 82px; left: 12px; flex-wrap: wrap; }
 }

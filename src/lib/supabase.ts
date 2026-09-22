@@ -24,3 +24,14 @@ export function createSupabaseAuthService(client: SupabaseClient): AuthService {
     },
   };
 }
+
+export function createOfflineAuthService(): AuthService {
+  return {
+    async getUser() { return null; },
+    async signIn() { throw new Error('Cloud sync is not configured'); },
+    async signUp() { throw new Error('Cloud sync is not configured'); },
+    async signOut() { return undefined; },
+    async resetPassword() { throw new Error('Cloud sync is not configured'); },
+    subscribe() { return () => undefined; },
+  };
+}

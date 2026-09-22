@@ -5,13 +5,11 @@ import { TodayPage } from '../features/dashboard/TodayPage';
 import { ExerciseRunner } from '../features/practice/ExerciseRunner';
 import { ListeningPage } from '../features/listening/ListeningPage';
 import { ReviewPage } from '../features/review/ReviewPage';
-import { PrintPage } from '../features/print/PrintPage';
 import { ExamSession } from '../features/exam/ExamSession';
+import { AccountPage } from '../features/auth/AccountPage';
+import { supabaseClient } from '../lib/runtime';
 const KnowledgePage = lazy(() => import('../features/knowledge/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
-
-function Placeholder({ title }: { title: string }) {
-  return <section><h1>{title}</h1><p>模块正在准备中。</p></section>;
-}
+const PrintPage = lazy(() => import('../features/print/PrintPage').then((module) => ({ default: module.PrintPage })));
 
 export const router = createBrowserRouter([
   {
@@ -24,9 +22,10 @@ export const router = createBrowserRouter([
       { path: 'listen', element: <ListeningPage /> },
       { path: 'practice', element: <ExerciseRunner setId="set-starter" /> },
       { path: 'review', element: <ReviewPage /> },
-      { path: 'print', element: <PrintPage /> },
+      { path: 'print', element: <Suspense fallback={<p>正在生成 A4 练习册…</p>}><PrintPage /></Suspense> },
       { path: 'exam', element: <ExamSession /> },
       { path: 'knowledge', element: <Suspense fallback={<p>正在加载高频知识库…</p>}><KnowledgePage /></Suspense> },
+      { path: 'account', element: <AccountPage cloudConfigured={Boolean(supabaseClient)} /> },
     ],
   },
 ]);
