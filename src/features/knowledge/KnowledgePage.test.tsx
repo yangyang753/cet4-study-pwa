@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { KnowledgePage } from './KnowledgePage';
 
 describe('KnowledgePage', () => {
@@ -16,5 +17,13 @@ describe('KnowledgePage', () => {
     render(<KnowledgePage />);
     await user.type(screen.getByRole('searchbox', { name: '搜索高频词' }), 'environment');
     expect(screen.getByRole('heading', { name: 'environment' })).toBeInTheDocument();
+  });
+
+  it('stores a mastered knowledge state', async () => {
+    const user = userEvent.setup();
+    const repository = { upsertKnowledgeState: vi.fn().mockResolvedValue(undefined) } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} />);
+    await user.click(screen.getAllByRole('button', { name: '标记为已掌握' })[0]);
+    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ status: 'mastered' }));
   });
 });

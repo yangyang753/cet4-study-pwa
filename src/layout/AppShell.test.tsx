@@ -11,7 +11,7 @@ describe('AppShell', () => {
       </MemoryRouter>,
     );
 
-    for (const label of ['今日学习', '听力精练', '专项练习', 'A4 打印']) {
+    for (const label of ['今日学习', '听力精练', '专项练习', '错题复习', '限时模拟', '账户同步', 'A4 打印']) {
       expect(screen.getAllByRole('link', { name: label }).length).toBeGreaterThan(0);
     }
     expect(screen.getByText('学习内容')).toBeInTheDocument();

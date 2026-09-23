@@ -11,7 +11,8 @@ describe('v1 content catalog', () => {
   });
 
   it('normalizes answer indexes and stable question ids', () => {
-    expect(getQuestion('listen-01:q1')?.correctAnswer).toBe('B');
+    const question = getQuestion('listen-01:q1');
+    expect(question && 'correctAnswer' in question ? question.correctAnswer : null).toBe('B');
     expect(getPracticeItems('translation')).toHaveLength(12);
   });
 

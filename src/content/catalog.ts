@@ -10,12 +10,14 @@ import type { CatalogMockExam, CatalogQuestion, Difficulty, PracticeKind, Vocabu
 
 const optionId = (index: number) => String.fromCharCode(65 + index);
 const difficulty = (value: string): Difficulty => value === 'standard' || value === 'challenge' ? value : 'foundation';
+const listeningType = (value: string): 'news' | 'conversation' | 'passage' => value === 'conversation' || value === 'passage' ? value : 'news';
+const readingType = (value: string): 'cloze' | 'matching' | 'reading' => value === 'cloze' || value === 'matching' ? value : 'reading';
 
 function listeningQuestions(): CatalogQuestion[] {
   return listeningData.flatMap((set) => set.questions.map((question, index) => ({
     id: `${set.id}:q${index + 1}`,
     version: 1,
-    type: set.type,
+    type: listeningType(set.type),
     difficulty: difficulty(set.difficulty),
     prompt: question.prompt,
     knowledgePointIds: [`listening:${set.type}`],
@@ -33,7 +35,7 @@ function readingQuestions(): CatalogQuestion[] {
   return readingData.flatMap((set) => set.questions.map((question, index) => ({
     id: `${set.id}:q${index + 1}`,
     version: 1,
-    type: set.type,
+    type: readingType(set.type),
     difficulty: difficulty(set.difficulty),
     prompt: question.prompt,
     knowledgePointIds: [`reading:${set.type}`],
