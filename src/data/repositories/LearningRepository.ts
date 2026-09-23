@@ -8,7 +8,9 @@ export interface LearningRepository extends SyncQueue {
   saveAttemptOnce(attempt: Attempt): Promise<void>;
   listAttempts(): Promise<Attempt[]>;
   saveDraft(draft: DraftRecord): Promise<void>;
+  getDrafts(): Promise<DraftRecord[]>;
   upsertReviewCard(card: ReviewCard): Promise<void>;
+  getReviewCard(id: string): Promise<ReviewCard | null>;
   listDueReviews(at: string): Promise<ReviewCard[]>;
   completeTask(completion: StudyTaskCompletion): Promise<void>;
   upsertKnowledgeState(state: KnowledgeState): Promise<void>;

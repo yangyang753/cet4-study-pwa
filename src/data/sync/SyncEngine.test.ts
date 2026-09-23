@@ -1,12 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { SyncEngine, resolveDraftConflict, type PendingOperation, type SyncQueue, type SyncRemote } from './SyncEngine';
+import { SyncEngine, resolveDraftConflict, type PendingOperation, type RemoteBatch, type SyncQueue, type SyncRemote } from './SyncEngine';
 
 class MemoryQueue implements SyncQueue {
   operations: PendingOperation[] = [];
+  entities = new Map<string, Record<string, unknown>>();
+  cursor: string | null = null;
   async list() { return [...this.operations]; }
   async put(operation: PendingOperation) { if (!this.operations.some((item) => item.id === operation.id)) this.operations.push(operation); }
   async remove(id: string) { this.operations = this.operations.filter((item) => item.id !== id); }
   async replace(operation: PendingOperation) { this.operations = this.operations.map((item) => item.id === operation.id ? operation : item); }
+  async mergeRemoteBatch(batch: RemoteBatch) {
+    for (const record of batch.records) {
+      const key = `${record.kind}:${record.id}`;
+      if (record.deletedAt) this.entities.delete(key);
+      else if (!this.entities.has(key) || String(this.entities.get(key)?.updatedAt ?? '') <= record.updatedAt) this.entities.set(key, record.payload);
+    }
+  }
+  async getSyncCursor() { return this.cursor; }
+  async setSyncCursor(cursor: string) { this.cursor = cursor; }
 }
 
 function attemptOperation(id: string): PendingOperation {
@@ -36,6 +47,29 @@ describe('SyncEngine', () => {
 
     expect(await engine.flush()).toEqual({ synced: 0, failed: 1 });
     expect((await queue.list())[0].attempts).toBe(1);
+  });
+
+  it('pulls retry-safely, deduplicates attempts, and advances the cursor after merge', async () => {
+    const queue = new MemoryQueue();
+    const batch: RemoteBatch = { cursor: '2026-09-23T12:00:00Z|a-1', records: [{ kind: 'attempt', id: 'a-1', updatedAt: '2026-09-23T12:00:00Z', payload: { id: 'a-1', updatedAt: '2026-09-23T12:00:00Z' } }] };
+    const remote: SyncRemote = { upsertAttempt: async () => undefined, upsertDraft: async () => undefined, pullSince: async () => batch };
+    const engine = new SyncEngine(queue, remote);
+
+    await engine.sync('user-1');
+    await engine.sync('user-1');
+
+    expect([...queue.entities]).toHaveLength(1);
+    expect(queue.cursor).toBe(batch.cursor);
+  });
+
+  it('does not advance the pull cursor when the local merge fails', async () => {
+    const queue = new MemoryQueue();
+    queue.mergeRemoteBatch = async () => { throw new Error('transaction failed'); };
+    const remote: SyncRemote = { upsertAttempt: async () => undefined, upsertDraft: async () => undefined, pullSince: async () => ({ cursor: 'next', records: [] }) };
+    const engine = new SyncEngine(queue, remote);
+
+    await expect(engine.sync('user-1')).rejects.toThrow('transaction failed');
+    expect(queue.cursor).toBeNull();
   });
 });
 

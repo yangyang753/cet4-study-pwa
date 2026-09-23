@@ -105,4 +105,29 @@ describe('DexieLearningRepository', () => {
     expect(await repository.getActiveExamSession()).toEqual(session);
     db.close();
   });
+
+  it('keeps both divergent draft bodies and remains idempotent when a pull is retried', async () => {
+    const db = new LearningDatabase(databaseName());
+    const repository = new DexieLearningRepository(db);
+    await repository.saveDraft({ id: 'draft-1', questionId: 'write-01', body: 'phone', deviceId: 'phone', updatedAt: '2026-09-23T10:00:00.000Z' });
+    const batch = { cursor: 'cursor-1', records: [{ kind: 'draft' as const, id: 'draft-1', updatedAt: '2026-09-23T10:05:00.000Z', payload: { id: 'draft-1', questionId: 'write-01', body: 'computer', deviceId: 'computer', updatedAt: '2026-09-23T10:05:00.000Z' } }] };
+
+    await repository.mergeRemoteBatch(batch);
+    await repository.mergeRemoteBatch(batch);
+
+    expect((await repository.getDrafts()).map((item) => item.body)).toEqual(expect.arrayContaining(['phone', 'computer']));
+    expect(await repository.getDrafts()).toHaveLength(2);
+    db.close();
+  });
+
+  it('applies a newer remote tombstone before mutable records', async () => {
+    const db = new LearningDatabase(databaseName());
+    const repository = new DexieLearningRepository(db);
+    await repository.upsertReviewCard({ id: 'review-1', questionId: 'q1', stage: 0, nextReviewAt: '2026-09-23T10:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T10:00:00.000Z' });
+
+    await repository.mergeRemoteBatch({ cursor: 'cursor-2', records: [{ kind: 'tombstone', id: 'reviewCard:review-1', updatedAt: '2026-09-23T11:00:00.000Z', deletedAt: '2026-09-23T11:00:00.000Z', payload: { id: 'reviewCard:review-1', kind: 'reviewCard', entityId: 'review-1', deletedAt: '2026-09-23T11:00:00.000Z', updatedAt: '2026-09-23T11:00:00.000Z' } }] });
+
+    expect(await repository.getReviewCard('review-1')).toBeNull();
+    db.close();
+  });
 });

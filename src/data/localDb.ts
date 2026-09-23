@@ -1,10 +1,11 @@
 import Dexie, { type EntityTable } from 'dexie';
 import type { Attempt } from '../domain/attempt';
-import type { DraftRecord, PendingOperation } from './sync/SyncEngine';
+import type { DraftRecord, PendingOperation, TombstoneRecord } from './sync/SyncEngine';
 import type { KnowledgeState, ReviewCard, StudyTaskCompletion, UserSettings } from '../domain/learning';
 import type { ExamSessionRecord } from '../domain/exam';
 
 export interface CachedPlan { id: string; date: string; tasks: unknown[]; updatedAt: string }
+export interface SyncCursorRecord { id: string; cursor: string; updatedAt: string }
 
 export class LearningDatabase extends Dexie {
   attempts!: EntityTable<Attempt, 'id'>;
@@ -16,6 +17,8 @@ export class LearningDatabase extends Dexie {
   knowledgeStates!: EntityTable<KnowledgeState, 'id'>;
   settings!: EntityTable<UserSettings, 'id'>;
   examSessions!: EntityTable<ExamSessionRecord, 'id'>;
+  tombstones!: EntityTable<TombstoneRecord, 'id'>;
+  syncCursors!: EntityTable<SyncCursorRecord, 'id'>;
 
   constructor(name = 'cet4-study') {
     super(name);
@@ -40,6 +43,11 @@ export class LearningDatabase extends Dexie {
       knowledgeStates: 'id,itemId,status,updatedAt',
       settings: 'id,updatedAt',
       examSessions: 'id,status,updatedAt',
+    });
+    this.version(4).stores({
+      attempts: 'id,userId,questionId,createdAt', drafts: 'id,questionId,updatedAt', plans: 'id,date', syncQueue: 'id,entityId,kind,createdAt',
+      reviewCards: 'id,questionId,nextReviewAt,updatedAt', taskCompletions: 'id,date,taskId,kind,completedAt', knowledgeStates: 'id,itemId,status,updatedAt',
+      settings: 'id,updatedAt', examSessions: 'id,status,updatedAt', tombstones: 'id,kind,entityId,updatedAt', syncCursors: 'id,updatedAt',
     });
   }
 }

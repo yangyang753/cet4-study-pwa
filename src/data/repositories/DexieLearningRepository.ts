@@ -1,20 +1,23 @@
+import type { EntityTable, Table } from 'dexie';
 import type { Attempt } from '../../domain/attempt';
-import { learningDb, type LearningDatabase } from '../localDb';
-import type { DraftRecord, PendingOperation } from '../sync/SyncEngine';
-import type { LearningRepository } from './LearningRepository';
-import { defaultUserSettings, type KnowledgeState, type ReviewCard, type StudyTaskCompletion, type UserSettings } from '../../domain/learning';
 import type { ExamSessionRecord } from '../../domain/exam';
+import { defaultUserSettings, type KnowledgeState, type ReviewCard, type StudyTaskCompletion, type UserSettings } from '../../domain/learning';
+import { learningDb, type LearningDatabase } from '../localDb';
+import { resolveDraftConflict, type DraftRecord, type OperationKind, type PendingOperation, type RemoteBatch, type TombstoneRecord } from '../sync/SyncEngine';
+import type { LearningRepository } from './LearningRepository';
+
+type StoredEntity = { id: string; updatedAt?: string; createdAt?: string; completedAt?: string; body?: string; questionId?: string; deviceId?: string };
+const tableNames: Record<Exclude<OperationKind, 'tombstone'>, string> = { attempt: 'attempts', draft: 'drafts', reviewCard: 'reviewCards', taskCompletion: 'taskCompletions', knowledgeState: 'knowledgeStates', examSession: 'examSessions', settings: 'settings' };
+const entityTimestamp = (entity: StoredEntity) => entity.updatedAt ?? entity.completedAt ?? entity.createdAt ?? '';
 
 export class DexieLearningRepository implements LearningRepository {
   constructor(private readonly db: LearningDatabase = learningDb) {}
-  async saveAttempt(attempt: Attempt) {
-    return this.saveAttemptOnce(attempt);
-  }
+  async saveAttempt(attempt: Attempt) { return this.saveAttemptOnce(attempt); }
   async saveAttemptOnce(attempt: Attempt) {
     await this.db.transaction('rw', this.db.attempts, this.db.syncQueue, async () => {
       if (await this.db.attempts.get(attempt.id)) return;
       await this.db.attempts.put(attempt);
-      await this.put({ id: `attempt:${attempt.id}`, entityId: attempt.id, kind: 'attempt', payload: attempt as unknown as Record<string, unknown>, createdAt: attempt.createdAt, attempts: 0 });
+      await this.put(this.operation('attempt', attempt.id, attempt as unknown as Record<string, unknown>, attempt.createdAt));
     });
     this.requestSync();
   }
@@ -22,34 +25,64 @@ export class DexieLearningRepository implements LearningRepository {
   async saveDraft(draft: DraftRecord) {
     await this.db.transaction('rw', this.db.drafts, this.db.syncQueue, async () => {
       await this.db.drafts.put(draft);
-      await this.put({ id: `draft:${draft.id}:${draft.updatedAt}`, entityId: draft.id, kind: 'draft', payload: draft as unknown as Record<string, unknown>, createdAt: draft.updatedAt, attempts: 0 });
+      await this.put(this.operation('draft', draft.id, draft as unknown as Record<string, unknown>, draft.updatedAt));
     });
     this.requestSync();
   }
+  getDrafts() { return this.db.drafts.toArray(); }
   getPendingOperations() { return this.list(); }
-  saveExamSession(session: ExamSessionRecord) { return this.db.examSessions.put(session).then(() => undefined); }
-  async getActiveExamSession() {
-    const active = await this.db.examSessions.where('status').equals('active').toArray();
-    return active.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0];
-  }
-  upsertReviewCard(card: ReviewCard) { return this.db.reviewCards.put(card).then(() => undefined); }
+  async upsertReviewCard(card: ReviewCard) { await this.saveMutable('reviewCard', this.db.reviewCards, card, card.updatedAt); }
+  async getReviewCard(id: string) { return (await this.db.reviewCards.get(id)) ?? null; }
   listDueReviews(at: string) { return this.db.reviewCards.where('nextReviewAt').belowOrEqual(at).sortBy('nextReviewAt'); }
-  completeTask(completion: StudyTaskCompletion) { return this.db.taskCompletions.put(completion).then(() => undefined); }
-  upsertKnowledgeState(state: KnowledgeState) { return this.db.knowledgeStates.put(state).then(() => undefined); }
-  saveUserSettings(settings: UserSettings) { return this.db.settings.put(settings).then(() => undefined); }
+  async completeTask(completion: StudyTaskCompletion) { await this.saveMutable('taskCompletion', this.db.taskCompletions, completion, completion.completedAt); }
+  async upsertKnowledgeState(state: KnowledgeState) { await this.saveMutable('knowledgeState', this.db.knowledgeStates, state, state.updatedAt); }
+  async saveUserSettings(settings: UserSettings) { await this.saveMutable('settings', this.db.settings, settings, settings.updatedAt); }
+  async saveExamSession(session: ExamSessionRecord) { await this.saveMutable('examSession', this.db.examSessions, session, session.updatedAt); }
+  async getActiveExamSession() { const active = await this.db.examSessions.where('status').equals('active').toArray(); return active.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0]; }
   async getDashboardSnapshot(at = new Date().toISOString()) {
-    const [attempts, dueReviews, completions, knowledgeStates, settings] = await Promise.all([
-      this.db.attempts.toArray(),
-      this.listDueReviews(at),
-      this.db.taskCompletions.toArray(),
-      this.db.knowledgeStates.toArray(),
-      this.db.settings.get('current'),
-    ]);
+    const [attempts, dueReviews, completions, knowledgeStates, settings] = await Promise.all([this.db.attempts.toArray(), this.listDueReviews(at), this.db.taskCompletions.toArray(), this.db.knowledgeStates.toArray(), this.db.settings.get('current')]);
     return { attempts, dueReviews, completions, knowledgeStates, settings: settings ?? defaultUserSettings() };
   }
   list() { return this.db.syncQueue.toArray(); }
   async put(operation: PendingOperation) { if (!await this.db.syncQueue.get(operation.id)) await this.db.syncQueue.put(operation); }
   async remove(id: string) { await this.db.syncQueue.delete(id); }
   async replace(operation: PendingOperation) { await this.db.syncQueue.put(operation); }
+  async getSyncCursor(userId: string) { return (await this.db.syncCursors.get(`sync:${userId}`))?.cursor ?? null; }
+  async setSyncCursor(cursor: string, userId: string) { await this.db.syncCursors.put({ id: `sync:${userId}`, cursor, updatedAt: new Date().toISOString() }); }
+
+  async mergeRemoteBatch(batch: RemoteBatch) {
+    const tables = [this.db.attempts, this.db.drafts, this.db.reviewCards, this.db.taskCompletions, this.db.knowledgeStates, this.db.examSessions, this.db.settings, this.db.tombstones];
+    await this.db.transaction('rw', tables, async () => {
+      const tombstoneRecords = batch.records.filter((record) => record.kind === 'tombstone');
+      for (const record of tombstoneRecords) {
+        const tombstone = record.payload as unknown as TombstoneRecord;
+        const target = this.tableFor(tombstone.kind);
+        const local = await target.get(tombstone.entityId);
+        if (!local || entityTimestamp(local) <= tombstone.deletedAt) await target.delete(tombstone.entityId);
+        await this.db.tombstones.put(tombstone);
+      }
+      for (const record of batch.records.filter((item) => item.kind !== 'tombstone')) {
+        const kind = record.kind as Exclude<OperationKind, 'tombstone'>;
+        const tombstone = await this.db.tombstones.get(`${kind}:${record.id}`);
+        if (tombstone && tombstone.deletedAt >= record.updatedAt) continue;
+        const table = this.tableFor(kind);
+        const local = await table.get(record.id);
+        if (kind === 'attempt') { if (!local) await table.put(record.payload as unknown as StoredEntity); continue; }
+        if (kind === 'draft' && local?.body && local.body !== record.payload.body) {
+          const merged = resolveDraftConflict(local as DraftRecord, record.payload as unknown as DraftRecord);
+          await table.bulkPut(merged);
+          continue;
+        }
+        if (!local || entityTimestamp(local) <= record.updatedAt) await table.put(record.payload as unknown as StoredEntity);
+      }
+    });
+  }
+
+  private tableFor(kind: Exclude<OperationKind, 'tombstone'>) { return this.db.table(tableNames[kind]) as Table<StoredEntity, string>; }
+  private operation(kind: OperationKind, entityId: string, payload: Record<string, unknown>, createdAt: string): PendingOperation { return { id: `${kind}:${entityId}:${createdAt}`, entityId, kind, payload, createdAt, attempts: 0 }; }
+  private async saveMutable<T extends { id: string }>(kind: OperationKind, table: EntityTable<T, 'id'>, entity: T, updatedAt: string) {
+    await this.db.transaction('rw', table, this.db.syncQueue, async () => { await table.put(entity); await this.put(this.operation(kind, entity.id, entity as unknown as Record<string, unknown>, updatedAt)); });
+    this.requestSync();
+  }
   private requestSync() { if (typeof window !== 'undefined') window.dispatchEvent(new Event('cet4:sync-needed')); }
 }
