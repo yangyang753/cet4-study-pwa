@@ -59,3 +59,20 @@ export interface ContentPack {
   practiceSets: PracticeSet[];
   audioAssets: AudioAsset[];
 }
+
+export type PracticeKind = 'vocabulary' | 'grammar' | 'listening' | 'reading' | 'translation' | 'writing';
+export type CatalogQuestion = Question & {
+  groupId: string;
+  passage?: string;
+  audioSrc?: string;
+};
+
+export interface CatalogMockExam {
+  id: string;
+  title: string;
+  listeningSetIds: string[];
+  readingSetIds: string[];
+  translationId: string;
+  writingId: string;
+  timingMinutes: number;
+}
