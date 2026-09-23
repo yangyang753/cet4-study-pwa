@@ -1,6 +1,14 @@
 begin;
-select plan(2);
+select plan(10);
 select ok((select relrowsecurity from pg_class where oid = 'public.attempts'::regclass), 'attempts has RLS');
 select ok((select relrowsecurity from pg_class where oid = 'public.drafts'::regclass), 'drafts has RLS');
+select ok((select relrowsecurity from pg_class where oid = 'public.review_queue'::regclass), 'review queue has RLS');
+select ok((select relrowsecurity from pg_class where oid = 'public.task_completions'::regclass), 'task completions has RLS');
+select ok((select relrowsecurity from pg_class where oid = 'public.knowledge_states'::regclass), 'knowledge states has RLS');
+select ok((select relrowsecurity from pg_class where oid = 'public.exam_sessions'::regclass), 'exam sessions has RLS');
+select ok((select relrowsecurity from pg_class where oid = 'public.user_settings'::regclass), 'settings has RLS');
+select ok((select relrowsecurity from pg_class where oid = 'public.tombstones'::regclass), 'tombstones has RLS');
+select is((select count(*) from pg_policies where schemaname = 'public' and policyname like '%_owner'), 11::bigint, 'all owned tables have owner policies');
+select is((select column_default from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'target_exam_date'), '''2026-12-12''::date', 'exam date default is correct');
 select * from finish();
 rollback;
