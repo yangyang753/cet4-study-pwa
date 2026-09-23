@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { Navigate, createBrowserRouter } from 'react-router-dom';
+import { Navigate, createBrowserRouter, useParams } from 'react-router-dom';
 import { AppShell } from '../layout/AppShell';
 import { TodayPage } from '../features/dashboard/TodayPage';
 import { PracticeRoute } from '../features/practice/ExerciseRunner';
@@ -7,6 +7,7 @@ import { PracticeHub } from '../features/practice/PracticeHub';
 import { ListeningPage } from '../features/listening/ListeningPage';
 import { ReviewPage } from '../features/review/ReviewPage';
 import { ExamSession } from '../features/exam/ExamSession';
+import { ExamPicker } from '../features/exam/ExamPicker';
 import { AccountPage } from '../features/auth/AccountPage';
 import { supabaseClient } from '../lib/runtime';
 const KnowledgePage = lazy(() => import('../features/knowledge/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
@@ -26,9 +27,15 @@ export const router = createBrowserRouter([
       { path: 'practice/:kind', element: <PracticeRoute /> },
       { path: 'review', element: <ReviewPage /> },
       { path: 'print', element: <Suspense fallback={<p>正在生成 A4 练习册…</p>}><PrintPage /></Suspense> },
-      { path: 'exam', element: <ExamSession /> },
+      { path: 'exam', element: <ExamPicker /> },
+      { path: 'exam/:mockId', element: <ExamRoute /> },
       { path: 'knowledge', element: <Suspense fallback={<p>正在加载高频知识库…</p>}><KnowledgePage /></Suspense> },
       { path: 'account', element: <AccountPage cloudConfigured={Boolean(supabaseClient)} /> },
     ],
   },
 ], { basename });
+
+function ExamRoute() {
+  const { mockId = 'mock-1' } = useParams();
+  return <ExamSession mockId={mockId} />;
+}

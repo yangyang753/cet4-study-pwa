@@ -32,7 +32,8 @@ export function createExamSession(exam: ResolvedExam, startedAt = new Date().toI
 export function remainingSeconds(session: ExamSessionRecord, now = new Date().toISOString()): number {
   const finalDeadline = session.sectionDeadlines.at(-1);
   if (!finalDeadline || session.status !== 'active') return 0;
-  return Math.max(0, Math.ceil((Date.parse(finalDeadline) - Date.parse(now)) / 1000));
+  const totalSeconds = Math.ceil((Date.parse(finalDeadline) - Date.parse(session.startedAt)) / 1000);
+  return Math.min(totalSeconds, Math.max(0, Math.ceil((Date.parse(finalDeadline) - Date.parse(now)) / 1000)));
 }
 
 export function restoreExamSession(session: ExamSessionRecord, exam: ResolvedExam, now = new Date().toISOString()): ExamSessionRecord {
