@@ -9,5 +9,9 @@ export interface Attempt {
   score: number | null;
   durationSeconds: number;
   mistakeReason?: MistakeReason;
+  contentVersion?: string;
+  kind?: string;
+  mode?: 'practice' | 'exam' | 'review';
+  deviceId?: string;
   createdAt: string;
 }
