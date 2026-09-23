@@ -13,6 +13,9 @@ const difficulty = (value: string): Difficulty => value === 'standard' || value 
 const listeningType = (value: string): 'news' | 'conversation' | 'passage' => value === 'conversation' || value === 'passage' ? value : 'news';
 const readingType = (value: string): 'cloze' | 'matching' | 'reading' => value === 'cloze' || value === 'matching' ? value : 'reading';
 
+const listeningKnowledgePoints = ['主旨理解', '因果关系', '转折定位', '时间细节', '事实细节', '否定信息', '后续行动'];
+const readingKnowledgePoints = ['主旨概括', '时间定位', '数字定位', '事实细节', '转折定位', '措施匹配'];
+
 function listeningQuestions(): CatalogQuestion[] {
   return listeningData.flatMap((set) => set.questions.map((question, index) => ({
     id: `${set.id}:q${index + 1}`,
@@ -20,7 +23,7 @@ function listeningQuestions(): CatalogQuestion[] {
     type: listeningType(set.type),
     difficulty: difficulty(set.difficulty),
     prompt: question.prompt,
-    knowledgePointIds: [`listening:${set.type}`],
+    knowledgePointIds: [listeningKnowledgePoints[index] ?? `听力:${set.type}`],
     explanationZh: question.explanationZh,
     sourceNote: '依据 CET-4 题型与高频考点编写的原创仿真练习',
     options: question.options.map((text, optionIndex) => ({ id: optionId(optionIndex), text })),
@@ -38,7 +41,7 @@ function readingQuestions(): CatalogQuestion[] {
     type: readingType(set.type),
     difficulty: difficulty(set.difficulty),
     prompt: question.prompt,
-    knowledgePointIds: [`reading:${set.type}`],
+    knowledgePointIds: [readingKnowledgePoints[index] ?? `阅读:${set.type}`],
     explanationZh: question.explanationZh,
     sourceNote: '依据 CET-4 题型与高频考点编写的原创仿真练习',
     options: question.options.map((text, optionIndex) => ({ id: optionId(optionIndex), text })),
