@@ -6,6 +6,7 @@ playwright-report/
 test-results/
 coverage/
 .superpowers/
+.worktrees/
 *.tsbuildinfo
 vite.config.js
 vite.config.d.ts
