@@ -35,15 +35,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new campus volunteering activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 校园志愿活动 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -57,15 +57,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new campus volunteering activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 校园志愿活动 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -150,15 +150,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new library services activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 图书馆服务 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -172,15 +172,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new library services activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 图书馆服务 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -254,15 +254,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new course selection activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 课程选择 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -276,15 +276,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new course selection activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 课程选择 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -358,15 +358,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new dormitory life activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 宿舍生活 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -380,15 +380,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new dormitory life activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 宿舍生活 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -462,15 +462,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new student clubs activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 学生社团 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -484,15 +484,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new student clubs activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 学生社团 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -577,15 +577,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new internship arrangements activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 实习安排 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -599,15 +599,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new internship arrangements activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 实习安排 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -681,15 +681,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new urban transport activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 城市交通 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -703,15 +703,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new urban transport activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 城市交通 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -785,15 +785,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new environmental protection activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 环境保护 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -807,15 +807,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new environmental protection activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 环境保护 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -889,15 +889,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new healthy eating activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 健康饮食 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -911,15 +911,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new healthy eating activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 健康饮食 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -1004,15 +1004,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new exercise habits activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 运动习惯 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -1026,15 +1026,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new exercise habits activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 运动习惯 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -1108,15 +1108,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new digital learning activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 数字学习 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -1130,15 +1130,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new digital learning activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 数字学习 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -1212,15 +1212,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new time management activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 时间管理 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -1234,15 +1234,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new time management activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 时间管理 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -1316,15 +1316,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new community service activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 社区服务 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -1338,15 +1338,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new community service activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 社区服务 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -1431,15 +1431,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new travel planning activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 旅游计划 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -1453,15 +1453,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new travel planning activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 旅游计划 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -1535,15 +1535,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new cultural festivals activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 文化节日 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -1557,15 +1557,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new cultural festivals activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 文化节日 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -1639,15 +1639,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new technological innovation activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 科技创新 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -1661,15 +1661,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new technological innovation activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 科技创新 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -1743,15 +1743,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new career preparation activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 就业准备 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -1765,15 +1765,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new career preparation activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 就业准备 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -1858,15 +1858,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new teamwork activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 团队合作 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -1880,15 +1880,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new teamwork activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 团队合作 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -1962,15 +1962,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new public safety activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 公共安全 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -1984,15 +1984,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new public safety activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 公共安全 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -2066,15 +2066,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new consumer choices activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 消费选择 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -2088,15 +2088,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new consumer choices activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 消费选择 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -2170,15 +2170,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new climate change activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 气候变化 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -2192,15 +2192,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new climate change activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 气候变化 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -2285,15 +2285,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new museum activities activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 博物馆活动 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -2307,15 +2307,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new museum activities activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 博物馆活动 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -2389,15 +2389,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new academic lectures activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 学术讲座 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -2411,15 +2411,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new academic lectures activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 学术讲座 有关的新活动。"
       },
       {
         "prompt": "When should students register?",
@@ -2493,15 +2493,15 @@
     ],
     "questions": [
       {
-        "prompt": "What is the announcement mainly about?",
+        "prompt": "When is the additional session available?",
         "options": [
-          "A new online meetings activity",
-          "A cancelled examination",
-          "A library fine",
-          "A sports competition"
+          "Saturday morning",
+          "Sunday afternoon",
+          "Monday evening",
+          "Friday noon"
         ],
-        "answer": 0,
-        "explanationZh": "开头说明学校推出了与 在线会议 有关的新活动。"
+        "answer": 1,
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
       },
       {
         "prompt": "Why was another session added?",
@@ -2515,15 +2515,15 @@
         "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
       },
       {
-        "prompt": "When is the additional session available?",
+        "prompt": "What is the announcement mainly about?",
         "options": [
-          "Saturday morning",
-          "Sunday afternoon",
-          "Monday evening",
-          "Friday noon"
+          "A new online meetings activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
         ],
-        "answer": 1,
-        "explanationZh": "转折后明确说明新增场次在周日下午。"
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 在线会议 有关的新活动。"
       },
       {
         "prompt": "When should students register?",

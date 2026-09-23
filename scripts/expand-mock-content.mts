@@ -11,9 +11,9 @@ const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set
   const themeEn = set.themeEn ?? set.theme;
   const transcript = `A university program about ${themeEn} has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.`;
   const questions = [
-    { prompt: 'What is the announcement mainly about?', options: [`A new ${themeEn} activity`, 'A cancelled examination', 'A library fine', 'A sports competition'], answer: 0, explanationZh: `开头说明学校推出了与 ${set.theme} 有关的新活动。` },
-    { prompt: 'Why was another session added?', options: ['The teacher was absent', 'The Saturday group was full', 'The room was repaired', 'The fee was reduced'], answer: 1, explanationZh: 'but 前后说明周六组已满，因此增加了另一场。' },
     { prompt: 'When is the additional session available?', options: ['Saturday morning', 'Sunday afternoon', 'Monday evening', 'Friday noon'], answer: 1, explanationZh: '转折后明确说明新增场次在周日下午。' },
+    { prompt: 'Why was another session added?', options: ['The teacher was absent', 'The Saturday group was full', 'The room was repaired', 'The fee was reduced'], answer: 1, explanationZh: 'but 前后说明周六组已满，因此增加了另一场。' },
+    { prompt: 'What is the announcement mainly about?', options: [`A new ${themeEn} activity`, 'A cancelled examination', 'A library fine', 'A sports competition'], answer: 0, explanationZh: `开头说明学校推出了与 ${set.theme} 有关的新活动。` },
     { prompt: 'When should students register?', options: ['Before Thursday', 'On Friday night', 'After Sunday', 'At the end of term'], answer: 0, explanationZh: '原文要求学生在周四之前在线注册。' },
     { prompt: 'What should students bring?', options: ['A laptop and headphones', 'A passport and map', 'A student card and reusable notebook', 'Food and sportswear'], answer: 2, explanationZh: '原文列出的材料是学生证和可重复使用的笔记本。' },
     { prompt: 'What is said about previous experience?', options: ['It is required', 'It is preferred', 'It is not required', 'It must be certified'], answer: 2, explanationZh: '原文明确说不要求先前经验，并会提供简短说明。' },

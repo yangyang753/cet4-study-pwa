@@ -13,7 +13,7 @@ const difficulty = (value: string): Difficulty => value === 'standard' || value 
 const listeningType = (value: string): 'news' | 'conversation' | 'passage' => value === 'conversation' || value === 'passage' ? value : 'news';
 const readingType = (value: string): 'cloze' | 'matching' | 'reading' => value === 'cloze' || value === 'matching' ? value : 'reading';
 
-const listeningKnowledgePoints = ['主旨理解', '因果关系', '转折定位', '时间细节', '事实细节', '否定信息', '后续行动'];
+const listeningKnowledgePoints = ['转折定位', '因果关系', '主旨理解', '时间细节', '事实细节', '否定信息', '后续行动'];
 const readingKnowledgePoints = ['主旨概括', '时间定位', '数字定位', '事实细节', '转折定位', '措施匹配'];
 
 function listeningQuestions(): CatalogQuestion[] {
