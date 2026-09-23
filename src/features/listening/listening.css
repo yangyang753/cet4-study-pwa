@@ -1,5 +1,9 @@
 .listening-page > header { margin-bottom: 24px; }
 .listening-page > header p { color: var(--color-muted); }
+.listening-heading { display: flex; justify-content: space-between; gap: 20px; align-items: end; }
+.set-navigation { display: flex; gap: 10px; align-items: center; }
+.set-navigation button { padding: 9px 12px; border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-panel); }
+.set-navigation button:disabled { opacity: .45; cursor: not-allowed; }
 .listening-grid { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 20px; }
 .audio-player { padding: 28px; border-radius: var(--radius-card); color: white; background: var(--color-green-dark); }
 .wave { display: flex; gap: 5px; align-items: center; height: 80px; margin: 22px 0; }
@@ -7,6 +11,8 @@
 .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .controls button, .controls select { padding: 8px 10px; border: 1px solid rgb(255 255 255 / 24%); border-radius: 10px; color: inherit; background: transparent; }
 .controls select option { color: var(--color-ink); }
+.player-status { display: inline-flex; margin: 0 0 12px; padding: 5px 10px; border-radius: 999px; color: #d8eee5; background: rgb(255 255 255 / 10%); }
+.status-error { color: #ffe4cc; }
 .media-error { margin: 14px 0; padding: 14px; border-radius: 12px; background: #f8e5d6; }
 .media-error button { margin-left: 8px; }
 .transcript, .dictation, .listening-question { margin-top: 20px; padding: 22px; border-radius: var(--radius-card); background: var(--color-panel); }
@@ -16,4 +22,4 @@
 .listening-question { margin-top: 0; align-self: start; }
 .listening-question label { display: block; padding: 12px; margin: 8px 0; border: 1px solid var(--color-line); border-radius: 12px; }
 .listening-question > button, .dictation button, .transcript button { padding: 10px 14px; border: 0; border-radius: 10px; background: var(--color-yellow); font-weight: 800; }
-@media (max-width: 900px) { .listening-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .listening-heading { align-items: start; flex-direction: column; } .listening-grid { grid-template-columns: 1fr; } }

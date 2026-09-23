@@ -1,9 +1,49 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ListeningPage } from './ListeningPage';
 
 describe('ListeningPage', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllEnvs();
+  });
+
+  it('resolves audio under the deployed application base path', () => {
+    vi.stubEnv('BASE_URL', '/cet4-study-pwa/');
+    const { container } = render(<ListeningPage />);
+    expect(container.querySelector('audio')).toHaveAttribute('src', '/cet4-study-pwa/audio/v1/listen-01.wav');
+  });
+
+  it('moves through all 24 listening sets', async () => {
+    vi.spyOn(HTMLMediaElement.prototype, 'pause').mockImplementation(() => undefined);
+    const user = userEvent.setup();
+    render(<ListeningPage />);
+    expect(screen.getByText('第 1 / 24 套')).toBeInTheDocument();
+    expect(screen.getByText(/校园志愿活动/)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: '下一套' }));
+    expect(screen.getByText('第 2 / 24 套')).toBeInTheDocument();
+    expect(screen.getByText(/图书馆服务/)).toBeInTheDocument();
+  });
+
+  it('reports buffering and ready states from the real media element', () => {
+    const { container } = render(<ListeningPage />);
+    const media = container.querySelector('audio')!;
+    fireEvent.waiting(media);
+    expect(screen.getByText('缓冲中…')).toBeInTheDocument();
+    fireEvent.canPlay(media);
+    expect(screen.getByText('可以播放')).toBeInTheDocument();
+  });
+
+  it('offers recovery when the browser rejects playback', async () => {
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockRejectedValue(new DOMException('Not allowed', 'NotAllowedError'));
+    const user = userEvent.setup();
+    render(<ListeningPage />);
+    await user.click(screen.getByRole('button', { name: '播放' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('浏览器未能开始播放');
+    expect(screen.getByRole('button', { name: '重试' })).toBeInTheDocument();
+  });
+
   it('keeps the transcript hidden until the learner asks to see it', async () => {
     const user = userEvent.setup();
     render(<ListeningPage />);

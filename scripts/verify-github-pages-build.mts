@@ -48,6 +48,11 @@ try {
   await page.getByRole('heading', { name: /继续向 425 分前进/ }).waitFor();
   await page.getByRole('link', { name: /开始今日训练/ }).click();
   await page.waitForURL(`**${repositoryBase}listen`);
+  const audioUrl = await page.locator('audio').getAttribute('src');
+  assert.equal(audioUrl, `${repositoryBase}audio/v1/listen-01.wav`);
+  const audioResponse = await page.request.get(`http://127.0.0.1:4189${audioUrl}`);
+  assert.equal(audioResponse.status(), 200);
+  assert.match(audioResponse.headers()['content-type'] ?? '', /^audio\//);
 } finally {
   await browser.close();
   await new Promise<void>((resolve, reject) => server.httpServer.close((error) => error ? reject(error) : resolve()));
