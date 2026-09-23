@@ -22,4 +22,8 @@
 .listening-question { margin-top: 0; align-self: start; }
 .listening-question label { display: block; padding: 12px; margin: 8px 0; border: 1px solid var(--color-line); border-radius: 12px; }
 .listening-question > button, .dictation button, .transcript button { padding: 10px 14px; border: 0; border-radius: 10px; background: var(--color-yellow); font-weight: 800; }
+.answer-error { color: #9b341f; font-weight: 700; }
+.answer-result { margin-top: 14px; padding: 14px; border-radius: 12px; background: #eef6f1; }
+.answer-result.incorrect { background: #fff1e5; }
+.answer-result strong { font-size: 1.05rem; }
 @media (max-width: 900px) { .listening-heading { align-items: start; flex-direction: column; } .listening-grid { grid-template-columns: 1fr; } }

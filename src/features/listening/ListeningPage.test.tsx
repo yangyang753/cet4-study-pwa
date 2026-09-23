@@ -1,12 +1,25 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import 'fake-indexeddb/auto';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import Dexie from 'dexie';
+import { LearningDatabase } from '../../data/localDb';
+import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import { ListeningPage } from './ListeningPage';
 
+const databases: string[] = [];
+
+function repository() {
+  const name = `listening-test-${crypto.randomUUID()}`;
+  databases.push(name);
+  return new DexieLearningRepository(new LearningDatabase(name));
+}
+
 describe('ListeningPage', () => {
-  afterEach(() => {
+  afterEach(async () => {
     vi.restoreAllMocks();
     vi.unstubAllEnvs();
+    await Promise.all(databases.splice(0).map((name) => Dexie.delete(name)));
   });
 
   it('resolves audio under the deployed application base path', () => {
@@ -67,5 +80,38 @@ describe('ListeningPage', () => {
     render(<ListeningPage />);
     await user.selectOptions(screen.getByLabelText('播放速度'), '1.25');
     expect(screen.getByLabelText('播放速度')).toHaveValue('1.25');
+  });
+
+  it('requires an answer before submission', async () => {
+    const user = userEvent.setup();
+    render(<ListeningPage repository={repository()} />);
+
+    await user.click(screen.getByRole('button', { name: '提交答案' }));
+
+    expect(screen.getByText('请选择一个答案')).toBeVisible();
+  });
+
+  it('grades a correct answer and saves one attempt on a double click', async () => {
+    const user = userEvent.setup();
+    const learningRepository = repository();
+    render(<ListeningPage repository={learningRepository} />);
+
+    await user.click(screen.getByRole('radio', { name: /Sunday afternoon/ }));
+    await user.dblClick(screen.getByRole('button', { name: '提交答案' }));
+
+    expect(await screen.findByText('回答正确')).toBeVisible();
+    await waitFor(async () => expect(await learningRepository.listAttempts()).toHaveLength(1));
+  });
+
+  it('adds a wrong answer to the review queue', async () => {
+    const user = userEvent.setup();
+    const learningRepository = repository();
+    render(<ListeningPage repository={learningRepository} />);
+
+    await user.click(screen.getByRole('radio', { name: /Saturday morning/ }));
+    await user.click(screen.getByRole('button', { name: '提交答案' }));
+
+    expect(await screen.findByText('回答错误')).toBeVisible();
+    await waitFor(async () => expect(await learningRepository.listDueReviews('9999-12-31T23:59:59.999Z')).toHaveLength(1));
   });
 });
