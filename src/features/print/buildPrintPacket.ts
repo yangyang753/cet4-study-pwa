@@ -71,5 +71,5 @@ export function buildPrintPacket(options: PrintPacketOptions): PrintPacket {
   const numbered = [...rawQuestionPages, ...rawAnswerPages].map((page, index) => ({ ...page, pageNumber: index + 1, totalPages }));
   const questionPages = numbered.slice(0, rawQuestionPages.length);
   const answerPages = numbered.slice(rawQuestionPages.length);
-  return { pages: questionPages, questionPages, answerPages, questionCount: questions.length };
+  return { pages: numbered, questionPages, answerPages, questionCount: questions.length };
 }

@@ -25,15 +25,22 @@ export class SupabaseSyncRemote implements SyncRemote {
   async pullSince(cursor: string | null, signal?: AbortSignal): Promise<RemoteBatch> {
     const since = cursor?.split('|')[0] ?? '1970-01-01T00:00:00.000Z';
     const pages = await Promise.all(tables.map(async ([kind, tableName]) => {
-      let query = this.client.from(tableName).select('*').gte('updated_at', since).order('updated_at').order('id').limit(1000);
-      if (signal) query = query.abortSignal(signal);
-      const { data, error } = await query;
-      if (error) throw error;
-      return (data ?? []).map((row) => this.fromRow(kind, row as Record<string, unknown>));
+      const records: RemoteRecord[] = [];
+      const pageSize = 1000;
+      for (let offset = 0; ; offset += pageSize) {
+        let query = this.client.from(tableName).select('*').gte('updated_at', since).order('updated_at').order('id').range(offset, offset + pageSize - 1);
+        if (signal) query = query.abortSignal(signal);
+        const { data, error } = await query;
+        if (error) throw error;
+        records.push(...(data ?? []).map((row) => this.fromRow(kind, row as Record<string, unknown>)));
+        if ((data?.length ?? 0) < pageSize) break;
+      }
+      return records;
     }));
-    const records = pages.flat().filter((record) => `${record.updatedAt}|${record.id}` > (cursor ?? '')).sort((left, right) => `${left.updatedAt}|${left.id}`.localeCompare(`${right.updatedAt}|${right.id}`));
+    const recordKey = (record: RemoteRecord) => `${record.updatedAt}|${record.kind}|${record.id}`;
+    const records = pages.flat().filter((record) => recordKey(record) > (cursor ?? '')).sort((left, right) => recordKey(left).localeCompare(recordKey(right)));
     const last = records.at(-1);
-    return { records, cursor: last ? `${last.updatedAt}|${last.id}` : (cursor ?? `${since}|`) };
+    return { records, cursor: last ? recordKey(last) : (cursor ?? `${since}||`) };
   }
 
   private toRow(kind: OperationKind, payload: Record<string, unknown>): [string, Record<string, unknown>] {

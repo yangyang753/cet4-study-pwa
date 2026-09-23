@@ -7,6 +7,7 @@ alter table public.attempts add column if not exists device_id text not null def
 alter table public.attempts add column if not exists updated_at timestamptz not null default now();
 alter table public.review_queue add column if not exists stage integer not null default 0;
 alter table public.review_queue add column if not exists last_correct boolean;
+alter table public.review_queue alter column id type text using id::text;
 
 create table if not exists public.task_completions (
   id text primary key, user_id uuid not null references auth.users(id) on delete cascade,

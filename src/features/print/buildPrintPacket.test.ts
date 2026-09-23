@@ -7,6 +7,7 @@ describe('buildPrintPacket', () => {
     const questions = getPracticeItems('listening').slice(0, 10);
     const packet = buildPrintPacket({ kind: 'practice', questions, pageCapacity: 8 });
     const allPages = [...packet.questionPages, ...packet.answerPages];
+    expect(packet.pages).toEqual(allPages);
     expect(allPages.every((page, index) => page.pageNumber === index + 1)).toBe(true);
     expect(allPages.every((page) => page.totalPages === allPages.length)).toBe(true);
     expect(packet.answerPages[0].blocks[0].explanation).toBe(questions[0].explanationZh);

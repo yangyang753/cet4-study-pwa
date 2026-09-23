@@ -11,5 +11,6 @@ describe('complete learning sync migration', () => {
       expect(sql).toMatch(new RegExp(`create policy ${table}_owner`, 'i'));
     }
     expect(sql).toContain("default '2026-12-12'");
+    expect(sql).toMatch(/review_queue alter column id type text/i);
   });
 });
