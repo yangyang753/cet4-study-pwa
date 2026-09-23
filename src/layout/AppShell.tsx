@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import '../styles/global.css';
+import { SyncStatus } from '../components/SyncStatus';
 
 const primaryLinks = [
   { to: '/today', label: '今日学习', icon: '⌂' },
@@ -35,8 +36,10 @@ export function AppShell({ children }: PropsWithChildren) {
           <span><strong>四级向前</strong><small>CET-4 Study Lab</small></span>
         </NavLink>
         <PrimaryNav />
+        <div className="desktop-sync"><SyncStatus compact /></div>
       </aside>
       <main className="main-content">{children ?? <Outlet />}</main>
+      <div className="mobile-sync"><SyncStatus compact /></div>
       <PrimaryNav mobile />
     </div>
   );

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { SyncEngine, resolveDraftConflict, type PendingOperation, type RemoteBatch, type SyncQueue, type SyncRemote } from './SyncEngine';
 
 class MemoryQueue implements SyncQueue {
@@ -70,6 +70,20 @@ describe('SyncEngine', () => {
 
     await expect(engine.sync('user-1')).rejects.toThrow('transaction failed');
     expect(queue.cursor).toBeNull();
+  });
+
+  it('never uploads an interrupted operation under the next account', async () => {
+    const queue = new MemoryQueue();
+    await queue.put(attemptOperation('private-a-1'));
+    const controller = new AbortController();
+    const firstRemote: SyncRemote = { upsertAttempt: async () => { controller.abort(); }, upsertDraft: async () => undefined };
+    await expect(new SyncEngine(queue, firstRemote).sync('user-1', controller.signal)).rejects.toMatchObject({ name: 'AbortError' });
+    const secondUpload = vi.fn().mockResolvedValue(undefined);
+    const secondRemote: SyncRemote = { upsertAttempt: secondUpload, upsertDraft: async () => undefined };
+
+    await new SyncEngine(queue, secondRemote).sync('user-2');
+
+    expect(secondUpload).not.toHaveBeenCalled();
   });
 });
 

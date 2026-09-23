@@ -1,5 +1,5 @@
 export type OperationKind = 'attempt' | 'draft' | 'reviewCard' | 'taskCompletion' | 'knowledgeState' | 'examSession' | 'settings' | 'tombstone';
-export interface PendingOperation { id: string; entityId: string; kind: OperationKind; payload: Record<string, unknown>; createdAt: string; attempts: number }
+export interface PendingOperation { id: string; entityId: string; kind: OperationKind; payload: Record<string, unknown>; createdAt: string; attempts: number; ownerId?: string }
 export interface DraftRecord { id: string; questionId: string; body: string; deviceId: string; updatedAt: string }
 export interface TombstoneRecord { id: string; kind: Exclude<OperationKind, 'tombstone'>; entityId: string; deletedAt: string; updatedAt: string }
 export interface RemoteRecord { kind: OperationKind; id: string; updatedAt: string; payload: Record<string, unknown>; deletedAt?: string }
@@ -39,15 +39,18 @@ export class SyncEngine {
       await this.queue.mergeRemoteBatch(batch);
       await this.queue.setSyncCursor(batch.cursor, userId);
     }
-    return this.flush(signal);
+    return this.flush(signal, userId);
   }
 
-  async flush(signal?: AbortSignal): Promise<{ synced: number; failed: number }> {
+  async flush(signal?: AbortSignal, userId?: string): Promise<{ synced: number; failed: number }> {
     const operations = (await this.queue.list()).sort((a, b) => a.createdAt.localeCompare(b.createdAt));
     let synced = 0;
     let failed = 0;
-    for (const operation of operations) {
+    for (const originalOperation of operations) {
       if (signal?.aborted) throw new DOMException('Sync cancelled', 'AbortError');
+      if (userId && originalOperation.ownerId && originalOperation.ownerId !== userId) continue;
+      const operation = userId && !originalOperation.ownerId ? { ...originalOperation, ownerId: userId } : originalOperation;
+      if (operation !== originalOperation) await this.queue.replace(operation);
       if (operation.attempts >= 5) { failed += 1; continue; }
       try {
         if (this.remote.upsertOperation) await this.remote.upsertOperation(operation.kind, operation.payload, signal);

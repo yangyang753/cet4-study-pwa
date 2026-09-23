@@ -19,6 +19,9 @@ button, input, textarea { font: inherit; }
 .desktop-nav a.active, .desktop-nav a:hover { color: white; background: rgb(255 255 255 / 12%); }
 .main-content { width: min(100%, 1500px); margin: 0 auto; padding: 34px clamp(24px, 5vw, 70px) 55px; }
 .mobile-nav { display: none; }
+.desktop-sync { position: absolute; right: 22px; bottom: 24px; left: 22px; color: #cfe0d8; font-size: 12px; }
+.mobile-sync { display: none; }
+.sync-status button { margin-left: 6px; border: 0; border-radius: 6px; background: var(--color-yellow); }
 .pwa-update { position: fixed; z-index: 40; right: 22px; bottom: 22px; display: flex; gap: 10px; align-items: center; padding: 14px 16px; border-radius: 14px; color: white; background: var(--color-green-dark); box-shadow: var(--shadow-card); }
 .pwa-update button { padding: 7px 10px; border: 0; border-radius: 8px; background: var(--color-yellow); font-weight: 800; }
 
@@ -27,10 +30,11 @@ button, input, textarea { font: inherit; }
 }
 
 @media (max-width: 900px) {
-  .app-shell { display: block; padding-bottom: 76px; }
+  .app-shell { display: block; padding-bottom: 132px; }
   .sidebar { display: none; }
   .main-content { padding: 22px 16px 36px; }
   .mobile-nav { position: fixed; z-index: 20; right: 0; bottom: 0; left: 0; display: grid; grid-template-columns: repeat(4, 1fr); min-height: 68px; padding: 8px; border-top: 1px solid var(--color-line); background: rgb(255 253 247 / 96%); backdrop-filter: blur(12px); }
+  .mobile-sync { position: fixed; z-index: 21; right: 10px; bottom: 116px; display: block; padding: 5px 9px; border-radius: 10px; color: white; background: var(--color-green-dark); font-size: 11px; }
   .mobile-nav a { display: grid; place-items: center; gap: 2px; color: var(--color-muted); font-size: 11px; }
   .mobile-nav a span { font-size: 18px; }
   .mobile-nav a.active { color: var(--color-green); font-weight: 800; }
