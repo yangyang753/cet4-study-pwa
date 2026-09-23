@@ -5,25 +5,57 @@
     "theme": "校园志愿活动",
     "themeEn": "campus volunteering",
     "difficulty": "foundation",
-    "transcript": "A university program about campus volunteering has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about campus volunteering has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about campus volunteering has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about campus volunteering has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new campus volunteering activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 校园志愿活动 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -33,7 +65,51 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
+      },
+      {
+        "prompt": "What can students do if they cannot attend?",
+        "options": [
+          "Request a refund",
+          "Watch a recording later",
+          "Join without registering",
+          "Submit a written report"
+        ],
+        "answer": 1,
+        "explanationZh": "结尾指出不能参加者之后可以观看录像。"
       }
     ],
     "audioSrc": "/audio/v1/listen-01.wav"
@@ -44,25 +120,57 @@
     "theme": "图书馆服务",
     "themeEn": "library services",
     "difficulty": "foundation",
-    "transcript": "A university program about library services has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about library services has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about library services has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about library services has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new library services activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 图书馆服务 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -72,7 +180,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-02.wav"
@@ -83,25 +224,57 @@
     "theme": "课程选择",
     "themeEn": "course selection",
     "difficulty": "foundation",
-    "transcript": "A university program about course selection has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about course selection has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about course selection has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about course selection has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new course selection activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 课程选择 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -111,7 +284,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-03.wav"
@@ -122,25 +328,57 @@
     "theme": "宿舍生活",
     "themeEn": "dormitory life",
     "difficulty": "foundation",
-    "transcript": "A university program about dormitory life has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about dormitory life has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about dormitory life has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about dormitory life has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new dormitory life activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 宿舍生活 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -150,7 +388,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-04.wav"
@@ -161,25 +432,57 @@
     "theme": "学生社团",
     "themeEn": "student clubs",
     "difficulty": "foundation",
-    "transcript": "A university program about student clubs has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about student clubs has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about student clubs has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about student clubs has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new student clubs activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 学生社团 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -189,7 +492,51 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
+      },
+      {
+        "prompt": "What can students do if they cannot attend?",
+        "options": [
+          "Request a refund",
+          "Watch a recording later",
+          "Join without registering",
+          "Submit a written report"
+        ],
+        "answer": 1,
+        "explanationZh": "结尾指出不能参加者之后可以观看录像。"
       }
     ],
     "audioSrc": "/audio/v1/listen-05.wav"
@@ -200,25 +547,57 @@
     "theme": "实习安排",
     "themeEn": "internship arrangements",
     "difficulty": "foundation",
-    "transcript": "A university program about internship arrangements has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about internship arrangements has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about internship arrangements has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about internship arrangements has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new internship arrangements activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 实习安排 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -228,7 +607,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-06.wav"
@@ -239,25 +651,57 @@
     "theme": "城市交通",
     "themeEn": "urban transport",
     "difficulty": "foundation",
-    "transcript": "A university program about urban transport has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about urban transport has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about urban transport has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about urban transport has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new urban transport activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 城市交通 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -267,7 +711,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-07.wav"
@@ -278,25 +755,57 @@
     "theme": "环境保护",
     "themeEn": "environmental protection",
     "difficulty": "foundation",
-    "transcript": "A university program about environmental protection has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about environmental protection has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about environmental protection has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about environmental protection has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new environmental protection activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 环境保护 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -306,7 +815,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-08.wav"
@@ -317,25 +859,57 @@
     "theme": "健康饮食",
     "themeEn": "healthy eating",
     "difficulty": "standard",
-    "transcript": "A university program about healthy eating has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about healthy eating has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about healthy eating has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about healthy eating has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new healthy eating activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 健康饮食 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -345,7 +919,51 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
+      },
+      {
+        "prompt": "What can students do if they cannot attend?",
+        "options": [
+          "Request a refund",
+          "Watch a recording later",
+          "Join without registering",
+          "Submit a written report"
+        ],
+        "answer": 1,
+        "explanationZh": "结尾指出不能参加者之后可以观看录像。"
       }
     ],
     "audioSrc": "/audio/v1/listen-09.wav"
@@ -356,25 +974,57 @@
     "theme": "运动习惯",
     "themeEn": "exercise habits",
     "difficulty": "standard",
-    "transcript": "A university program about exercise habits has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about exercise habits has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about exercise habits has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about exercise habits has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new exercise habits activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 运动习惯 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -384,7 +1034,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-10.wav"
@@ -395,25 +1078,57 @@
     "theme": "数字学习",
     "themeEn": "digital learning",
     "difficulty": "standard",
-    "transcript": "A university program about digital learning has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about digital learning has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about digital learning has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about digital learning has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new digital learning activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 数字学习 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -423,7 +1138,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-11.wav"
@@ -434,25 +1182,57 @@
     "theme": "时间管理",
     "themeEn": "time management",
     "difficulty": "standard",
-    "transcript": "A university program about time management has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about time management has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about time management has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about time management has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new time management activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 时间管理 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -462,7 +1242,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-12.wav"
@@ -473,25 +1286,57 @@
     "theme": "社区服务",
     "themeEn": "community service",
     "difficulty": "standard",
-    "transcript": "A university program about community service has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about community service has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about community service has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about community service has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new community service activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 社区服务 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -501,7 +1346,51 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
+      },
+      {
+        "prompt": "What can students do if they cannot attend?",
+        "options": [
+          "Request a refund",
+          "Watch a recording later",
+          "Join without registering",
+          "Submit a written report"
+        ],
+        "answer": 1,
+        "explanationZh": "结尾指出不能参加者之后可以观看录像。"
       }
     ],
     "audioSrc": "/audio/v1/listen-13.wav"
@@ -512,25 +1401,57 @@
     "theme": "旅游计划",
     "themeEn": "travel planning",
     "difficulty": "standard",
-    "transcript": "A university program about travel planning has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about travel planning has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about travel planning has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about travel planning has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new travel planning activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 旅游计划 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -540,7 +1461,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-14.wav"
@@ -551,25 +1505,57 @@
     "theme": "文化节日",
     "themeEn": "cultural festivals",
     "difficulty": "standard",
-    "transcript": "A university program about cultural festivals has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about cultural festivals has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about cultural festivals has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about cultural festivals has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new cultural festivals activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 文化节日 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -579,7 +1565,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-15.wav"
@@ -590,25 +1609,57 @@
     "theme": "科技创新",
     "themeEn": "technological innovation",
     "difficulty": "standard",
-    "transcript": "A university program about technological innovation has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about technological innovation has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about technological innovation has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about technological innovation has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new technological innovation activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 科技创新 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -618,7 +1669,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-16.wav"
@@ -629,25 +1713,57 @@
     "theme": "就业准备",
     "themeEn": "career preparation",
     "difficulty": "standard",
-    "transcript": "A university program about career preparation has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about career preparation has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about career preparation has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about career preparation has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new career preparation activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 就业准备 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -657,7 +1773,51 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
+      },
+      {
+        "prompt": "What can students do if they cannot attend?",
+        "options": [
+          "Request a refund",
+          "Watch a recording later",
+          "Join without registering",
+          "Submit a written report"
+        ],
+        "answer": 1,
+        "explanationZh": "结尾指出不能参加者之后可以观看录像。"
       }
     ],
     "audioSrc": "/audio/v1/listen-17.wav"
@@ -668,25 +1828,57 @@
     "theme": "团队合作",
     "themeEn": "teamwork",
     "difficulty": "standard",
-    "transcript": "A university program about teamwork has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about teamwork has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about teamwork has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about teamwork has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new teamwork activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 团队合作 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -696,7 +1888,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-18.wav"
@@ -707,25 +1932,57 @@
     "theme": "公共安全",
     "themeEn": "public safety",
     "difficulty": "challenge",
-    "transcript": "A university program about public safety has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about public safety has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about public safety has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about public safety has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new public safety activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 公共安全 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -735,7 +1992,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-19.wav"
@@ -746,25 +2036,57 @@
     "theme": "消费选择",
     "themeEn": "consumer choices",
     "difficulty": "challenge",
-    "transcript": "A university program about consumer choices has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about consumer choices has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about consumer choices has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about consumer choices has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new consumer choices activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 消费选择 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -774,7 +2096,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-20.wav"
@@ -785,25 +2140,57 @@
     "theme": "气候变化",
     "themeEn": "climate change",
     "difficulty": "challenge",
-    "transcript": "A university program about climate change has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about climate change has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about climate change has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about climate change has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new climate change activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 气候变化 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -813,7 +2200,51 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
+      },
+      {
+        "prompt": "What can students do if they cannot attend?",
+        "options": [
+          "Request a refund",
+          "Watch a recording later",
+          "Join without registering",
+          "Submit a written report"
+        ],
+        "answer": 1,
+        "explanationZh": "结尾指出不能参加者之后可以观看录像。"
       }
     ],
     "audioSrc": "/audio/v1/listen-21.wav"
@@ -824,25 +2255,57 @@
     "theme": "博物馆活动",
     "themeEn": "museum activities",
     "difficulty": "challenge",
-    "transcript": "A university program about museum activities has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about museum activities has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about museum activities has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about museum activities has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new museum activities activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 博物馆活动 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -852,7 +2315,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-22.wav"
@@ -863,25 +2359,57 @@
     "theme": "学术讲座",
     "themeEn": "academic lectures",
     "difficulty": "challenge",
-    "transcript": "A university program about academic lectures has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about academic lectures has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about academic lectures has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about academic lectures has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new academic lectures activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 学术讲座 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -891,7 +2419,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-23.wav"
@@ -902,25 +2463,57 @@
     "theme": "在线会议",
     "themeEn": "online meetings",
     "difficulty": "challenge",
-    "transcript": "A university program about online meetings has introduced a new weekly activity. The Saturday group is full, but another session is now available on Sunday afternoon. Students are advised to register early and bring the materials listed in the notice.",
+    "transcript": "A university program about online meetings has introduced a new weekly activity after reviewing student feedback. The Saturday group is full, but another session is now available on Sunday afternoon. Students should register online before Thursday and bring a student card and a reusable notebook. No previous experience is required because a short orientation will be provided. Anyone unable to attend may watch a recording later.",
     "segments": [
       {
         "start": 0,
-        "end": 7,
-        "text": "A university program about online meetings has introduced a new weekly activity."
+        "end": 9,
+        "text": "A university program about online meetings has introduced a new weekly activity after reviewing student feedback."
       },
       {
-        "start": 7,
-        "end": 15,
+        "start": 9,
+        "end": 18,
         "text": "The Saturday group is full, but another session is now available on Sunday afternoon."
       },
       {
-        "start": 15,
-        "end": 23,
-        "text": "Students are advised to register early and bring the materials listed in the notice."
+        "start": 18,
+        "end": 28,
+        "text": "Students should register online before Thursday and bring a student card and a reusable notebook."
+      },
+      {
+        "start": 28,
+        "end": 37,
+        "text": "No previous experience is required because a short orientation will be provided."
+      },
+      {
+        "start": 37,
+        "end": 44,
+        "text": "Anyone unable to attend may watch a recording later."
       }
     ],
     "questions": [
+      {
+        "prompt": "What is the announcement mainly about?",
+        "options": [
+          "A new online meetings activity",
+          "A cancelled examination",
+          "A library fine",
+          "A sports competition"
+        ],
+        "answer": 0,
+        "explanationZh": "开头说明学校推出了与 在线会议 有关的新活动。"
+      },
+      {
+        "prompt": "Why was another session added?",
+        "options": [
+          "The teacher was absent",
+          "The Saturday group was full",
+          "The room was repaired",
+          "The fee was reduced"
+        ],
+        "answer": 1,
+        "explanationZh": "but 前后说明周六组已满，因此增加了另一场。"
+      },
       {
         "prompt": "When is the additional session available?",
         "options": [
@@ -930,7 +2523,40 @@
           "Friday noon"
         ],
         "answer": 1,
-        "explanationZh": "but 后说明新增场次在周日下午。"
+        "explanationZh": "转折后明确说明新增场次在周日下午。"
+      },
+      {
+        "prompt": "When should students register?",
+        "options": [
+          "Before Thursday",
+          "On Friday night",
+          "After Sunday",
+          "At the end of term"
+        ],
+        "answer": 0,
+        "explanationZh": "原文要求学生在周四之前在线注册。"
+      },
+      {
+        "prompt": "What should students bring?",
+        "options": [
+          "A laptop and headphones",
+          "A passport and map",
+          "A student card and reusable notebook",
+          "Food and sportswear"
+        ],
+        "answer": 2,
+        "explanationZh": "原文列出的材料是学生证和可重复使用的笔记本。"
+      },
+      {
+        "prompt": "What is said about previous experience?",
+        "options": [
+          "It is required",
+          "It is preferred",
+          "It is not required",
+          "It must be certified"
+        ],
+        "answer": 2,
+        "explanationZh": "原文明确说不要求先前经验，并会提供简短说明。"
       }
     ],
     "audioSrc": "/audio/v1/listen-24.wav"
