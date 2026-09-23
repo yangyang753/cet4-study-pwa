@@ -9,9 +9,9 @@
 - 24 组带真人感语音资源的听力训练，支持倍速、逐句与听写
 - 客观题即时判分、中文解析、错因标记和间隔复习
 - 写作与翻译编辑、自查清单、参考答案和本地草稿
-- 6 套阶段模拟卷的数据结构与成绩汇总
-- A4 练习页/答案页分离打印，预留手写答题空间
-- 本地优先存储、断网可重开、PWA 安装、Supabase 账户同步链路
+- 6 套 125 分钟、57 题完整模拟卷，支持恢复、交卷和分项分析
+- 可配置 A4 每日/专项/模拟练习，题目与完整答案解析分离
+- 本地优先存储、断网作答、JSON 备份恢复、PWA 安装和 Supabase 双向同步
 - 桌面侧栏与手机底部导航
 
 ## 本地运行
@@ -33,11 +33,13 @@ pnpm preview:test
 ## 启用账户与跨设备同步
 
 1. 创建 Supabase 项目。
-2. 在 SQL Editor 执行 `supabase/migrations/001_initial.sql`，按需执行 `supabase/seed.sql`。
+2. 在 SQL Editor 依次执行 `supabase/migrations/001_initial.sql` 和 `supabase/migrations/002_complete_learning_sync.sql`，按需执行 `supabase/seed.sql`。
 3. 复制 `.env.example` 为 `.env.local`，填写项目 URL 和 publishable/anon key。
 4. 在 Supabase Authentication 中启用 Email 登录，然后重新启动开发服务器。
 
 未配置 Supabase 时，应用自动进入离线体验模式；学习内容和答题记录仍优先保存到浏览器本机。
+
+GitHub Pages 部署可在仓库 Settings → Secrets and variables → Actions 中同时添加 `VITE_SUPABASE_URL` 和 `VITE_SUPABASE_ANON_KEY`。两项都不设置时会安全构建为离线模式；只设置其中一项会中止部署，避免产生无法登录的半配置版本。
 
 ## 内容维护
 
@@ -61,13 +63,14 @@ pnpm vitest run
 pnpm typecheck
 pnpm build
 pnpm e2e
+pnpm release:verify
 ```
 
 端到端测试覆盖桌面学习路径、手机布局、PWA 清单、离线重开和 A4 PDF 渲染。Windows 本机测试使用已安装的 Chrome；CI 可在 `playwright.config.ts` 中改用 Playwright Chromium。
 
 ## 部署
 
-`pnpm build` 生成 `dist/` 静态站点，可部署到任意 HTTPS 静态托管服务。托管平台需要将未知路径回退到 `index.html`，以支持 `/today`、`/knowledge` 等前端路由。PWA 与服务工作线程在 HTTPS 或 localhost 下启用。
+`pnpm build` 生成 `dist/` 静态站点，可部署到任意 HTTPS 静态托管服务。GitHub Actions 已配置 Pages 发布、仓库子路径、404 路由回退、可选云端密钥与发布前检查。其他托管平台需要将未知路径回退到 `index.html`。PWA 与服务工作线程在 HTTPS 或 localhost 下启用。
 
 仓库已提供 `vercel.json`，可直接运行 `vercel --prod` 发布到 Vercel。
 
