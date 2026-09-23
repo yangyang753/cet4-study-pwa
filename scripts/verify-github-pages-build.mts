@@ -45,7 +45,7 @@ const browser = await chromium.launch({ channel: 'chrome' });
 try {
   const page = await browser.newPage();
   await page.goto(`http://127.0.0.1:4189${repositoryBase}today`);
-  await page.getByRole('heading', { name: /继续向 425 分前进/ }).waitFor();
+await page.getByRole('heading', { name: /向目标 425 分前进/ }).waitFor();
   await page.getByRole('link', { name: /开始今日训练/ }).click();
   await page.waitForURL(`**${repositoryBase}listen`);
   const audioUrl = await page.locator('audio').getAttribute('src');

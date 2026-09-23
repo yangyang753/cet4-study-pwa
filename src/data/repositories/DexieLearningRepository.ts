@@ -12,7 +12,14 @@ const entityTimestamp = (entity: StoredEntity) => entity.updatedAt ?? entity.com
 
 export class DexieLearningRepository implements LearningRepository {
   constructor(private readonly db: LearningDatabase = learningDb) {}
-  async saveAttempt(attempt: Attempt) { return this.saveAttemptOnce(attempt); }
+  async saveAttempt(attempt: Attempt) {
+    const updatedAt = attempt.updatedAt ?? attempt.createdAt;
+    await this.db.transaction('rw', this.db.attempts, this.db.syncQueue, async () => {
+      await this.db.attempts.put(attempt);
+      await this.put(this.operation('attempt', attempt.id, attempt as unknown as Record<string, unknown>, updatedAt));
+    });
+    this.requestSync();
+  }
   async saveAttemptOnce(attempt: Attempt) {
     await this.db.transaction('rw', this.db.attempts, this.db.syncQueue, async () => {
       if (await this.db.attempts.get(attempt.id)) return;
@@ -33,12 +40,17 @@ export class DexieLearningRepository implements LearningRepository {
   getPendingOperations() { return this.list(); }
   async upsertReviewCard(card: ReviewCard) { await this.saveMutable('reviewCard', this.db.reviewCards, card, card.updatedAt); }
   async getReviewCard(id: string) { return (await this.db.reviewCards.get(id)) ?? null; }
-  listDueReviews(at: string) { return this.db.reviewCards.where('nextReviewAt').belowOrEqual(at).sortBy('nextReviewAt'); }
+  async listDueReviews(at: string) {
+    const cards = await this.db.reviewCards.where('nextReviewAt').belowOrEqual(at).toArray();
+    return cards.sort((left, right) => (right.priority ?? 1) - (left.priority ?? 1) || left.nextReviewAt.localeCompare(right.nextReviewAt));
+  }
   async completeTask(completion: StudyTaskCompletion) { await this.saveMutable('taskCompletion', this.db.taskCompletions, completion, completion.completedAt); }
   async upsertKnowledgeState(state: KnowledgeState) { await this.saveMutable('knowledgeState', this.db.knowledgeStates, state, state.updatedAt); }
   async saveUserSettings(settings: UserSettings) { await this.saveMutable('settings', this.db.settings, settings, settings.updatedAt); }
   async saveExamSession(session: ExamSessionRecord) { await this.saveMutable('examSession', this.db.examSessions, session, session.updatedAt); }
   async getActiveExamSession() { const active = await this.db.examSessions.where('status').equals('active').toArray(); return active.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0]; }
+  async savePlan(plan: import('../localDb').CachedPlan) { await this.db.plans.put(plan); }
+  async getPlan(date: string) { return (await this.db.plans.where('date').equals(date).first()) ?? null; }
   async getDashboardSnapshot(at = new Date().toISOString()) {
     const [attempts, dueReviews, completions, knowledgeStates, settings] = await Promise.all([this.db.attempts.toArray(), this.listDueReviews(at), this.db.taskCompletions.toArray(), this.db.knowledgeStates.toArray(), this.db.settings.get('current')]);
     return { attempts, dueReviews, completions, knowledgeStates, settings: settings ?? defaultUserSettings() };
@@ -67,7 +79,10 @@ export class DexieLearningRepository implements LearningRepository {
         if (tombstone && tombstone.deletedAt >= record.updatedAt) continue;
         const table = this.tableFor(kind);
         const local = await table.get(record.id);
-        if (kind === 'attempt') { if (!local) await table.put(record.payload as unknown as StoredEntity); continue; }
+        if (kind === 'attempt') {
+          if (!local || entityTimestamp(local) <= record.updatedAt) await table.put(record.payload as unknown as StoredEntity);
+          continue;
+        }
         if (kind === 'draft' && local?.body && local.body !== record.payload.body) {
           const merged = resolveDraftConflict(local as DraftRecord, record.payload as unknown as DraftRecord);
           await table.bulkPut(merged);

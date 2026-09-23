@@ -42,4 +42,18 @@ describe('ExamSession', () => {
     await userEvent.click(screen.getByRole('button', { name: '继续考试' }));
     expect(await screen.findByText('写作 · 30 分钟')).toBeVisible();
   });
+
+  it('lets the learner finish a section early and continue to the next section', async () => {
+    const repo = repository();
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    render(<ExamSession mockId="mock-1" repository={repo} now={() => '2026-09-23T08:00:00.000Z'} />);
+
+    await userEvent.click(await screen.findByRole('button', { name: '完成写作并进入听力' }));
+
+    expect(await screen.findByText('当前分区：听力（25 分钟）')).toBeVisible();
+    await waitFor(() => expect(repo.saveExamSession).toHaveBeenCalledWith(expect.objectContaining({
+      currentSectionIndex: 1,
+      lockedSectionIndexes: [0],
+    })));
+  });
 });

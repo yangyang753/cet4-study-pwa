@@ -30,6 +30,46 @@ const attempt: Attempt = {
 };
 
 describe('DexieLearningRepository', () => {
+  it('stores and retrieves the actual daily plan used for carryover', async () => {
+    const db = new LearningDatabase(databaseName());
+    const repository = new DexieLearningRepository(db);
+    const plan = { id: 'plan:2026-10-19', date: '2026-10-19', tasks: [{ id: '2026-10-19:writing', kind: 'writing' as const, minutes: 20, priority: 2 }], updatedAt: '2026-10-19T00:00:00.000Z' };
+
+    await repository.savePlan(plan);
+
+    expect(await repository.getPlan('2026-10-19')).toEqual(plan);
+    db.close();
+  });
+
+  it('updates an existing attempt with its learner-selected mistake reason', async () => {
+    const db = new LearningDatabase(databaseName());
+    const repository = new DexieLearningRepository(db);
+    const attempt = {
+      id: 'reason-attempt', userId: 'local', questionId: 'q1', response: 'B', correct: false,
+      score: 0, durationSeconds: 12, createdAt: '2026-09-23T10:00:00.000Z',
+    };
+
+    await repository.saveAttemptOnce(attempt);
+    await repository.saveAttempt({ ...attempt, mistakeReason: 'guessed', updatedAt: '2026-09-23T10:01:00.000Z' });
+
+    expect(await db.attempts.get(attempt.id)).toMatchObject({ id: attempt.id, mistakeReason: 'guessed' });
+    db.close();
+  });
+
+  it('accepts a newer remote mistake reason for an existing attempt', async () => {
+    const db = new LearningDatabase(databaseName());
+    const repository = new DexieLearningRepository(db);
+    await repository.saveAttemptOnce(attempt);
+
+    await repository.mergeRemoteBatch({ cursor: 'cursor-1', records: [{
+      kind: 'attempt', id: attempt.id, updatedAt: '2026-09-23T10:05:00.000Z',
+      payload: { ...attempt, mistakeReason: 'misunderstood', updatedAt: '2026-09-23T10:05:00.000Z' },
+    }] });
+
+    expect(await db.attempts.get(attempt.id)).toMatchObject({ mistakeReason: 'misunderstood' });
+    db.close();
+  });
+
   it('saves the same attempt id only once', async () => {
     const db = new LearningDatabase(databaseName());
     const repository = new DexieLearningRepository(db);
@@ -53,6 +93,16 @@ describe('DexieLearningRepository', () => {
     await repository.upsertReviewCard(reviewCard);
 
     expect(await repository.listDueReviews('2026-09-23T12:00:00.000Z')).toEqual([reviewCard]);
+    db.close();
+  });
+
+  it('orders due review cards by learner-specific priority', async () => {
+    const db = new LearningDatabase(databaseName());
+    const repository = new DexieLearningRepository(db);
+    await repository.upsertReviewCard({ id: 'low', questionId: 'q1', stage: 0, priority: 2, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z' });
+    await repository.upsertReviewCard({ id: 'high', questionId: 'q2', stage: 0, priority: 6, nextReviewAt: '2026-09-23T09:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T09:00:00.000Z' });
+
+    expect((await repository.listDueReviews('2026-09-23T12:00:00.000Z')).map((card) => card.id)).toEqual(['high', 'low']);
     db.close();
   });
 

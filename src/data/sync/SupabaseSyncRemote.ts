@@ -45,9 +45,9 @@ export class SupabaseSyncRemote implements SyncRemote {
 
   private toRow(kind: OperationKind, payload: Record<string, unknown>): [string, Record<string, unknown>] {
     const common = { id: payload.id, user_id: this.userId, updated_at: payload.updatedAt ?? payload.createdAt ?? payload.completedAt };
-    if (kind === 'attempt') return ['attempts', { ...common, question_id: payload.questionId, response: payload.response, correct: payload.correct, score: payload.score, duration_seconds: payload.durationSeconds ?? 0, content_version: payload.contentVersion ?? 'v1', kind: payload.kind ?? 'practice', mode: payload.mode ?? 'practice', device_id: payload.deviceId ?? 'unknown', created_at: payload.createdAt }];
+    if (kind === 'attempt') return ['attempts', { ...common, question_id: payload.questionId, response: payload.response, correct: payload.correct, score: payload.score, duration_seconds: payload.durationSeconds ?? 0, mistake_reason: payload.mistakeReason ?? null, content_version: payload.contentVersion ?? 'v1', kind: payload.kind ?? 'practice', mode: payload.mode ?? 'practice', device_id: payload.deviceId ?? 'unknown', created_at: payload.createdAt }];
     if (kind === 'draft') return ['drafts', { ...common, question_id: payload.questionId, body: payload.body, device_id: payload.deviceId }];
-    if (kind === 'reviewCard') return ['review_queue', { ...common, question_id: payload.questionId, priority: 1, next_review_at: payload.nextReviewAt, stage: payload.stage, last_correct: payload.lastCorrect }];
+    if (kind === 'reviewCard') return ['review_queue', { ...common, question_id: payload.questionId, priority: payload.priority ?? 1, reason: payload.reason ?? null, next_review_at: payload.nextReviewAt, stage: payload.stage, last_correct: payload.lastCorrect }];
     if (kind === 'taskCompletion') return ['task_completions', { ...common, task_id: payload.taskId, kind: payload.kind, completion_date: payload.date, completed_at: payload.completedAt }];
     if (kind === 'knowledgeState') return ['knowledge_states', { ...common, item_id: payload.itemId, status: payload.status, favorite: payload.favorite }];
     if (kind === 'examSession') return ['exam_sessions', { ...common, mock_id: payload.mockId, content_version: payload.contentVersion, status: payload.status, payload }];
@@ -57,9 +57,9 @@ export class SupabaseSyncRemote implements SyncRemote {
 
   private fromRow(kind: OperationKind, row: Record<string, unknown>): RemoteRecord {
     const updatedAt = asString(row.updated_at);
-    if (kind === 'attempt') return { kind, id: asString(row.id), updatedAt, payload: { id: row.id, userId: this.userId, questionId: row.question_id, response: row.response, correct: row.correct, score: row.score, durationSeconds: row.duration_seconds, contentVersion: row.content_version, kind: row.kind, mode: row.mode, deviceId: row.device_id, createdAt: row.created_at, updatedAt } };
+    if (kind === 'attempt') return { kind, id: asString(row.id), updatedAt, payload: { id: row.id, userId: this.userId, questionId: row.question_id, response: row.response, correct: row.correct, score: row.score, durationSeconds: row.duration_seconds, mistakeReason: row.mistake_reason, contentVersion: row.content_version, kind: row.kind, mode: row.mode, deviceId: row.device_id, createdAt: row.created_at, updatedAt } };
     if (kind === 'draft') return { kind, id: asString(row.id), updatedAt, payload: { id: row.id, questionId: row.question_id, body: row.body, deviceId: row.device_id, updatedAt } };
-    if (kind === 'reviewCard') return { kind, id: asString(row.id), updatedAt, payload: { id: row.id, questionId: row.question_id, stage: row.stage, nextReviewAt: row.next_review_at, lastCorrect: row.last_correct, updatedAt } };
+    if (kind === 'reviewCard') return { kind, id: asString(row.id), updatedAt, payload: { id: row.id, questionId: row.question_id, stage: row.stage, priority: row.priority, reason: row.reason, nextReviewAt: row.next_review_at, lastCorrect: row.last_correct, updatedAt } };
     if (kind === 'taskCompletion') return { kind, id: asString(row.id), updatedAt, payload: { id: row.id, taskId: row.task_id, kind: row.kind, date: row.completion_date, completedAt: row.completed_at, updatedAt } };
     if (kind === 'knowledgeState') return { kind, id: asString(row.id), updatedAt, payload: { id: row.id, itemId: row.item_id, status: row.status, favorite: row.favorite, updatedAt } };
     if (kind === 'examSession' || kind === 'settings') return { kind, id: asString(row.id), updatedAt, payload: { ...(row.payload as Record<string, unknown>), updatedAt } };

@@ -14,4 +14,5 @@ export interface Attempt {
   mode?: 'practice' | 'exam' | 'review' | 'mastery';
   deviceId?: string;
   createdAt: string;
+  updatedAt?: string;
 }

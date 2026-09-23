@@ -122,13 +122,20 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
     updateSession(reduceExamSession(session, { type: 'submit', now: submittedAt }), true);
     void completeDailyTask(repository, 'mock', submittedAt.slice(0, 10));
   };
+  const nextSection = exam.sections[session.currentSectionIndex + 1];
+  const advanceSection = () => {
+    if (!nextSection || !window.confirm(`确认完成${sectionNames[section.kind]}并进入${sectionNames[nextSection.kind]}吗？进入后不能返回上一部分。`)) return;
+    const advanced = reduceExamSession(session, { type: 'go-to-section', sectionIndex: session.currentSectionIndex + 1, now: now() });
+    setQuestionIndex(0);
+    updateSession(advanced, true);
+  };
 
   return <section className="exam-session">
     <header className="exam-header"><div><span>完整模拟 · 原创仿真</span><h1>{exam.title}</h1></div><div className="exam-timer"><small>全卷剩余</small><strong role="timer">{formatSeconds(seconds)}</strong></div></header>
     <nav className="exam-sections" aria-label="考试分区">{exam.sections.map((item, index) => <span key={item.kind} className={index === session.currentSectionIndex ? 'active' : ''} aria-current={index === session.currentSectionIndex ? 'step' : undefined}>{sectionNames[item.kind]} · {item.minutes} 分钟{session.lockedSectionIndexes.includes(index) ? ' · 已锁定' : ''}</span>)}</nav>
     <div className="exam-progress"><span>当前分区：{sectionNames[section.kind]}（{section.minutes} 分钟）</span><span>本区 {questionIndex + 1}/{section.questions.length} · 全卷已答 {answered}/57</span></div>
     <main className="exam-question"><QuestionView question={question} response={response} onChange={saveAnswer} /></main>
-    <footer className="exam-actions"><button disabled={questionIndex === 0} onClick={() => moveQuestion(questionIndex - 1)}>上一题</button><button disabled={questionIndex === section.questions.length - 1} onClick={() => moveQuestion(questionIndex + 1)}>下一题</button><button className="danger-action" onClick={submit}>交卷</button></footer>
+    <footer className="exam-actions"><button disabled={questionIndex === 0} onClick={() => moveQuestion(questionIndex - 1)}>上一题</button><button disabled={questionIndex === section.questions.length - 1} onClick={() => moveQuestion(questionIndex + 1)}>下一题</button>{nextSection && <button className="section-action" onClick={advanceSection}>完成{sectionNames[section.kind]}并进入{sectionNames[nextSection.kind]}</button>}<button className="danger-action" onClick={submit}>交卷</button></footer>
     <p className="exam-save-note">每次作答、切题及每 30 秒自动保存到本机。考试中不显示答案和解析。</p>
   </section>;
 }

@@ -11,7 +11,8 @@ function daysBetween(start: string, end: string) {
 export function planDay(input: PlannerInput): DailyPlan {
   const remaining = daysBetween(input.date, input.examDate);
   const phase: StudyPhase = remaining <= 28 ? 'sprint' : remaining <= 56 ? 'breakthrough' : 'foundation';
-  const rotating: StudyKind = phase === 'sprint' ? 'mock' : phase === 'breakthrough' ? input.weakSkill : 'reading';
+  const requestedRotating: StudyKind = phase === 'sprint' ? 'mock' : phase === 'breakthrough' ? input.weakSkill : 'reading';
+  const rotating: StudyKind = ['vocabulary', 'listening', 'review'].includes(requestedRotating) ? 'reading' : requestedRotating;
   const minutes = input.dailyMinutes;
   const vocabularyMinutes = Math.round(minutes * 0.25);
   const listeningMinutes = Math.round(minutes / 3);
@@ -27,6 +28,11 @@ export function planDay(input: PlannerInput): DailyPlan {
   const total = tasks.reduce((sum, task) => sum + task.minutes, 0);
   if (total < minutes) tasks[2] = { ...tasks[2], minutes: tasks[2].minutes + minutes - total };
   return { date: input.date, phase, tasks };
+}
+
+export function carryoverFromPlan(previousTasks: StudyTask[], completedTaskIds: Set<string>): StudyTask[] {
+  return previousTasks.filter((task) =>
+    !completedTaskIds.has(task.id) && !['vocabulary', 'listening', 'review'].includes(task.kind));
 }
 
 export function daysUntil(date: string, examDate: string) { return Math.max(0, daysBetween(date, examDate)); }

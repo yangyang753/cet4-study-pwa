@@ -6,6 +6,19 @@ const exam = resolveExam('mock-1');
 const startedAt = '2026-09-23T00:00:00.000Z';
 
 describe('exam session reducer', () => {
+  it('locks completed sections when the learner advances manually', () => {
+    const session = createExamSession(exam, startedAt);
+
+    const advanced = reduceExamSession(session, {
+      type: 'go-to-section',
+      sectionIndex: 1,
+      now: '2026-09-23T00:10:00.000Z',
+    });
+
+    expect(advanced.currentSectionIndex).toBe(1);
+    expect(advanced.lockedSectionIndexes).toEqual([0]);
+  });
+
   it('uses an absolute final deadline and records answers', () => {
     const session = createExamSession(exam, startedAt);
     expect(remainingSeconds(session, '2026-09-23T00:00:30.000Z')).toBe(7470);

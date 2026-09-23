@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { TodayPage } from './TodayPage';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
@@ -10,7 +10,19 @@ const snapshot = {
 };
 
 function repository(overrides = {}) {
-  return { getDashboardSnapshot: async () => ({ ...snapshot, ...overrides }) } as unknown as LearningRepository;
+  return {
+    getDashboardSnapshot: async () => ({ ...snapshot, ...overrides }),
+    getPlan: async (date: string) => date === '2026-10-19' ? {
+      id: 'plan:2026-10-19', date, updatedAt: '2026-10-19T00:00:00.000Z',
+      tasks: [
+        { id: '2026-10-19:vocabulary', kind: 'vocabulary', minutes: 15, priority: 3 },
+        { id: '2026-10-19:listening', kind: 'listening', minutes: 20, priority: 4 },
+        { id: '2026-10-19:writing', kind: 'writing', minutes: 20, priority: 2 },
+        { id: '2026-10-19:review', kind: 'review', minutes: 5, priority: 5 },
+      ],
+    } : null,
+    savePlan: async () => undefined,
+  } as unknown as LearningRepository;
 }
 
 describe('TodayPage', () => {
@@ -40,5 +52,24 @@ describe('TodayPage', () => {
     })} />);
     expect(await screen.findByRole('link', { name: '开始掌握检测' })).toHaveAttribute('href', expect.stringContaining('mastery/vocabulary'));
     expect(screen.getByText('已掌握')).toBeVisible();
+  });
+
+  it('labels an unfinished specialist task carried over from yesterday', async () => {
+    const attempts = Array.from({ length: 5 }, (_, index) => ({
+      id: `attempt-${index}`, userId: 'local', questionId: `q-${index}`, response: 'A',
+      correct: false, score: 0, durationSeconds: 10, kind: 'writing', mode: 'practice' as const,
+      createdAt: `2026-10-19T0${index}:00:00.000Z`,
+    }));
+    render(<TodayPage today="2026-10-20" repository={repository({
+      attempts,
+      completions: [
+        { id: '2026-10-19:vocabulary', date: '2026-10-19', taskId: '2026-10-19:vocabulary', kind: 'vocabulary', completedAt: '2026-10-19T08:00:00.000Z' },
+        { id: '2026-10-19:listening', date: '2026-10-19', taskId: '2026-10-19:listening', kind: 'listening', completedAt: '2026-10-19T08:20:00.000Z' },
+        { id: '2026-10-19:review', date: '2026-10-19', taskId: '2026-10-19:review', kind: 'review', completedAt: '2026-10-19T08:40:00.000Z' },
+      ],
+    })} />);
+
+    await screen.findByText('优先加强短文写作');
+    await waitFor(() => expect(screen.getByText('昨日顺延')).toBeVisible());
   });
 });

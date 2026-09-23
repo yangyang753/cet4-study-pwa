@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { planDay } from './planDay';
+import { carryoverFromPlan, planDay } from './planDay';
 
 const base = { date: '2026-09-22', examDate: '2026-12-12', dailyMinutes: 60, weakSkill: 'listening' as const, unfinished: [] };
 
@@ -22,5 +22,18 @@ describe('planDay', () => {
 
   it('moves into sprint phase within four weeks of the exam', () => {
     expect(planDay({ ...base, date: '2026-11-20' }).phase).toBe('sprint');
+  });
+
+  it('carries yesterday unfinished rotating task without duplicating daily routines', () => {
+    const completedTaskIds = new Set([
+      '2026-10-19:vocabulary',
+      '2026-10-19:listening',
+      '2026-10-19:review',
+    ]);
+
+    const previousTasks = planDay({ ...base, date: '2026-10-19', weakSkill: 'writing' }).tasks;
+    expect(carryoverFromPlan(previousTasks, completedTaskIds)).toEqual([
+      { id: '2026-10-19:writing', kind: 'writing', minutes: 20, priority: 2 },
+    ]);
   });
 });

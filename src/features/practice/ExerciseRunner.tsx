@@ -13,11 +13,13 @@ import type { LearningRepository } from '../../data/repositories/LearningReposit
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import { completeDailyTask, localStudyDate } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
+import type { Attempt, MistakeReason } from '../../domain/attempt';
 
 const starterContent = parseContentPack(rawContent);
 const defaultRepository = new DexieLearningRepository();
 const practiceKinds: PracticeKind[] = ['vocabulary', 'grammar', 'listening', 'reading', 'translation', 'writing'];
 interface AnsweredItem { questionId: string; correct: boolean | null; durationSeconds: number }
+const reasonPriority: Record<MistakeReason, number> = { unknown: 6, misunderstood: 6, location: 5, guessed: 5, careless: 3, overtime: 4 };
 
 export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repository = defaultRepository, userId = 'local-learner', today = localStudyDate() }: { setId?: string; kind?: PracticeKind; limit?: number; mode?: 'practice' | 'exam'; repository?: LearningRepository; userId?: string; today?: string }) {
   const questions = useMemo<Question[]>(() => {
@@ -33,6 +35,8 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
   const [startedAt, setStartedAt] = useState(() => Date.now());
   const [answered, setAnswered] = useState<AnsweredItem[]>([]);
   const [finished, setFinished] = useState(false);
+  const [currentAttempt, setCurrentAttempt] = useState<Attempt | null>(null);
+  const [selectedReason, setSelectedReason] = useState<MistakeReason | undefined>();
   const question = questions[index];
   const plannedKind = kind === 'grammar' ? null : kind;
 
@@ -40,11 +44,11 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
   if (finished) {
     const correct = answered.filter((item) => item.correct).length;
     const durationSeconds = answered.reduce((sum, item) => sum + item.durationSeconds, 0);
-    return <section className="practice-summary"><h1>练习完成</h1><p>完成 {answered.length} 题，答对 {correct} 题，用时 {durationSeconds} 秒。</p><p>错题 {answered.filter((item) => item.correct === false).length} 道，已经加入复习安排。</p>{plannedKind && mode === 'practice' && <MasteryCheck kind={plannedKind} taskId={`${today}:${plannedKind}`} repository={repository} />}</section>;
+    return <section className="practice-summary"><h1>练习完成</h1><p>完成 {answered.length} 题，答对 {correct} 题，用时 {durationSeconds} 秒。</p><p>错题 {answered.filter((item) => item.correct === false).length} 道，已经加入复习安排。</p>{plannedKind && mode === 'practice' && <MasteryCheck kind={plannedKind} taskId={`${today}:${plannedKind}`} repository={repository} sourceQuestionIds={answered.map((item) => item.questionId)} />}</section>;
   }
 
   const duration = () => Math.max(0, Math.round((Date.now() - startedAt) / 1000));
-  const baseAttempt = (responseValue: unknown, correct: boolean | null, score: number | null) => ({
+  const baseAttempt = (responseValue: unknown, correct: boolean | null, score: number | null): Attempt => ({
     id: crypto.randomUUID(), userId, questionId: question.id, response: responseValue, correct, score,
     durationSeconds: duration(), contentVersion: 'v1', kind: kind ?? question.type, mode,
     deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device', createdAt: new Date().toISOString(),
@@ -55,10 +59,35 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     const graded = gradeAnswer(question as ObjectiveQuestionType, response);
     setAnswerError(''); setResult(graded); setSaveState('saving');
     const seconds = duration();
-    void repository.saveAttemptOnce(baseAttempt(response, graded.correct, graded.score)).then(() => {
+    const attempt = baseAttempt(response, graded.correct, graded.score);
+    setCurrentAttempt(attempt);
+    void repository.saveAttemptOnce(attempt).then(async () => {
+      if (!graded.correct) await repository.upsertReviewCard({
+        id: `review:${question.id}`, questionId: question.id, stage: 0, priority: 6,
+        nextReviewAt: attempt.createdAt, lastCorrect: false, updatedAt: attempt.createdAt,
+      });
       setAnswered((items) => [...items, { questionId: question.id, correct: graded.correct, durationSeconds: seconds }]);
       setSaveState('saved');
     }).catch(() => setSaveState('error'));
+  }
+
+  async function saveReason(reason: MistakeReason) {
+    if (!currentAttempt || saveState !== 'saved') return;
+    const updated = { ...currentAttempt, mistakeReason: reason, updatedAt: new Date().toISOString() };
+    setSelectedReason(reason);
+    setCurrentAttempt(updated);
+    await repository.saveAttempt(updated);
+    const existing = await repository.getReviewCard(`review:${currentAttempt.questionId}`);
+    await repository.upsertReviewCard({
+      id: `review:${currentAttempt.questionId}`,
+      questionId: currentAttempt.questionId,
+      stage: existing?.stage ?? 0,
+      priority: reasonPriority[reason],
+      reason,
+      nextReviewAt: existing?.nextReviewAt ?? updated.updatedAt!,
+      lastCorrect: existing?.lastCorrect ?? Boolean(currentAttempt.correct),
+      updatedAt: updated.updatedAt!,
+    });
   }
 
   async function next() {
@@ -67,7 +96,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
       setFinished(true); return;
     }
     setIndex((value) => value + 1);
-    setResponse(''); setResult(null); setSaveState('idle'); setAnswerError(''); setStartedAt(Date.now());
+    setResponse(''); setResult(null); setSaveState('idle'); setAnswerError(''); setCurrentAttempt(null); setSelectedReason(undefined); setStartedAt(Date.now());
   }
 
   if (!('options' in question)) return <SubjectiveEditor question={question} kind={question.type} repository={repository} onSubmit={(body) => {
@@ -78,7 +107,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     });
   }} />;
 
-  return <section className="exercise-runner"><header><span>{mode === 'exam' ? '模拟考试' : '专项练习'}</span><b>{index + 1} / {questions.length}</b></header><ObjectiveQuestion question={question as ObjectiveQuestionType} value={response} disabled={Boolean(result)} onChange={setResponse} />{answerError && <p role="alert" className="answer-error">{answerError}</p>}{saveState !== 'idle' && <p role="status">{saveState === 'saving' ? '正在保存…' : saveState === 'saved' ? '已保存到本机，联网后自动同步' : '保存失败，请重试本题'}</p>}{!result ? <button className="primary-action" onClick={submit}>提交答案</button> : <>{mode === 'practice' && <ExplanationPanel question={question} correct={result.correct} />}<button className="primary-action" onClick={() => void next()}>{index >= questions.length - 1 ? '查看结果' : '下一题'}</button></>}</section>;
+  return <section className="exercise-runner"><header><span>{mode === 'exam' ? '模拟考试' : '专项练习'}</span><b>{index + 1} / {questions.length}</b></header><ObjectiveQuestion question={question as ObjectiveQuestionType} value={response} disabled={Boolean(result)} onChange={setResponse} />{answerError && <p role="alert" className="answer-error">{answerError}</p>}{saveState !== 'idle' && <p role="status">{saveState === 'saving' ? '正在保存…' : saveState === 'saved' ? '已保存到本机，联网后自动同步' : '保存失败，请重试本题'}</p>}{!result ? <button className="primary-action" onClick={submit}>提交答案</button> : <>{mode === 'practice' && <ExplanationPanel question={question} correct={result.correct} onReason={saveState === 'saved' ? saveReason : undefined} selectedReason={selectedReason} />}<button className="primary-action" onClick={() => void next()}>{index >= questions.length - 1 ? '查看结果' : '下一题'}</button></>}</section>;
 }
 
 export function PracticeRoute() {

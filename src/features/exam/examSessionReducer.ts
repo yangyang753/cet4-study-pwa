@@ -57,7 +57,8 @@ export function reduceExamSession(session: ExamSessionRecord, action: ExamSessio
   if (action.type === 'answer') return { ...session, answers: { ...session.answers, [action.questionId]: action.response }, updatedAt: now };
   if (action.type === 'go-to-section') {
     if (action.sectionIndex < session.currentSectionIndex || session.lockedSectionIndexes.includes(action.sectionIndex)) return session;
-    return { ...session, currentSectionIndex: action.sectionIndex, updatedAt: now };
+    const lockedSectionIndexes = Array.from({ length: action.sectionIndex }, (_, index) => index);
+    return { ...session, currentSectionIndex: action.sectionIndex, lockedSectionIndexes, updatedAt: now };
   }
   return { ...session, status: 'submitted', submittedAt: now, updatedAt: now };
 }

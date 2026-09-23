@@ -19,5 +19,10 @@ export function LoginPage() {
     try { await auth.signUp(email, password); setMessage('注册成功；若启用了邮箱验证，请检查收件箱。'); } catch { setMessage('注册失败，请稍后再试'); }
   }
 
-  return <section className="login-card"><h2>登录四级向前</h2><form onSubmit={submit}><label>邮箱<input value={email} onChange={(event) => setEmail(event.target.value)} type="email" autoComplete="email" /></label><label>密码<input value={password} onChange={(event) => setPassword(event.target.value)} type="password" autoComplete="current-password" /></label><div className="login-actions"><button type="submit">登录</button><button className="secondary" type="button" onClick={() => void signUp()}>创建账户</button></div>{message && <p role="alert">{message}</p>}</form></section>;
+  async function resetPassword() {
+    if (!email.includes('@')) { setMessage('请先填写有效邮箱'); return; }
+    try { await auth.resetPassword(email); setMessage('重置邮件已发送，请检查收件箱。'); } catch { setMessage('暂时无法发送重置邮件，请稍后再试'); }
+  }
+
+  return <section className="login-card"><h2>登录四级向前</h2><form onSubmit={submit}><label>邮箱<input value={email} onChange={(event) => setEmail(event.target.value)} type="email" autoComplete="email" /></label><label>密码<input value={password} onChange={(event) => setPassword(event.target.value)} type="password" autoComplete="current-password" /></label><div className="login-actions"><button type="submit">登录</button><button className="secondary" type="button" onClick={() => void signUp()}>创建账户</button><button className="secondary" type="button" onClick={() => void resetPassword()}>忘记密码</button></div>{message && <p role="alert">{message}</p>}</form></section>;
 }

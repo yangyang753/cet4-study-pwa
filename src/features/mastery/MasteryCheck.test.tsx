@@ -3,6 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { MasteryCheck } from './MasteryCheck';
+import { selectMasteryQuestions } from './MasteryCheck';
+import { getPracticeItems } from '../../content/catalog';
 
 function repository() {
   return {
@@ -13,6 +15,12 @@ function repository() {
 }
 
 describe('MasteryCheck', () => {
+  it('starts with questions from the practice that was just completed', () => {
+    const sourceIds = getPracticeItems('listening').slice(3, 5).map((question) => question.id);
+
+    expect(selectMasteryQuestions('listening', sourceIds).map((question) => question.id)).toEqual(sourceIds);
+  });
+
   it('marks the task mastered only after two correct answers', async () => {
     const user = userEvent.setup();
     const learningRepository = repository();

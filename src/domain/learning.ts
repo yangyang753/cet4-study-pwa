@@ -1,4 +1,5 @@
 import type { Attempt } from './attempt';
+import type { MistakeReason } from './attempt';
 import type { StudyKind } from '../features/planner/planDay';
 
 export interface ReviewCard {
@@ -7,6 +8,8 @@ export interface ReviewCard {
   stage: number;
   nextReviewAt: string;
   lastCorrect: boolean;
+  priority?: number;
+  reason?: MistakeReason;
   updatedAt: string;
 }
 

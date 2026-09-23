@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { getPracticeItems } from '../../content/catalog';
+import { getPracticeItems, getQuestion } from '../../content/catalog';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import type { CatalogQuestion, ObjectiveQuestion as ObjectiveQuestionType, PracticeKind } from '../../domain/content';
@@ -16,12 +16,19 @@ const masteryQuestionKind: Record<StudyKind, PracticeKind> = {
   translation: 'grammar', writing: 'grammar', review: 'vocabulary', mock: 'reading',
 };
 
-function questionsFor(kind: StudyKind) {
-  return getPracticeItems(masteryQuestionKind[kind]).filter((question) => 'options' in question).slice(0, 2) as Array<CatalogQuestion & ObjectiveQuestionType>;
+export function selectMasteryQuestions(kind: StudyKind, sourceQuestionIds: string[] = []) {
+  const sourceQuestions = sourceQuestionIds.map(getQuestion).filter((question): question is CatalogQuestion => Boolean(question));
+  const knowledgePointIds = new Set(sourceQuestions.flatMap((question) => question.knowledgePointIds));
+  const objectiveSource = sourceQuestions.filter((question) => 'options' in question) as Array<CatalogQuestion & ObjectiveQuestionType>;
+  const catalog = getPracticeItems(masteryQuestionKind[kind]).filter((question) => 'options' in question) as Array<CatalogQuestion & ObjectiveQuestionType>;
+  const related = catalog.filter((question) => question.knowledgePointIds.some((id) => knowledgePointIds.has(id)));
+  const unique = [...objectiveSource, ...related, ...catalog].filter((question, index, items) => items.findIndex((item) => item.id === question.id) === index);
+  return unique.slice(0, 2);
 }
 
-export function MasteryCheck({ kind, taskId, repository = defaultRepository, now = new Date().toISOString() }: { kind: StudyKind; taskId: string; repository?: LearningRepository; now?: string }) {
-  const questions = useMemo(() => questionsFor(kind), [kind]);
+export function MasteryCheck({ kind, taskId, repository = defaultRepository, now = new Date().toISOString(), sourceQuestionIds = [] }: { kind: StudyKind; taskId: string; repository?: LearningRepository; now?: string; sourceQuestionIds?: string[] }) {
+  const questionIdsKey = sourceQuestionIds.join('|');
+  const questions = useMemo(() => selectMasteryQuestions(kind, questionIdsKey ? questionIdsKey.split('|') : []), [kind, questionIdsKey]);
   const [index, setIndex] = useState(0);
   const [response, setResponse] = useState('');
   const [results, setResults] = useState<boolean[]>([]);
