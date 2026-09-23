@@ -36,4 +36,17 @@ describe('ReviewPage', () => {
     expect(await screen.findByText('复习正确')).toBeVisible();
     await waitFor(async () => expect(await repository.listDueReviews('9999-12-31T23:59:59.999Z')).toEqual([expect.objectContaining({ stage: 1, lastCorrect: true })]));
   });
+
+  it('automatically completes the review task and offers a mastery check', async () => {
+    const user = userEvent.setup();
+    const repository = await setupRepository();
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
+    await user.click(await screen.findByRole('button', { name: '重新练习' }));
+    await user.click(screen.getByRole('radio', { name: /Sunday afternoon/ }));
+    await user.click(screen.getByRole('button', { name: '提交复习答案' }));
+    expect(await screen.findByText('掌握度检测')).toBeVisible();
+    await waitFor(async () => expect((await repository.getDashboardSnapshot()).completions).toEqual([
+      expect.objectContaining({ taskId: '2026-09-23:review' }),
+    ]));
+  });
 });

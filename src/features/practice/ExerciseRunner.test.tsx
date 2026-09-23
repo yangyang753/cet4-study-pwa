@@ -31,7 +31,7 @@ describe('ExerciseRunner', () => {
 
   it('saves subjective submissions without assigning automatic correctness', async () => {
     const user = userEvent.setup();
-    const repository = { saveDraft: vi.fn().mockResolvedValue(undefined), saveAttemptOnce: vi.fn().mockResolvedValue(undefined) } as unknown as LearningRepository;
+    const repository = { saveDraft: vi.fn().mockResolvedValue(undefined), saveAttemptOnce: vi.fn().mockResolvedValue(undefined), completeTask: vi.fn().mockResolvedValue(undefined) } as unknown as LearningRepository;
     render(<ExerciseRunner kind="writing" limit={1} repository={repository} />);
     await user.type(screen.getByRole('textbox', { name: '写作答题区' }), 'Daily reading helps me learn.');
     await user.click(screen.getByRole('button', { name: '提交自查' }));
@@ -55,5 +55,21 @@ describe('ExerciseRunner', () => {
     await user.click(screen.getByRole('button', { name: '提交答案' }));
     expect(screen.getByText('请选择一个答案')).toBeVisible();
     expect(repository.saveAttemptOnce).not.toHaveBeenCalled();
+  });
+
+  it('automatically completes the matching daily task after the final answer', async () => {
+    const user = userEvent.setup();
+    const repository = {
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+      completeTask: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<ExerciseRunner kind="vocabulary" limit={1} repository={repository} today="2026-09-22" />);
+    await user.click(screen.getAllByRole('radio')[0]);
+    await user.click(screen.getByRole('button', { name: '提交答案' }));
+    await user.click(await screen.findByRole('button', { name: '查看结果' }));
+    expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({
+      id: '2026-09-22:vocabulary', taskId: '2026-09-22:vocabulary', kind: 'vocabulary',
+    }));
+    expect(await screen.findByText('掌握度检测')).toBeVisible();
   });
 });

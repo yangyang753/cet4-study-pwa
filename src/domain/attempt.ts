@@ -11,7 +11,7 @@ export interface Attempt {
   mistakeReason?: MistakeReason;
   contentVersion?: string;
   kind?: string;
-  mode?: 'practice' | 'exam' | 'review';
+  mode?: 'practice' | 'exam' | 'review' | 'mastery';
   deviceId?: string;
   createdAt: string;
 }

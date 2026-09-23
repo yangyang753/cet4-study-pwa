@@ -8,6 +8,8 @@ import { resolveExam } from './examBlueprint';
 import { createExamSession, reduceExamSession, remainingSeconds, restoreExamSession } from './examSessionReducer';
 import { ExamResult } from './ExamResult';
 import './exam.css';
+import { completeDailyTask } from '../mastery/taskProgress';
+import { MasteryCheck } from '../mastery/MasteryCheck';
 
 const defaultRepository = new DexieLearningRepository();
 const defaultNow = () => new Date().toISOString();
@@ -98,7 +100,7 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
   if (recovery) return <section className="exam-recovery" role="dialog" aria-labelledby="recovery-title"><h1 id="recovery-title">继续上次模考</h1><p>检测到一场未完成的 {exam.title}，答案已保存在本机。</p><div><button className="primary-action" onClick={continueSaved}>继续考试</button><button onClick={restart}>重新开始</button></div></section>;
   if (!session) return <p>正在恢复模考…</p>;
   if (session.status === 'stale') return <section className="exam-notice"><h1>题库已更新</h1><p>这份旧模考记录已设为只读，请开始一套新试卷。</p><button onClick={restart}>开始新模考</button></section>;
-  if (session.status === 'submitted') return <ExamResult session={session} exam={exam} repository={repository} />;
+  if (session.status === 'submitted') { const taskId = `${session.submittedAt?.slice(0, 10) ?? now().slice(0, 10)}:mock`; return <><ExamResult session={session} exam={exam} repository={repository} /><MasteryCheck kind="mock" taskId={taskId} repository={repository} /></>; }
 
   const section = exam.sections[session.currentSectionIndex];
   const question = section.questions[questionIndex];
@@ -116,7 +118,9 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
   const submit = () => {
     if (finalWriteStarted.current || !window.confirm('确认提前交卷吗？交卷后不能再修改答案。')) return;
     finalWriteStarted.current = true;
-    updateSession(reduceExamSession(session, { type: 'submit', now: now() }), true);
+    const submittedAt = now();
+    updateSession(reduceExamSession(session, { type: 'submit', now: submittedAt }), true);
+    void completeDailyTask(repository, 'mock', submittedAt.slice(0, 10));
   };
 
   return <section className="exam-session">

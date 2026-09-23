@@ -10,6 +10,7 @@ function repository(active = undefined as ReturnType<typeof createExamSession> |
   return {
     getActiveExamSession: vi.fn().mockResolvedValue(active),
     saveExamSession: vi.fn().mockResolvedValue(undefined),
+    completeTask: vi.fn().mockResolvedValue(undefined),
   } as unknown as LearningRepository;
 }
 
@@ -29,6 +30,8 @@ describe('ExamSession', () => {
       const submittedWrites = vi.mocked(repo.saveExamSession).mock.calls.filter(([session]) => session.status === 'submitted');
       expect(submittedWrites).toHaveLength(1);
     });
+    expect(repo.completeTask).toHaveBeenCalledWith(expect.objectContaining({ kind: 'mock' }));
+    expect(await screen.findByText('掌握度检测')).toBeVisible();
   });
 
   it('offers to continue a recoverable active session', async () => {

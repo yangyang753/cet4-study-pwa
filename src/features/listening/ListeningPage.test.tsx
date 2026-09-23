@@ -114,4 +114,24 @@ describe('ListeningPage', () => {
     expect(await screen.findByText('回答错误')).toBeVisible();
     await waitFor(async () => expect(await learningRepository.listDueReviews('9999-12-31T23:59:59.999Z')).toHaveLength(1));
   });
+
+  it('automatically completes listening after the whole set and offers mastery questions', async () => {
+    const user = userEvent.setup();
+    const learningRepository = repository();
+    render(<ListeningPage repository={learningRepository} today="2026-09-22" />);
+    const correctAnswers = [
+      /Sunday afternoon/, /The Saturday group was full/, /A new campus volunteering activity/,
+      /Before Thursday/, /A student card and reusable notebook/, /It is not required/, /Watch a recording later/,
+    ];
+    for (let index = 0; index < correctAnswers.length; index += 1) {
+      await user.click(screen.getByRole('radio', { name: correctAnswers[index] }));
+      await user.click(screen.getByRole('button', { name: '提交答案' }));
+      expect(await screen.findByText('回答正确')).toBeVisible();
+      if (index < correctAnswers.length - 1) await user.click(screen.getByRole('button', { name: '下一题' }));
+    }
+    expect(await screen.findByText('掌握度检测')).toBeVisible();
+    await waitFor(async () => expect((await learningRepository.getDashboardSnapshot()).completions).toEqual([
+      expect.objectContaining({ taskId: '2026-09-22:listening' }),
+    ]));
+  });
 });
