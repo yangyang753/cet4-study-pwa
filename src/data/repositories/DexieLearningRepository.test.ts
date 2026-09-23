@@ -3,6 +3,7 @@ import Dexie from 'dexie';
 import { afterEach, describe, expect, it } from 'vitest';
 import type { Attempt } from '../../domain/attempt';
 import type { ReviewCard } from '../../domain/learning';
+import type { ExamSessionRecord } from '../../domain/exam';
 import { LearningDatabase } from '../localDb';
 import { DexieLearningRepository } from './DexieLearningRepository';
 
@@ -87,6 +88,21 @@ describe('DexieLearningRepository', () => {
     expect(snapshot.completions).toHaveLength(1);
     expect(snapshot.knowledgeStates).toEqual([expect.objectContaining({ itemId: 'v0001', status: 'mastered' })]);
     expect(snapshot.settings.playbackRate).toBe(1.25);
+    db.close();
+  });
+
+  it('persists and retrieves the active exam session through the version-three store', async () => {
+    const db = new LearningDatabase(databaseName());
+    const repository = new DexieLearningRepository(db);
+    const session: ExamSessionRecord = {
+      id: 'exam:mock-1:1', mockId: 'mock-1', contentVersion: 'v1', startedAt: '2026-09-23T00:00:00.000Z',
+      updatedAt: '2026-09-23T00:01:00.000Z', sectionDeadlines: ['2026-09-23T00:30:00.000Z', '2026-09-23T00:55:00.000Z', '2026-09-23T01:35:00.000Z', '2026-09-23T02:05:00.000Z'],
+      currentSectionIndex: 0, lockedSectionIndexes: [], answers: {}, status: 'active',
+    };
+
+    await repository.saveExamSession(session);
+
+    expect(await repository.getActiveExamSession()).toEqual(session);
     db.close();
   });
 });

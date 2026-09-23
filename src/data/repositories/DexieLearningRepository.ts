@@ -3,6 +3,7 @@ import { learningDb, type LearningDatabase } from '../localDb';
 import type { DraftRecord, PendingOperation } from '../sync/SyncEngine';
 import type { LearningRepository } from './LearningRepository';
 import { defaultUserSettings, type KnowledgeState, type ReviewCard, type StudyTaskCompletion, type UserSettings } from '../../domain/learning';
+import type { ExamSessionRecord } from '../../domain/exam';
 
 export class DexieLearningRepository implements LearningRepository {
   constructor(private readonly db: LearningDatabase = learningDb) {}
@@ -26,6 +27,11 @@ export class DexieLearningRepository implements LearningRepository {
     this.requestSync();
   }
   getPendingOperations() { return this.list(); }
+  saveExamSession(session: ExamSessionRecord) { return this.db.examSessions.put(session).then(() => undefined); }
+  async getActiveExamSession() {
+    const active = await this.db.examSessions.where('status').equals('active').toArray();
+    return active.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0];
+  }
   upsertReviewCard(card: ReviewCard) { return this.db.reviewCards.put(card).then(() => undefined); }
   listDueReviews(at: string) { return this.db.reviewCards.where('nextReviewAt').belowOrEqual(at).sortBy('nextReviewAt'); }
   completeTask(completion: StudyTaskCompletion) { return this.db.taskCompletions.put(completion).then(() => undefined); }
