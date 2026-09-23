@@ -2,7 +2,8 @@ import { Suspense, lazy } from 'react';
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import { AppShell } from '../layout/AppShell';
 import { TodayPage } from '../features/dashboard/TodayPage';
-import { ExerciseRunner } from '../features/practice/ExerciseRunner';
+import { PracticeRoute } from '../features/practice/ExerciseRunner';
+import { PracticeHub } from '../features/practice/PracticeHub';
 import { ListeningPage } from '../features/listening/ListeningPage';
 import { ReviewPage } from '../features/review/ReviewPage';
 import { ExamSession } from '../features/exam/ExamSession';
@@ -21,7 +22,8 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate replace to="/today" /> },
       { path: 'today', element: <TodayPage /> },
       { path: 'listen', element: <ListeningPage /> },
-      { path: 'practice', element: <ExerciseRunner setId="set-starter" /> },
+      { path: 'practice', element: <PracticeHub /> },
+      { path: 'practice/:kind', element: <PracticeRoute /> },
       { path: 'review', element: <ReviewPage /> },
       { path: 'print', element: <Suspense fallback={<p>正在生成 A4 练习册…</p>}><PrintPage /></Suspense> },
       { path: 'exam', element: <ExamSession /> },
