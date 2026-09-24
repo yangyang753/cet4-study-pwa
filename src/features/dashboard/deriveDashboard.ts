@@ -1,7 +1,8 @@
 import type { Attempt } from '../../domain/attempt';
 import type { StudyTaskCompletion } from '../../domain/learning';
+import { selectRecentEvidence, type CoreStudyKind } from './learningEvidence';
 
-export interface WeakSkill { kind: string; accuracy: number; attempts: number }
+export interface WeakSkill { kind: CoreStudyKind; accuracy: number; attempts: number }
 export interface DashboardMetrics { hasEnoughData: boolean; weakSkill: WeakSkill | null; streak: number; completedTaskIds: Set<string> }
 
 function localDate(iso: string, timeZone: string) {
@@ -11,17 +12,17 @@ function localDate(iso: string, timeZone: string) {
 }
 
 export function deriveDashboard(attempts: Attempt[], completions: StudyTaskCompletion[], today: string, timeZone = 'Asia/Shanghai'): DashboardMetrics {
-  const scored = attempts.filter((attempt) => typeof attempt.correct === 'boolean');
-  const groups = new Map<string, { correct: number; total: number }>();
-  for (const attempt of scored) {
-    const kind = attempt.kind ?? 'other';
-    const group = groups.get(kind) ?? { correct: 0, total: 0 };
-    group.total += 1;
-    group.correct += Number(attempt.correct);
-    groups.set(kind, group);
+  const evidence = selectRecentEvidence(attempts, `${today}T23:59:59.999Z`);
+  const groups = new Map<CoreStudyKind, { correct: number; totalWeight: number; attempts: number }>();
+  for (const item of evidence) {
+    const group = groups.get(item.kind) ?? { correct: 0, totalWeight: 0, attempts: 0 };
+    group.totalWeight += item.weight;
+    group.correct += Number(item.correct) * item.weight;
+    group.attempts += 1;
+    groups.set(item.kind, group);
   }
-  const hasEnoughData = scored.length >= 5;
-  const weakSkill = hasEnoughData ? [...groups.entries()].map(([kind, value]) => ({ kind, accuracy: value.correct / value.total, attempts: value.total })).sort((a, b) => a.accuracy - b.accuracy)[0] ?? null : null;
+  const hasEnoughData = evidence.length >= 5;
+  const weakSkill = hasEnoughData ? [...groups.entries()].map(([kind, value]) => ({ kind, accuracy: value.correct / value.totalWeight, attempts: value.attempts })).sort((a, b) => a.accuracy - b.accuracy || b.attempts - a.attempts)[0] ?? null : null;
   const activeDates = new Set([...attempts.map((item) => localDate(item.createdAt, timeZone)), ...completions.map((item) => item.date)]);
   let streak = 0;
   const cursor = new Date(`${today}T12:00:00Z`);

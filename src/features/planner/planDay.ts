@@ -1,4 +1,4 @@
-export type StudyKind = 'vocabulary' | 'listening' | 'reading' | 'translation' | 'writing' | 'review' | 'mock';
+export type StudyKind = 'vocabulary' | 'grammar' | 'listening' | 'reading' | 'translation' | 'writing' | 'review' | 'mock';
 export type StudyPhase = 'foundation' | 'breakthrough' | 'sprint';
 export interface StudyTask { id: string; kind: StudyKind; minutes: number; priority: number }
 export interface PlannerInput { date: string; examDate: string; dailyMinutes: number; weakSkill: StudyKind; unfinished: StudyTask[] }

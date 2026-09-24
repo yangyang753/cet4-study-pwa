@@ -11,6 +11,7 @@ import './dashboard.css';
 const defaultRepository = new DexieLearningRepository();
 const taskCopy: Record<StudyKind, { icon: string; title: string; detail: string; href: string }> = {
   vocabulary: { icon: 'Aa', title: '高频词汇与词性', detail: '10 个核心词 + 5 道词性判断', href: 'practice/vocabulary' },
+  grammar: { icon: 'Gr', title: '重点语法', detail: '找主干并检查句子形式', href: 'practice/grammar' },
   listening: { icon: '♫', title: '长对话精听', detail: '校园活动 · 转折信号定位', href: 'listen' },
   reading: { icon: '▥', title: '仔细阅读', detail: '1 篇 · 主旨与细节', href: 'practice/reading' },
   translation: { icon: '译', title: '段落翻译', detail: '主干分析与高频表达', href: 'practice/translation' },
@@ -38,7 +39,7 @@ export function TodayPage({ today = new Date().toISOString().slice(0, 10), examD
   const metrics = useMemo(() => deriveDashboard(snapshot?.attempts ?? [], snapshot?.completions ?? [], today), [snapshot, today]);
   const targetDate = examDate ?? snapshot?.settings.examDate ?? '2026-12-12';
   const dailyMinutes = snapshot?.settings.dailyMinutes ?? 60;
-  const weakKind = metrics.weakSkill?.kind as StudyKind | undefined;
+  const weakKind: StudyKind | undefined = metrics.weakSkill?.kind;
   const unfinished = carryoverFromPlan(previousPlan?.tasks ?? [], metrics.completedTaskIds);
   const plan = planDay({ date: today, examDate: targetDate, dailyMinutes, weakSkill: weakKind ?? 'listening', unfinished });
   useEffect(() => {

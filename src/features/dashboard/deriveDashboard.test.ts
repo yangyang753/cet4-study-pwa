@@ -24,4 +24,18 @@ describe('deriveDashboard', () => {
     const attempts = [attempt('1', 'listening', true, '2026-09-22T16:30:00.000Z')];
     expect(deriveDashboard(attempts, [], '2026-09-23', 'Asia/Shanghai').streak).toBe(1);
   });
+
+  it('ignores old failures when recent evidence identifies a different weakness', () => {
+    const attempts = [
+      ...Array.from({ length: 8 }, (_, index) => attempt(`old-${index}`, 'grammar', false, `2026-08-0${index + 1}T01:00:00.000Z`)),
+      ...Array.from({ length: 5 }, (_, index) => attempt(`recent-${index}`, 'conversation', false, `2026-09-2${index}T01:00:00.000Z`)),
+      ...Array.from({ length: 5 }, (_, index) => attempt(`read-${index}`, 'reading', true, `2026-09-2${index}T02:00:00.000Z`)),
+    ];
+    expect(deriveDashboard(attempts, [], '2026-09-24').weakSkill?.kind).toBe('listening');
+  });
+
+  it('withholds a weakness when only four normalized attempts exist', () => {
+    const attempts = Array.from({ length: 4 }, (_, index) => attempt(String(index), 'conversation', false, `2026-09-2${index}T01:00:00.000Z`));
+    expect(deriveDashboard(attempts, [], '2026-09-24')).toMatchObject({ hasEnoughData: false, weakSkill: null });
+  });
 });
