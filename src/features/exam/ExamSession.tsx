@@ -100,7 +100,7 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
   if (recovery) return <section className="exam-recovery" role="dialog" aria-labelledby="recovery-title"><h1 id="recovery-title">继续上次模考</h1><p>检测到一场未完成的 {exam.title}，答案已保存在本机。</p><div><button className="primary-action" onClick={continueSaved}>继续考试</button><button onClick={restart}>重新开始</button></div></section>;
   if (!session) return <p>正在恢复模考…</p>;
   if (session.status === 'stale') return <section className="exam-notice"><h1>题库已更新</h1><p>这份旧模考记录已设为只读，请开始一套新试卷。</p><button onClick={restart}>开始新模考</button></section>;
-  if (session.status === 'submitted') { const taskId = `${session.submittedAt?.slice(0, 10) ?? now().slice(0, 10)}:mock`; return <><ExamResult session={session} exam={exam} repository={repository} /><MasteryCheck kind="mock" taskId={taskId} repository={repository} /></>; }
+  if (session.status === 'submitted') { const taskId = `${session.submittedAt?.slice(0, 10) ?? now().slice(0, 10)}:mock`; return <><ExamResult session={session} exam={exam} repository={repository} /><MasteryCheck kind="mock" taskId={taskId} repository={repository} sourceQuestionIds={Object.keys(session.answers)} /></>; }
 
   const section = exam.sections[session.currentSectionIndex];
   const question = section.questions[questionIndex];

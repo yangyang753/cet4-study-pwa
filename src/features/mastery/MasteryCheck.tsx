@@ -7,12 +7,12 @@ import type { CatalogQuestion, ObjectiveQuestion as ObjectiveQuestionType, Pract
 import type { StudyKind } from '../planner/planDay';
 import { gradeAnswer } from '../practice/gradeAnswer';
 import { ObjectiveQuestion } from '../practice/ObjectiveQuestion';
-import { localStudyDate } from './taskProgress';
+import { decodeMasteryContext } from './masteryContext';
 import './mastery.css';
 
 const defaultRepository = new DexieLearningRepository();
 const masteryQuestionKind: Record<StudyKind, PracticeKind> = {
-  vocabulary: 'vocabulary', listening: 'listening', reading: 'reading',
+  vocabulary: 'vocabulary', grammar: 'grammar', listening: 'listening', reading: 'reading',
   translation: 'grammar', writing: 'grammar', review: 'vocabulary', mock: 'reading',
 };
 
@@ -23,7 +23,7 @@ export function selectMasteryQuestions(kind: StudyKind, sourceQuestionIds: strin
   const catalog = getPracticeItems(masteryQuestionKind[kind]).filter((question) => 'options' in question) as Array<CatalogQuestion & ObjectiveQuestionType>;
   const related = catalog.filter((question) => question.knowledgePointIds.some((id) => knowledgePointIds.has(id)));
   const unique = [...objectiveSource, ...related, ...catalog].filter((question, index, items) => items.findIndex((item) => item.id === question.id) === index);
-  return unique.slice(0, 2);
+  return unique.slice(0, 3);
 }
 
 export function MasteryCheck({ kind, taskId, repository = defaultRepository, now = new Date().toISOString(), sourceQuestionIds = [] }: { kind: StudyKind; taskId: string; repository?: LearningRepository; now?: string; sourceQuestionIds?: string[] }) {
@@ -62,15 +62,14 @@ export function MasteryCheck({ kind, taskId, repository = defaultRepository, now
   };
 
   if (!question) return <p>暂时无法生成掌握检测题。</p>;
-  if (finished) return <section className={`mastery-result ${finished}`}><h1>{finished === 'mastered' ? '已完全掌握' : '需要继续复习'}</h1><p>{finished === 'mastered' ? '两题全部答对，今日任务已真正掌握。' : '检测中还有薄弱点，错题已自动加入复习安排。'}</p><a href={`${import.meta.env.BASE_URL}today`}>返回今日计划</a></section>;
+  if (finished) return <section className={`mastery-result ${finished}`}><h1>{finished === 'mastered' ? '已完全掌握' : '需要继续复习'}</h1><p>{finished === 'mastered' ? '检测正确率达到 80%，今日任务已真正掌握。' : '检测中还有薄弱点，错题已自动加入复习安排。'}</p><a href={`${import.meta.env.BASE_URL}today`}>返回今日计划</a></section>;
 
-  return <section className="mastery-check"><header><span>掌握度检测</span><h1>完成后再确认：你真的掌握了吗？</h1><p>共 2 题，必须全部答对才算完全掌握。</p><b>{index + 1} / 2</b></header><ObjectiveQuestion question={question} value={response} disabled={answerResult !== null || saving} onChange={setResponse} />{answerResult !== null && <p role="status" className={answerResult ? 'correct' : 'incorrect'}>{answerResult ? '回答正确' : `回答错误。${question.explanationZh}`}</p>}{answerResult === null ? <button className="primary-action" disabled={!response || saving} onClick={() => void submit()}>{index === questions.length - 1 ? '完成检测' : '提交答案'}</button> : index < questions.length - 1 && <button className="primary-action" onClick={() => { setIndex((value) => value + 1); setResponse(''); setAnswerResult(null); }}>下一题</button>}</section>;
+  return <section className="mastery-check"><header><span>掌握度检测</span><h1>完成后再确认：你真的掌握了吗？</h1><p>{sourceQuestionIds.length ? '题目优先来自本次练习内容。' : '题目来自当前学习类别。'}达到 80% 才算掌握。</p><b>{index + 1} / {questions.length}</b></header><ObjectiveQuestion question={question} value={response} disabled={answerResult !== null || saving} onChange={setResponse} />{answerResult !== null && <p role="status" className={answerResult ? 'correct' : 'incorrect'}>{answerResult ? '回答正确' : `回答错误。${question.explanationZh}`}</p>}{answerResult === null ? <button className="primary-action" disabled={!response || saving} onClick={() => void submit()}>{index === questions.length - 1 ? '完成检测' : '提交答案'}</button> : index < questions.length - 1 && <button className="primary-action" onClick={() => { setIndex((value) => value + 1); setResponse(''); setAnswerResult(null); }}>下一题</button>}</section>;
 }
 
 export function MasteryRoute() {
   const { kind = 'vocabulary' } = useParams();
   const [params] = useSearchParams();
-  const safeKind = (Object.keys(masteryQuestionKind).includes(kind) ? kind : 'vocabulary') as StudyKind;
-  const taskId = params.get('taskId') ?? `${localStudyDate()}:${safeKind}`;
-  return <MasteryCheck kind={safeKind} taskId={taskId} />;
+  const context = decodeMasteryContext(params, kind);
+  return <MasteryCheck kind={context.kind} taskId={context.taskId} sourceQuestionIds={context.sourceQuestionIds} />;
 }

@@ -146,7 +146,7 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today }: { 
       {question.options.map((option, index) => { const optionId = String.fromCharCode(65 + index); return <label key={optionId}><input type="radio" name={`${listeningSet.id}:${questionIndex}`} checked={selected === optionId} disabled={Boolean(result)} onChange={() => setSelected(optionId)} />{optionId}. {option}</label>; })}
       {!result && <button disabled={submissionState === 'saving'} onClick={() => void submit()}>{submissionState === 'saving' ? '正在保存…' : '提交答案'}</button>}
       {answerError && <p role="alert" className="answer-error">{answerError}</p>}
-      {result && <div className={`answer-result ${result}`} role="status"><strong>{result === 'correct' ? '回答正确' : '回答错误'}</strong><p>正确答案：{String.fromCharCode(65 + question.answer)}</p><p>解析：{question.explanationZh}</p>{questionIndex < listeningSet.questions.length - 1 ? <button onClick={nextQuestion}>下一题</button> : <><p>本套完成，今日听力任务已自动记录。</p><MasteryCheck kind="listening" taskId={`${today}:listening`} repository={repository} /></>}</div>}
+      {result && <div className={`answer-result ${result}`} role="status"><strong>{result === 'correct' ? '回答正确' : '回答错误'}</strong><p>正确答案：{String.fromCharCode(65 + question.answer)}</p><p>解析：{question.explanationZh}</p>{questionIndex < listeningSet.questions.length - 1 ? <button onClick={nextQuestion}>下一题</button> : <><p>本套完成，今日听力任务已自动记录。</p><MasteryCheck kind="listening" taskId={`${today}:listening`} repository={repository} sourceQuestionIds={listeningSet.questions.map((_, index) => `${listeningSet.id}:q${index + 1}`)} /></>}</div>}
       {submissionState === 'error' && <p role="alert">保存失败，答案仍保留，请再次提交。</p>}
     </aside></div>
   </section>;

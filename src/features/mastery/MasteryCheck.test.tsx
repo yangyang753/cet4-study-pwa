@@ -5,6 +5,7 @@ import type { LearningRepository } from '../../data/repositories/LearningReposit
 import { MasteryCheck } from './MasteryCheck';
 import { selectMasteryQuestions } from './MasteryCheck';
 import { getPracticeItems } from '../../content/catalog';
+import { decodeMasteryContext, encodeMasteryContext } from './masteryContext';
 
 function repository() {
   return {
@@ -15,21 +16,35 @@ function repository() {
 }
 
 describe('MasteryCheck', () => {
+  it('round-trips validated route context without duplicate source ids', () => {
+    const query = encodeMasteryContext({ taskId: '2026-09-24:listening', kind: 'listening', sourceQuestionIds: ['l1', 'l2', 'l1'] });
+    expect(decodeMasteryContext(new URLSearchParams(query), 'vocabulary')).toEqual({
+      taskId: '2026-09-24:listening', kind: 'listening', sourceQuestionIds: ['l1', 'l2'],
+    });
+  });
+
+  it('falls back safely for malformed route context', () => {
+    expect(decodeMasteryContext(new URLSearchParams('taskId=x&source=one&source=one'), 'bad-kind')).toMatchObject({
+      kind: 'vocabulary', sourceQuestionIds: ['one'],
+    });
+  });
+
   it('starts with questions from the practice that was just completed', () => {
     const sourceIds = getPracticeItems('listening').slice(3, 5).map((question) => question.id);
 
-    expect(selectMasteryQuestions('listening', sourceIds).map((question) => question.id)).toEqual(sourceIds);
+    expect(selectMasteryQuestions('listening', sourceIds).map((question) => question.id)).toEqual(expect.arrayContaining(sourceIds));
+    expect(selectMasteryQuestions('listening', sourceIds)).toHaveLength(3);
   });
 
-  it('marks the task mastered only after two correct answers', async () => {
+  it('marks the task mastered after all three contextual answers are correct', async () => {
     const user = userEvent.setup();
     const learningRepository = repository();
     render(<MasteryCheck kind="vocabulary" taskId="2026-09-22:vocabulary" repository={learningRepository} now="2026-09-22T09:00:00.000Z" />);
 
-    for (let index = 0; index < 2; index += 1) {
+    for (let index = 0; index < 3; index += 1) {
       await user.click(screen.getAllByRole('radio')[0]);
-      await user.click(screen.getByRole('button', { name: index === 0 ? '提交答案' : '完成检测' }));
-      if (index === 0) await user.click(await screen.findByRole('button', { name: '下一题' }));
+      await user.click(screen.getByRole('button', { name: index === 2 ? '完成检测' : '提交答案' }));
+      if (index < 2) await user.click(await screen.findByRole('button', { name: '下一题' }));
     }
 
     expect(await screen.findByText('已完全掌握')).toBeVisible();
@@ -44,6 +59,9 @@ describe('MasteryCheck', () => {
     render(<MasteryCheck kind="vocabulary" taskId="2026-09-22:vocabulary" repository={learningRepository} now="2026-09-22T09:00:00.000Z" />);
 
     await user.click(screen.getAllByRole('radio')[1]);
+    await user.click(screen.getByRole('button', { name: '提交答案' }));
+    await user.click(await screen.findByRole('button', { name: '下一题' }));
+    await user.click(screen.getAllByRole('radio')[0]);
     await user.click(screen.getByRole('button', { name: '提交答案' }));
     await user.click(await screen.findByRole('button', { name: '下一题' }));
     await user.click(screen.getAllByRole('radio')[0]);
