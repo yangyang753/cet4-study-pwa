@@ -10,13 +10,14 @@ const iso = z.iso.datetime();
 const attemptSchema = z.object({ id: z.string().min(1), userId: z.string(), questionId: z.string(), response: z.unknown(), correct: z.boolean().nullable(), score: z.number().nullable(), durationSeconds: z.number(), createdAt: iso }).passthrough();
 const draftSchema = z.object({ id: z.string(), questionId: z.string(), body: z.string(), deviceId: z.string(), updatedAt: iso }).passthrough();
 const planSchema = z.object({ id: z.string(), date: z.string(), tasks: z.array(z.unknown()), updatedAt: iso }).passthrough();
-const operationSchema = z.object({ id: z.string(), entityId: z.string(), kind: z.enum(['attempt', 'draft', 'reviewCard', 'taskCompletion', 'knowledgeState', 'examSession', 'settings', 'tombstone']), payload: z.record(z.string(), z.unknown()), createdAt: iso, attempts: z.number() }).passthrough();
+const syncEntityKindSchema = z.enum(['attempt', 'draft', 'reviewCard', 'taskCompletion', 'knowledgeState', 'examSession', 'settings', 'plan']);
+const operationSchema = z.object({ id: z.string(), entityId: z.string(), kind: z.union([syncEntityKindSchema, z.literal('tombstone')]), payload: z.record(z.string(), z.unknown()), createdAt: iso, attempts: z.number() }).passthrough();
 const reviewSchema = z.object({ id: z.string(), questionId: z.string(), stage: z.number(), nextReviewAt: iso, lastCorrect: z.boolean(), updatedAt: iso }).passthrough();
 const completionSchema = z.object({ id: z.string(), date: z.string(), taskId: z.string(), kind: z.string(), completedAt: iso }).passthrough();
 const knowledgeSchema = z.object({ id: z.string(), itemId: z.string(), status: z.enum(['learning', 'review', 'mastered']), favorite: z.boolean(), updatedAt: iso }).passthrough();
 const settingsSchema = z.object({ id: z.literal('current'), examDate: z.string(), dailyMinutes: z.number(), playbackRate: z.number(), updatedAt: iso }).passthrough();
 const examSchema = z.object({ id: z.string(), mockId: z.string(), contentVersion: z.string(), startedAt: iso, updatedAt: iso, sectionDeadlines: z.array(iso), currentSectionIndex: z.number(), lockedSectionIndexes: z.array(z.number()), answers: z.record(z.string(), z.union([z.string(), z.array(z.string())])), status: z.enum(['active', 'submitted', 'stale']) }).passthrough();
-const tombstoneSchema = z.object({ id: z.string(), kind: z.enum(['attempt', 'draft', 'reviewCard', 'taskCompletion', 'knowledgeState', 'examSession', 'settings']), entityId: z.string(), deletedAt: iso, updatedAt: iso }).passthrough();
+const tombstoneSchema = z.object({ id: z.string(), kind: syncEntityKindSchema, entityId: z.string(), deletedAt: iso, updatedAt: iso }).passthrough();
 const backupSchema = z.object({
   schemaVersion: z.literal(1), contentVersion: z.string(), exportedAt: z.iso.datetime(),
   data: z.object({ attempts: z.array(attemptSchema), drafts: z.array(draftSchema), plans: z.array(planSchema), syncQueue: z.array(operationSchema), reviewCards: z.array(reviewSchema), taskCompletions: z.array(completionSchema), knowledgeStates: z.array(knowledgeSchema), settings: z.array(settingsSchema), examSessions: z.array(examSchema), tombstones: z.array(tombstoneSchema) }),

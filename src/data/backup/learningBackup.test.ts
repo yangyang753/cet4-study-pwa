@@ -2,6 +2,7 @@ import 'fake-indexeddb/auto';
 import Dexie from 'dexie';
 import { afterEach, describe, expect, it } from 'vitest';
 import { LearningDatabase } from '../localDb';
+import { DexieLearningRepository } from '../repositories/DexieLearningRepository';
 import { exportLearningData, importLearningData } from './learningBackup';
 
 const names: string[] = [];
@@ -28,5 +29,18 @@ describe('learning backup', () => {
     await expect(importLearningData(db, { schemaVersion: 1, contentVersion: 'v1', exportedAt: '2026-09-23T10:00:00.000Z', data: { attempts: [{ id: 'broken' }], drafts: [], plans: [], syncQueue: [], reviewCards: [], taskCompletions: [], knowledgeStates: [], settings: [], examSessions: [], tombstones: [] } })).rejects.toThrow('Invalid backup file');
     expect(await db.attempts.count()).toBe(1);
     db.close();
+  });
+
+  it('restores a backup containing a queued daily plan operation', async () => {
+    const source = database();
+    const now = '2026-09-24T09:00:00.000Z';
+    await new DexieLearningRepository(source).savePlan({ id: 'plan:2026-09-24', date: '2026-09-24', tasks: [], updatedAt: now });
+    const backup = await exportLearningData(source);
+    const target = database();
+
+    await expect(importLearningData(target, backup)).resolves.toBeUndefined();
+    expect(await target.plans.get('plan:2026-09-24')).toBeTruthy();
+    expect((await target.syncQueue.toArray()).some((item) => item.kind === 'plan')).toBe(true);
+    source.close(); target.close();
   });
 });
