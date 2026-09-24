@@ -6,6 +6,9 @@ import { SubjectiveEditor } from './SubjectiveEditor';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 
 const question: SubjectiveQuestion = { id: 'write-1', version: 1, type: 'writing', difficulty: 'foundation', prompt: 'Write about study habits.', knowledgePointIds: ['kp'], explanationZh: '结构完整。', sourceNote: 'Original exercise modeled on the official CET-4 format', rubric: ['观点明确', '结构完整'], referenceAnswer: 'Daily practice is useful.' };
+const validWriting = `First, daily practice helps students remember important knowledge and notice their weak points before an examination. A clear routine also makes a difficult goal feel smaller, so learners are more willing to begin instead of waiting for the perfect moment.
+
+Therefore, I plan to study at the same time each evening, review mistakes, and write down one question for the next day. This simple method gives every session a purpose and allows steady progress without creating unnecessary pressure. It also builds confidence because improvement becomes visible after several consistent weeks.`;
 
 afterEach(() => { localStorage.clear(); vi.useRealTimers(); });
 
@@ -23,6 +26,7 @@ describe('SubjectiveEditor', () => {
   it('shows a rubric and reference answer without an official score', async () => {
     const user = userEvent.setup();
     render(<SubjectiveEditor question={question} kind="writing" />);
+    fireEvent.change(screen.getByLabelText('写作答题区'), { target: { value: validWriting } });
     await user.click(screen.getByRole('button', { name: '提交自查' }));
     expect(screen.getByText('Daily practice is useful.')).toBeInTheDocument();
     expect(screen.queryByText(/官方分数/)).not.toBeInTheDocument();
@@ -48,8 +52,19 @@ describe('SubjectiveEditor', () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
     render(<SubjectiveEditor question={question} kind="writing" onSubmit={onSubmit} />);
-    await user.type(screen.getByLabelText('写作答题区'), 'First, practice helps.\n\nTherefore, I improve every day.');
+    fireEvent.change(screen.getByLabelText('写作答题区'), { target: { value: validWriting } });
     await user.click(screen.getByRole('button', { name: '提交自查' }));
-    expect(onSubmit).toHaveBeenCalledWith(expect.stringContaining('First, practice helps.'), expect.objectContaining({ score: 0.75, passed: true }));
+    expect(onSubmit).toHaveBeenCalledWith(expect.stringContaining('First, daily practice helps'), expect.objectContaining({ score: 1, passed: true }));
+  });
+
+  it('keeps an invalid draft and does not complete the exercise', async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+    render(<SubjectiveEditor question={question} kind="writing" onSubmit={onSubmit} />);
+    fireEvent.change(screen.getByLabelText('写作答题区'), { target: { value: 'Too short.' } });
+    await user.click(screen.getByRole('button', { name: '提交自查' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('至少需要 80 个英文单词');
+    expect(screen.getByLabelText('写作答题区')).toHaveValue('Too short.');
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 });

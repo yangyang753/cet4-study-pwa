@@ -1,10 +1,14 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { vi } from 'vitest';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { getPracticeItems } from '../../content/catalog';
 import { ExerciseRunner } from './ExerciseRunner';
+
+const validWriting = `First, daily practice helps students remember important knowledge and notice their weak points before an examination. A clear routine also makes a difficult goal feel smaller, so learners are more willing to begin instead of waiting for the perfect moment.
+
+Therefore, I plan to study at the same time each evening, review mistakes, and write down one question for the next day. This simple method gives every session a purpose and allows steady progress without creating unnecessary pressure. It also builds confidence because improvement becomes visible after several consistent weeks.`;
 
 describe('ExerciseRunner', () => {
   it('waits for attempt history before showing a catalog question', async () => {
@@ -88,13 +92,24 @@ describe('ExerciseRunner', () => {
     expect(await screen.findByRole('textbox', { name: '写作答题区' })).toBeVisible();
   });
 
-  it('saves subjective submissions with bounded local self-check evidence', async () => {
+  it('saves valid subjective submissions with bounded local self-check evidence', async () => {
     const user = userEvent.setup();
     const repository = { saveDraft: vi.fn().mockResolvedValue(undefined), saveAttemptOnce: vi.fn().mockResolvedValue(undefined), completeTask: vi.fn().mockResolvedValue(undefined) } as unknown as LearningRepository;
     render(<ExerciseRunner kind="writing" limit={1} repository={repository} />);
-    await user.type(await screen.findByRole('textbox', { name: '写作答题区' }), 'Daily reading helps me learn.');
+    fireEvent.change(await screen.findByRole('textbox', { name: '写作答题区' }), { target: { value: validWriting } });
     await user.click(screen.getByRole('button', { name: '提交自查' }));
-    expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ response: 'Daily reading helps me learn.', correct: false, score: 0.25 }));
+    expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ response: validWriting, correct: true, score: 1 }));
+  });
+
+  it('does not save or complete a short subjective response', async () => {
+    const user = userEvent.setup();
+    const repository = { listAttempts: vi.fn().mockResolvedValue([]), saveDraft: vi.fn().mockResolvedValue(undefined), saveAttemptOnce: vi.fn(), completeTask: vi.fn() } as unknown as LearningRepository;
+    render(<ExerciseRunner kind="writing" limit={1} repository={repository} />);
+    fireEvent.change(await screen.findByRole('textbox', { name: '写作答题区' }), { target: { value: 'Too short.' } });
+    await user.click(screen.getByRole('button', { name: '提交自查' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('至少需要 80 个英文单词');
+    expect(repository.saveAttemptOnce).not.toHaveBeenCalled();
+    expect(repository.completeTask).not.toHaveBeenCalled();
   });
 
   it('does not reveal explanations while running in exam mode', async () => {
@@ -171,8 +186,8 @@ describe('ExerciseRunner', () => {
       completeTask: vi.fn().mockResolvedValue(undefined),
     } as unknown as LearningRepository;
     render(<ExerciseRunner kind="writing" limit={1} repository={repository} />);
-    await user.type(await screen.findByRole('textbox', { name: '写作答题区' }), 'First, practice helps.\n\nTherefore, I improve every day.');
+    fireEvent.change(await screen.findByRole('textbox', { name: '写作答题区' }), { target: { value: validWriting } });
     await user.click(screen.getByRole('button', { name: '提交自查' }));
-    expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ kind: 'writing', correct: true, score: 0.75 }));
+    expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ kind: 'writing', correct: true, score: 1 }));
   });
 });
