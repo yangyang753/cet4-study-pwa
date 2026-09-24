@@ -30,11 +30,18 @@ export interface KnowledgeState {
   updatedAt: string;
 }
 
+export interface ExamReadinessState {
+  registrationConfirmed: boolean;
+  admissionTicketPrepared: boolean;
+  equipmentPrepared: boolean;
+}
+
 export interface UserSettings {
   id: 'current';
   examDate: string;
   dailyMinutes: number;
   playbackRate: number;
+  readiness?: ExamReadinessState;
   diagnosticCompletedAt?: string;
   diagnosticLevels?: Partial<Record<CoreStudyKind, number>>;
   updatedAt: string;
@@ -53,5 +60,20 @@ export const defaultUserSettings = (): UserSettings => ({
   examDate: '2026-12-12',
   dailyMinutes: 60,
   playbackRate: 1,
+  readiness: {
+    registrationConfirmed: false,
+    admissionTicketPrepared: false,
+    equipmentPrepared: false,
+  },
   updatedAt: new Date(0).toISOString(),
 });
+
+export function normalizeUserSettings(settings?: Partial<UserSettings>): UserSettings {
+  const defaults = defaultUserSettings();
+  return {
+    ...defaults,
+    ...settings,
+    id: 'current',
+    readiness: { ...defaults.readiness!, ...settings?.readiness },
+  };
+}

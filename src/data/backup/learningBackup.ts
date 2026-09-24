@@ -15,7 +15,10 @@ const operationSchema = z.object({ id: z.string(), entityId: z.string(), kind: z
 const reviewSchema = z.object({ id: z.string(), questionId: z.string(), stage: z.number(), nextReviewAt: iso, lastCorrect: z.boolean(), updatedAt: iso }).passthrough();
 const completionSchema = z.object({ id: z.string(), date: z.string(), taskId: z.string(), kind: z.string(), completedAt: iso }).passthrough();
 const knowledgeSchema = z.object({ id: z.string(), itemId: z.string(), status: z.enum(['learning', 'review', 'mastered']), favorite: z.boolean(), updatedAt: iso }).passthrough();
-const settingsSchema = z.object({ id: z.literal('current'), examDate: z.string(), dailyMinutes: z.number(), playbackRate: z.number(), updatedAt: iso }).passthrough();
+const settingsSchema = z.object({
+  id: z.literal('current'), examDate: z.string(), dailyMinutes: z.number(), playbackRate: z.number(), updatedAt: iso,
+  readiness: z.object({ registrationConfirmed: z.boolean(), admissionTicketPrepared: z.boolean(), equipmentPrepared: z.boolean() }).optional(),
+}).passthrough();
 const examSchema = z.object({ id: z.string(), mockId: z.string(), contentVersion: z.string(), startedAt: iso, updatedAt: iso, sectionDeadlines: z.array(iso), currentSectionIndex: z.number(), lockedSectionIndexes: z.array(z.number()), answers: z.record(z.string(), z.union([z.string(), z.array(z.string())])), status: z.enum(['active', 'submitted', 'stale']) }).passthrough();
 const tombstoneSchema = z.object({ id: z.string(), kind: syncEntityKindSchema, entityId: z.string(), deletedAt: iso, updatedAt: iso }).passthrough();
 const backupSchema = z.object({

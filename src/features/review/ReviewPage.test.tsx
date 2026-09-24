@@ -10,11 +10,11 @@ import { ReviewPage } from './ReviewPage';
 const names: string[] = [];
 afterEach(async () => Promise.all(names.splice(0).map((name) => Dexie.delete(name))));
 
-async function setupRepository() {
+async function setupRepository(stage = 0) {
   const name = `review-test-${crypto.randomUUID()}`;
   names.push(name);
   const repository = new DexieLearningRepository(new LearningDatabase(name));
-  await repository.upsertReviewCard({ id: 'review:listen-01:q1', questionId: 'listen-01:q1', stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z' });
+  await repository.upsertReviewCard({ id: 'review:listen-01:q1', questionId: 'listen-01:q1', stage, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z' });
   return repository;
 }
 
@@ -48,5 +48,23 @@ describe('ReviewPage', () => {
     await waitFor(async () => expect((await repository.getDashboardSnapshot()).completions).toEqual([
       expect.objectContaining({ taskId: '2026-09-23:review' }),
     ]));
+  });
+
+  it('uses the saved exam date when scheduling the next review', async () => {
+    const user = userEvent.setup();
+    const repository = await setupRepository(3);
+    await repository.saveUserSettings({
+      id: 'current', examDate: '2026-09-24', dailyMinutes: 60, playbackRate: 1,
+      updatedAt: '2026-09-23T09:00:00.000Z',
+    });
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
+
+    await user.click(await screen.findByRole('button', { name: '重新练习' }));
+    await user.click(screen.getByRole('radio', { name: /Sunday afternoon/ }));
+    await user.click(screen.getByRole('button', { name: '提交复习答案' }));
+
+    await waitFor(async () => expect(await repository.getReviewCard('review:listen-01:q1')).toMatchObject({
+      nextReviewAt: '2026-09-24T00:00:00.000Z',
+    }));
   });
 });

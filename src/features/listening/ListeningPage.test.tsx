@@ -82,6 +82,18 @@ describe('ListeningPage', () => {
     expect(screen.getByLabelText('播放速度')).toHaveValue('1.25');
   });
 
+  it('loads the saved default playback rate', async () => {
+    const learningRepository = repository();
+    await learningRepository.saveUserSettings({
+      id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1.25,
+      updatedAt: '2026-09-24T00:00:00.000Z',
+    });
+
+    render(<ListeningPage repository={learningRepository} />);
+
+    await waitFor(() => expect(screen.getByLabelText('播放速度')).toHaveValue('1.25'));
+  });
+
   it('requires an answer before submission', async () => {
     const user = userEvent.setup();
     render(<ListeningPage repository={repository()} />);

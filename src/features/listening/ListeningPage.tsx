@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import listeningSets from '../../../content/v1/listeningSets.json';
 import type { AudioAsset } from '../../domain/content';
 import { publicAssetUrl } from '../../lib/publicAssetUrl';
@@ -22,7 +22,7 @@ const typeCopy = { news: '短篇新闻', conversation: '长对话', passage: '�
 
 const defaultRepository = new DexieLearningRepository();
 
-function ListeningExercise({ setIndex, onSetIndexChange, repository, today }: { setIndex: number; onSetIndexChange: (index: number) => void; repository: LearningRepository; today: string }) {
+function ListeningExercise({ setIndex, onSetIndexChange, repository, today, playbackRate }: { setIndex: number; onSetIndexChange: (index: number) => void; repository: LearningRepository; today: string; playbackRate: number }) {
   const listeningSet = listeningSets[setIndex];
   const [questionIndex, setQuestionIndex] = useState(0);
   const question = listeningSet.questions[questionIndex];
@@ -33,7 +33,7 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today }: { 
     transcript: listeningSet.transcript,
     segments: listeningSet.segments.map((segment, index) => ({ ...segment, id: `${listeningSet.id}-segment-${index + 1}` })),
   }), [listeningSet]);
-  const player = useSegmentPlayer(audio);
+  const player = useSegmentPlayer(audio, playbackRate);
   const [showTranscript, setShowTranscript] = useState(false);
   const [mediaError, setMediaError] = useState('');
   const [status, setStatus] = useState<PlayerStatus>('loading');
@@ -154,5 +154,11 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today }: { 
 
 export function ListeningPage({ repository = defaultRepository, today = localStudyDate() }: { repository?: LearningRepository; today?: string }) {
   const [setIndex, setSetIndex] = useState(0);
-  return <ListeningExercise key={listeningSets[setIndex].id} setIndex={setIndex} onSetIndexChange={setSetIndex} repository={repository} today={today} />;
+  const [playbackRate, setPlaybackRate] = useState(1);
+  useEffect(() => {
+    let active = true;
+    void repository.getDashboardSnapshot().then((snapshot) => { if (active) setPlaybackRate(snapshot.settings.playbackRate); }).catch(() => undefined);
+    return () => { active = false; };
+  }, [repository]);
+  return <ListeningExercise key={listeningSets[setIndex].id} setIndex={setIndex} onSetIndexChange={setSetIndex} repository={repository} today={today} playbackRate={playbackRate} />;
 }

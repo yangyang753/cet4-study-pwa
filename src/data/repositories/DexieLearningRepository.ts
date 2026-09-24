@@ -1,7 +1,7 @@
 import type { EntityTable, Table } from 'dexie';
 import type { Attempt } from '../../domain/attempt';
 import type { ExamSessionRecord } from '../../domain/exam';
-import { defaultUserSettings, type KnowledgeState, type ReviewCard, type StudyTaskCompletion, type UserSettings } from '../../domain/learning';
+import { normalizeUserSettings, type KnowledgeState, type ReviewCard, type StudyTaskCompletion, type UserSettings } from '../../domain/learning';
 import { learningDb, type LearningDatabase } from '../localDb';
 import { resolveDraftConflict, type DraftRecord, type OperationKind, type PendingOperation, type RemoteBatch, type TombstoneRecord } from '../sync/SyncEngine';
 import type { LearningRepository } from './LearningRepository';
@@ -46,14 +46,17 @@ export class DexieLearningRepository implements LearningRepository {
   }
   async completeTask(completion: StudyTaskCompletion) { await this.saveMutable('taskCompletion', this.db.taskCompletions, completion, completion.completedAt); }
   async upsertKnowledgeState(state: KnowledgeState) { await this.saveMutable('knowledgeState', this.db.knowledgeStates, state, state.updatedAt); }
-  async saveUserSettings(settings: UserSettings) { await this.saveMutable('settings', this.db.settings, settings, settings.updatedAt); }
+  async saveUserSettings(settings: UserSettings) {
+    const normalized = normalizeUserSettings(settings);
+    await this.saveMutable('settings', this.db.settings, normalized, normalized.updatedAt);
+  }
   async saveExamSession(session: ExamSessionRecord) { await this.saveMutable('examSession', this.db.examSessions, session, session.updatedAt); }
   async getActiveExamSession() { const active = await this.db.examSessions.where('status').equals('active').toArray(); return active.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0]; }
   async savePlan(plan: import('../localDb').CachedPlan) { await this.saveMutable('plan', this.db.plans, plan, plan.updatedAt); }
   async getPlan(date: string) { return (await this.db.plans.where('date').equals(date).first()) ?? null; }
   async getDashboardSnapshot(at = new Date().toISOString()) {
     const [attempts, dueReviews, completions, knowledgeStates, settings] = await Promise.all([this.db.attempts.toArray(), this.listDueReviews(at), this.db.taskCompletions.toArray(), this.db.knowledgeStates.toArray(), this.db.settings.get('current')]);
-    return { attempts, dueReviews, completions, knowledgeStates, settings: settings ?? defaultUserSettings() };
+    return { attempts, dueReviews, completions, knowledgeStates, settings: normalizeUserSettings(settings) };
   }
   list() { return this.db.syncQueue.toArray(); }
   async put(operation: PendingOperation) { if (!await this.db.syncQueue.get(operation.id)) await this.db.syncQueue.put(operation); }

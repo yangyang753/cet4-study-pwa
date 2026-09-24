@@ -9,6 +9,12 @@
 .focus-action { display: inline-block; padding: 12px 18px; border-radius: 13px; color: var(--color-green-dark); background: var(--color-yellow); font-weight: 800; }
 .knowledge-action { display: inline-block; margin-left: 16px; color: white; font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
 .countdown-card strong { display: block; color: var(--color-orange); font: 800 64px/1 Georgia, serif; }
+.exam-readiness { margin: 0 0 20px; padding: 22px 26px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-panel); box-shadow: var(--shadow-card); }
+.exam-readiness h2 { margin: 0 0 6px; }
+.exam-readiness p { color: var(--color-muted); }
+.exam-readiness > div { display: flex; gap: 18px; flex-wrap: wrap; }
+.exam-readiness label { display: flex; gap: 8px; align-items: center; font-weight: 700; }
+.exam-readiness input { width: 18px; height: 18px; accent-color: var(--color-green); }
 .dashboard-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 20px; }
 .task-card { display: grid; grid-template-columns: 44px 1fr auto auto; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--color-line); }
 .task-card:last-child { border: 0; }

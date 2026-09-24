@@ -20,19 +20,23 @@ const filterKind = (questionId: string) => {
   return '其他';
 };
 
-export function ReviewPage({ repository = defaultRepository, now = new Date().toISOString(), examDate = '2026-12-12' }: { repository?: LearningRepository; now?: string; examDate?: string }) {
+export function ReviewPage({ repository = defaultRepository, now = new Date().toISOString(), examDate }: { repository?: LearningRepository; now?: string; examDate?: string }) {
   const [cards, setCards] = useState<ReviewCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('今日到期');
   const [activeId, setActiveId] = useState<string | null>(null);
   const [response, setResponse] = useState('');
   const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
+  const [effectiveExamDate, setEffectiveExamDate] = useState(examDate ?? '2026-12-12');
 
   useEffect(() => {
     let current = true;
-    repository.listDueReviews(now).then((items) => { if (current) { setCards(items); setLoading(false); } });
+    void Promise.all([
+      repository.listDueReviews(now),
+      examDate ? Promise.resolve(examDate) : repository.getDashboardSnapshot(now).then((snapshot) => snapshot.settings.examDate),
+    ]).then(([items, savedExamDate]) => { if (current) { setCards(items); setEffectiveExamDate(savedExamDate); setLoading(false); } });
     return () => { current = false; };
-  }, [now, repository]);
+  }, [examDate, now, repository]);
 
   const shown = useMemo(() => cards.filter((card) => {
     if (filter === '今日到期') return card.stage < 4;
@@ -46,7 +50,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
     if (!activeCard || !activeQuestion || !('options' in activeQuestion) || !response) return;
     const graded = gradeAnswer(activeQuestion as ObjectiveQuestion, response);
     const currentStudyDate = studyDate(new Date(now));
-    const schedule = scheduleReviewStage(activeCard.stage, graded.correct, currentStudyDate, examDate);
+    const schedule = scheduleReviewStage(activeCard.stage, graded.correct, currentStudyDate, effectiveExamDate);
     const updated = { ...activeCard, stage: schedule.stage, nextReviewAt: schedule.nextReviewAt, lastCorrect: graded.correct, updatedAt: now };
     await repository.upsertReviewCard(updated);
     await repository.saveAttemptOnce({
