@@ -9,6 +9,11 @@ import mockData from '../../content/v1/mockExams.json';
 import type { CatalogMockExam, CatalogQuestion, Difficulty, PracticeKind, VocabularyEntry } from '../domain/content';
 
 const optionId = (index: number) => String.fromCharCode(65 + index);
+const rotate = <T,>(items: T[], offset: number): T[] => {
+  if (!items.length) return [];
+  const normalized = offset % items.length;
+  return [...items.slice(normalized), ...items.slice(0, normalized)];
+};
 const difficulty = (value: string): Difficulty => value === 'standard' || value === 'challenge' ? value : 'foundation';
 const listeningType = (value: string): 'news' | 'conversation' | 'passage' => value === 'conversation' || value === 'passage' ? value : 'news';
 const readingType = (value: string): 'cloze' | 'matching' | 'reading' => value === 'cloze' || value === 'matching' ? value : 'reading';
@@ -80,7 +85,13 @@ const writingQuestions: CatalogQuestion[] = writingData.map((item) => ({
 }));
 
 const vocabularyQuestions: CatalogQuestion[] = vocabularyData.map((item, index) => {
-  const distractors = [1, 2, 3].map((offset) => vocabularyData[(index + offset) % vocabularyData.length].meaningZh);
+  const distractors: string[] = [];
+  for (let offset = 1; distractors.length < 3 && offset < vocabularyData.length; offset += 1) {
+    const candidate = vocabularyData[(index + offset) % vocabularyData.length].meaningZh;
+    if (candidate !== item.meaningZh && !distractors.includes(candidate)) distractors.push(candidate);
+  }
+  const answerPosition = index % 4;
+  const optionTexts = rotate([item.meaningZh, ...distractors], (4 - answerPosition) % 4);
   return {
     id: `${item.id}:meaning`,
     version: 1,
@@ -90,13 +101,19 @@ const vocabularyQuestions: CatalogQuestion[] = vocabularyData.map((item, index) 
     knowledgePointIds: [`vocabulary:${item.id}`],
     explanationZh: `${item.word} ${item.partOfSpeech} ${item.meaningZh}。例句：${item.example}`,
     sourceNote: '依据 CET-4 高频词汇编写的原创练习',
-    options: [item.meaningZh, ...distractors].map((text, optionIndex) => ({ id: optionId(optionIndex), text })),
-    correctAnswer: 'A',
+    options: optionTexts.map((text, optionIndex) => ({ id: optionId(optionIndex), text })),
+    correctAnswer: optionId(answerPosition),
     groupId: item.id,
   };
 });
 
-const grammarQuestions: CatalogQuestion[] = grammarData.map((item) => ({
+const grammarQuestions: CatalogQuestion[] = grammarData.map((item, index) => {
+  const answerPosition = index % 4;
+  const optionTexts = rotate(
+    [item.checklist[0], ...item.checklist.slice(1), '先忽略句子结构，只凭语感作答'].slice(0, 4),
+    (4 - answerPosition) % 4,
+  );
+  return {
   id: `${item.id}:check`,
   version: 1,
   type: 'vocabulary',
@@ -105,10 +122,11 @@ const grammarQuestions: CatalogQuestion[] = grammarData.map((item) => ({
   knowledgePointIds: [`grammar:${item.id}`],
   explanationZh: `${item.summary} ${item.checklist.join('；')}`,
   sourceNote: '依据 CET-4 高频语法考点编写的原创练习',
-  options: item.checklist.map((text, optionIndex) => ({ id: optionId(optionIndex), text })),
-  correctAnswer: 'A',
+  options: optionTexts.map((text, optionIndex) => ({ id: optionId(optionIndex), text })),
+  correctAnswer: optionId(answerPosition),
   groupId: item.id,
-}));
+  };
+});
 
 const listening = listeningQuestions();
 const reading = readingQuestions();

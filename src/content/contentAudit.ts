@@ -47,3 +47,28 @@ export function auditContentInventory(inventory: ContentInventory): string[] {
   }
   return errors;
 }
+
+interface GeneratedQuestionCandidate {
+  id: string;
+  options?: { id: string; text: string }[];
+  correctAnswer?: string | string[];
+}
+
+export function auditGeneratedQuestions(groups: Partial<Record<'vocabulary' | 'grammar', GeneratedQuestionCandidate[]>>): string[] {
+  const errors: string[] = [];
+  for (const [kind, questions] of Object.entries(groups)) {
+    if (!questions) continue;
+    for (const question of questions) {
+      if (!question.options) continue;
+      const normalized = question.options.map((option) => option.text.trim().toLocaleLowerCase());
+      if (new Set(normalized).size !== normalized.length) errors.push(`${kind}:${question.id}: duplicate option text`);
+    }
+    if (questions.length >= 4) {
+      const positions = new Set(questions.slice(0, 8).flatMap((question) => typeof question.correctAnswer === 'string' ? [question.correctAnswer] : []));
+      for (const position of ['A', 'B', 'C', 'D']) {
+        if (!positions.has(position)) errors.push(`${kind}: first 8 questions do not include answer position ${position}`);
+      }
+    }
+  }
+  return errors;
+}

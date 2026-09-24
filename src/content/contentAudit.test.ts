@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { auditContentInventory } from './contentAudit';
+import { auditContentInventory, auditGeneratedQuestions } from './contentAudit';
+import { getPracticeItems } from './catalog';
 import inventory from '../../content/v1/inventory.json';
 
 describe('auditContentInventory', () => {
@@ -17,5 +18,9 @@ describe('auditContentInventory', () => {
 
   it('accepts only shipped mocks with the complete 57-question structure', () => {
     expect(auditContentInventory(inventory)).toEqual([]);
+  });
+
+  it('accepts generated questions with unique options and balanced answer positions', () => {
+    expect(auditGeneratedQuestions({ vocabulary: getPracticeItems('vocabulary'), grammar: getPracticeItems('grammar') })).toEqual([]);
   });
 });

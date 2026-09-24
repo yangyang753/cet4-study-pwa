@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { vi } from 'vitest';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
+import { getPracticeItems } from '../../content/catalog';
 import { ExerciseRunner } from './ExerciseRunner';
 
 describe('ExerciseRunner', () => {
@@ -101,6 +102,21 @@ describe('ExerciseRunner', () => {
     await user.click(screen.getByRole('button', { name: '提交答案' }));
     expect(screen.getByText('请选择一个答案')).toBeVisible();
     expect(repository.saveAttemptOnce).not.toHaveBeenCalled();
+  });
+
+  it('replaces attempted catalog questions with unseen questions from history', async () => {
+    const questions = getPracticeItems('reading');
+    const unseen = questions[questions.length - 1];
+    const repository = {
+      listAttempts: vi.fn().mockResolvedValue(questions.slice(0, -1).map((question, index) => ({
+        id: `attempt-${index}`, userId: 'learner', questionId: question.id, response: 'A', correct: true,
+        score: 1, durationSeconds: 10, kind: 'reading', mode: 'practice', createdAt: '2026-09-23T08:00:00.000Z',
+      }))),
+    } as unknown as LearningRepository;
+
+    render(<ExerciseRunner kind="reading" limit={1} repository={repository} today="2026-09-24" />);
+
+    expect(await screen.findByText(unseen.prompt)).toBeVisible();
   });
 
   it('automatically completes the matching daily task after the final answer', async () => {

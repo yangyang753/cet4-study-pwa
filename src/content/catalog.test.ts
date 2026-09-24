@@ -19,4 +19,11 @@ describe('v1 content catalog', () => {
   it('contains no broken references in the shipped catalog', () => {
     expect(validateCatalogReferences()).toEqual([]);
   });
+
+  it('distributes generated vocabulary and grammar answers across available positions', () => {
+    for (const kind of ['vocabulary', 'grammar'] as const) {
+      const answers = getPracticeItems(kind).slice(0, 8).map((question) => 'correctAnswer' in question ? question.correctAnswer : null);
+      expect(new Set(answers)).toEqual(new Set(['A', 'B', 'C', 'D']));
+    }
+  });
 });

@@ -40,10 +40,12 @@ describe('MasteryCheck', () => {
   it('marks the task mastered after all three contextual answers are correct', async () => {
     const user = userEvent.setup();
     const learningRepository = repository();
+    const questions = selectMasteryQuestions('vocabulary');
     render(<MasteryCheck kind="vocabulary" taskId="2026-09-22:vocabulary" repository={learningRepository} now="2026-09-22T09:00:00.000Z" />);
 
     for (let index = 0; index < 3; index += 1) {
-      await user.click(screen.getAllByRole('radio')[0]);
+      const correctAnswer = String(questions[index].correctAnswer);
+      await user.click(screen.getAllByRole('radio').find((radio) => radio.getAttribute('value') === correctAnswer)!);
       await user.click(screen.getByRole('button', { name: index === 2 ? '完成检测' : '提交答案' }));
       if (index < 2) await user.click(await screen.findByRole('button', { name: '下一题' }));
     }
@@ -57,15 +59,17 @@ describe('MasteryCheck', () => {
   it('schedules a review when either mastery answer is wrong', async () => {
     const user = userEvent.setup();
     const learningRepository = repository();
+    const questions = selectMasteryQuestions('vocabulary');
     render(<MasteryCheck kind="vocabulary" taskId="2026-09-22:vocabulary" repository={learningRepository} now="2026-09-22T09:00:00.000Z" />);
 
-    await user.click(screen.getAllByRole('radio')[1]);
+    const wrongOption = questions[0].options.find((option) => option.id !== questions[0].correctAnswer)!;
+    await user.click(screen.getAllByRole('radio').find((radio) => radio.getAttribute('value') === wrongOption.id)!);
     await user.click(screen.getByRole('button', { name: '提交答案' }));
     await user.click(await screen.findByRole('button', { name: '下一题' }));
-    await user.click(screen.getAllByRole('radio')[0]);
+    await user.click(screen.getAllByRole('radio').find((radio) => radio.getAttribute('value') === String(questions[1].correctAnswer))!);
     await user.click(screen.getByRole('button', { name: '提交答案' }));
     await user.click(await screen.findByRole('button', { name: '下一题' }));
-    await user.click(screen.getAllByRole('radio')[0]);
+    await user.click(screen.getAllByRole('radio').find((radio) => radio.getAttribute('value') === String(questions[2].correctAnswer))!);
     await user.click(screen.getByRole('button', { name: '完成检测' }));
 
     expect(await screen.findByText('需要继续复习')).toBeVisible();

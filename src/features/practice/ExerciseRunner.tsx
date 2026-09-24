@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import rawContent from '../../content/starter/content.json';
 import { getPracticeItems } from '../../content/catalog';
@@ -14,6 +14,7 @@ import { DexieLearningRepository } from '../../data/repositories/DexieLearningRe
 import { completeDailyTask, localStudyDate } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
 import type { Attempt, MistakeReason } from '../../domain/attempt';
+import { selectPracticeQuestions } from './selectPracticeQuestions';
 
 const starterContent = parseContentPack(rawContent);
 const defaultRepository = new DexieLearningRepository();
@@ -22,11 +23,12 @@ interface AnsweredItem { questionId: string; correct: boolean | null; durationSe
 const reasonPriority: Record<MistakeReason, number> = { unknown: 6, misunderstood: 6, location: 5, guessed: 5, careless: 3, overtime: 4 };
 
 export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repository = defaultRepository, userId = 'local-learner', today = localStudyDate() }: { setId?: string; kind?: PracticeKind; limit?: number; mode?: 'practice' | 'exam'; repository?: LearningRepository; userId?: string; today?: string }) {
-  const questions = useMemo<Question[]>(() => {
-    if (kind) return getPracticeItems(kind).slice(0, limit);
+  const initialQuestions = useMemo<Question[]>(() => {
+    if (kind) return selectPracticeQuestions(getPracticeItems(kind), [], { kind, date: today, limit });
     const practiceSet = starterContent.practiceSets.find((set) => set.id === setId);
     return practiceSet?.questionIds.map((id) => starterContent.questions.find((question) => question.id === id)!).filter(Boolean) ?? [];
-  }, [kind, limit, setId]);
+  }, [kind, limit, setId, today]);
+  const [questions, setQuestions] = useState<Question[]>(initialQuestions);
   const [index, setIndex] = useState(0);
   const [response, setResponse] = useState('');
   const [result, setResult] = useState<GradeResult | null>(null);
@@ -39,6 +41,20 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
   const [selectedReason, setSelectedReason] = useState<MistakeReason | undefined>();
   const question = questions[index];
   const plannedKind = kind === 'grammar' ? null : kind;
+
+  useEffect(() => {
+    if (!kind) return;
+    let active = true;
+    void (async () => {
+      try {
+        const attempts = await repository.listAttempts();
+        if (active) setQuestions(selectPracticeQuestions(getPracticeItems(kind), attempts, { kind, date: today, limit }));
+      } catch {
+        // Storage can be unavailable in private browsing; keep the stable daily fallback.
+      }
+    })();
+    return () => { active = false; };
+  }, [initialQuestions, kind, limit, repository, today]);
 
   if (!question) return <p>未找到这组练习。</p>;
   if (finished) {
@@ -113,5 +129,5 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
 export function PracticeRoute() {
   const { kind } = useParams();
   if (!practiceKinds.includes(kind as PracticeKind)) return <p>未找到该练习类型。</p>;
-  return <ExerciseRunner kind={kind as PracticeKind} />;
+  return <ExerciseRunner key={kind} kind={kind as PracticeKind} />;
 }
