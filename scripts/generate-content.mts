@@ -167,9 +167,51 @@ const readingThemes = [...themes.map(([theme]) => theme), '人工智能', '终�
 const readingSets = readingThemes.map((theme, index) => ({ id: `read-${String(index + 1).padStart(2, '0')}`, type: index % 3 === 0 ? 'cloze' : index % 3 === 1 ? 'matching' : 'reading', theme, difficulty: index < 10 ? 'foundation' : index < 22 ? 'standard' : 'challenge', passage: `${theme} has become an important topic among college students. A recent campus project showed that small, regular actions are often more effective than a single large event. Participants said clear goals and timely feedback helped them continue. The organizers therefore plan to provide practical guidance and invite more students to join.`, questions: [{ prompt: 'What helped participants continue?', options: ['Higher costs', 'Clear goals and feedback', 'Less communication', 'A shorter semester'], answer: 1, explanationZh: '第三句直接说明 clear goals and timely feedback 帮助参与者坚持。' }] }));
 
 const translationThemes = ['志愿服务', '传统节日', '公共交通', '数字支付', '在线教育', '环境保护', '中国茶文化', '城市公园', '科技创新', '全民健身', '文化遗产', '乡村发展'];
-const translations = translationThemes.map((theme, index) => ({ id: `trans-${String(index + 1).padStart(2, '0')}`, theme, prompt: `近年来，${theme}受到越来越多人的关注。它不仅改善了人们的日常生活，也为社会发展带来了新的机会。`, referenceAnswer: `In recent years, ${theme} has attracted increasing attention. It has not only improved people's daily lives but also created new opportunities for social development.`, rubric: ['主干完整', 'not only...but also... 使用正确', '时态和主谓一致正确'] }));
+const translationPrompts = [
+  '许多大学生利用周末参加志愿服务。他们在帮助社区居民的同时，也提高了沟通能力，并更加理解社会责任。',
+  '中国的传统节日往往与家庭团聚有关。如今，年轻人还会通过短视频介绍节日习俗，让更多外国朋友了解中国文化。',
+  '近年来，不少城市不断改善公共交通。更方便的地铁和公交线路既缩短了通勤时间，也有助于减少空气污染。',
+  '数字支付在中国日常生活中十分普遍。人们只需使用手机就能完成许多交易，但同时也应注意保护个人信息。',
+  '在线教育使学习不再受到地点限制。只要能够合理安排时间，学生就可以按照自己的节奏反复学习重要内容。',
+  '越来越多的人认识到环境保护需要长期行动。节约能源、减少一次性用品等小习惯也能产生积极影响。',
+  '中国茶文化有着悠久历史。饮茶不仅是一种生活习惯，人们还常常借此与亲友交流并表达热情好客。',
+  '城市公园为居民提供了接近自然的空间。清晨和傍晚，许多人会在那里散步、锻炼或暂时远离忙碌的生活。',
+  '科技创新正在改变生产和生活方式。新技术能够提高效率，但只有被负责任地使用，才能真正造福社会。',
+  '全民健身活动近年来受到广泛欢迎。定期运动不仅有益于身体健康，还能帮助人们缓解压力、保持积极心态。',
+  '文化遗产记录着一个民族的历史和智慧。保护古建筑与传统技艺，需要政府、专家和普通公众共同参与。',
+  '随着基础设施不断完善，乡村发展迎来了新的机会。电子商务帮助农民销售产品，也吸引一些年轻人返乡创业。',
+];
+const translationAnswers = [
+  'Many college students take part in volunteer service on weekends. While helping community residents, they also improve their communication skills and gain a better understanding of social responsibility.',
+  'Traditional Chinese festivals are often connected with family reunions. Today, young people also introduce festival customs through short videos, enabling more foreign friends to understand Chinese culture.',
+  'In recent years, many cities have continued to improve public transport. More convenient metro and bus routes not only shorten commuting time but also help reduce air pollution.',
+  'Digital payment is common in daily life in China. People can complete many transactions simply by using a mobile phone, but they should also pay attention to protecting personal information.',
+  'Online education allows learning to take place anywhere. As long as students manage their time properly, they can review important material repeatedly at their own pace.',
+  'More people are realizing that environmental protection requires long-term action. Small habits such as saving energy and reducing disposable products can also make a positive difference.',
+  'Chinese tea culture has a long history. Drinking tea is not only a daily habit; people also use it to communicate with friends and relatives and to show hospitality.',
+  'City parks provide residents with space close to nature. In the morning and evening, many people walk, exercise, or briefly escape from their busy lives there.',
+  'Technological innovation is changing the way people live and work. New technology can improve efficiency, but it can truly benefit society only when used responsibly.',
+  'Public fitness activities have become widely popular in recent years. Regular exercise benefits physical health and also helps people reduce stress and maintain a positive attitude.',
+  'Cultural heritage records the history and wisdom of a nation. Protecting historic buildings and traditional skills requires the joint participation of governments, experts, and the public.',
+  'As infrastructure continues to improve, rural development is gaining new opportunities. E-commerce helps farmers sell products and attracts some young people to return home and start businesses.',
+];
+const translations = translationThemes.map((theme, index) => ({ id: `trans-${String(index + 1).padStart(2, '0')}`, theme, prompt: translationPrompts[index], referenceAnswer: translationAnswers[index], rubric: ['信息完整准确', '句子衔接自然', '时态、语态和主谓一致正确'] }));
 const writingTopics = ['daily reading', 'volunteer work', 'time management', 'healthy habits', 'online learning', 'teamwork', 'environmental action', 'campus activities', 'career planning', 'digital tools', 'public transport', 'cultural exchange'];
-const writingPrompts = writingTopics.map((topic, index) => ({ id: `write-${String(index + 1).padStart(2, '0')}`, topic, prompt: `Write 120–180 words about the importance of ${topic} and give at least one practical suggestion.`, outline: ['State your view', 'Give two reasons or one example', 'Offer a practical suggestion'], referenceOpening: `In my view, ${topic} can make a meaningful difference in college life.` }));
+const writingInstructions = [
+  'Your university is collecting suggestions for encouraging daily reading. Write an essay explaining why the habit matters and propose one workable activity.',
+  'Write an essay for the campus newspaper describing what students can learn from volunteer work. Support your view with an example.',
+  'Many students struggle to balance study and rest. Write an essay explaining how effective time management can help and recommend a practical method.',
+  'Write an essay discussing one healthy habit that college students often overlook and explain how the university could encourage it.',
+  'Online learning offers flexibility but also creates difficulties. Write an essay evaluating both sides and state how students should use it.',
+  'A student club wants to improve teamwork. Write an essay identifying a common team problem and suggesting how members can solve it.',
+  'Write an essay persuading students to take one realistic environmental action on campus and explain its possible impact.',
+  'Your university plans to redesign campus activities. Write an essay describing which kind of activity deserves more support and why.',
+  'Write an essay explaining why career planning should begin before graduation and identify the first step a student can take.',
+  'Digital tools can either support or interrupt study. Write an essay explaining how students can use them more responsibly.',
+  'Write an essay about one improvement you would make to public transport around your university and explain who would benefit.',
+  'Your class will hold an international cultural exchange event. Write an essay proposing an activity and explaining how it promotes understanding.',
+];
+const writingPrompts = writingTopics.map((topic, index) => ({ id: `write-${String(index + 1).padStart(2, '0')}`, topic, prompt: `${writingInstructions[index]} Write 120–180 words.`, outline: ['State a clear position', 'Develop it with reasons or an example', 'End with a practical conclusion'], referenceOpening: `In my view, ${topic} deserves thoughtful attention because it can make a meaningful difference in college life.` }));
 const mockExams = Array.from({ length: 6 }, (_, index) => ({ id: `mock-${index + 1}`, title: `阶段模拟卷 ${index + 1}`, listeningSetIds: listeningSets.slice(index * 4, index * 4 + 4).map((item) => item.id), readingSetIds: readingSets.slice(index * 5, index * 5 + 5).map((item) => item.id), translationId: translations[index * 2].id, writingId: writingPrompts[index * 2].id, timingMinutes: 125 }));
 
 await mkdir(outputDir, { recursive: true });

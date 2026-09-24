@@ -12,7 +12,7 @@ describe('v1 content catalog', () => {
 
   it('normalizes answer indexes and stable question ids', () => {
     const question = getQuestion('listen-01:q1');
-    expect(question && 'correctAnswer' in question ? question.correctAnswer : null).toBe('B');
+    expect(question && 'correctAnswer' in question ? question.correctAnswer : null).toBe('A');
     expect(getPracticeItems('translation')).toHaveLength(12);
   });
 

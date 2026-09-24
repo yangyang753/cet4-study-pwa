@@ -23,7 +23,7 @@ describe('ReviewPage', () => {
     const user = userEvent.setup();
     render(<ReviewPage repository={await setupRepository()} now="2026-09-23T12:00:00.000Z" />);
     await user.click(await screen.findByRole('button', { name: '重新练习' }));
-    expect(screen.getByText('When is the additional session available?')).toBeVisible();
+    expect(screen.getByText('When will the campus volunteering activity take place?')).toBeVisible();
   });
 
   it('advances the review card after a correct re-practice answer', async () => {

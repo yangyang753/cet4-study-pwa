@@ -20,6 +20,17 @@ interface MockCandidate {
 
 interface QuestionSetCandidate { id?: string; questions?: unknown[] }
 
+interface DiversityQuestionCandidate { prompt?: string; answer?: number }
+interface ListeningDiversityCandidate extends QuestionSetCandidate { theme?: string; themeEn?: string; transcript?: string; audioSrc?: string; questions?: DiversityQuestionCandidate[] }
+interface ReadingDiversityCandidate extends QuestionSetCandidate { theme?: string; passage?: string; questions?: DiversityQuestionCandidate[] }
+interface SubjectiveDiversityCandidate { id?: string; theme?: string; topic?: string; prompt?: string }
+interface DiversityInventory {
+  listeningSets: ListeningDiversityCandidate[];
+  readingSets: ReadingDiversityCandidate[];
+  translations: SubjectiveDiversityCandidate[];
+  writingPrompts: SubjectiveDiversityCandidate[];
+}
+
 const minimums: Record<keyof ContentInventory, number> = { vocabulary: 800, collocations: 120, grammarTopics: 15, listeningSets: 24, readingSets: 30, translations: 12, writingPrompts: 12, mockExams: 6 };
 
 export function auditContentInventory(inventory: ContentInventory): string[] {
@@ -70,5 +81,44 @@ export function auditGeneratedQuestions(groups: Partial<Record<'vocabulary' | 'g
       }
     }
   }
+  return errors;
+}
+
+function normalizedShape(text: string, removable: Array<string | undefined>) {
+  let normalized = text.toLocaleLowerCase();
+  for (const value of removable.filter((item): item is string => Boolean(item))) {
+    normalized = normalized.replaceAll(value.toLocaleLowerCase(), '<topic>');
+  }
+  return normalized.replace(/\d+(?:\.\d+)?/g, '<number>').replace(/[^a-z\u4e00-\u9fff<>]+/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function repeatedShapes(items: Array<{ text: string; removable: Array<string | undefined> }>) {
+  const shapes = items.map((item) => normalizedShape(item.text, item.removable)).filter(Boolean);
+  return new Set(shapes).size !== shapes.length;
+}
+
+function auditQuestionGroup(kind: 'listeningSets' | 'readingSets', sets: Array<{ questions?: DiversityQuestionCandidate[] }>) {
+  const errors: string[] = [];
+  const questions = sets.flatMap((set) => set.questions ?? []);
+  if (questions.length >= 10) {
+    const prompts = questions.map((question) => normalizedShape(question.prompt ?? '', []));
+    if (new Set(prompts).size / questions.length < 0.5) errors.push(`${kind}: prompt diversity below 50%`);
+    const answers = questions.map((question) => question.answer).filter((answer): answer is number => Number.isInteger(answer));
+    for (const answer of new Set(answers)) {
+      if (answers.filter((item) => item === answer).length / answers.length > 0.6) errors.push(`${kind}: answer position ${answer} exceeds 60%`);
+    }
+  }
+  return errors;
+}
+
+export function auditContentDiversity(inventory: DiversityInventory): string[] {
+  const errors: string[] = [];
+  if (repeatedShapes(inventory.listeningSets.map((set) => ({ text: set.transcript ?? '', removable: [set.theme, set.themeEn] })))) errors.push('listeningSets: repeated normalized transcript');
+  if (repeatedShapes(inventory.readingSets.map((set) => ({ text: set.passage ?? '', removable: [set.theme] })))) errors.push('readingSets: repeated normalized passage');
+  errors.push(...auditQuestionGroup('listeningSets', inventory.listeningSets));
+  errors.push(...auditQuestionGroup('readingSets', inventory.readingSets));
+  for (const set of inventory.listeningSets) if (!set.audioSrc?.trim()) errors.push(`listeningSets:${set.id ?? 'unknown'}: missing audio reference`);
+  if (inventory.translations.length > 1 && repeatedShapes(inventory.translations.map((item) => ({ text: item.prompt ?? '', removable: [item.theme] })))) errors.push('translations: repeated normalized prompt');
+  if (inventory.writingPrompts.length > 1 && repeatedShapes(inventory.writingPrompts.map((item) => ({ text: item.prompt ?? '', removable: [item.topic] })))) errors.push('writingPrompts: repeated normalized prompt');
   return errors;
 }

@@ -60,9 +60,9 @@ describe('ListeningPage', () => {
   it('keeps the transcript hidden until the learner asks to see it', async () => {
     const user = userEvent.setup();
     render(<ListeningPage />);
-    expect(screen.queryByText(/Saturday group is full/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Saturday team reached its maximum size/)).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: '显示原文' }));
-    expect(screen.getByText(/Saturday group is full/)).toBeInTheDocument();
+    expect(screen.getByText(/Saturday team reached its maximum size/)).toBeInTheDocument();
   });
 
   it('preserves the selected answer and offers text mode after audio failure', async () => {
@@ -108,7 +108,7 @@ describe('ListeningPage', () => {
     const learningRepository = repository();
     render(<ListeningPage repository={learningRepository} />);
 
-    await user.click(screen.getByRole('radio', { name: /Saturday morning/ }));
+    await user.click(screen.getByRole('radio', { name: /announced next month/ }));
     await user.click(screen.getByRole('button', { name: '提交答案' }));
 
     expect(await screen.findByText('回答错误')).toBeVisible();
@@ -120,8 +120,8 @@ describe('ListeningPage', () => {
     const learningRepository = repository();
     render(<ListeningPage repository={learningRepository} today="2026-09-22" />);
     const correctAnswers = [
-      /Sunday afternoon/, /The Saturday group was full/, /A new campus volunteering activity/,
-      /Before Thursday/, /A student card and reusable notebook/, /It is not required/, /Watch a recording later/,
+      /new group will meet on Sunday afternoon/, /Saturday team reached its maximum size/, /student volunteer office is organizing reading visits/,
+      /Applications close before Thursday noon/, /student card and one picture book/, /No teaching experience is needed/, /watch the recorded briefing/,
     ];
     for (let index = 0; index < correctAnswers.length; index += 1) {
       await user.click(screen.getByRole('radio', { name: correctAnswers[index] }));
