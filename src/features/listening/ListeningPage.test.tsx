@@ -94,6 +94,24 @@ describe('ListeningPage', () => {
     await waitFor(() => expect(screen.getByLabelText('播放速度')).toHaveValue('1.25'));
   });
 
+  it('does not clear a selected answer when saved playback settings arrive late', async () => {
+    let resolveSnapshot!: (value: { settings: { id: 'current'; examDate: string; dailyMinutes: number; playbackRate: number; updatedAt: string } }) => void;
+    const learningRepository = {
+      getDashboardSnapshot: vi.fn().mockReturnValue(new Promise((resolve) => { resolveSnapshot = resolve; })),
+    } as unknown as DexieLearningRepository;
+    const user = userEvent.setup();
+    render(<ListeningPage repository={learningRepository} />);
+
+    await user.click(screen.getByRole('radio', { name: /Sunday afternoon/ }));
+    resolveSnapshot({ settings: {
+      id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1.25,
+      updatedAt: '2026-09-24T00:00:00.000Z',
+    } });
+
+    await waitFor(() => expect(screen.getByLabelText('播放速度')).toHaveValue('1.25'));
+    expect(screen.getByRole('radio', { name: /Sunday afternoon/ })).toBeChecked();
+  });
+
   it('requires an answer before submission', async () => {
     const user = userEvent.setup();
     render(<ListeningPage repository={repository()} />);
