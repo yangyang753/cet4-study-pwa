@@ -118,6 +118,7 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
       <section className="audio-player">
         <span>{typeCopy[listeningSet.type as keyof typeof typeCopy]} · {listeningSet.theme}</span>
         <h2>{listeningSet.themeEn}</h2>
+        <p className="audio-source-note">合成语音训练材料 · 原创仿真内容，用于精听与定位练习</p>
         <div className="wave" aria-hidden="true">{Array.from({ length: 32 }, (_, index) => <i key={index} style={{ height: `${20 + (index * 17) % 54}px` }} />)}</div>
         <audio
           ref={player.mediaRef}

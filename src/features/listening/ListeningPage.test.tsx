@@ -26,6 +26,7 @@ describe('ListeningPage', () => {
     vi.stubEnv('BASE_URL', '/cet4-study-pwa/');
     const { container } = render(<ListeningPage />);
     expect(container.querySelector('audio')).toHaveAttribute('src', '/cet4-study-pwa/audio/v1/listen-01.wav');
+    expect(screen.getByText(/合成语音训练材料/)).toBeInTheDocument();
   });
 
   it('moves through all 24 listening sets', async () => {

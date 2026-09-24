@@ -7,6 +7,7 @@
 .listening-grid { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 20px; }
 .audio-player { padding: 28px; border-radius: var(--radius-card); color: white; background: var(--color-green-dark); }
 .wave { display: flex; gap: 5px; align-items: center; height: 80px; margin: 22px 0; }
+.audio-source-note { color: #c7e0d5; font-size: .88rem; }
 .wave i { flex: 1; max-width: 8px; border-radius: 8px; background: #7ab49d; }
 .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .controls button, .controls select { padding: 8px 10px; border: 1px solid rgb(255 255 255 / 24%); border-radius: 10px; color: inherit; background: transparent; }
