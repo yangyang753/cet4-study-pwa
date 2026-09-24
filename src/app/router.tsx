@@ -11,6 +11,7 @@ import { ExamPicker } from '../features/exam/ExamPicker';
 import { AccountPage } from '../features/auth/AccountPage';
 import { MasteryRoute } from '../features/mastery/MasteryCheck';
 import { DiagnosticPage } from '../features/diagnostic/DiagnosticPage';
+import { PasswordRecoveryPage } from '../features/auth/PasswordRecoveryPage';
 import { supabaseClient } from '../lib/runtime';
 const KnowledgePage = lazy(() => import('../features/knowledge/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
 const PrintPage = lazy(() => import('../features/print/PrintPage').then((module) => ({ default: module.PrintPage })));
@@ -35,6 +36,7 @@ export const router = createBrowserRouter([
       { path: 'exam/:mockId', element: <ExamRoute /> },
       { path: 'knowledge', element: <Suspense fallback={<p>正在加载高频知识库…</p>}><KnowledgePage /></Suspense> },
       { path: 'account', element: <AccountPage cloudConfigured={Boolean(supabaseClient)} /> },
+      { path: 'recover', element: <PasswordRecoveryPage /> },
     ],
   },
 ], { basename });
