@@ -10,6 +10,7 @@ describe('normalizeUserSettings', () => {
       playbackRate: 1,
       updatedAt: '2026-09-24T00:00:00.000Z',
     })).toMatchObject({
+      reminderTime: '',
       readiness: {
         registrationConfirmed: false,
         admissionTicketPrepared: false,

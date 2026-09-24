@@ -10,6 +10,7 @@ export function LearningSettings({ repository = defaultRepository }: { repositor
   const [examDate, setExamDate] = useState('');
   const [dailyMinutes, setDailyMinutes] = useState('60');
   const [playbackRate, setPlaybackRate] = useState('1');
+  const [reminderTime, setReminderTime] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -22,6 +23,7 @@ export function LearningSettings({ repository = defaultRepository }: { repositor
       setExamDate(normalized.examDate);
       setDailyMinutes(String(normalized.dailyMinutes));
       setPlaybackRate(String(normalized.playbackRate));
+      setReminderTime(normalized.reminderTime ?? '');
     }).catch(() => setError('读取学习设置失败，请刷新后重试。'));
     return () => { active = false; };
   }, [repository]);
@@ -44,6 +46,7 @@ export function LearningSettings({ repository = defaultRepository }: { repositor
       examDate,
       dailyMinutes: minutes,
       playbackRate: Number(playbackRate),
+      reminderTime,
       updatedAt: new Date().toISOString(),
     });
     try {
@@ -65,6 +68,9 @@ export function LearningSettings({ repository = defaultRepository }: { repositor
       <label>考试日期<input aria-label="考试日期" type="date" value={examDate} onChange={(event) => setExamDate(event.target.value)} /></label>
       <label>每日学习分钟数<input aria-label="每日学习分钟数" type="number" min="20" max="180" value={dailyMinutes} onChange={(event) => setDailyMinutes(event.target.value)} /></label>
       <label>默认听力速度<select aria-label="默认听力速度" value={playbackRate} onChange={(event) => setPlaybackRate(event.target.value)}>{[0.75, 1, 1.25, 1.5].map((rate) => <option key={rate} value={rate}>{rate}×</option>)}</select></label>
+      <label>每日提醒时间<input aria-label="每日提醒时间" type="time" value={reminderTime} onChange={(event) => setReminderTime(event.target.value)} /></label>
+      <p><small>留空表示关闭。应用打开时检查提醒；浏览器无法保证应用完全关闭后仍按时通知。</small></p>
+      {'Notification' in window && Notification.permission === 'default' && <button type="button" onClick={() => void Notification.requestPermission().then((permission) => setMessage(permission === 'granted' ? '浏览器通知已开启' : '未开启浏览器通知，应用内提醒仍可使用'))}>开启浏览器通知</button>}
       <button type="submit">保存学习设置</button>
     </form>
     {error && <p role="alert">{error}</p>}

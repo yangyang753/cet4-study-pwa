@@ -24,6 +24,9 @@ button, input, textarea { font: inherit; }
 .sync-status button { margin-left: 6px; border: 0; border-radius: 6px; background: var(--color-yellow); }
 .pwa-update { position: fixed; z-index: 40; right: 22px; bottom: 22px; display: flex; gap: 10px; align-items: center; padding: 14px 16px; border-radius: 14px; color: white; background: var(--color-green-dark); box-shadow: var(--shadow-card); }
 .pwa-update button { padding: 7px 10px; border: 0; border-radius: 8px; background: var(--color-yellow); font-weight: 800; }
+.study-reminder { position: fixed; z-index: 40; top: 16px; left: 50%; display: flex; align-items: center; gap: 12px; max-width: min(92vw, 640px); padding: 12px 14px; border-radius: 14px; color: white; background: var(--color-green); box-shadow: var(--shadow-card); transform: translateX(-50%); }
+.study-reminder a { color: var(--color-yellow); font-weight: 800; white-space: nowrap; }
+.study-reminder button { border: 0; color: white; background: transparent; font-size: 1.4rem; cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

@@ -2,6 +2,7 @@ import type { PropsWithChildren } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import '../styles/global.css';
 import { SyncStatus } from '../components/SyncStatus';
+import { StudyReminder } from '../components/StudyReminder';
 
 const primaryLinks = [
   { to: '/today', label: '今日学习', icon: '⌂' },
@@ -30,6 +31,7 @@ function PrimaryNav({ mobile = false }: { mobile?: boolean }) {
 export function AppShell({ children }: PropsWithChildren) {
   return (
     <div className="app-shell">
+      <StudyReminder />
       <aside className="sidebar">
         <NavLink className="brand" to="/today" aria-label="四级向前首页">
           <span className="brand-mark">4</span>

@@ -41,6 +41,7 @@ export interface UserSettings {
   examDate: string;
   dailyMinutes: number;
   playbackRate: number;
+  reminderTime?: string;
   readiness?: ExamReadinessState;
   diagnosticCompletedAt?: string;
   diagnosticLevels?: Partial<Record<CoreStudyKind, number>>;
@@ -60,6 +61,7 @@ export const defaultUserSettings = (): UserSettings => ({
   examDate: '2026-12-12',
   dailyMinutes: 60,
   playbackRate: 1,
+  reminderTime: '',
   readiness: {
     registrationConfirmed: false,
     admissionTicketPrepared: false,

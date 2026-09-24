@@ -30,12 +30,19 @@ describe('LearningSettings', () => {
     await user.clear(screen.getByLabelText('每日学习分钟数'));
     await user.type(screen.getByLabelText('每日学习分钟数'), '75');
     await user.selectOptions(screen.getByLabelText('默认听力速度'), '1.25');
+    await user.clear(screen.getByLabelText('每日提醒时间'));
+    await user.type(screen.getByLabelText('每日提醒时间'), '20:30');
     await user.click(screen.getByRole('button', { name: '保存学习设置' }));
 
     expect(learningRepository.saveUserSettings).toHaveBeenCalledWith(expect.objectContaining({
-      examDate: '2026-12-19', dailyMinutes: 75, playbackRate: 1.25,
+      examDate: '2026-12-19', dailyMinutes: 75, playbackRate: 1.25, reminderTime: '20:30',
     }));
     expect(await screen.findByText('设置已保存')).toBeVisible();
+  });
+
+  it('explains that browser reminders require the app to be open', async () => {
+    render(<LearningSettings repository={repository()} />);
+    expect(await screen.findByText(/应用打开时检查提醒/)).toBeVisible();
   });
 
   it('rejects a daily study time outside the supported range', async () => {
