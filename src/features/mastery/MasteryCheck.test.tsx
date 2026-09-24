@@ -37,6 +37,11 @@ describe('MasteryCheck', () => {
     expect(selectMasteryQuestions('listening', sourceIds)).toHaveLength(3);
   });
 
+  it('does not select unrelated objective grammar questions for writing or translation', () => {
+    expect(selectMasteryQuestions('writing')).toHaveLength(0);
+    expect(selectMasteryQuestions('translation')).toHaveLength(0);
+  });
+
   it('marks the task mastered after all three contextual answers are correct', async () => {
     const user = userEvent.setup();
     const learningRepository = repository();

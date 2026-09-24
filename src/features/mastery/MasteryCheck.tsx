@@ -3,12 +3,13 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { getPracticeItems, getQuestion } from '../../content/catalog';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
-import type { CatalogQuestion, ObjectiveQuestion as ObjectiveQuestionType, PracticeKind } from '../../domain/content';
+import type { CatalogQuestion, ObjectiveQuestion as ObjectiveQuestionType, PracticeKind, SubjectiveQuestion } from '../../domain/content';
 import type { StudyKind } from '../planner/planDay';
 import { gradeAnswer } from '../practice/gradeAnswer';
 import { ObjectiveQuestion } from '../practice/ObjectiveQuestion';
 import { decodeMasteryContext } from './masteryContext';
 import { recordMasteryOutcome } from './taskProgress';
+import { SubjectiveMasteryCheck } from './SubjectiveMasteryCheck';
 import './mastery.css';
 
 const defaultRepository = new DexieLearningRepository();
@@ -18,6 +19,7 @@ const masteryQuestionKind: Record<StudyKind, PracticeKind> = {
 };
 
 export function selectMasteryQuestions(kind: StudyKind, sourceQuestionIds: string[] = []) {
+  if (kind === 'writing' || kind === 'translation') return [];
   const sourceQuestions = sourceQuestionIds.map(getQuestion).filter((question): question is CatalogQuestion => Boolean(question));
   const knowledgePointIds = new Set(sourceQuestions.flatMap((question) => question.knowledgePointIds));
   const objectiveSource = sourceQuestions.filter((question) => 'options' in question) as Array<CatalogQuestion & ObjectiveQuestionType>;
@@ -27,7 +29,7 @@ export function selectMasteryQuestions(kind: StudyKind, sourceQuestionIds: strin
   return unique.slice(0, 3);
 }
 
-export function MasteryCheck({ kind, taskId, repository = defaultRepository, now = new Date().toISOString(), sourceQuestionIds = [] }: { kind: StudyKind; taskId: string; repository?: LearningRepository; now?: string; sourceQuestionIds?: string[] }) {
+function ObjectiveMasteryCheck({ kind, taskId, repository, now, sourceQuestionIds }: { kind: StudyKind; taskId: string; repository: LearningRepository; now: string; sourceQuestionIds: string[] }) {
   const questionIdsKey = sourceQuestionIds.join('|');
   const questions = useMemo(() => selectMasteryQuestions(kind, questionIdsKey ? questionIdsKey.split('|') : []), [kind, questionIdsKey]);
   const [index, setIndex] = useState(0);
@@ -65,6 +67,16 @@ export function MasteryCheck({ kind, taskId, repository = defaultRepository, now
   if (finished) return <section className={`mastery-result ${finished}`}><h1>{finished === 'mastered' ? '已完全掌握' : '需要继续复习'}</h1><p>{finished === 'mastered' ? '检测正确率达到 80%，今日任务已真正掌握。' : '检测中还有薄弱点，错题已自动加入复习安排。'}</p><a href={`${import.meta.env.BASE_URL}today`}>返回今日计划</a></section>;
 
   return <section className="mastery-check"><header><span>掌握度检测</span><h1>完成后再确认：你真的掌握了吗？</h1><p>{sourceQuestionIds.length ? '题目优先来自本次练习内容。' : '题目来自当前学习类别。'}达到 80% 才算掌握。</p><b>{index + 1} / {questions.length}</b></header><ObjectiveQuestion question={question} value={response} disabled={answerResult !== null || saving} onChange={setResponse} />{answerResult !== null && <p role="status" className={answerResult ? 'correct' : 'incorrect'}>{answerResult ? '回答正确' : `回答错误。${question.explanationZh}`}</p>}{answerResult === null ? <button className="primary-action" disabled={!response || saving} onClick={() => void submit()}>{index === questions.length - 1 ? '完成检测' : '提交答案'}</button> : index < questions.length - 1 && <button className="primary-action" onClick={() => { setIndex((value) => value + 1); setResponse(''); setAnswerResult(null); }}>下一题</button>}</section>;
+}
+
+export function MasteryCheck({ kind, taskId, repository = defaultRepository, now = new Date().toISOString(), sourceQuestionIds = [] }: { kind: StudyKind; taskId: string; repository?: LearningRepository; now?: string; sourceQuestionIds?: string[] }) {
+  if (kind === 'writing' || kind === 'translation') {
+    const sourced = sourceQuestionIds.map(getQuestion).find((question): question is CatalogQuestion & SubjectiveQuestion => Boolean(question && !('options' in question)));
+    const fallback = getPracticeItems(kind).find((question): question is CatalogQuestion & SubjectiveQuestion => !('options' in question));
+    const question = sourced ?? fallback;
+    return question ? <SubjectiveMasteryCheck kind={kind} taskId={taskId} question={question} repository={repository} now={now} /> : <p>暂时无法生成掌握检测题。</p>;
+  }
+  return <ObjectiveMasteryCheck kind={kind} taskId={taskId} repository={repository} now={now} sourceQuestionIds={sourceQuestionIds} />;
 }
 
 export function MasteryRoute() {
