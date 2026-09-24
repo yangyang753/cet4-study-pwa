@@ -7,6 +7,7 @@
     "dev": "vite",
     "preview:test": "vite build && vite preview --host 127.0.0.1 --port 4173",
     "build": "tsc -b && vite build",
+    "bundle:check": "tsx scripts/check-bundle-budget.mts",
     "lint": "eslint .",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
@@ -18,7 +19,7 @@
     "audio:audit": "tsx scripts/audio-manifest.mts",
     "pages:verify": "tsx scripts/verify-github-pages-build.mts",
     "runtime:verify": "tsx scripts/verify-runtime-config.mts",
-    "release:verify": "pnpm content:validate && pnpm content:audit && pnpm audio:audit && pnpm test --run && pnpm e2e && pnpm typecheck && pnpm lint && pnpm build && pnpm pages:verify && pnpm runtime:verify"
+    "release:verify": "pnpm content:validate && pnpm content:audit && pnpm audio:audit && pnpm test --run && pnpm e2e && pnpm typecheck && pnpm lint && pnpm build && pnpm bundle:check && pnpm pages:verify && pnpm runtime:verify"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",
@@ -32,6 +33,7 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.63.0",
     "@testing-library/jest-dom": "^7.0.1",

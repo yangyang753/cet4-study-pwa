@@ -33,11 +33,13 @@ pnpm preview:test
 ## 启用账户与跨设备同步
 
 1. 创建 Supabase 项目。
-2. 在 SQL Editor 依次执行 `supabase/migrations/001_initial.sql` 和 `supabase/migrations/002_complete_learning_sync.sql`，按需执行 `supabase/seed.sql`。
-3. 复制 `.env.example` 为 `.env.local`，填写项目 URL 和 publishable/anon key。
+2. 使用 Supabase CLI 按顺序应用 `supabase/migrations/001_initial.sql` 至 `004_daily_plans.sql`，按需执行 `supabase/seed.sql`。
+3. 复制 `.env.example` 为 `.env.local`，填写项目 URL 和 `sb_publishable_...` Publishable Key。
 4. 在 Supabase Authentication 中启用 Email 登录，然后重新启动开发服务器。
 
 未配置 Supabase 时，应用自动进入离线体验模式；学习内容和答题记录仍优先保存到浏览器本机。
+
+完整图文顺序见 [`docs/supabase-setup.md`](docs/supabase-setup.md)。
 
 GitHub Pages 部署可在仓库 Settings → Secrets and variables → Actions 中同时添加 `VITE_SUPABASE_URL` 和 `VITE_SUPABASE_PUBLISHABLE_KEY`。两项都不设置时会安全构建为离线模式；只设置其中一项会中止部署，避免产生无法登录的半配置版本。网页端仅使用 `sb_publishable_...` 公钥，禁止配置 Secret Key 或 `service_role` 密钥。
 
@@ -66,7 +68,7 @@ pnpm e2e
 pnpm release:verify
 ```
 
-端到端测试覆盖桌面学习路径、手机布局、PWA 清单、离线重开和 A4 PDF 渲染。Windows 本机测试使用已安装的 Chrome；CI 可在 `playwright.config.ts` 中改用 Playwright Chromium。
+端到端测试覆盖桌面学习路径、360px 手机布局、无障碍扫描、PWA 清单、离线重开和 A4 PDF 渲染。Windows 本机使用已安装的 Chrome，CI 自动安装 Playwright Chromium。
 
 ## 部署
 

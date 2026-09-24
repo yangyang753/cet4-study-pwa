@@ -8,6 +8,18 @@ const base = isGitHubPages ? '/cet4-study-pwa/' : '/';
 
 export default defineConfig({
   base,
+  build: {
+    manifest: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/@remix-run') || id.includes('node_modules/react-router')) return 'vendor-react';
+          if (id.includes('node_modules/dexie')) return 'vendor-dexie';
+          if (id.includes('node_modules/@supabase')) return 'vendor-supabase';
+        },
+      },
+    },
+  },
   plugins: [react(), VitePWA({
     registerType: 'autoUpdate',
     includeAssets: ['icon.svg'],

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 test('supports the daily learning journey on desktop', async ({ page }) => {
   await page.goto('/today');
@@ -18,6 +19,17 @@ test('keeps the core navigation usable on a phone', async ({ page }) => {
   await mobileNav.getByRole('link', { name: /听力精练/ }).click();
   await expect(page.getByRole('heading', { name: '听力精练' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+});
+
+test('keeps core pages within a 360px viewport without serious accessibility violations', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  for (const route of ['/today', '/listen', '/practice', '/account']) {
+    await page.goto(route);
+    await expect(page.locator('main')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), `${route} must not scroll horizontally`).toBeTruthy();
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact ?? ''))).toEqual([]);
+  }
 });
 
 test('exposes installable PWA metadata', async ({ page, request }) => {

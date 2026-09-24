@@ -15,6 +15,7 @@ function serviceWith(user: { id: string; email: string } | null): AuthService {
     signUp: vi.fn().mockResolvedValue(user),
     signOut: vi.fn().mockResolvedValue(undefined),
     resetPassword: vi.fn().mockResolvedValue(undefined),
+    updatePassword: vi.fn().mockResolvedValue(undefined),
     subscribe: () => () => undefined,
   };
 }

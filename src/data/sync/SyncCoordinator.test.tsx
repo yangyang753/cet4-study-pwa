@@ -7,7 +7,7 @@ import type { PendingOperation, SyncRemote } from './SyncEngine';
 import { SyncCoordinator } from './SyncCoordinator';
 import { SyncStatus } from '../../components/SyncStatus';
 
-const signedOut: AuthService = { getUser: async () => null, signIn: async () => null, signUp: async () => null, signOut: async () => undefined, resetPassword: async () => undefined, subscribe: () => () => undefined };
+const signedOut: AuthService = { getUser: async () => null, signIn: async () => null, signUp: async () => null, signOut: async () => undefined, resetPassword: async () => undefined, updatePassword: async () => undefined, subscribe: () => () => undefined };
 
 describe('SyncCoordinator', () => {
   it('shows explicit local-only state when cloud sync is unavailable', async () => {
