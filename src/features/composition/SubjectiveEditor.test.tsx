@@ -6,9 +6,9 @@ import { SubjectiveEditor } from './SubjectiveEditor';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 
 const question: SubjectiveQuestion = { id: 'write-1', version: 1, type: 'writing', difficulty: 'foundation', prompt: 'Write about study habits.', knowledgePointIds: ['kp'], explanationZh: '结构完整。', sourceNote: 'Original exercise modeled on the official CET-4 format', rubric: ['观点明确', '结构完整'], referenceAnswer: 'Daily practice is useful.' };
-const validWriting = `First, daily practice helps students remember important knowledge and notice their weak points before an examination. A clear routine also makes a difficult goal feel smaller, so learners are more willing to begin instead of waiting for the perfect moment.
+const validWriting = `First, daily practice helps students remember important knowledge and notice their weak points before an examination. A clear routine also makes a difficult goal feel smaller, so learners are more willing to begin instead of waiting for the perfect moment. Keeping a notebook beside the textbook also helps students capture useful expressions and review them before they disappear from memory.
 
-Therefore, I plan to study at the same time each evening, review mistakes, and write down one question for the next day. This simple method gives every session a purpose and allows steady progress without creating unnecessary pressure. It also builds confidence because improvement becomes visible after several consistent weeks.`;
+Therefore, I plan to study at the same time each evening, review mistakes, and write down one question for the next day. This simple method gives every session a purpose and allows steady progress without creating unnecessary pressure. It also builds confidence because improvement becomes visible after several consistent weeks. Finally, I will compare my work every Sunday and adjust the routine when one activity is no longer useful.`;
 
 afterEach(() => { localStorage.clear(); vi.useRealTimers(); });
 
@@ -63,7 +63,7 @@ describe('SubjectiveEditor', () => {
     render(<SubjectiveEditor question={question} kind="writing" onSubmit={onSubmit} />);
     fireEvent.change(screen.getByLabelText('写作答题区'), { target: { value: 'Too short.' } });
     await user.click(screen.getByRole('button', { name: '提交自查' }));
-    expect(screen.getByRole('alert')).toHaveTextContent('至少需要 80 个英文单词');
+    expect(screen.getByRole('alert')).toHaveTextContent('至少需要 120 个英文单词');
     expect(screen.getByLabelText('写作答题区')).toHaveValue('Too short.');
     expect(onSubmit).not.toHaveBeenCalled();
   });

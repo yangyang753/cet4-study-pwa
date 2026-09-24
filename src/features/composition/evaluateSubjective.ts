@@ -8,7 +8,7 @@ export function evaluateSubjective(kind: 'writing' | 'translation', body: string
   const words = text ? text.split(/\s+/) : [];
   const normalized = text.toLowerCase();
   const checks: SubjectiveCheck[] = kind === 'writing' ? [
-    { label: '篇幅', passed: words.length >= 80, suggestion: '目标写到 120～180 词；先补充一个具体理由或例子。' },
+    { label: '篇幅', passed: words.length >= 120 && words.length <= 180, suggestion: words.length < 120 ? '四级写作至少 120 词；请补充一个具体理由或例子。' : '建议控制在 120～180 词，删去重复表达。' },
     { label: '段落结构', passed: text.split(/\n\s*\n/).filter(Boolean).length >= 2, suggestion: '至少分为开头和主体两段，建议再增加总结段。' },
     { label: '连接表达', passed: /\b(first|second|however|therefore|moreover|finally|because)\b/i.test(text), suggestion: '加入 First、However、Therefore 等连接词说明逻辑。' },
     { label: '句子完整性', passed: sentenceComplete(text), suggestion: '检查最后一句和每个句子的主语、谓语及结尾标点。' },

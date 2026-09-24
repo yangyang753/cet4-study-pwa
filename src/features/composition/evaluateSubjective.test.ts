@@ -3,7 +3,7 @@ import { evaluateSubjective } from './evaluateSubjective';
 
 describe('evaluateSubjective', () => {
   it('turns writing checks into a bounded local score without claiming an official score', () => {
-    const feedback = evaluateSubjective('writing', 'First, daily practice helps.\n\nTherefore, learners improve steadily.', []);
+    const feedback = evaluateSubjective('writing', `First, ${Array(60).fill('practice').join(' ')}.\n\nTherefore, ${Array(60).fill('learners').join(' ')}.` , []);
     expect(feedback.checks.map((item) => item.label)).toEqual(expect.arrayContaining(['篇幅', '段落结构', '连接表达', '句子完整性']));
     expect(feedback.checks.find((item) => item.label === '段落结构')?.passed).toBe(true);
     expect(feedback.disclaimer).toContain('不等同于官方阅卷或人工评分');
