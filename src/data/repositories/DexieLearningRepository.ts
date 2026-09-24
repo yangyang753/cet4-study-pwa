@@ -7,7 +7,7 @@ import { resolveDraftConflict, type DraftRecord, type OperationKind, type Pendin
 import type { LearningRepository } from './LearningRepository';
 
 type StoredEntity = { id: string; updatedAt?: string; createdAt?: string; completedAt?: string; body?: string; questionId?: string; deviceId?: string };
-const tableNames: Record<Exclude<OperationKind, 'tombstone'>, string> = { attempt: 'attempts', draft: 'drafts', reviewCard: 'reviewCards', taskCompletion: 'taskCompletions', knowledgeState: 'knowledgeStates', examSession: 'examSessions', settings: 'settings' };
+const tableNames: Record<Exclude<OperationKind, 'tombstone'>, string> = { attempt: 'attempts', draft: 'drafts', reviewCard: 'reviewCards', taskCompletion: 'taskCompletions', knowledgeState: 'knowledgeStates', examSession: 'examSessions', settings: 'settings', plan: 'plans' };
 const entityTimestamp = (entity: StoredEntity) => entity.updatedAt ?? entity.completedAt ?? entity.createdAt ?? '';
 
 export class DexieLearningRepository implements LearningRepository {
@@ -49,7 +49,7 @@ export class DexieLearningRepository implements LearningRepository {
   async saveUserSettings(settings: UserSettings) { await this.saveMutable('settings', this.db.settings, settings, settings.updatedAt); }
   async saveExamSession(session: ExamSessionRecord) { await this.saveMutable('examSession', this.db.examSessions, session, session.updatedAt); }
   async getActiveExamSession() { const active = await this.db.examSessions.where('status').equals('active').toArray(); return active.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0]; }
-  async savePlan(plan: import('../localDb').CachedPlan) { await this.db.plans.put(plan); }
+  async savePlan(plan: import('../localDb').CachedPlan) { await this.saveMutable('plan', this.db.plans, plan, plan.updatedAt); }
   async getPlan(date: string) { return (await this.db.plans.where('date').equals(date).first()) ?? null; }
   async getDashboardSnapshot(at = new Date().toISOString()) {
     const [attempts, dueReviews, completions, knowledgeStates, settings] = await Promise.all([this.db.attempts.toArray(), this.listDueReviews(at), this.db.taskCompletions.toArray(), this.db.knowledgeStates.toArray(), this.db.settings.get('current')]);
@@ -63,7 +63,7 @@ export class DexieLearningRepository implements LearningRepository {
   async setSyncCursor(cursor: string, userId: string) { await this.db.syncCursors.put({ id: `sync:${userId}`, cursor, updatedAt: new Date().toISOString() }); }
 
   async mergeRemoteBatch(batch: RemoteBatch) {
-    const tables = [this.db.attempts, this.db.drafts, this.db.reviewCards, this.db.taskCompletions, this.db.knowledgeStates, this.db.examSessions, this.db.settings, this.db.tombstones];
+    const tables = [this.db.attempts, this.db.drafts, this.db.plans, this.db.reviewCards, this.db.taskCompletions, this.db.knowledgeStates, this.db.examSessions, this.db.settings, this.db.tombstones];
     await this.db.transaction('rw', tables, async () => {
       const tombstoneRecords = batch.records.filter((record) => record.kind === 'tombstone');
       for (const record of tombstoneRecords) {

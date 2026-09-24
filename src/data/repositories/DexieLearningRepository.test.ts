@@ -38,6 +38,19 @@ describe('DexieLearningRepository', () => {
     await repository.savePlan(plan);
 
     expect(await repository.getPlan('2026-10-19')).toEqual(plan);
+    expect(await repository.list()).toContainEqual(expect.objectContaining({ kind: 'plan', entityId: plan.id }));
+    db.close();
+  });
+
+  it('merges only a newer remote plan while preserving other dates', async () => {
+    const db = new LearningDatabase(databaseName());
+    const repository = new DexieLearningRepository(db);
+    const local = { id: 'plan:2026-10-19', date: '2026-10-19', tasks: [], updatedAt: '2026-10-19T10:00:00.000Z' };
+    await repository.savePlan(local);
+    await repository.mergeRemoteBatch({ cursor: 'c1', records: [{ kind: 'plan', id: local.id, updatedAt: '2026-10-19T09:00:00.000Z', payload: { ...local, updatedAt: '2026-10-19T09:00:00.000Z' } }] });
+    expect(await repository.getPlan(local.date)).toEqual(local);
+    await repository.mergeRemoteBatch({ cursor: 'c2', records: [{ kind: 'plan', id: local.id, updatedAt: '2026-10-19T11:00:00.000Z', payload: { ...local, tasks: [{ id: 'new', kind: 'reading', minutes: 20, priority: 1 }], updatedAt: '2026-10-19T11:00:00.000Z' } }] });
+    expect((await repository.getPlan(local.date))?.tasks[0]?.id).toBe('new');
     db.close();
   });
 

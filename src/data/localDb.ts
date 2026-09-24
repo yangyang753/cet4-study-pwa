@@ -50,6 +50,11 @@ export class LearningDatabase extends Dexie {
       reviewCards: 'id,questionId,nextReviewAt,updatedAt', taskCompletions: 'id,date,taskId,kind,completedAt', knowledgeStates: 'id,itemId,status,updatedAt',
       settings: 'id,updatedAt', examSessions: 'id,status,updatedAt', tombstones: 'id,kind,entityId,updatedAt', syncCursors: 'id,updatedAt',
     });
+    this.version(5).stores({
+      attempts: 'id,userId,questionId,createdAt', drafts: 'id,questionId,updatedAt', plans: 'id,date,updatedAt', syncQueue: 'id,entityId,kind,createdAt',
+      reviewCards: 'id,questionId,nextReviewAt,updatedAt', taskCompletions: 'id,date,taskId,kind,completedAt', knowledgeStates: 'id,itemId,status,updatedAt',
+      settings: 'id,updatedAt', examSessions: 'id,status,updatedAt', tombstones: 'id,kind,entityId,updatedAt', syncCursors: 'id,updatedAt',
+    });
   }
 }
 

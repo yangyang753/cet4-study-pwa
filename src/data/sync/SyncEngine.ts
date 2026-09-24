@@ -1,4 +1,4 @@
-export type OperationKind = 'attempt' | 'draft' | 'reviewCard' | 'taskCompletion' | 'knowledgeState' | 'examSession' | 'settings' | 'tombstone';
+export type OperationKind = 'attempt' | 'draft' | 'reviewCard' | 'taskCompletion' | 'knowledgeState' | 'examSession' | 'settings' | 'plan' | 'tombstone';
 export interface PendingOperation { id: string; entityId: string; kind: OperationKind; payload: Record<string, unknown>; createdAt: string; attempts: number; ownerId?: string }
 export interface DraftRecord { id: string; questionId: string; body: string; deviceId: string; updatedAt: string }
 export interface TombstoneRecord { id: string; kind: Exclude<OperationKind, 'tombstone'>; entityId: string; deletedAt: string; updatedAt: string }
