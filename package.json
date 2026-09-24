@@ -19,7 +19,8 @@
     "audio:audit": "tsx scripts/audio-manifest.mts",
     "pages:verify": "tsx scripts/verify-github-pages-build.mts",
     "runtime:verify": "tsx scripts/verify-runtime-config.mts",
-    "release:verify": "pnpm content:validate && pnpm content:audit && pnpm audio:audit && pnpm test --run && pnpm e2e && pnpm typecheck && pnpm lint && pnpm build && pnpm bundle:check && pnpm pages:verify && pnpm runtime:verify"
+    "supabase:verify": "tsx scripts/verify-supabase-migrations.mts",
+    "release:verify": "pnpm content:validate && pnpm content:audit && pnpm audio:audit && pnpm test --run && pnpm e2e && pnpm typecheck && pnpm lint && pnpm build && pnpm bundle:check && pnpm pages:verify && pnpm supabase:verify && pnpm runtime:verify"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",
