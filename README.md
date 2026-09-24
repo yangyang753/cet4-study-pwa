@@ -39,7 +39,7 @@ pnpm preview:test
 
 未配置 Supabase 时，应用自动进入离线体验模式；学习内容和答题记录仍优先保存到浏览器本机。
 
-GitHub Pages 部署可在仓库 Settings → Secrets and variables → Actions 中同时添加 `VITE_SUPABASE_URL` 和 `VITE_SUPABASE_ANON_KEY`。两项都不设置时会安全构建为离线模式；只设置其中一项会中止部署，避免产生无法登录的半配置版本。
+GitHub Pages 部署可在仓库 Settings → Secrets and variables → Actions 中同时添加 `VITE_SUPABASE_URL` 和 `VITE_SUPABASE_PUBLISHABLE_KEY`。两项都不设置时会安全构建为离线模式；只设置其中一项会中止部署，避免产生无法登录的半配置版本。网页端仅使用 `sb_publishable_...` 公钥，禁止配置 Secret Key 或 `service_role` 密钥。
 
 ## 内容维护
 

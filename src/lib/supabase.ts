@@ -3,7 +3,7 @@ import type { AuthService, AuthUser } from '../features/auth/AuthProvider';
 
 export function createConfiguredSupabaseClient(): SupabaseClient | null {
   const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   return url && key ? createClient(url, key) : null;
 }
 

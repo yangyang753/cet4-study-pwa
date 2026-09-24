@@ -4,7 +4,8 @@ import { determineRuntimeMode } from './verify-runtime-config.mts';
 describe('runtime configuration', () => {
   it('accepts complete offline and cloud modes but rejects partial credentials', () => {
     expect(determineRuntimeMode({})).toBe('offline');
-    expect(determineRuntimeMode({ VITE_SUPABASE_URL: 'https://project.supabase.co', VITE_SUPABASE_ANON_KEY: 'public-key' })).toBe('cloud');
-    expect(() => determineRuntimeMode({ VITE_SUPABASE_URL: 'https://project.supabase.co' })).toThrow('Both VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY');
+    expect(determineRuntimeMode({ VITE_SUPABASE_URL: 'https://project.supabase.co', VITE_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_public' })).toBe('cloud');
+    expect(() => determineRuntimeMode({ VITE_SUPABASE_URL: 'https://project.supabase.co' })).toThrow('provided together');
+    expect(() => determineRuntimeMode({ VITE_SUPABASE_URL: 'https://project.supabase.co', VITE_SUPABASE_PUBLISHABLE_KEY: 'service_role_secret' })).toThrow('Publishable Key');
   });
 });

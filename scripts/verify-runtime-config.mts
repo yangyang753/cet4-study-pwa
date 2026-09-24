@@ -4,8 +4,9 @@ import path from 'node:path';
 export type RuntimeMode = 'offline' | 'cloud';
 export function determineRuntimeMode(environment: Record<string, string | undefined>): RuntimeMode {
   const url = environment.VITE_SUPABASE_URL?.trim();
-  const key = environment.VITE_SUPABASE_ANON_KEY?.trim();
-  if (Boolean(url) !== Boolean(key)) throw new Error('Both VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be provided together.');
+  const key = environment.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
+  if (Boolean(url) !== Boolean(key)) throw new Error('VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY must be provided together.');
+  if (key && !key.startsWith('sb_publishable_')) throw new Error('Use a Supabase Publishable Key beginning with sb_publishable_.');
   return url && key ? 'cloud' : 'offline';
 }
 
