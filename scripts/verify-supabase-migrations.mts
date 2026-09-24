@@ -23,6 +23,9 @@ export function verifyMigrationContracts(root = defaultRoot): string[] {
   }
   for (const table of requiredOwnerTables) if (!ownerKeys.includes(`'${table}'`)) errors.push(`005 missing owner table ${table}`);
   if (!ownerKeys.includes('add primary key (user_id, id)')) errors.push('005 must add owner-scoped primary keys');
+  for (const contract of ["column_name = 'tasks'", "id = 'plan:' || plan_date::text", 'drop column tasks']) {
+    if (!ownerKeys.includes(contract)) errors.push(`005 missing legacy daily-plan recovery: ${contract}`);
+  }
   if (/array\[[^\]]*'(attempts|drafts)'/s.test(ownerKeys)) errors.push('005 must not rewrite attempts or drafts primary keys');
   for (const table of ['daily_plans', ...requiredOwnerTables]) if (!rls.includes(`'${table}'`)) errors.push(`RLS tests missing ${table} owner-key assertion`);
   if (!rls.includes('select plan(20)')) errors.push('RLS pgTAP plan must match 20 assertions');

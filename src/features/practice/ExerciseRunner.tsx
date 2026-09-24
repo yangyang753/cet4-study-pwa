@@ -28,7 +28,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     const practiceSet = starterContent.practiceSets.find((set) => set.id === setId);
     return practiceSet?.questionIds.map((id) => starterContent.questions.find((question) => question.id === id)!).filter(Boolean) ?? [];
   }, [kind, limit, setId, today]);
-  const [questions, setQuestions] = useState<Question[]>(initialQuestions);
+  const [questions, setQuestions] = useState<Question[] | null>(() => kind ? null : initialQuestions);
   const [index, setIndex] = useState(0);
   const [response, setResponse] = useState('');
   const [result, setResult] = useState<GradeResult | null>(null);
@@ -39,7 +39,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
   const [finished, setFinished] = useState(false);
   const [currentAttempt, setCurrentAttempt] = useState<Attempt | null>(null);
   const [selectedReason, setSelectedReason] = useState<MistakeReason | undefined>();
-  const question = questions[index];
+  const question = questions?.[index];
   const plannedKind = kind;
 
   useEffect(() => {
@@ -50,13 +50,16 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
         const attempts = await repository.listAttempts();
         if (active) setQuestions(selectPracticeQuestions(getPracticeItems(kind), attempts, { kind, date: today, limit }));
       } catch {
-        // Storage can be unavailable in private browsing; keep the stable daily fallback.
+        if (active) setQuestions(initialQuestions);
       }
     })();
     return () => { active = false; };
   }, [initialQuestions, kind, limit, repository, today]);
 
+  if (questions === null) return <p role="status">正在根据学习记录选题…</p>;
   if (!question) return <p>未找到这组练习。</p>;
+  const questionCount = questions.length;
+  const questionId = question.id;
   if (finished) {
     const correct = answered.filter((item) => item.correct).length;
     const durationSeconds = answered.reduce((sum, item) => sum + item.durationSeconds, 0);
@@ -65,7 +68,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
 
   const duration = () => Math.max(0, Math.round((Date.now() - startedAt) / 1000));
   const baseAttempt = (responseValue: unknown, correct: boolean | null, score: number | null): Attempt => ({
-    id: crypto.randomUUID(), userId, questionId: question.id, response: responseValue, correct, score,
+    id: crypto.randomUUID(), userId, questionId, response: responseValue, correct, score,
     durationSeconds: duration(), contentVersion: 'v1', kind: kind ?? question.type, mode,
     deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device', createdAt: new Date().toISOString(),
   });
@@ -79,10 +82,10 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     setCurrentAttempt(attempt);
     void repository.saveAttemptOnce(attempt).then(async () => {
       if (!graded.correct) await repository.upsertReviewCard({
-        id: `review:${question.id}`, questionId: question.id, stage: 0, priority: 6,
+        id: `review:${questionId}`, questionId, stage: 0, priority: 6,
         nextReviewAt: attempt.createdAt, lastCorrect: false, updatedAt: attempt.createdAt,
       });
-      setAnswered((items) => [...items, { questionId: question.id, correct: graded.correct, durationSeconds: seconds }]);
+      setAnswered((items) => [...items, { questionId, correct: graded.correct, durationSeconds: seconds }]);
       setSaveState('saved');
     }).catch(() => setSaveState('error'));
   }
@@ -107,7 +110,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
   }
 
   async function next() {
-    if (index >= questions.length - 1) {
+    if (index >= questionCount - 1) {
       if (plannedKind && mode === 'practice') await completeDailyTask(repository, plannedKind, today);
       setFinished(true); return;
     }

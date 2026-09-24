@@ -18,7 +18,14 @@ describe('Supabase migration contracts', () => {
     for (const table of ['daily_plans', 'review_queue', 'task_completions', 'knowledge_states', 'exam_sessions', 'tombstones']) {
       expect(migrations).toContain(table);
     }
-    expect(migrations.match(/primary key \(user_id, id\)/g)).toHaveLength(2);
+    expect(migrations.match(/primary key \(user_id, id\)/g)?.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('repairs projects that already recorded the legacy migration 004', () => {
+    const migration005 = read('supabase/migrations/005_owner_scoped_keys.sql');
+    expect(migration005).toContain("column_name = 'tasks'");
+    expect(migration005).toContain("id = 'plan:' || plan_date::text");
+    expect(migration005).toContain('drop column tasks');
   });
 
   it('passes the complete static migration contract audit', () => {

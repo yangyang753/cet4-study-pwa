@@ -38,6 +38,7 @@ describe('foundation diagnostic', () => {
   it('shows tested percentages and the selected learning priority after completion', async () => {
     const user = userEvent.setup();
     const grammarQuestion = getPracticeItems('grammar')[0];
+    if (!('correctAnswer' in grammarQuestion)) throw new Error('Expected an objective grammar question');
     const repository = {
       getDashboardSnapshot: vi.fn().mockResolvedValue({ settings: { id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-23T00:00:00.000Z' } }),
       saveUserSettings: vi.fn().mockResolvedValue(undefined),

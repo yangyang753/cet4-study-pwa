@@ -19,6 +19,9 @@ test('keeps the core navigation usable on a phone', async ({ page }) => {
   await mobileNav.getByRole('link', { name: /听力精练/ }).click();
   await expect(page.getByRole('heading', { name: '听力精练' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+  await page.goto('account');
+  await expect(page.getByText(/当前为离线体验模式/)).toBeVisible();
+  await expect(page.getByRole('button', { name: '登录' })).toHaveCount(0);
 });
 
 test('keeps core pages within a 360px viewport without serious accessibility violations', async ({ page }) => {
@@ -61,4 +64,7 @@ test('continues a full mock into the next locked section', async ({ page, reques
   const audioSrc = await page.getByLabel('模考听力音频').getAttribute('src');
   expect(audioSrc).toContain('/audio/');
   expect((await request.get(new URL(audioSrc!, page.url()).toString())).ok()).toBeTruthy();
+  await page.getByRole('button', { name: '交卷' }).click();
+  await expect(page.getByText('备考估分', { exact: true })).toBeVisible();
+  await expect(page.getByText('备考估分基于本应用规则，不是官方 CET-4 标准分。')).toBeVisible();
 });
