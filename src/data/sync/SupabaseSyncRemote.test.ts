@@ -25,4 +25,12 @@ describe('SupabaseSyncRemote', () => {
     });
     expect(fake.upsert).toHaveBeenLastCalledWith(expect.objectContaining({ priority: 5, reason: 'location' }));
   });
+
+  it('maps a daily plan to the authenticated learner plan table', async () => {
+    const fake = clientDouble();
+    const remote = new SupabaseSyncRemote(fake.client, 'user-1');
+    await remote.upsertOperation('plan', { id: 'plan:2026-09-24', date: '2026-09-24', tasks: [], updatedAt: '2026-09-24T09:00:00.000Z' });
+    expect(fake.from).toHaveBeenCalledWith('daily_plans');
+    expect(fake.upsert).toHaveBeenCalledWith({ id: 'plan:2026-09-24', user_id: 'user-1', plan_date: '2026-09-24', payload: { id: 'plan:2026-09-24', date: '2026-09-24', tasks: [], updatedAt: '2026-09-24T09:00:00.000Z' }, updated_at: '2026-09-24T09:00:00.000Z' });
+  });
 });

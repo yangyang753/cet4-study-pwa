@@ -4,6 +4,7 @@ import type { OperationKind, RemoteBatch, RemoteRecord, SyncRemote } from './Syn
 const tables: Array<[Exclude<OperationKind, 'tombstone'> | 'tombstone', string]> = [
   ['attempt', 'attempts'], ['draft', 'drafts'], ['reviewCard', 'review_queue'], ['taskCompletion', 'task_completions'],
   ['knowledgeState', 'knowledge_states'], ['examSession', 'exam_sessions'], ['settings', 'user_settings'], ['tombstone', 'tombstones'],
+  ['plan', 'daily_plans'],
 ];
 
 const asString = (value: unknown) => typeof value === 'string' ? value : '';
@@ -52,6 +53,7 @@ export class SupabaseSyncRemote implements SyncRemote {
     if (kind === 'knowledgeState') return ['knowledge_states', { ...common, item_id: payload.itemId, status: payload.status, favorite: payload.favorite }];
     if (kind === 'examSession') return ['exam_sessions', { ...common, mock_id: payload.mockId, content_version: payload.contentVersion, status: payload.status, payload }];
     if (kind === 'settings') return ['user_settings', { ...common, exam_date: payload.examDate, daily_minutes: payload.dailyMinutes, payload }];
+    if (kind === 'plan') return ['daily_plans', { ...common, plan_date: payload.date, payload }];
     return ['tombstones', { ...common, entity_kind: payload.kind, entity_id: payload.entityId, deleted_at: payload.deletedAt }];
   }
 
@@ -62,7 +64,7 @@ export class SupabaseSyncRemote implements SyncRemote {
     if (kind === 'reviewCard') return { kind, id: asString(row.id), updatedAt, payload: { id: row.id, questionId: row.question_id, stage: row.stage, priority: row.priority, reason: row.reason, nextReviewAt: row.next_review_at, lastCorrect: row.last_correct, updatedAt } };
     if (kind === 'taskCompletion') return { kind, id: asString(row.id), updatedAt, payload: { id: row.id, taskId: row.task_id, kind: row.kind, date: row.completion_date, completedAt: row.completed_at, updatedAt } };
     if (kind === 'knowledgeState') return { kind, id: asString(row.id), updatedAt, payload: { id: row.id, itemId: row.item_id, status: row.status, favorite: row.favorite, updatedAt } };
-    if (kind === 'examSession' || kind === 'settings') return { kind, id: asString(row.id), updatedAt, payload: { ...(row.payload as Record<string, unknown>), updatedAt } };
+    if (kind === 'examSession' || kind === 'settings' || kind === 'plan') return { kind, id: asString(row.id), updatedAt, payload: { ...(row.payload as Record<string, unknown>), updatedAt } };
     const payload = { id: row.id, kind: row.entity_kind, entityId: row.entity_id, deletedAt: row.deleted_at, updatedAt };
     return { kind: 'tombstone', id: asString(row.id), updatedAt, deletedAt: asString(row.deleted_at), payload };
   }
