@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import vocabulary from '../../../content/v1/vocabulary.json';
 import collocations from '../../../content/v1/collocations.json';
 import grammarTopics from '../../../content/v1/grammarTopics.json';
@@ -14,6 +14,19 @@ export function KnowledgePage({ repository = defaultRepository }: { repository?:
   const [query, setQuery] = useState('');
   const [visibleCount, setVisibleCount] = useState(18);
   const [mastered, setMastered] = useState<Set<string>>(() => new Set());
+  useEffect(() => {
+    let active = true;
+    void repository.getDashboardSnapshot().then((snapshot) => {
+      if (!active) return;
+      const savedIds = snapshot.knowledgeStates
+        .filter((state) => state.status === 'mastered')
+        .map((state) => state.itemId);
+      setMastered((current) => new Set([...current, ...savedIds]));
+    }).catch(() => {
+      // The knowledge library remains usable when local storage is unavailable.
+    });
+    return () => { active = false; };
+  }, [repository]);
   const filteredWords = useMemo(() => {
     const normalized = query.trim().toLowerCase();
     return vocabulary.filter((item) => !normalized || `${item.word} ${item.meaningZh}`.toLowerCase().includes(normalized));

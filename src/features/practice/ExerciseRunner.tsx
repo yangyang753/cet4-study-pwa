@@ -73,21 +73,37 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device', createdAt: new Date().toISOString(),
   });
 
+  async function persistObjectiveAttempt(attempt: Attempt, graded: GradeResult) {
+    setSaveState('saving');
+    try {
+      await repository.saveAttemptOnce(attempt);
+      if (!graded.correct) await repository.upsertReviewCard({
+        id: `review:${attempt.questionId}`, questionId: attempt.questionId, stage: 0, priority: 6,
+        nextReviewAt: attempt.createdAt, lastCorrect: false, updatedAt: attempt.createdAt,
+      });
+      setAnswered((items) => [...items, {
+        questionId: attempt.questionId,
+        correct: graded.correct,
+        durationSeconds: attempt.durationSeconds,
+      }]);
+      setSaveState('saved');
+    } catch {
+      setSaveState('error');
+    }
+  }
+
   function submit() {
     if (!response) { setAnswerError('请选择一个答案'); return; }
     const graded = gradeAnswer(question as ObjectiveQuestionType, response);
-    setAnswerError(''); setResult(graded); setSaveState('saving');
-    const seconds = duration();
+    setAnswerError(''); setResult(graded);
     const attempt = baseAttempt(response, graded.correct, graded.score);
     setCurrentAttempt(attempt);
-    void repository.saveAttemptOnce(attempt).then(async () => {
-      if (!graded.correct) await repository.upsertReviewCard({
-        id: `review:${questionId}`, questionId, stage: 0, priority: 6,
-        nextReviewAt: attempt.createdAt, lastCorrect: false, updatedAt: attempt.createdAt,
-      });
-      setAnswered((items) => [...items, { questionId, correct: graded.correct, durationSeconds: seconds }]);
-      setSaveState('saved');
-    }).catch(() => setSaveState('error'));
+    void persistObjectiveAttempt(attempt, graded);
+  }
+
+  function retrySave() {
+    if (!currentAttempt || !result || saveState !== 'error') return;
+    void persistObjectiveAttempt(currentAttempt, result);
   }
 
   async function saveReason(reason: MistakeReason) {
@@ -126,7 +142,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     });
   }} />;
 
-  return <section className="exercise-runner"><header><span>{mode === 'exam' ? '模拟考试' : '专项练习'}</span><b>{index + 1} / {questions.length}</b></header><ObjectiveQuestion question={question as ObjectiveQuestionType} value={response} disabled={Boolean(result)} onChange={setResponse} />{answerError && <p role="alert" className="answer-error">{answerError}</p>}{saveState !== 'idle' && <p role="status">{saveState === 'saving' ? '正在保存…' : saveState === 'saved' ? '已保存到本机，联网后自动同步' : '保存失败，请重试本题'}</p>}{!result ? <button className="primary-action" onClick={submit}>提交答案</button> : <>{mode === 'practice' && <ExplanationPanel question={question} correct={result.correct} onReason={saveState === 'saved' ? saveReason : undefined} selectedReason={selectedReason} />}<button className="primary-action" onClick={() => void next()}>{index >= questions.length - 1 ? '查看结果' : '下一题'}</button></>}</section>;
+  return <section className="exercise-runner"><header><span>{mode === 'exam' ? '模拟考试' : '专项练习'}</span><b>{index + 1} / {questions.length}</b></header><ObjectiveQuestion question={question as ObjectiveQuestionType} value={response} disabled={Boolean(result)} onChange={setResponse} />{answerError && <p role="alert" className="answer-error">{answerError}</p>}{saveState !== 'idle' && <p role={saveState === 'error' ? 'alert' : 'status'}>{saveState === 'saving' ? '正在保存…' : saveState === 'saved' ? '已保存到本机，联网后自动同步' : '保存失败，请重新保存后继续'}</p>}{saveState === 'error' && <button type="button" onClick={retrySave}>重新保存</button>}{!result ? <button className="primary-action" onClick={submit}>提交答案</button> : <>{mode === 'practice' && <ExplanationPanel question={question} correct={result.correct} onReason={saveState === 'saved' ? saveReason : undefined} selectedReason={selectedReason} />}{saveState !== 'saving' && <button className="primary-action" disabled={saveState !== 'saved'} onClick={() => void next()}>{index >= questions.length - 1 ? '查看结果' : '下一题'}</button>}</>}</section>;
 }
 
 export function PracticeRoute() {

@@ -41,6 +41,26 @@ describe('ExerciseRunner', () => {
     expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ userId: 'learner-1', response: 'A', correct: true }));
   });
 
+  it('retries a failed objective save before allowing progress', async () => {
+    const user = userEvent.setup();
+    const saveAttemptOnce = vi.fn()
+      .mockRejectedValueOnce(new Error('storage unavailable'))
+      .mockResolvedValueOnce(undefined);
+    const repository = { saveAttemptOnce } as unknown as LearningRepository;
+    render(<ExerciseRunner setId="set-starter" repository={repository} />);
+
+    await user.click(screen.getByRole('radio', { name: /encourage/ }));
+    await user.click(screen.getByRole('button', { name: '提交答案' }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('保存失败');
+    expect(screen.getByRole('button', { name: /下一题|查看结果/ })).toBeDisabled();
+    await user.click(screen.getByRole('button', { name: '重新保存' }));
+
+    expect(await screen.findByText('已保存到本机，联网后自动同步')).toBeVisible();
+    expect(saveAttemptOnce).toHaveBeenCalledTimes(2);
+    expect(screen.getByRole('button', { name: /下一题|查看结果/ })).toBeEnabled();
+  });
+
   it('persists the selected mistake reason on the same attempt', async () => {
     const user = userEvent.setup();
     const repository = {
@@ -150,16 +170,17 @@ describe('ExerciseRunner', () => {
     const user = userEvent.setup();
     const repository = {
       saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
       completeTask: vi.fn().mockResolvedValue(undefined),
     } as unknown as LearningRepository;
     render(<ExerciseRunner kind="vocabulary" limit={1} repository={repository} today="2026-09-22" />);
     await user.click((await screen.findAllByRole('radio'))[0]);
     await user.click(screen.getByRole('button', { name: '提交答案' }));
     await user.click(await screen.findByRole('button', { name: '查看结果' }));
+    expect(await screen.findByText('掌握度检测')).toBeVisible();
     expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({
       id: '2026-09-22:vocabulary', taskId: '2026-09-22:vocabulary', kind: 'vocabulary',
     }));
-    expect(await screen.findByText('掌握度检测')).toBeVisible();
   });
 
   it('automatically completes grammar and opens its mastery check', async () => {
@@ -167,14 +188,15 @@ describe('ExerciseRunner', () => {
     const repository = {
       listAttempts: vi.fn().mockResolvedValue([]),
       saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
       completeTask: vi.fn().mockResolvedValue(undefined),
     } as unknown as LearningRepository;
     render(<ExerciseRunner kind="grammar" limit={1} repository={repository} today="2026-09-24" />);
     await user.click((await screen.findAllByRole('radio'))[0]);
     await user.click(screen.getByRole('button', { name: '提交答案' }));
     await user.click(await screen.findByRole('button', { name: '查看结果' }));
-    expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({ kind: 'grammar' }));
     expect(await screen.findByText('掌握度检测')).toBeVisible();
+    expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({ kind: 'grammar' }));
   });
 
   it('persists subjective self-check evidence as a score and correctness result', async () => {

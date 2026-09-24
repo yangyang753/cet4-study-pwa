@@ -21,9 +21,33 @@ describe('KnowledgePage', () => {
 
   it('stores a mastered knowledge state', async () => {
     const user = userEvent.setup();
-    const repository = { upsertKnowledgeState: vi.fn().mockResolvedValue(undefined) } as unknown as LearningRepository;
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
     render(<KnowledgePage repository={repository} />);
     await user.click(screen.getAllByRole('button', { name: '标记为已掌握' })[0]);
     expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ status: 'mastered' }));
+  });
+
+  it('restores mastered knowledge from the saved dashboard snapshot', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({
+        attempts: [],
+        reviewCards: [],
+        dailyProgress: [],
+        knowledgeStates: [{
+          id: 'knowledge:v0001',
+          itemId: 'v0001',
+          status: 'mastered',
+          favorite: false,
+          updatedAt: '2026-09-24T08:00:00.000Z',
+        }],
+      }),
+    } as unknown as LearningRepository;
+
+    render(<KnowledgePage repository={repository} />);
+
+    expect(await screen.findByRole('button', { name: '已掌握' })).toBeDisabled();
   });
 });
