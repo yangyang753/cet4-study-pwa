@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('renders separate A4 question and answer sheets', async ({ page }) => {
-  await page.goto('/print');
+  await page.goto('print');
   const sheets = page.locator('.print-sheet');
   await expect(sheets.first()).toContainText('高频知识与四级练习');
   await expect(sheets.first()).not.toContainText('答案与解析');

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('an offline listening answer survives a reload in IndexedDB', async ({ context, page }) => {
-  await page.goto('/listen');
+  await page.goto('listen');
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.getByRole('radio', { name: /Sunday afternoon/ }).check();
   await context.setOffline(true);
