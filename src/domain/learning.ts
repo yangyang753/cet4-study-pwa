@@ -36,7 +36,7 @@ export interface UserSettings {
   dailyMinutes: number;
   playbackRate: number;
   diagnosticCompletedAt?: string;
-  diagnosticLevels?: Record<CoreStudyKind, number>;
+  diagnosticLevels?: Partial<Record<CoreStudyKind, number>>;
   updatedAt: string;
 }
 

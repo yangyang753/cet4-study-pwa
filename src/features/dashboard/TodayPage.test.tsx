@@ -72,4 +72,13 @@ describe('TodayPage', () => {
     await screen.findByText('优先加强短文写作');
     await waitFor(() => expect(screen.getByText('昨日顺延')).toBeVisible());
   });
+
+  it('uses the diagnostic weakness before enough recent attempts exist', async () => {
+    render(<TodayPage today="2026-09-24" repository={repository({
+      settings: { ...snapshot.settings, diagnosticCompletedAt: '2026-09-23T09:00:00.000Z', diagnosticLevels: { vocabulary: 0.67, grammar: 0.33, listening: 0.67, reading: 1 } },
+    })} />);
+
+    expect(await screen.findByText('优先加强重点语法')).toBeVisible();
+    expect(screen.getByRole('heading', { name: '重点语法' })).toBeVisible();
+  });
 });
