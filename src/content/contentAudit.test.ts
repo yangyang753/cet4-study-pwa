@@ -45,7 +45,7 @@ describe('auditContentDiversity', () => {
   });
 
   it('rejects low prompt diversity, missing audio references, and biased answers', () => {
-    const repeated = Array.from({ length: 12 }, (_, index) => question('What happened?', 1));
+    const repeated = Array.from({ length: 12 }, () => question('What happened?', 1));
     const errors = auditContentDiversity({
       listeningSets: [{ id: 'l1', theme: 'one', transcript: 'Unique listening material.', audioSrc: '', questions: repeated }],
       readingSets: [{ id: 'r1', theme: 'two', passage: 'Unique reading material.', questions: repeated }],

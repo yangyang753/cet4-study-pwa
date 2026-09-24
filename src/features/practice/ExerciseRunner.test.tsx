@@ -11,6 +11,11 @@ const validWriting = `First, daily practice helps students remember important kn
 Therefore, I plan to study at the same time each evening, review mistakes, and write down one question for the next day. This simple method gives every session a purpose and allows steady progress without creating unnecessary pressure. It also builds confidence because improvement becomes visible after several consistent weeks.`;
 
 describe('ExerciseRunner', () => {
+  it('provides a page-level heading for objective practice routes', () => {
+    render(<ExerciseRunner setId="set-starter" />);
+    expect(screen.getByRole('heading', { level: 1, name: '专项练习' })).toBeVisible();
+  });
+
   it('waits for attempt history before showing a catalog question', async () => {
     let resolveAttempts!: (value: []) => void;
     const repository = {

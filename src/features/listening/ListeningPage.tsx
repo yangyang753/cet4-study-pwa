@@ -160,5 +160,5 @@ export function ListeningPage({ repository = defaultRepository, today = localStu
     void repository.getDashboardSnapshot().then((snapshot) => { if (active) setPlaybackRate(snapshot.settings.playbackRate); }).catch(() => undefined);
     return () => { active = false; };
   }, [repository]);
-  return <ListeningExercise key={listeningSets[setIndex].id} setIndex={setIndex} onSetIndexChange={setSetIndex} repository={repository} today={today} playbackRate={playbackRate} />;
+  return <ListeningExercise key={`${listeningSets[setIndex].id}:${playbackRate}`} setIndex={setIndex} onSetIndexChange={setSetIndex} repository={repository} today={today} playbackRate={playbackRate} />;
 }

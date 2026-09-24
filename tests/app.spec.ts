@@ -44,6 +44,17 @@ test('exposes installable PWA metadata', async ({ page, request }) => {
   const manifest = await manifestResponse.json();
   expect(manifest.name).toContain('四级向前');
   expect(manifest.display).toBe('standalone');
+  expect(manifest.icons).toEqual(expect.arrayContaining([
+    expect.objectContaining({ sizes: '192x192', type: 'image/png' }),
+    expect.objectContaining({ sizes: '512x512', purpose: expect.stringContaining('maskable') }),
+  ]));
+  await page.goto('account');
+  await expect(page.getByRole('heading', { name: '安装到手机桌面' })).toBeVisible();
+});
+
+test('gives objective practice routes one page-level heading', async ({ page }) => {
+  await page.goto('practice/vocabulary');
+  await expect(page.getByRole('heading', { level: 1, name: '专项练习' })).toBeVisible();
 });
 
 test('reopens the visited study dashboard while offline', async ({ page, context }) => {

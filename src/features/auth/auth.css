@@ -4,6 +4,10 @@
 .account-page header p { color: var(--color-muted); }
 .cloud-notice { padding: 14px 18px; border-radius: 14px; color: var(--color-green-dark); background: var(--color-green-soft); }
 .account-card, .login-card { padding: 24px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-panel); box-shadow: var(--shadow-card); }
+.install-help { padding: 24px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-panel); box-shadow: var(--shadow-card); }
+.install-help h2 { margin-top: 0; }
+.install-help li { margin: 8px 0; line-height: 1.6; }
+.install-help button { padding: 11px 16px; border: 0; border-radius: 10px; color: white; background: var(--color-green); font-weight: 800; }
 .login-card form { display: grid; gap: 14px; }
 .login-card label { display: grid; gap: 6px; font-weight: 700; }
 .login-card input { padding: 12px; border: 1px solid var(--color-line); border-radius: 10px; }

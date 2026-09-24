@@ -5,6 +5,7 @@
 .answer-option { display: flex; gap: 12px; padding: 14px; margin: 10px 0; border: 1px solid var(--color-line); border-radius: 14px; }
 .answer-option:has(input:checked) { border-color: var(--color-green); background: var(--color-green-soft); }
 .primary-action { margin-top: 18px; padding: 12px 18px; border: 0; border-radius: 12px; color: var(--color-green-dark); background: var(--color-yellow); font-weight: 800; }
+.exercise-runner > header h1 { margin: 0; font-size: 1rem; letter-spacing: .08em; }
 .explanation { margin-top: 22px; padding: 20px; border-radius: 16px; background: var(--color-green-soft); }
 .explanation.incorrect { background: #f8e5d6; }
 .reason-row { display: flex; flex-wrap: wrap; gap: 8px; }

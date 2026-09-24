@@ -33,7 +33,12 @@ assert.match(indexHtml, /\/cet4-study-pwa\/assets\//, 'built assets must use the
 assert.equal(fallbackHtml, indexHtml, 'GitHub Pages must serve the app shell for direct route visits');
 assert.equal(manifest.start_url, `${repositoryBase}today`);
 assert.equal(manifest.scope, repositoryBase);
-assert.equal(manifest.icons[0]?.src, `${repositoryBase}icon.svg`);
+assert.ok(manifest.icons.some((icon) => icon.src === `${repositoryBase}icon-192.png`), 'manifest must include the 192px PNG icon');
+assert.ok(manifest.icons.some((icon) => icon.src === `${repositoryBase}icon-512.png`), 'manifest must include the 512px PNG icon');
+assert.ok(manifest.icons.some((icon) => icon.src === `${repositoryBase}icon-maskable-512.png`), 'manifest must include a maskable PNG icon');
+for (const asset of ['icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png']) {
+  assert.ok(existsSync(`dist/${asset}`), `${asset} must be included in the Pages build`);
+}
 
 process.env.GITHUB_ACTIONS = 'true';
 const server = await preview({
