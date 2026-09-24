@@ -1,6 +1,7 @@
 import type { Attempt } from './attempt';
 import type { MistakeReason } from './attempt';
 import type { StudyKind } from '../features/planner/planDay';
+import type { CoreStudyKind } from '../features/dashboard/learningEvidence';
 
 export interface ReviewCard {
   id: string;
@@ -34,6 +35,8 @@ export interface UserSettings {
   examDate: string;
   dailyMinutes: number;
   playbackRate: number;
+  diagnosticCompletedAt?: string;
+  diagnosticLevels?: Record<CoreStudyKind, number>;
   updatedAt: string;
 }
 

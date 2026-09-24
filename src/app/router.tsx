@@ -10,6 +10,7 @@ import { ExamSession } from '../features/exam/ExamSession';
 import { ExamPicker } from '../features/exam/ExamPicker';
 import { AccountPage } from '../features/auth/AccountPage';
 import { MasteryRoute } from '../features/mastery/MasteryCheck';
+import { DiagnosticPage } from '../features/diagnostic/DiagnosticPage';
 import { supabaseClient } from '../lib/runtime';
 const KnowledgePage = lazy(() => import('../features/knowledge/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
 const PrintPage = lazy(() => import('../features/print/PrintPage').then((module) => ({ default: module.PrintPage })));
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
       { path: 'practice/:kind', element: <PracticeRoute /> },
       { path: 'review', element: <ReviewPage /> },
       { path: 'mastery/:kind', element: <MasteryRoute /> },
+      { path: 'diagnostic', element: <DiagnosticPage /> },
       { path: 'print', element: <Suspense fallback={<p>正在生成 A4 练习册…</p>}><PrintPage /></Suspense> },
       { path: 'exam', element: <ExamPicker /> },
       { path: 'exam/:mockId', element: <ExamRoute /> },
