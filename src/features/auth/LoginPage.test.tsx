@@ -24,7 +24,7 @@ describe('LoginPage', () => {
     await user.type(screen.getByRole('textbox', { name: '邮箱' }), 'learner@example.com');
     await user.click(screen.getByRole('button', { name: '忘记密码' }));
 
-    expect(service.resetPassword).toHaveBeenCalledWith('learner@example.com');
+    expect(service.resetPassword).toHaveBeenCalledWith('learner@example.com', 'http://localhost:3000/recover');
     expect(await screen.findByText('重置邮件已发送，请检查收件箱。')).toBeVisible();
   });
 });

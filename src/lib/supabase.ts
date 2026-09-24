@@ -17,9 +17,10 @@ export function createSupabaseAuthService(client: SupabaseClient): AuthService {
     async signIn(email, password) { const { data, error } = await client.auth.signInWithPassword({ email, password }); if (error) throw error; return toUser(data.user); },
     async signUp(email, password) { const { data, error } = await client.auth.signUp({ email, password }); if (error) throw error; return toUser(data.user); },
     async signOut() { const { error } = await client.auth.signOut(); if (error) throw error; },
-    async resetPassword(email) { const { error } = await client.auth.resetPasswordForEmail(email); if (error) throw error; },
+    async resetPassword(email, redirectTo) { const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo }); if (error) throw error; },
+    async updatePassword(password) { const { error } = await client.auth.updateUser({ password }); if (error) throw error; },
     subscribe(callback) {
-      const { data } = client.auth.onAuthStateChange((_event, session) => { void callback(toUser(session?.user ?? null)); });
+      const { data } = client.auth.onAuthStateChange((event, session) => { void callback(toUser(session?.user ?? null), event); });
       return () => data.subscription.unsubscribe();
     },
   };
@@ -32,6 +33,7 @@ export function createOfflineAuthService(): AuthService {
     async signUp() { throw new Error('Cloud sync is not configured'); },
     async signOut() { return undefined; },
     async resetPassword() { throw new Error('Cloud sync is not configured'); },
+    async updatePassword() { throw new Error('Cloud sync is not configured'); },
     subscribe() { return () => undefined; },
   };
 }

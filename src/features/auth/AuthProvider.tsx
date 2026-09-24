@@ -8,8 +8,9 @@ export interface AuthService {
   signIn(email: string, password: string): Promise<AuthUser | null>;
   signUp(email: string, password: string): Promise<AuthUser | null>;
   signOut(): Promise<void>;
-  resetPassword(email: string): Promise<void>;
-  subscribe(callback: (user: AuthUser | null) => void | Promise<void>): () => void;
+  resetPassword(email: string, redirectTo: string): Promise<void>;
+  updatePassword(password: string): Promise<void>;
+  subscribe(callback: (user: AuthUser | null, event?: string) => void | Promise<void>): () => void;
 }
 
 interface AuthContextValue {
@@ -18,14 +19,18 @@ interface AuthContextValue {
   signIn(email: string, password: string): Promise<void>;
   signUp(email: string, password: string): Promise<void>;
   signOut(): Promise<void>;
-  resetPassword(email: string): Promise<void>;
+  resetPassword(email: string, redirectTo: string): Promise<void>;
+  updatePassword(password: string): Promise<void>;
+  isRecoverySession: boolean;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
+const noopSessionExpired = async () => undefined;
 
-export function AuthProvider({ children, service, onSessionExpired = async () => undefined }: PropsWithChildren<{ service: AuthService; onSessionExpired?: () => Promise<void> }>) {
+export function AuthProvider({ children, service, onSessionExpired = noopSessionExpired }: PropsWithChildren<{ service: AuthService; onSessionExpired?: () => Promise<void> }>) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [status, setStatus] = useState<AuthStatus>('loading');
+  const [isRecoverySession, setRecoverySession] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -34,7 +39,8 @@ export function AuthProvider({ children, service, onSessionExpired = async () =>
       setUser(nextUser);
       setStatus(nextUser ? 'signedIn' : 'signedOut');
     });
-    const unsubscribe = service.subscribe(async (nextUser) => {
+    const unsubscribe = service.subscribe(async (nextUser, event) => {
+      if (event === 'PASSWORD_RECOVERY') setRecoverySession(true);
       if (!nextUser) await onSessionExpired();
       if (!active) return;
       setUser(nextUser);
@@ -56,9 +62,11 @@ export function AuthProvider({ children, service, onSessionExpired = async () =>
       setUser(nextUser);
       setStatus(nextUser ? 'signedIn' : 'signedOut');
     },
-    async signOut() { await service.signOut(); setUser(null); setStatus('signedOut'); },
-    resetPassword: (email) => service.resetPassword(email),
-  }), [service, status, user]);
+    async signOut() { await service.signOut(); setUser(null); setStatus('signedOut'); setRecoverySession(false); },
+    resetPassword: (email, redirectTo) => service.resetPassword(email, redirectTo),
+    async updatePassword(password) { await service.updatePassword(password); setRecoverySession(false); },
+    isRecoverySession,
+  }), [isRecoverySession, service, status, user]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
