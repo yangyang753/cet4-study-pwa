@@ -11,6 +11,7 @@ import './exam.css';
 import { completeDailyTask } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
 import { studyDate } from '../../lib/studyDate';
+import { publicAssetUrl } from '../../lib/publicAssetUrl';
 
 const defaultRepository = new DexieLearningRepository();
 const defaultNow = () => new Date().toISOString();
@@ -26,7 +27,7 @@ function formatSeconds(seconds: number) {
 function QuestionView({ question, response, onChange }: { question: CatalogQuestion; response: string; onChange: (response: string) => void }) {
   if ('options' in question) {
     return <>
-      {question.audioSrc && <audio controls preload="metadata" src={question.audioSrc}>您的浏览器不支持音频播放。</audio>}
+      {question.audioSrc && <audio aria-label="模考听力音频" controls preload="metadata" src={publicAssetUrl(question.audioSrc)}>您的浏览器不支持音频播放。</audio>}
       {question.passage && <article className="exam-passage">{question.passage}</article>}
       <ObjectiveQuestionView question={question as ObjectiveQuestion} value={response} disabled={false} onChange={onChange} />
     </>;

@@ -52,10 +52,13 @@ test('reopens the visited study dashboard while offline', async ({ page, context
   await expect(page.getByRole('heading', { name: /向目标 425 分前进/ })).toBeVisible();
 });
 
-test('continues a full mock into the next locked section', async ({ page }) => {
+test('continues a full mock into the next locked section', async ({ page, request }) => {
   await page.goto('exam/mock-1');
   page.on('dialog', (dialog) => dialog.accept());
   await page.getByRole('button', { name: '完成写作并进入听力' }).click();
   await expect(page.getByText('当前分区：听力（25 分钟）')).toBeVisible();
   await expect(page.getByText(/写作 · 30 分钟 · 已锁定/)).toBeVisible();
+  const audioSrc = await page.getByLabel('模考听力音频').getAttribute('src');
+  expect(audioSrc).toContain('/audio/');
+  expect((await request.get(new URL(audioSrc!, page.url()).toString())).ok()).toBeTruthy();
 });

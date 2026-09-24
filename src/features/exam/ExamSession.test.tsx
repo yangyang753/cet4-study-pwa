@@ -14,7 +14,7 @@ function repository(active = undefined as ReturnType<typeof createExamSession> |
   } as unknown as LearningRepository;
 }
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => { vi.restoreAllMocks(); vi.unstubAllEnvs(); });
 
 describe('ExamSession', () => {
   it('renders the official section without revealing feedback and submits once on double click', async () => {
@@ -45,12 +45,14 @@ describe('ExamSession', () => {
 
   it('lets the learner finish a section early and continue to the next section', async () => {
     const repo = repository();
+    vi.stubEnv('BASE_URL', '/cet4-study-pwa/');
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     render(<ExamSession mockId="mock-1" repository={repo} now={() => '2026-09-23T08:00:00.000Z'} />);
 
     await userEvent.click(await screen.findByRole('button', { name: '完成写作并进入听力' }));
 
     expect(await screen.findByText('当前分区：听力（25 分钟）')).toBeVisible();
+    expect(screen.getByLabelText('模考听力音频')).toHaveAttribute('src', expect.stringContaining('/cet4-study-pwa/audio/'));
     await waitFor(() => expect(repo.saveExamSession).toHaveBeenCalledWith(expect.objectContaining({
       currentSectionIndex: 1,
       lockedSectionIndexes: [0],
