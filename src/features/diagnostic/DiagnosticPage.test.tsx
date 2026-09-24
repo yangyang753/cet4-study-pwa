@@ -1,4 +1,7 @@
+import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { getPracticeItems } from '../../content/catalog';
+import { DiagnosticPage } from './DiagnosticPage';
 import { scoreDiagnostic } from './diagnostic';
 
 describe('foundation diagnostic', () => {
@@ -19,5 +22,11 @@ describe('foundation diagnostic', () => {
     const result = scoreDiagnostic([], '2026-09-24T09:00:00.000Z');
     expect(Object.values(result.levels).every((value) => value >= 0 && value <= 1)).toBe(true);
     expect(result.levels).toMatchObject({ vocabulary: 0, grammar: 0, listening: 0, reading: 0 });
+  });
+
+  it('provides audio controls for a listening diagnostic question', () => {
+    const listeningQuestion = getPracticeItems('listening')[0];
+    render(<DiagnosticPage questions={[{ ...listeningQuestion, diagnosticKind: 'listening' }]} />);
+    expect(screen.getByLabelText('诊断听力音频')).toHaveAttribute('controls');
   });
 });

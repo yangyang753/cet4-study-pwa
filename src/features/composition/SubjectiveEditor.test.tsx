@@ -36,4 +36,11 @@ describe('SubjectiveEditor', () => {
     await act(() => vi.advanceTimersByTimeAsync(2000));
     expect(repository.saveDraft).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'write-1', body: 'A synced draft.' }));
   });
+
+  it('counts the English words produced for a translation answer', async () => {
+    const user = userEvent.setup();
+    render(<SubjectiveEditor question={{ ...question, type: 'translation' }} kind="translation" />);
+    await user.type(screen.getByLabelText('翻译答题区'), 'Chinese culture matters.');
+    expect(screen.getByText('3 词')).toBeVisible();
+  });
 });

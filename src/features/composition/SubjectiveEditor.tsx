@@ -14,7 +14,6 @@ function persistentId(key: string) {
 }
 
 function countEnglishWords(value: string) { return value.trim() ? value.trim().split(/\s+/).length : 0; }
-function countChineseCharacters(value: string) { return (value.match(/[\u3400-\u9fff]/g) ?? []).length; }
 
 export function SubjectiveEditor({ question, kind, repository = defaultRepository, onSubmit }: { question: SubjectiveQuestion; kind: 'writing' | 'translation'; repository?: LearningRepository; onSubmit?: (body: string) => void }) {
   const storageKey = `draft:${question.id}`;
@@ -27,8 +26,14 @@ export function SubjectiveEditor({ question, kind, repository = defaultRepositor
     }, 2000);
     return () => window.clearTimeout(timer);
   }, [body, question.id, repository, storageKey]);
-  const count = useMemo(() => kind === 'writing' ? countEnglishWords(body) : countChineseCharacters(body), [body, kind]);
+  const count = useMemo(() => countEnglishWords(body), [body]);
   const keywords = useMemo(() => [...new Set(question.referenceAnswer.toLowerCase().match(/[a-z]{5,}/g) ?? [])].slice(0, 4), [question.referenceAnswer]);
   const feedback = useMemo(() => evaluateSubjective(kind, body, keywords), [body, kind, keywords]);
-  return <section className="subjective-editor"><header><h1>{kind === 'writing' ? '写作练习' : '翻译练习'}</h1><span>{count} {kind === 'writing' ? '词' : '个汉字'}</span></header><p>{question.prompt}</p><label>{kind === 'writing' ? '写作答题区' : '翻译答题区'}<textarea aria-label={kind === 'writing' ? '写作答题区' : '翻译答题区'} value={body} onChange={(event) => setBody(event.target.value)} /></label><button onClick={() => { setSubmitted(true); onSubmit?.(body); }}>提交自查</button>{submitted && <section><h2>针对性修改建议</h2><ul>{feedback.checks.map((item) => <li key={item.label}><strong>{item.passed ? '✓' : '待改'} {item.label}</strong>：{item.passed ? '已达到基础要求。' : item.suggestion}</li>)}</ul><p>{feedback.disclaimer}</p><h2>自查清单</h2><ul>{question.rubric.map((item) => <li key={item}>{item}</li>)}</ul><h2>参考答案</h2><p>{question.referenceAnswer}</p></section>}</section>;
+  return <section className="subjective-editor">
+    <header><h1>{kind === 'writing' ? '写作练习' : '翻译练习'}</h1><span>{count} 词</span></header>
+    <p>{question.prompt}</p>
+    <label>{kind === 'writing' ? '写作答题区' : '翻译答题区'}<textarea aria-label={kind === 'writing' ? '写作答题区' : '翻译答题区'} value={body} onChange={(event) => setBody(event.target.value)} /></label>
+    <button onClick={() => { setSubmitted(true); onSubmit?.(body); }}>提交自查</button>
+    {submitted && <section><h2>针对性修改建议</h2><ul>{feedback.checks.map((item) => <li key={item.label}><strong>{item.passed ? '✓' : '待改'} {item.label}</strong>：{item.passed ? '已达到基础要求。' : item.suggestion}</li>)}</ul><p>{feedback.disclaimer}</p><h2>自查清单</h2><ul>{question.rubric.map((item) => <li key={item}>{item}</li>)}</ul><h2>参考答案</h2><p>{question.referenceAnswer}</p></section>}
+  </section>;
 }

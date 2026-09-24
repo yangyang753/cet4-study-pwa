@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react';
 import { getPracticeItems } from '../../content/catalog';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
-import type { ObjectiveQuestion as ObjectiveQuestionType, PracticeKind } from '../../domain/content';
+import type { CatalogQuestion, ObjectiveQuestion as ObjectiveQuestionType, PracticeKind } from '../../domain/content';
+import { publicAssetUrl } from '../../lib/publicAssetUrl';
 import { ObjectiveQuestion } from '../practice/ObjectiveQuestion';
 import { gradeAnswer } from '../practice/gradeAnswer';
 import type { CoreStudyKind } from '../dashboard/learningEvidence';
@@ -10,9 +11,11 @@ import { scoreDiagnostic, type DiagnosticResponse } from './diagnostic';
 
 const defaultRepository = new DexieLearningRepository();
 const diagnosticKinds: Array<Extract<PracticeKind, CoreStudyKind>> = ['vocabulary', 'grammar', 'listening', 'reading'];
+type DiagnosticQuestion = CatalogQuestion & { diagnosticKind: CoreStudyKind };
 
-export function DiagnosticPage({ repository = defaultRepository, now = () => new Date().toISOString() }: { repository?: LearningRepository; now?: () => string }) {
-  const questions = useMemo(() => diagnosticKinds.flatMap((kind) => getPracticeItems(kind).filter((item) => 'options' in item).slice(0, 3).map((item) => ({ ...item, diagnosticKind: kind }))), []);
+export function DiagnosticPage({ repository = defaultRepository, now = () => new Date().toISOString(), questions: suppliedQuestions }: { repository?: LearningRepository; now?: () => string; questions?: DiagnosticQuestion[] }) {
+  const generatedQuestions = useMemo(() => diagnosticKinds.flatMap((kind) => getPracticeItems(kind).filter((item) => 'options' in item).slice(0, 3).map((item) => ({ ...item, diagnosticKind: kind }))), []);
+  const questions = suppliedQuestions ?? generatedQuestions;
   const [index, setIndex] = useState(0);
   const [response, setResponse] = useState('');
   const [answers, setAnswers] = useState<DiagnosticResponse[]>([]);
@@ -32,5 +35,10 @@ export function DiagnosticPage({ repository = defaultRepository, now = () => new
 
   if (finished) return <section><h1 tabIndex={-1}>基础诊断已完成</h1><p>结果已用于安排第一周学习计划，不代表官方 CET-4 分数。</p><a href={`${import.meta.env.BASE_URL}today`}>查看今日计划</a></section>;
   if (!question) return <p>暂时无法生成基础诊断。</p>;
-  return <section className="practice-runner"><header><span>10～15 分钟 · 基础诊断</span><h1>先了解目前的基础</h1><p>共 12 题，可稍后再做，不影响使用其他功能。</p><b>{index + 1} / {questions.length}</b></header><ObjectiveQuestion question={question as ObjectiveQuestionType} value={response} disabled={false} onChange={setResponse} /><button className="primary-action" disabled={!response} onClick={() => void submit()}>{index === questions.length - 1 ? '完成诊断' : '下一题'}</button><a href={`${import.meta.env.BASE_URL}today`}>稍后进行</a></section>;
+  return <section className="practice-runner">
+    <header><span>10～15 分钟 · 基础诊断</span><h1>先了解目前的基础</h1><p>共 {questions.length} 题，可稍后再做，不影响使用其他功能。</p><b>{index + 1} / {questions.length}</b></header>
+    {'audioSrc' in question && question.audioSrc && <audio aria-label="诊断听力音频" controls preload="metadata" src={publicAssetUrl(question.audioSrc)} />}
+    <ObjectiveQuestion question={question as ObjectiveQuestionType} value={response} disabled={false} onChange={setResponse} />
+    <button className="primary-action" disabled={!response} onClick={() => void submit()}>{index === questions.length - 1 ? '完成诊断' : '下一题'}</button><a href={`${import.meta.env.BASE_URL}today`}>稍后进行</a>
+  </section>;
 }
