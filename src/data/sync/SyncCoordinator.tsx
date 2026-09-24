@@ -15,6 +15,7 @@ export function SyncCoordinator({ client, children, repository = defaultReposito
   const [state, setState] = useState<SyncState>('local');
   const [pendingCount, setPendingCount] = useState(0);
   const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
+  const [lastError, setLastError] = useState<string | null>(null);
   const [retryToken, setRetryToken] = useState(0);
   const retry = useCallback(() => setRetryToken((value) => value + 1), []);
   const configured = Boolean(client || remoteFactory);
@@ -31,6 +32,7 @@ export function SyncCoordinator({ client, children, repository = defaultReposito
       if (!configured || !user || !createRemote) { setState('local'); return; }
       if (!navigator.onLine) { setState(pending.length ? 'pending' : 'offline'); return; }
       setState('syncing');
+      setLastError(null);
       try {
         const engine = new SyncEngine(repository, createRemote(user.id));
         await engine.sync(user.id, controller.signal);
@@ -43,6 +45,7 @@ export function SyncCoordinator({ client, children, repository = defaultReposito
       } catch (error) {
         if (controller.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) return;
         setState('error');
+        setLastError('网络或云端服务暂时不可用');
         retryTimer = window.setTimeout(() => { retryIndex = Math.min(retryIndex + 1, retryDelays.length - 1); void run(); }, retryDelays[retryIndex]);
       }
     };
@@ -54,6 +57,6 @@ export function SyncCoordinator({ client, children, repository = defaultReposito
     return () => { controller.abort(); if (retryTimer) window.clearTimeout(retryTimer); window.removeEventListener('online', handleSync); window.removeEventListener('offline', handleSync); window.removeEventListener('cet4:sync-needed', handleSync); };
   }, [client, configured, remoteFactory, repository, retryToken, user]);
 
-  const value = useMemo(() => ({ state, pendingCount, lastSyncedAt, retry }), [lastSyncedAt, pendingCount, retry, state]);
+  const value = useMemo(() => ({ state, pendingCount, lastSyncedAt, lastError, retry }), [lastError, lastSyncedAt, pendingCount, retry, state]);
   return <SyncContext.Provider value={value}>{children}</SyncContext.Provider>;
 }

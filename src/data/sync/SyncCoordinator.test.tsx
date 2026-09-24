@@ -25,4 +25,18 @@ describe('SyncCoordinator', () => {
     render(<AuthProvider service={service}><SyncCoordinator client={null} repository={repository} remoteFactory={() => remote}><SyncStatus /></SyncCoordinator></AuthProvider>);
     expect(await screen.findByText('1 条记录等待同步')).toBeVisible();
   });
+
+  it('shows a sanitized reason and retry action after a cloud failure', async () => {
+    Object.defineProperty(navigator, 'onLine', { configurable: true, value: true });
+    const repository = {
+      list: vi.fn().mockResolvedValue([]), getSyncCursor: vi.fn().mockResolvedValue(null),
+      mergeRemoteBatch: vi.fn(), setSyncCursor: vi.fn(), replace: vi.fn(), remove: vi.fn(), put: vi.fn(),
+    } as unknown as LearningRepository;
+    const service: AuthService = { ...signedOut, getUser: async () => ({ id: 'user-1', email: 'learner@example.com' }) };
+    const remote = { pullSince: vi.fn().mockRejectedValue(new Error('secret server detail')), upsertAttempt: vi.fn(), upsertDraft: vi.fn() } as SyncRemote;
+    render(<AuthProvider service={service}><SyncCoordinator client={null} repository={repository} remoteFactory={() => remote}><SyncStatus /></SyncCoordinator></AuthProvider>);
+    expect(await screen.findByText(/网络或云端服务暂时不可用/)).toBeVisible();
+    expect(screen.getByRole('button', { name: '重试' })).toBeVisible();
+    expect(screen.queryByText(/secret server detail/)).not.toBeInTheDocument();
+  });
 });
