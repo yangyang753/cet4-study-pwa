@@ -43,4 +43,13 @@ describe('SubjectiveEditor', () => {
     await user.type(screen.getByLabelText('翻译答题区'), 'Chinese culture matters.');
     expect(screen.getByText('3 词')).toBeVisible();
   });
+
+  it('returns the displayed local feedback with the submitted body', async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+    render(<SubjectiveEditor question={question} kind="writing" onSubmit={onSubmit} />);
+    await user.type(screen.getByLabelText('写作答题区'), 'First, practice helps.\n\nTherefore, I improve every day.');
+    await user.click(screen.getByRole('button', { name: '提交自查' }));
+    expect(onSubmit).toHaveBeenCalledWith(expect.stringContaining('First, practice helps.'), expect.objectContaining({ score: 0.75, passed: true }));
+  });
 });

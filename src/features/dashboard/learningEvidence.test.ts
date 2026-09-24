@@ -21,4 +21,12 @@ describe('learning evidence', () => {
     expect(selectRecentEvidence(attempts, '2026-09-24T12:00:00.000Z')).toHaveLength(30);
     expect(selectRecentEvidence(attempts, '2026-09-24T12:00:00.000Z').every((item) => item.kind === 'listening')).toBe(true);
   });
+
+  it('includes locally scored writing and translation attempts as evidence', () => {
+    const writing = { ...attempt('writing', 'writing', '2026-09-24T10:00:00.000Z'), correct: true, score: 0.75 };
+    const translation = { ...attempt('translation', 'translation', '2026-09-24T11:00:00.000Z'), correct: false, score: 0.5 };
+    expect(selectRecentEvidence([writing, translation], '2026-09-24T12:00:00.000Z').map((item) => [item.kind, item.correct])).toEqual([
+      ['translation', false], ['writing', true],
+    ]);
+  });
 });

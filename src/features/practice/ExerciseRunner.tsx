@@ -40,7 +40,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
   const [currentAttempt, setCurrentAttempt] = useState<Attempt | null>(null);
   const [selectedReason, setSelectedReason] = useState<MistakeReason | undefined>();
   const question = questions[index];
-  const plannedKind = kind === 'grammar' ? null : kind;
+  const plannedKind = kind;
 
   useEffect(() => {
     if (!kind) return;
@@ -115,9 +115,9 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     setResponse(''); setResult(null); setSaveState('idle'); setAnswerError(''); setCurrentAttempt(null); setSelectedReason(undefined); setStartedAt(Date.now());
   }
 
-  if (!('options' in question)) return <SubjectiveEditor question={question} kind={question.type} repository={repository} onSubmit={(body) => {
+  if (!('options' in question)) return <SubjectiveEditor question={question} kind={question.type} repository={repository} onSubmit={(body, feedback) => {
     const seconds = duration();
-    void repository.saveAttemptOnce(baseAttempt(body, null, null)).then(async () => {
+    void repository.saveAttemptOnce(baseAttempt(body, feedback.passed, feedback.score)).then(async () => {
       if (plannedKind && mode === 'practice') await completeDailyTask(repository, plannedKind, today);
       setAnswered([{ questionId: question.id, correct: null, durationSeconds: seconds }]); setFinished(true);
     });

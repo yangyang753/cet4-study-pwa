@@ -1,5 +1,5 @@
 export interface SubjectiveCheck { label: string; passed: boolean; suggestion: string }
-export interface SubjectiveFeedback { checks: SubjectiveCheck[]; disclaimer: string }
+export interface SubjectiveFeedback { checks: SubjectiveCheck[]; score: number; passed: boolean; disclaimer: string }
 
 const sentenceComplete = (body: string) => /[.!?。！？]\s*$/.test(body.trim());
 
@@ -18,5 +18,6 @@ export function evaluateSubjective(kind: 'writing' | 'translation', body: string
     { label: '时态语态', passed: /\b(is|are|was|were|has|have|had|will|can|be|been)\b/i.test(text), suggestion: '根据原文时间检查时态，必要时使用被动语态。' },
     { label: '固定搭配', passed: words.length >= 5, suggestion: '核对动词与介词、名词与动词的常用搭配。' },
   ];
-  return { checks, disclaimer: '这是规则化自查建议，不等同于官方阅卷或人工评分。' };
+  const score = checks.length ? checks.filter((check) => check.passed).length / checks.length : 0;
+  return { checks, score, passed: score >= 0.6, disclaimer: '这是规则化自查建议，不等同于官方阅卷或人工评分。' };
 }

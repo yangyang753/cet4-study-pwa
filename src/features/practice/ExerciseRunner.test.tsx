@@ -76,13 +76,13 @@ describe('ExerciseRunner', () => {
     expect(screen.getByRole('textbox', { name: '写作答题区' })).toBeVisible();
   });
 
-  it('saves subjective submissions without assigning automatic correctness', async () => {
+  it('saves subjective submissions with bounded local self-check evidence', async () => {
     const user = userEvent.setup();
     const repository = { saveDraft: vi.fn().mockResolvedValue(undefined), saveAttemptOnce: vi.fn().mockResolvedValue(undefined), completeTask: vi.fn().mockResolvedValue(undefined) } as unknown as LearningRepository;
     render(<ExerciseRunner kind="writing" limit={1} repository={repository} />);
     await user.type(screen.getByRole('textbox', { name: '写作答题区' }), 'Daily reading helps me learn.');
     await user.click(screen.getByRole('button', { name: '提交自查' }));
-    expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ response: 'Daily reading helps me learn.', correct: null, score: null }));
+    expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ response: 'Daily reading helps me learn.', correct: false, score: 0.25 }));
   });
 
   it('does not reveal explanations while running in exam mode', async () => {
@@ -133,5 +133,34 @@ describe('ExerciseRunner', () => {
       id: '2026-09-22:vocabulary', taskId: '2026-09-22:vocabulary', kind: 'vocabulary',
     }));
     expect(await screen.findByText('掌握度检测')).toBeVisible();
+  });
+
+  it('automatically completes grammar and opens its mastery check', async () => {
+    const user = userEvent.setup();
+    const repository = {
+      listAttempts: vi.fn().mockResolvedValue([]),
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+      completeTask: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<ExerciseRunner kind="grammar" limit={1} repository={repository} today="2026-09-24" />);
+    await user.click(screen.getAllByRole('radio')[0]);
+    await user.click(screen.getByRole('button', { name: '提交答案' }));
+    await user.click(await screen.findByRole('button', { name: '查看结果' }));
+    expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({ kind: 'grammar' }));
+    expect(await screen.findByText('掌握度检测')).toBeVisible();
+  });
+
+  it('persists subjective self-check evidence as a score and correctness result', async () => {
+    const user = userEvent.setup();
+    const repository = {
+      listAttempts: vi.fn().mockResolvedValue([]),
+      saveDraft: vi.fn().mockResolvedValue(undefined),
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+      completeTask: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<ExerciseRunner kind="writing" limit={1} repository={repository} />);
+    await user.type(screen.getByRole('textbox', { name: '写作答题区' }), 'First, practice helps.\n\nTherefore, I improve every day.');
+    await user.click(screen.getByRole('button', { name: '提交自查' }));
+    expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ kind: 'writing', correct: true, score: 0.75 }));
   });
 });
