@@ -38,6 +38,10 @@ export function AuthProvider({ children, service, onSessionExpired = noopSession
       if (!active) return;
       setUser(nextUser);
       setStatus(nextUser ? 'signedIn' : 'signedOut');
+    }).catch(() => {
+      if (!active) return;
+      setUser(null);
+      setStatus('signedOut');
     });
     const unsubscribe = service.subscribe(async (nextUser, event) => {
       if (event === 'PASSWORD_RECOVERY') setRecoverySession(true);

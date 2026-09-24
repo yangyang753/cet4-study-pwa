@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { AuthProvider, type AuthService } from './AuthProvider';
 import { LoginPage } from './LoginPage';
+import { AccountPage } from './AccountPage';
 
 function authService(): AuthService {
   return {
@@ -17,6 +18,12 @@ function authService(): AuthService {
 }
 
 describe('LoginPage', () => {
+  it('does not offer cloud login while running locally only', async () => {
+    render(<AuthProvider service={authService()}><AccountPage cloudConfigured={false} /></AuthProvider>);
+    expect(await screen.findByText(/当前为离线体验模式/)).toBeVisible();
+    expect(screen.queryByRole('button', { name: '登录' })).not.toBeInTheDocument();
+  });
+
   it('sends a password reset email for a valid address', async () => {
     const user = userEvent.setup();
     const service = authService();

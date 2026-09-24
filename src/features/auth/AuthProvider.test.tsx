@@ -28,6 +28,14 @@ describe('AuthProvider', () => {
     expect(screen.getByText('learner@example.com')).toBeInTheDocument();
   });
 
+  it('leaves loading state when session recovery rejects', async () => {
+    const service = serviceWith(null);
+    service.getUser = vi.fn().mockRejectedValue(new Error('network'));
+    render(<AuthProvider service={service}><Probe /></AuthProvider>);
+    expect(await screen.findByText('signedOut')).toBeVisible();
+    expect(screen.getByText('none')).toBeVisible();
+  });
+
   it('runs the expiry callback before exposing signed-out state', async () => {
     let listener: ((user: null) => void) | undefined;
     const order: string[] = [];
