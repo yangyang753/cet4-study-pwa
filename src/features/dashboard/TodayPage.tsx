@@ -6,6 +6,7 @@ import { DexieLearningRepository } from '../../data/repositories/DexieLearningRe
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import type { DashboardSnapshot } from '../../domain/learning';
 import type { CachedPlan } from '../../data/localDb';
+import { previousStudyDate, studyDate } from '../../lib/studyDate';
 import './dashboard.css';
 
 const defaultRepository = new DexieLearningRepository();
@@ -20,7 +21,7 @@ const taskCopy: Record<StudyKind, { icon: string; title: string; detail: string;
   mock: { icon: '✓', title: '限时模拟', detail: '按考试节奏完成混合训练', href: 'exam' },
 };
 
-export function TodayPage({ today = new Date().toISOString().slice(0, 10), examDate, repository = defaultRepository }: { today?: string; examDate?: string; repository?: LearningRepository }) {
+export function TodayPage({ today = studyDate(), examDate, repository = defaultRepository }: { today?: string; examDate?: string; repository?: LearningRepository }) {
   const [snapshot, setSnapshot] = useState<DashboardSnapshot | null>(null);
   const [previousPlan, setPreviousPlan] = useState<CachedPlan | null | undefined>(undefined);
   useEffect(() => {
@@ -30,10 +31,8 @@ export function TodayPage({ today = new Date().toISOString().slice(0, 10), examD
     return () => { current = false; };
   }, [repository]);
   useEffect(() => {
-    const previous = new Date(`${today}T12:00:00Z`);
-    previous.setUTCDate(previous.getUTCDate() - 1);
     let current = true;
-    repository.getPlan(previous.toISOString().slice(0, 10)).then((value) => { if (current) setPreviousPlan(value); }).catch(() => { if (current) setPreviousPlan(null); });
+    repository.getPlan(previousStudyDate(today)).then((value) => { if (current) setPreviousPlan(value); }).catch(() => { if (current) setPreviousPlan(null); });
     return () => { current = false; };
   }, [repository, today]);
   const metrics = useMemo(() => deriveDashboard(snapshot?.attempts ?? [], snapshot?.completions ?? [], today), [snapshot, today]);

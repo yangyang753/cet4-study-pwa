@@ -1,9 +1,8 @@
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import type { StudyKind } from '../planner/planDay';
+import { studyDate } from '../../lib/studyDate';
 
-export function localStudyDate(date = new Date()) {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
-}
+export const localStudyDate = studyDate;
 
 export async function completeDailyTask(repository: LearningRepository, kind: StudyKind, date = localStudyDate()) {
   const taskId = `${date}:${kind}`;

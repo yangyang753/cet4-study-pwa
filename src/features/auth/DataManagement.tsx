@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent } from 'react';
 import { clearLocalLearningData, exportLearningData, importLearningData } from '../../data/backup/learningBackup';
+import { studyDate } from '../../lib/studyDate';
 
 export interface DataManagementActions { exportData(): Promise<unknown> | unknown; importData(input: unknown): Promise<void> | void; clearData(): Promise<void> | void }
 const defaultActions: DataManagementActions = { exportData: exportLearningData, importData: (input) => importLearningData(undefined, input), clearData: clearLocalLearningData };
@@ -10,7 +11,7 @@ export function DataManagement({ actions = defaultActions }: { actions?: DataMan
   const download = async () => {
     const data = await actions.exportData();
     const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
-    const anchor = document.createElement('a'); anchor.href = url; anchor.download = `cet4-study-backup-${new Date().toISOString().slice(0, 10)}.json`; anchor.click(); URL.revokeObjectURL(url);
+    const anchor = document.createElement('a'); anchor.href = url; anchor.download = `cet4-study-backup-${studyDate()}.json`; anchor.click(); URL.revokeObjectURL(url);
     setMessage('备份已导出。');
   };
   const restore = async (event: ChangeEvent<HTMLInputElement>) => {
