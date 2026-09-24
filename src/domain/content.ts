@@ -15,6 +15,7 @@ export interface VocabularyEntry {
   partOfSpeech: string;
   meaningZh: string;
   example: string;
+  exampleZh?: string;
   derivatives: string[];
   confusables: string[];
 }

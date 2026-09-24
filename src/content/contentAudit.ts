@@ -84,6 +84,24 @@ export function auditGeneratedQuestions(groups: Partial<Record<'vocabulary' | 'g
   return errors;
 }
 
+interface KnowledgeExampleCandidate { id?: string; example?: string; exampleZh?: string }
+
+export function auditKnowledgeExamples(vocabulary: KnowledgeExampleCandidate[], collocations: KnowledgeExampleCandidate[]): string[] {
+  const errors: string[] = [];
+  const groups = [{ kind: 'vocabulary', items: vocabulary }, { kind: 'collocations', items: collocations }] as const;
+  for (const group of groups) {
+    for (const item of group.items) {
+      const id = item.id ?? 'unknown';
+      const example = item.example?.trim() ?? '';
+      if (/often appears in college English reading and listening/i.test(example) || /Use .+ to express this idea clearly in CET-4/i.test(example)) {
+        errors.push(`${group.kind}:${id}: generic placeholder example`);
+      }
+      if (!item.exampleZh?.trim()) errors.push(`${group.kind}:${id}: missing Chinese memory cue`);
+    }
+  }
+  return errors;
+}
+
 function normalizedShape(text: string, removable: Array<string | undefined>) {
   let normalized = text.toLocaleLowerCase();
   for (const value of removable.filter((item): item is string => Boolean(item))) {

@@ -10,6 +10,8 @@ describe('KnowledgePage', () => {
     expect(screen.getByText('800')).toBeInTheDocument();
     expect(screen.getByText('126')).toBeInTheDocument();
     expect(screen.getByText('15')).toBeInTheDocument();
+    expect(screen.getByText(/原创仿真内容，不是历年官方真题/)).toBeInTheDocument();
+    expect(screen.getAllByText(/记忆提示：/).length).toBeGreaterThan(0);
   });
 
   it('filters vocabulary by the learner query', async () => {

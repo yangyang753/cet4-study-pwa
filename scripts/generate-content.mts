@@ -1,5 +1,6 @@
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { buildCollocationExample, buildVocabularyExample } from './knowledge-examples.mts';
 
 const root = process.cwd();
 const frequencyPath = path.join(root, 'tmp/cet-vocabulary/cet_full_list.json');
@@ -20,7 +21,7 @@ const vocabulary = frequency
   .map((entry, index) => {
     const detail = dictionary.get(entry.word)!;
     const part = detail.mean.match(/^([a-z.]+)/i)?.[1] ?? 'word';
-    return { id: `v${String(index + 1).padStart(4, '0')}`, word: entry.word, phonetic: detail.phonetic_symbol || `/${entry.word}/`, partOfSpeech: part, meaningZh: detail.mean, example: `The word “${entry.word}” often appears in college English reading and listening.`, derivatives: [], confusables: [], frequency: entry.frequency, category: entry.category, subcategory: entry.subcategory, source: 'exam-data/CETVocabulary + doupoa/CET-4-Auxiliary-Memory' };
+    return { id: `v${String(index + 1).padStart(4, '0')}`, word: entry.word, phonetic: detail.phonetic_symbol || `/${entry.word}/`, partOfSpeech: part, meaningZh: detail.mean, ...buildVocabularyExample({ word: entry.word, partOfSpeech: part, meaningZh: detail.mean }, index), derivatives: [], confusables: [], frequency: entry.frequency, category: entry.category, subcategory: entry.subcategory, source: 'exam-data/CETVocabulary + doupoa/CET-4-Auxiliary-Memory' };
   });
 
 const phraseText = `take part in|参加
@@ -148,7 +149,7 @@ offer an opportunity|提供机会
 create value|创造价值
 protect the environment|保护环境
 save energy|节约能源
-keep a balance|保持平衡`.split('\n').map((line, index) => { const [phrase, meaningZh] = line.split('|'); return { id: `c${String(index + 1).padStart(3, '0')}`, phrase, meaningZh, example: `Use “${phrase}” to express this idea clearly in CET-4 writing or translation.` }; });
+keep a balance|保持平衡`.split('\n').map((line, index) => { const [phrase, meaningZh] = line.split('|'); return { id: `c${String(index + 1).padStart(3, '0')}`, phrase, meaningZh, ...buildCollocationExample(phrase, index) }; });
 
 const grammarNames = ['词性判断', '一般时态与完成时态', '被动语态', '主谓一致', '非谓语动词', '定语从句', '名词性从句', '状语从句', '比较结构', '虚拟语气', '倒装结构', '强调结构', '并列与平行结构', '代词指代', '长难句主干分析'];
 const grammarTopics = grammarNames.map((title, index) => ({ id: `g${String(index + 1).padStart(2, '0')}`, title, summary: `掌握${title}的核心规则，并通过四级语境中的短句进行判断。`, checklist: ['先找句子主干', '识别连接词和修饰成分', '检查形式与语义是否一致'] }));

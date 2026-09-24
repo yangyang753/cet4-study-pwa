@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { auditContentDiversity, auditContentInventory, auditGeneratedQuestions } from './contentAudit';
+import { auditContentDiversity, auditContentInventory, auditGeneratedQuestions, auditKnowledgeExamples } from './contentAudit';
 import { getPracticeItems } from './catalog';
 import inventory from '../../content/v1/inventory.json';
 
@@ -58,5 +58,26 @@ describe('auditContentDiversity', () => {
 
   it('accepts the shipped content diversity contract', () => {
     expect(auditContentDiversity(inventory)).toEqual([]);
+  });
+});
+
+describe('auditKnowledgeExamples', () => {
+  it('rejects the former vocabulary and collocation placeholder templates', () => {
+    expect(auditKnowledgeExamples(
+      [{ id: 'v1', example: 'The word “benefit” often appears in college English reading and listening.', exampleZh: '' }],
+      [{ id: 'c1', example: 'Use “take part in” to express this idea clearly in CET-4 writing or translation.', exampleZh: '' }],
+    )).toEqual(expect.arrayContaining([
+      'vocabulary:v1: generic placeholder example',
+      'vocabulary:v1: missing Chinese memory cue',
+      'collocations:c1: generic placeholder example',
+      'collocations:c1: missing Chinese memory cue',
+    ]));
+  });
+
+  it('accepts contextual examples with Chinese memory cues', () => {
+    expect(auditKnowledgeExamples(
+      [{ id: 'v1', example: 'Regular exercise can benefit both physical and mental health.', exampleZh: '规律运动有益于身心健康。' }],
+      [{ id: 'c1', example: 'Many students take part in community service on weekends.', exampleZh: '许多学生周末参加社区服务。' }],
+    )).toEqual([]);
   });
 });

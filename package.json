@@ -14,6 +14,7 @@
     "e2e": "playwright test",
     "content:validate": "tsx scripts/validate-content.mts",
     "content:generate": "tsx scripts/generate-content.mts && tsx scripts/expand-mock-content.mts",
+    "content:enrich": "tsx scripts/enrich-knowledge-content.mts",
     "content:audit": "tsx scripts/audit-content.mts",
     "audio:generate": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/generate-audio.ps1 && tsx scripts/sync-audio-timings.mts",
     "audio:audit": "tsx scripts/audio-manifest.mts",
