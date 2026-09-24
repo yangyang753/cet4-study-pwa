@@ -8,6 +8,7 @@ import type { StudyKind } from '../planner/planDay';
 import { gradeAnswer } from '../practice/gradeAnswer';
 import { ObjectiveQuestion } from '../practice/ObjectiveQuestion';
 import { decodeMasteryContext } from './masteryContext';
+import { recordMasteryOutcome } from './taskProgress';
 import './mastery.css';
 
 const defaultRepository = new DexieLearningRepository();
@@ -54,9 +55,8 @@ export function MasteryCheck({ kind, taskId, repository = defaultRepository, now
     setResults(nextResults);
     setAnswerResult(graded.correct);
     if (index === questions.length - 1) {
-      const status = nextResults.every(Boolean) ? 'mastered' : 'review';
-      await repository.upsertKnowledgeState({ id: `mastery:${taskId}`, itemId: taskId, status, favorite: false, updatedAt: now });
-      setFinished(status);
+      const outcome = await recordMasteryOutcome(repository, taskId, nextResults.filter(Boolean).length, questions.length, now);
+      setFinished(outcome === 'mastered' ? 'mastered' : 'review');
     }
     setSaving(false);
   };

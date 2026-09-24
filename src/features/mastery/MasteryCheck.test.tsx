@@ -12,6 +12,7 @@ function repository() {
     saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
     upsertReviewCard: vi.fn().mockResolvedValue(undefined),
     upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+    completeTask: vi.fn().mockResolvedValue(undefined),
   } as unknown as LearningRepository;
 }
 
