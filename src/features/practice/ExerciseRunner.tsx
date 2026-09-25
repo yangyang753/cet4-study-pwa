@@ -15,7 +15,7 @@ import { completeDailyTask, localStudyDate } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
 import type { Attempt, MistakeReason } from '../../domain/attempt';
 import { selectPracticeQuestions } from './selectPracticeQuestions';
-import { VocabularyWarmup } from '../vocabulary/VocabularyWarmup';
+import { DailyVocabularySession } from '../vocabulary/DailyVocabularySession';
 import { buildWarmupQuestions } from '../vocabulary/buildWarmupQuestions';
 import { learningVocabulary } from '../../content/vocabularyLearning';
 import { QuestionTranslationGate, questionNeedsTranslation } from '../translation/QuestionTranslationGate';
@@ -63,7 +63,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     return () => { active = false; };
   }, [initialQuestions, kind, limit, repository, today]);
 
-  if (!warmupComplete) return <VocabularyWarmup repository={repository} onComplete={(entries) => {
+  if (!warmupComplete) return <DailyVocabularySession repository={repository} today={today} onComplete={(entries) => {
     setQuestions(entries.length ? buildWarmupQuestions(entries, learningVocabulary) : initialQuestions);
     setWarmupComplete(true);
   }} />;
