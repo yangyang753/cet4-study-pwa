@@ -42,10 +42,7 @@ export function buildVocabularyWorkload(
   const dueWords = entries
     .map((word) => ({ word, state: stateById.get(word.id) }))
     .filter((item): item is { word: VocabularyEntry; state: KnowledgeState } => Boolean(item.state))
-    .filter(({ state }) => {
-      if (state.status !== 'mastered' && state.status !== 'review') return false;
-      return dateMs(state.nextReviewAt ?? addDays(state.updatedAt, 1)) <= dueAt;
-    })
+    .filter(({ state }) => dateMs(state.nextReviewAt ?? addDays(state.updatedAt, 1)) <= dueAt)
     .sort((left, right) => {
       const leftDue = dateMs(left.state.nextReviewAt ?? addDays(left.state.updatedAt, 1));
       const rightDue = dateMs(right.state.nextReviewAt ?? addDays(right.state.updatedAt, 1));

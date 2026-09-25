@@ -44,6 +44,14 @@ describe('vocabulary workload', () => {
     expect(result.dueWords[0].id).toBe('v0');
     expect(result.dueWords[14].id).toBe('v14');
   });
+
+  it('brings legacy learning words without a review date back for review', () => {
+    const result = buildVocabularyWorkload([entry(1)], [state(1, {
+      status: 'learning', nextReviewAt: undefined, updatedAt: '2026-09-23T00:00:00.000Z',
+    })], '2026-09-25', '2026-12-12');
+    expect(result.dueWords.map((word) => word.id)).toEqual(['v1']);
+    expect(result.newWords).toEqual([]);
+  });
 });
 
 describe('word cloze and review state', () => {
