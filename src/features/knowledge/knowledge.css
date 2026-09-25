@@ -13,9 +13,16 @@
 .knowledge-tabs button[aria-selected="true"] { color: white; background: var(--color-green); }
 .knowledge-search { display: grid; gap: 7px; color: var(--color-muted); font-size: 13px; font-weight: 700; }
 .knowledge-search input { width: min(100%, 520px); padding: 13px 15px; border: 1px solid var(--color-line); border-radius: 12px; background: white; }
+.knowledge-tools { display: flex; align-items: end; justify-content: space-between; gap: 14px; }
+.knowledge-tools .knowledge-search { flex: 1; }
+.review-filter { padding: 12px 16px; border: 1px solid var(--color-green); border-radius: 12px; color: var(--color-green); background: white; font-weight: 800; white-space: nowrap; }
+.review-filter[aria-pressed="true"] { color: white; background: var(--color-green); }
 .word-grid, .grammar-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .word-card, .grammar-grid article, .phrase-list article { padding: 20px; border: 1px solid var(--color-line); border-radius: 18px; background: var(--color-panel); }
 .word-card > span, .grammar-grid article > span { float: right; color: var(--color-orange); font-size: 11px; font-weight: 900; }
+.word-card.review { border-color: #e4ae50; box-shadow: inset 0 4px 0 #e4ae50; }
+.knowledge-status { display: inline-block; margin: 0 8px 8px 0; padding: 4px 8px; border-radius: 999px; color: #7a4a00; background: #fff0d2; font-size: 12px; }
+.knowledge-status.learning { color: var(--color-green-dark); background: var(--color-green-soft); }
 .word-card h2, .phrase-list h2, .grammar-grid h2 { margin: 0 0 5px; font-size: 20px; }
 .word-card p { margin: 6px 0; }
 .word-card .phonetic { color: var(--color-green); }
@@ -25,4 +32,4 @@
 .empty-result { padding: 24px; border-radius: 16px; background: var(--color-green-soft); }
 .load-more { justify-self: center; padding: 12px 18px; border: 0; border-radius: 12px; color: white; background: var(--color-green); font-weight: 800; }
 @media (max-width: 900px) { .word-grid, .grammar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 620px) { .knowledge-heading { align-items: flex-start; flex-direction: column; } .inventory { grid-template-columns: repeat(3, 1fr); } .inventory article { padding: 14px 10px; } .inventory strong { font-size: 26px; } .word-grid, .grammar-grid, .phrase-list { grid-template-columns: 1fr; } .knowledge-tabs { width: 100%; } .knowledge-tabs button { flex: 1; padding-inline: 8px; } }
+@media (max-width: 620px) { .knowledge-heading, .knowledge-tools { align-items: stretch; flex-direction: column; } .inventory { grid-template-columns: repeat(3, 1fr); } .inventory article { padding: 14px 10px; } .inventory strong { font-size: 26px; } .word-grid, .grammar-grid, .phrase-list { grid-template-columns: 1fr; } .knowledge-tabs { width: 100%; } .knowledge-tabs button { flex: 1; padding-inline: 8px; } }

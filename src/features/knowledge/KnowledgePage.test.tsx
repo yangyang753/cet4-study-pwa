@@ -52,4 +52,32 @@ describe('KnowledgePage', () => {
 
     expect(await screen.findByRole('button', { name: '已掌握' })).toBeDisabled();
   });
+
+  it('shows and filters words that need mastery', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [{
+        id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: false, updatedAt: '2026-09-24T08:00:00.000Z',
+      }] }),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} />);
+
+    expect(await screen.findByText('待掌握')).toBeVisible();
+    await userEvent.click(screen.getByRole('button', { name: '只看待掌握（1）' }));
+    expect(screen.getByRole('heading', { name: 'passage' })).toBeVisible();
+    expect(screen.queryByRole('heading', { name: 'one' })).not.toBeInTheDocument();
+  });
+
+  it('moves a review word to mastered while preserving its favorite flag', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [{
+        id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: true, updatedAt: '2026-09-24T08:00:00.000Z',
+      }] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} />);
+    await screen.findByText('待掌握');
+    await userEvent.click(screen.getAllByRole('button', { name: '标记为已掌握' })[0]);
+    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v0001', status: 'mastered', favorite: true }));
+    expect(screen.getByRole('button', { name: '已掌握' })).toBeDisabled();
+  });
 });
