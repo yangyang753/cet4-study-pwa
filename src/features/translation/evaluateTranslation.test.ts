@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { VocabularyEntry } from '../../domain/content';
-import { evaluateTranslation } from './evaluateTranslation';
+import { evaluateTranslation, resolveVocabularyToken } from './evaluateTranslation';
 
 const vocabulary: VocabularyEntry[] = [
   { id: 'v-available', word: 'available', phonetic: '', partOfSpeech: 'a.', meaningZh: 'a.可获得的;有空的', example: '', derivatives: [], confusables: [] },
@@ -43,6 +43,7 @@ describe('evaluateTranslation', () => {
     const result = evaluateTranslation([{ id: 'stem', text: 'Zebra.', translation: '斑马。' }], vocabulary);
     expect(result.complete).toBe(true);
     expect(result.auditableWords).toEqual([]);
+    expect(evaluateTranslation([{ id: 'stem', text: 'A?', translation: '一' }], vocabulary).complete).toBe(true);
   });
 
   it('maps common inflections back to an existing headword', () => {
@@ -59,5 +60,10 @@ describe('evaluateTranslation', () => {
     ], vocabulary);
     expect(result.auditableWords.map((item) => item.word)).toEqual(['large', 'available']);
     expect(result.missedWords).toEqual([]);
+  });
+
+  it('does not invent a stem that is absent from the vocabulary', () => {
+    expect(resolveVocabularyToken('studied', vocabulary.filter((entry) => entry.word !== 'study'))).toBeNull();
+    expect(resolveVocabularyToken('studied', vocabulary)?.word).toBe('study');
   });
 });

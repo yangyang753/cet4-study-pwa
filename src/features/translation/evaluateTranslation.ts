@@ -62,6 +62,11 @@ function wordCandidates(token: string): string[] {
   return candidates;
 }
 
+export function resolveVocabularyToken(token: string, vocabulary: VocabularyEntry[]): VocabularyEntry | null {
+  const vocabularyByWord = new Map(vocabulary.map((entry) => [entry.word.toLowerCase(), entry]));
+  return wordCandidates(token.toLowerCase()).map((candidate) => vocabularyByWord.get(candidate)).find(Boolean) ?? null;
+}
+
 export function evaluateTranslation(segments: TranslationSegment[], vocabulary: VocabularyEntry[]): TranslationEvaluation {
   const vocabularyByWord = new Map(vocabulary.map((entry) => [entry.word.toLowerCase(), entry]));
   const auditableWords: AuditedWord[] = [];

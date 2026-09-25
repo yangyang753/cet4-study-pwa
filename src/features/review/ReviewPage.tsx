@@ -38,8 +38,6 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
 
   useEffect(() => {
     let current = true;
-    setLoading(true);
-    setLoadError('');
     void Promise.all([
       repository.listDueReviews(now),
       examDate ? Promise.resolve(examDate) : repository.getDashboardSnapshot(now).then((snapshot) => snapshot.settings.examDate),
@@ -87,7 +85,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
   };
 
   if (loading) return <p role="status">正在读取复习安排…</p>;
-  if (loadError) return <section><h1>错题与复习</h1><p role="alert">{loadError}</p><button onClick={() => setReloadKey((value) => value + 1)}>重新读取</button></section>;
+  if (loadError) return <section><h1>错题与复习</h1><p role="alert">{loadError}</p><button onClick={() => { setLoading(true); setLoadError(''); setReloadKey((value) => value + 1); }}>重新读取</button></section>;
   if (activeCard && activeQuestion && 'options' in activeQuestion) return <section><button onClick={() => { setActiveId(null); setResponse(''); setResult(null); setTranslationUnlocked(false); setSubmitError(''); setAttemptId(''); }}>← 返回复习列表</button><h1>重新练习</h1>{translationRequired && <QuestionTranslationGate key={activeQuestion.id} question={activeQuestion as ObjectiveQuestion} repository={repository} onUnlocked={() => setTranslationUnlocked(true)} />}<ObjectiveQuestionView question={activeQuestion as ObjectiveQuestion} value={response} disabled={Boolean(result) || submitting || (translationRequired && !translationUnlocked)} onChange={setResponse} />{submitError && <p role="alert">{submitError}</p>}{!result && <button onClick={() => void submit()} disabled={!response || submitting || (translationRequired && !translationUnlocked)}>{submitError ? '重新保存复习结果' : submitting ? '正在保存…' : '提交复习答案'}</button>}{result && <div role="status"><strong>{result === 'correct' ? '复习正确' : '复习错误'}</strong><p>{activeQuestion.explanationZh}</p><MasteryCheck kind="review" taskId={`${studyDate(new Date(now))}:review`} repository={repository} now={now} sourceQuestionIds={[activeQuestion.id]} /></div>}</section>;
 
   return <section><h1>错题与复习</h1><div>{['今日到期', '听力', '阅读', '词汇', '已掌握'].map((value) => <button key={value} aria-pressed={filter === value} onClick={() => setFilter(value)}>{value}</button>)}</div>{shown.length === 0 && <p>当前没有需要复习的题目。</p>}{shown.map((card) => { const question = getQuestion(card.questionId); return <article key={card.id}><h2>{question?.prompt ?? '题目内容暂不可用'}</h2><p>{filterKind(card.questionId)} · 第 {card.stage + 1} 阶段</p><button disabled={!question} onClick={() => { setActiveId(card.id); setTranslationUnlocked(false); setSubmitError(''); setAttemptId(''); }}>重新练习</button></article>; })}</section>;

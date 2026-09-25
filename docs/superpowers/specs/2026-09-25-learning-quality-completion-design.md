@@ -51,4 +51,3 @@ Deployment may only become cloud-enabled through externally supplied `VITE_SUPAB
 - Browser tests cover the ten-word warm-up followed by a matching first question on a 360 px-capable flow.
 - Content audit validates the learning vocabulary adapter.
 - `pnpm release:verify` and `pnpm audit --prod` pass.
-

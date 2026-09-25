@@ -1,8 +1,8 @@
-import type { CatalogQuestion, VocabularyEntry } from '../../domain/content';
+import type { CatalogQuestion, ObjectiveQuestion, VocabularyEntry } from '../../domain/content';
 
 const optionId = (index: number) => String.fromCharCode(65 + index);
 
-export function buildWarmupQuestions(warmedWords: VocabularyEntry[], vocabulary: VocabularyEntry[]): CatalogQuestion[] {
+export function buildWarmupQuestions(warmedWords: VocabularyEntry[], vocabulary: VocabularyEntry[]): Array<CatalogQuestion & ObjectiveQuestion> {
   return warmedWords.map((word, index) => {
     const distractors = vocabulary
       .filter((candidate) => candidate.id !== word.id && candidate.meaningZh !== word.meaningZh)

@@ -20,7 +20,7 @@ test('keeps the core navigation usable on a phone', async ({ page }) => {
   await expect(page.getByRole('heading', { name: '听力精练' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
   await page.goto('account');
-  await expect(page.getByText(/当前为离线体验模式/)).toBeVisible();
+  await expect(page.getByText('当前没有启用云端同步')).toBeVisible();
   await expect(page.getByRole('button', { name: '登录' })).toHaveCount(0);
 });
 
@@ -61,6 +61,7 @@ test('starts vocabulary practice with word study and unlocks questions after tra
     await page.getByRole('button', { name: '基本认识' }).click();
   }
   await expect(page.getByRole('heading', { level: 1, name: '专项练习' })).toBeVisible();
+  await expect(page.getByRole('group', { name: '请选择 passage 的正确含义。' })).toBeVisible();
   const firstChoice = page.getByRole('radio').first();
   await expect(firstChoice).toBeDisabled();
   await page.getByRole('textbox', { name: '题干中文翻译' }).fill('这道题询问单词的正确含义。');

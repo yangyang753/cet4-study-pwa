@@ -20,7 +20,7 @@ function authService(): AuthService {
 describe('LoginPage', () => {
   it('does not offer cloud login while running locally only', async () => {
     render(<AuthProvider service={authService()}><AccountPage cloudConfigured={false} /></AuthProvider>);
-    expect(await screen.findByText(/当前为离线体验模式/)).toBeVisible();
+    expect(await screen.findByText('当前没有启用云端同步')).toBeVisible();
     expect(screen.queryByRole('button', { name: '登录' })).not.toBeInTheDocument();
   });
 

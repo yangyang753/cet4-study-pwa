@@ -142,4 +142,3 @@
 - [ ] Run `pnpm audit --prod`; expect no known vulnerabilities.
 - [ ] Review the complete branch against the spec, with special attention to retry duplication and warm-up/question identity.
 - [ ] Record results and commit with `docs: record learning quality verification`.
-

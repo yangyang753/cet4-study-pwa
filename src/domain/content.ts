@@ -18,6 +18,7 @@ export interface VocabularyEntry {
   exampleZh?: string;
   derivatives: string[];
   confusables: string[];
+  frequency?: number;
 }
 
 export interface QuestionOption { id: string; text: string }
