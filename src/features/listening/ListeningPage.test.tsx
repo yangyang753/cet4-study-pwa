@@ -21,7 +21,7 @@ async function unlockListeningQuestion() {
   for (const input of screen.getAllByRole('textbox').filter((item) => item.getAttribute('aria-label')?.includes('中文翻译'))) {
     fireEvent.change(input, { target: { value: translation } });
   }
-  await userEvent.click(screen.getByRole('button', { name: '检查翻译并解锁选项' }));
+  await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
   await screen.findByText('高频词义覆盖通过，可以开始作答。');
 }
 
@@ -109,7 +109,9 @@ describe('ListeningPage', () => {
   it('does not clear a selected answer when saved playback settings arrive late', async () => {
     let resolveSnapshot!: (value: { settings: { id: 'current'; examDate: string; dailyMinutes: number; playbackRate: number; updatedAt: string } }) => void;
     const learningRepository = {
-      getDashboardSnapshot: vi.fn().mockReturnValue(new Promise((resolve) => { resolveSnapshot = resolve; })),
+      getDashboardSnapshot: vi.fn()
+        .mockResolvedValueOnce({ knowledgeStates: [] })
+        .mockReturnValue(new Promise((resolve) => { resolveSnapshot = resolve; })),
     } as unknown as DexieLearningRepository;
     const user = userEvent.setup();
     render(<ListeningPage repository={learningRepository} />);

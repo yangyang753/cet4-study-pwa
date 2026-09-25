@@ -27,16 +27,20 @@ export function QuestionTranslationGate({ question, repository, vocabulary = def
   const [evaluation, setEvaluation] = useState<TranslationEvaluation | null>(null);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [knowledgeReady, setKnowledgeReady] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
 
   useEffect(() => {
     let active = true;
+    setKnowledgeReady(false);
     void (async () => {
       try {
         const snapshot = await repository.getDashboardSnapshot();
         if (active) setStates(new Map(snapshot.knowledgeStates.map((state) => [state.itemId, state])));
       } catch {
         // The translation gate still works when prior state cannot be read.
+      } finally {
+        if (active) setKnowledgeReady(true);
       }
     })();
     return () => { active = false; };
@@ -80,7 +84,7 @@ export function QuestionTranslationGate({ question, repository, vocabulary = def
   return <section className={`translation-gate ${unlocked ? 'unlocked' : ''}`} aria-labelledby={`translation-title-${question.id}`}>
     <header><span>作答前一步</span><h2 id={`translation-title-${question.id}`}>先翻译，再选择答案</h2><p>系统检查高频词义是否覆盖，不等同于人工翻译评分。</p></header>
     {required.map((segment) => <label key={segment.id} className="translation-field"><strong>{segment.label}</strong><span>{segment.text}</span><textarea aria-label={segment.id === 'stem' ? '题干中文翻译' : `${segment.label} 中文翻译`} value={translations[segment.id] ?? ''} disabled={unlocked} onChange={(event) => setTranslations((current) => ({ ...current, [segment.id]: event.target.value }))} placeholder="填写中文翻译" /></label>)}
-    {!unlocked && !error.includes('错词保存失败') && <button className="primary-action" disabled={saving} onClick={check}>{saving ? '正在检查…' : '检查翻译并解锁选项'}</button>}
+    {!unlocked && !error.includes('错词保存失败') && <button className="primary-action" disabled={saving || !knowledgeReady} onClick={check}>{!knowledgeReady ? '正在读取单词状态…' : saving ? '正在检查…' : '检查翻译并解锁选项'}</button>}
     {error && <p role="alert">{error}</p>}
     {error.includes('错词保存失败') && evaluation && <button disabled={saving} onClick={() => void persistAndUnlock(evaluation)}>{saving ? '正在保存…' : '重新保存并解锁'}</button>}
     {evaluation && unlocked && <div className="translation-result" role="status">{missed.length ? <><strong>已加入待掌握单词</strong><ul>{missed.map((word) => <li key={word.id}><b>{word.word}</b><span>{word.meaningZh}</span></li>)}</ul></> : <strong>高频词义覆盖通过，可以开始作答。</strong>}</div>}

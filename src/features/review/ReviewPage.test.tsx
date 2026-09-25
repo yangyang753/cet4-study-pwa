@@ -22,7 +22,7 @@ async function setupRepository(stage = 0) {
 async function unlockReviewQuestion() {
   const translation = vocabulary.map((item) => item.meaningZh).join(' ');
   for (const input of screen.getAllByRole('textbox')) fireEvent.change(input, { target: { value: translation } });
-  await userEvent.click(screen.getByRole('button', { name: '检查翻译并解锁选项' }));
+  await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
   await screen.findByText('高频词义覆盖通过，可以开始作答。');
 }
 

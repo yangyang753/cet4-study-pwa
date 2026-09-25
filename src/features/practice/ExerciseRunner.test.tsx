@@ -12,7 +12,7 @@ Therefore, I plan to study at the same time each evening, review mistakes, and w
 
 async function unlockCurrentQuestion() {
   for (const input of screen.getAllByRole('textbox')) await userEvent.type(input, '中文翻译');
-  await userEvent.click(screen.getByRole('button', { name: '检查翻译并解锁选项' }));
+  await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
 }
 
 describe('ExerciseRunner', () => {

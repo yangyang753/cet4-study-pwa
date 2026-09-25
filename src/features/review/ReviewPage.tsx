@@ -10,7 +10,7 @@ import { scheduleReviewStage } from './scheduleReview';
 import { completeDailyTask } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
 import { studyDate } from '../../lib/studyDate';
-import { QuestionTranslationGate } from '../translation/QuestionTranslationGate';
+import { QuestionTranslationGate, questionNeedsTranslation } from '../translation/QuestionTranslationGate';
 
 const defaultRepository = new DexieLearningRepository();
 const filterKind = (questionId: string) => {
@@ -47,6 +47,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
   }), [cards, filter]);
   const activeCard = cards.find((card) => card.id === activeId) ?? null;
   const activeQuestion = activeCard ? getQuestion(activeCard.questionId) : null;
+  const translationRequired = Boolean(activeQuestion && 'options' in activeQuestion && questionNeedsTranslation(activeQuestion as ObjectiveQuestion));
 
   const submit = async () => {
     if (!activeCard || !activeQuestion || !('options' in activeQuestion) || !response) return;
@@ -66,7 +67,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
   };
 
   if (loading) return <p role="status">正在读取复习安排…</p>;
-  if (activeCard && activeQuestion && 'options' in activeQuestion) return <section><button onClick={() => { setActiveId(null); setResponse(''); setResult(null); setTranslationUnlocked(false); }}>← 返回复习列表</button><h1>重新练习</h1><QuestionTranslationGate key={activeQuestion.id} question={activeQuestion as ObjectiveQuestion} repository={repository} onUnlocked={() => setTranslationUnlocked(true)} /><ObjectiveQuestionView question={activeQuestion as ObjectiveQuestion} value={response} disabled={Boolean(result) || !translationUnlocked} onChange={setResponse} />{!result && <button onClick={() => void submit()} disabled={!response || !translationUnlocked}>提交复习答案</button>}{result && <div role="status"><strong>{result === 'correct' ? '复习正确' : '复习错误'}</strong><p>{activeQuestion.explanationZh}</p><MasteryCheck kind="review" taskId={`${studyDate(new Date(now))}:review`} repository={repository} now={now} sourceQuestionIds={[activeQuestion.id]} /></div>}</section>;
+  if (activeCard && activeQuestion && 'options' in activeQuestion) return <section><button onClick={() => { setActiveId(null); setResponse(''); setResult(null); setTranslationUnlocked(false); }}>← 返回复习列表</button><h1>重新练习</h1>{translationRequired && <QuestionTranslationGate key={activeQuestion.id} question={activeQuestion as ObjectiveQuestion} repository={repository} onUnlocked={() => setTranslationUnlocked(true)} />}<ObjectiveQuestionView question={activeQuestion as ObjectiveQuestion} value={response} disabled={Boolean(result) || (translationRequired && !translationUnlocked)} onChange={setResponse} />{!result && <button onClick={() => void submit()} disabled={!response || (translationRequired && !translationUnlocked)}>提交复习答案</button>}{result && <div role="status"><strong>{result === 'correct' ? '复习正确' : '复习错误'}</strong><p>{activeQuestion.explanationZh}</p><MasteryCheck kind="review" taskId={`${studyDate(new Date(now))}:review`} repository={repository} now={now} sourceQuestionIds={[activeQuestion.id]} /></div>}</section>;
 
   return <section><h1>错题与复习</h1><div>{['今日到期', '听力', '阅读', '词汇', '已掌握'].map((value) => <button key={value} aria-pressed={filter === value} onClick={() => setFilter(value)}>{value}</button>)}</div>{shown.length === 0 && <p>当前没有需要复习的题目。</p>}{shown.map((card) => { const question = getQuestion(card.questionId); return <article key={card.id}><h2>{question?.prompt ?? '题目内容暂不可用'}</h2><p>{filterKind(card.questionId)} · 第 {card.stage + 1} 阶段</p><button disabled={!question} onClick={() => { setActiveId(card.id); setTranslationUnlocked(false); }}>重新练习</button></article>; })}</section>;
 }

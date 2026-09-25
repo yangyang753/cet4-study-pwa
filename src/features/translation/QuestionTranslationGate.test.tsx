@@ -39,7 +39,7 @@ describe('QuestionTranslationGate', () => {
   it('requires a translation for the stem and every English option', async () => {
     const onUnlocked = vi.fn();
     render(<QuestionTranslationGate question={question} repository={repository()} vocabulary={words} onUnlocked={onUnlocked} />);
-    await userEvent.click(screen.getByRole('button', { name: '检查翻译并解锁选项' }));
+    await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
     expect(screen.getByRole('alert')).toHaveTextContent('请先填写题干和所有英文选项的中文翻译');
     expect(onUnlocked).not.toHaveBeenCalled();
   });
@@ -51,7 +51,7 @@ describe('QuestionTranslationGate', () => {
     ] }) });
     render(<QuestionTranslationGate question={question} repository={learningRepository} vocabulary={words} onUnlocked={onUnlocked} />);
     await fillGate('什么时候进行？');
-    await userEvent.click(screen.getByRole('button', { name: '检查翻译并解锁选项' }));
+    await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
 
     expect(await screen.findByText('activity')).toBeVisible();
     expect(screen.getByText('available')).toBeVisible();
@@ -59,12 +59,29 @@ describe('QuestionTranslationGate', () => {
     expect(onUnlocked).toHaveBeenCalledOnce();
   });
 
+  it('waits for existing word state before saving so a favorite cannot be overwritten', async () => {
+    let resolveSnapshot!: (value: { knowledgeStates: Array<{ id: string; itemId: string; status: 'mastered'; favorite: boolean; updatedAt: string }> }) => void;
+    const snapshot = new Promise<{ knowledgeStates: Array<{ id: string; itemId: string; status: 'mastered'; favorite: boolean; updatedAt: string }> }>((resolve) => { resolveSnapshot = resolve; });
+    const learningRepository = repository({ getDashboardSnapshot: vi.fn().mockReturnValue(snapshot) });
+    render(<QuestionTranslationGate question={question} repository={learningRepository} vocabulary={words} onUnlocked={vi.fn()} />);
+
+    await fillGate('什么时候进行？');
+    expect(screen.getByRole('button', { name: '正在读取单词状态…' })).toBeDisabled();
+
+    resolveSnapshot({ knowledgeStates: [
+      { id: 'knowledge:v-available', itemId: 'v-available', status: 'mastered', favorite: true, updatedAt: '2026-09-24T00:00:00.000Z' },
+    ] });
+    await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
+
+    expect(learningRepository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v-available', favorite: true }));
+  });
+
   it('keeps translations locked and retries after a storage failure', async () => {
     const onUnlocked = vi.fn();
     const save = vi.fn().mockRejectedValueOnce(new Error('storage')).mockResolvedValue(undefined);
     render(<QuestionTranslationGate question={question} repository={repository({ upsertKnowledgeState: save })} vocabulary={words} onUnlocked={onUnlocked} />);
     await fillGate('什么时候进行？');
-    await userEvent.click(screen.getByRole('button', { name: '检查翻译并解锁选项' }));
+    await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('错词保存失败');
     expect(screen.getByRole('textbox', { name: '题干中文翻译' })).toHaveValue('什么时候进行？');
     expect(onUnlocked).not.toHaveBeenCalled();
