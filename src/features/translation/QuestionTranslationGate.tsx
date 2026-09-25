@@ -71,7 +71,7 @@ export function QuestionTranslationGate({ question, repository, vocabulary = def
     const segments = required.map((segment) => ({ ...segment, translation: translations[segment.id] ?? '' }));
     const result = evaluateTranslation(segments, vocabulary);
     if (!result.complete) {
-      setError('请先填写题干和所有英文选项的中文翻译。');
+      setError('请先填写题干和所有英文选项的中文翻译，请使用中文填写。');
       return;
     }
     setEvaluation(result);
@@ -87,6 +87,6 @@ export function QuestionTranslationGate({ question, repository, vocabulary = def
     {!unlocked && !error.includes('错词保存失败') && <button className="primary-action" disabled={saving || !knowledgeReady} onClick={check}>{!knowledgeReady ? '正在读取单词状态…' : saving ? '正在检查…' : '检查翻译并解锁选项'}</button>}
     {error && <p role="alert">{error}</p>}
     {error.includes('错词保存失败') && evaluation && <button disabled={saving} onClick={() => void persistAndUnlock(evaluation)}>{saving ? '正在保存…' : '重新保存并解锁'}</button>}
-    {evaluation && unlocked && <div className="translation-result" role="status">{missed.length ? <><strong>已加入待掌握单词</strong><ul>{missed.map((word) => <li key={word.id}><b>{word.word}</b><span>{word.meaningZh}</span></li>)}</ul></> : <strong>高频词义覆盖通过，可以开始作答。</strong>}</div>}
+    {evaluation && unlocked && <div className="translation-result" role="status"><p>已识别 {new Set(evaluation.auditableWords.map((word) => word.id)).size} 个高频词，覆盖 {new Set(evaluation.coveredWords.map((word) => word.id)).size} 个。</p>{missed.length ? <><strong>已加入待掌握单词</strong><ul>{missed.map((word) => <li key={word.id}><b>{word.word}</b><span>{word.meaningZh}</span></li>)}</ul></> : <strong>高频词义覆盖通过，可以开始作答。</strong>}</div>}
   </section>;
 }

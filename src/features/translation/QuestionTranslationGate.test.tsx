@@ -57,6 +57,16 @@ describe('QuestionTranslationGate', () => {
     expect(screen.getByText('available')).toBeVisible();
     expect(learningRepository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v-available', status: 'review', favorite: true }));
     expect(onUnlocked).toHaveBeenCalledOnce();
+    expect(screen.getByText(/已识别 2 个高频词/)).toBeVisible();
+  });
+
+  it('rejects English filler that is not a Chinese translation', async () => {
+    const onUnlocked = vi.fn();
+    render(<QuestionTranslationGate question={question} repository={repository()} vocabulary={words} onUnlocked={onUnlocked} />);
+    await fillGate('not translated');
+    await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('请使用中文填写');
+    expect(onUnlocked).not.toHaveBeenCalled();
   });
 
   it('waits for existing word state before saving so a favorite cannot be overwritten', async () => {
