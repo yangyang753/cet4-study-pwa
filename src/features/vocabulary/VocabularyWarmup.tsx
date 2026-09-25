@@ -11,7 +11,7 @@ export function VocabularyWarmup({ repository, entries = vocabulary, limit = 10,
   repository: LearningRepository;
   entries?: VocabularyEntry[];
   limit?: number;
-  onComplete: () => void;
+  onComplete: (entries: VocabularyEntry[]) => void;
 }) {
   const [words, setWords] = useState<VocabularyEntry[] | null>(null);
   const [states, setStates] = useState<Map<string, KnowledgeState>>(() => new Map());
@@ -59,7 +59,7 @@ export function VocabularyWarmup({ repository, entries = vocabulary, limit = 10,
       setPendingStatus(null);
       if (words && index >= words.length - 1) {
         setComplete(true);
-        onComplete();
+        onComplete(words);
       } else {
         setIndex((current) => current + 1);
         setRevealed(false);
@@ -73,7 +73,7 @@ export function VocabularyWarmup({ repository, entries = vocabulary, limit = 10,
 
   if (complete) return <section className="vocabulary-warmup complete"><h1>单词热身完成</h1><p>已记录这组单词，接下来用题目检查是否会用。</p></section>;
   if (!words) return <p role="status">正在准备今日高频词…</p>;
-  if (!word) return <section className="vocabulary-warmup"><h1>暂无可学习单词</h1><button onClick={onComplete}>继续做题</button></section>;
+  if (!word) return <section className="vocabulary-warmup"><h1>暂无可学习单词</h1><button onClick={() => onComplete([])}>继续做题</button></section>;
 
   return <section className="vocabulary-warmup">
     <header><span>词汇热身 · {index + 1}/{words.length}</span><h1>先学单词，再开始做题</h1><p>先看英文回想词义，再显示答案。这里只记录学习状态，不会直接算作已掌握。</p></header>

@@ -66,6 +66,7 @@ describe('VocabularyWarmup', () => {
       await userEvent.click(screen.getByRole('button', { name: '基本认识' }));
     }
     expect(onComplete).toHaveBeenCalledOnce();
+    expect(onComplete).toHaveBeenCalledWith(entries);
     expect(screen.getByText('单词热身完成')).toBeVisible();
   });
 });

@@ -215,10 +215,13 @@ describe('ExerciseRunner', () => {
       await user.click(await screen.findByRole('button', { name: '显示释义' }));
       await user.click(screen.getByRole('button', { name: '基本认识' }));
     }
-    await unlockCurrentQuestion();
-    await user.click((await screen.findAllByRole('radio'))[0]);
-    await user.click(screen.getByRole('button', { name: '提交答案' }));
-    await user.click(await screen.findByRole('button', { name: '查看结果' }));
+    expect((await screen.findAllByText('请选择 passage 的正确含义。'))[0]).toBeVisible();
+    for (let index = 0; index < 10; index += 1) {
+      await unlockCurrentQuestion();
+      await user.click((await screen.findAllByRole('radio'))[0]);
+      await user.click(screen.getByRole('button', { name: '提交答案' }));
+      await user.click(await screen.findByRole('button', { name: index === 9 ? '查看结果' : '下一题' }));
+    }
     expect(await screen.findByText('掌握度检测')).toBeVisible();
     expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({
       id: '2026-09-22:vocabulary', taskId: '2026-09-22:vocabulary', kind: 'vocabulary',

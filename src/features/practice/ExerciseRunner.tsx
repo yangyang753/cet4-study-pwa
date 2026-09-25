@@ -16,6 +16,8 @@ import { MasteryCheck } from '../mastery/MasteryCheck';
 import type { Attempt, MistakeReason } from '../../domain/attempt';
 import { selectPracticeQuestions } from './selectPracticeQuestions';
 import { VocabularyWarmup } from '../vocabulary/VocabularyWarmup';
+import { buildWarmupQuestions } from '../vocabulary/buildWarmupQuestions';
+import { learningVocabulary } from '../../content/vocabularyLearning';
 import { QuestionTranslationGate, questionNeedsTranslation } from '../translation/QuestionTranslationGate';
 
 const starterContent = parseContentPack(rawContent);
@@ -61,7 +63,10 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     return () => { active = false; };
   }, [initialQuestions, kind, limit, repository, today]);
 
-  if (!warmupComplete) return <VocabularyWarmup repository={repository} onComplete={() => setWarmupComplete(true)} />;
+  if (!warmupComplete) return <VocabularyWarmup repository={repository} onComplete={(entries) => {
+    setQuestions(entries.length ? buildWarmupQuestions(entries, learningVocabulary) : initialQuestions);
+    setWarmupComplete(true);
+  }} />;
   if (questions === null) return <p role="status">正在根据学习记录选题…</p>;
   if (!question) return <p>未找到这组练习。</p>;
   const questionCount = questions.length;
