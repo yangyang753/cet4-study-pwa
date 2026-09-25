@@ -25,4 +25,3 @@ Content generation will replace the two known placeholder templates with determi
 ## Verification
 
 Use test-driven changes for validation, mastery, reminders, settings, and content audits. Then run content validation/audits, audio audit, unit tests, end-to-end tests, typecheck, lint, build, bundle and Pages verification before deployment.
-
