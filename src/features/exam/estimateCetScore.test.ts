@@ -10,7 +10,7 @@ function submittedSession(perfect: boolean) {
     for (const section of exam.sections) {
       for (const question of section.questions) {
         if ('correctAnswer' in question) active.answers[question.id] = question.correctAnswer;
-        else if (question.type === 'writing') active.answers[question.id] = `${'First, regular English practice improves useful skills because it builds confidence and accuracy. '.repeat(6)}\n\nTherefore, steady daily learning creates lasting progress.`;
+        else if (question.type === 'writing') active.answers[question.id] = `${'First, regular English practice improves useful skills because it builds confidence and accuracy. '.repeat(9)}\n\nTherefore, steady daily learning creates lasting progress.`;
         else {
           const keywords = [...new Set(question.referenceAnswer.toLowerCase().match(/[a-z]{5,}/g) ?? [])].slice(0, 4);
           active.answers[question.id] = `${keywords.join(' ')} is important and can support lasting progress.`;
