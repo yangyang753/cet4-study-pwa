@@ -26,6 +26,12 @@ function repository(overrides = {}) {
 }
 
 describe('TodayPage', () => {
+  it('starts daily training with vocabulary before questions', async () => {
+    render(<TodayPage today="2026-09-22" repository={repository()} />);
+    expect(await screen.findByRole('link', { name: '先学高频词 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
+    expect(screen.getByText(/先完成单词热身/)).toBeVisible();
+  });
+
   it('shows the countdown and the four-part 60-minute plan', () => {
     render(<TodayPage today="2026-09-22" examDate="2026-12-12" />);
     expect(screen.getByText('81')).toBeInTheDocument();

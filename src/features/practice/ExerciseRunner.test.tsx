@@ -11,6 +11,16 @@ const validWriting = `First, daily practice helps students remember important kn
 Therefore, I plan to study at the same time each evening, review mistakes, and write down one question for the next day. This simple method gives every session a purpose and allows steady progress without creating unnecessary pressure. It also builds confidence because improvement becomes visible after several consistent weeks. Finally, I will compare my work every Sunday and adjust the routine when one activity is no longer useful.`;
 
 describe('ExerciseRunner', () => {
+  it('shows vocabulary warm-up before vocabulary answer controls in practice mode', async () => {
+    const repository = {
+      listAttempts: vi.fn().mockResolvedValue([]),
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
+    } as unknown as LearningRepository;
+    render(<ExerciseRunner kind="vocabulary" limit={1} repository={repository} />);
+    expect(await screen.findByText('先学单词，再开始做题')).toBeVisible();
+    expect(screen.queryByRole('radio')).not.toBeInTheDocument();
+  });
+
   it('provides a page-level heading for objective practice routes', () => {
     render(<ExerciseRunner setId="set-starter" />);
     expect(screen.getByRole('heading', { level: 1, name: '专项练习' })).toBeVisible();
@@ -177,8 +187,14 @@ describe('ExerciseRunner', () => {
       saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
       upsertReviewCard: vi.fn().mockResolvedValue(undefined),
       completeTask: vi.fn().mockResolvedValue(undefined),
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
     } as unknown as LearningRepository;
     render(<ExerciseRunner kind="vocabulary" limit={1} repository={repository} today="2026-09-22" />);
+    for (let index = 0; index < 10; index += 1) {
+      await user.click(await screen.findByRole('button', { name: '显示释义' }));
+      await user.click(screen.getByRole('button', { name: '基本认识' }));
+    }
     await user.click((await screen.findAllByRole('radio'))[0]);
     await user.click(screen.getByRole('button', { name: '提交答案' }));
     await user.click(await screen.findByRole('button', { name: '查看结果' }));

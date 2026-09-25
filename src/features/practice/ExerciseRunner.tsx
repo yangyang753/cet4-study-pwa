@@ -15,6 +15,7 @@ import { completeDailyTask, localStudyDate } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
 import type { Attempt, MistakeReason } from '../../domain/attempt';
 import { selectPracticeQuestions } from './selectPracticeQuestions';
+import { VocabularyWarmup } from '../vocabulary/VocabularyWarmup';
 
 const starterContent = parseContentPack(rawContent);
 const defaultRepository = new DexieLearningRepository();
@@ -39,6 +40,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
   const [finished, setFinished] = useState(false);
   const [currentAttempt, setCurrentAttempt] = useState<Attempt | null>(null);
   const [selectedReason, setSelectedReason] = useState<MistakeReason | undefined>();
+  const [warmupComplete, setWarmupComplete] = useState(kind !== 'vocabulary' || mode !== 'practice');
   const question = questions?.[index];
   const plannedKind = kind;
 
@@ -56,6 +58,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     return () => { active = false; };
   }, [initialQuestions, kind, limit, repository, today]);
 
+  if (!warmupComplete) return <VocabularyWarmup repository={repository} onComplete={() => setWarmupComplete(true)} />;
   if (questions === null) return <p role="status">正在根据学习记录选题…</p>;
   if (!question) return <p>未找到这组练习。</p>;
   const questionCount = questions.length;
