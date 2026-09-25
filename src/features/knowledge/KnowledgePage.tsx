@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import vocabulary from '../../../content/v1/vocabulary.json';
 import collocations from '../../../content/v1/collocations.json';
 import grammarTopics from '../../../content/v1/grammarTopics.json';
+import { learningVocabulary as vocabulary } from '../../content/vocabularyLearning';
 import './knowledge.css';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';

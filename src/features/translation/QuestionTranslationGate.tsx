@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import vocabularyData from '../../../content/v1/vocabulary.json';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
+import { learningVocabulary } from '../../content/vocabularyLearning';
 import type { ObjectiveQuestion, VocabularyEntry } from '../../domain/content';
 import type { KnowledgeState } from '../../domain/learning';
 import { evaluateTranslation, type TranslationEvaluation } from './evaluateTranslation';
 
-const defaultVocabulary = vocabularyData as VocabularyEntry[];
+const defaultVocabulary = learningVocabulary;
 const containsEnglish = (text: string) => /[A-Za-z]/.test(text.replace(/(?:prep|pron|conj|modal|adj|adv|num|art|aux|vt|vi|ad|n|v|a)\./gi, ''));
 
 export function questionNeedsTranslation(question: ObjectiveQuestion): boolean {

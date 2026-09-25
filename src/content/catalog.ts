@@ -1,4 +1,3 @@
-import vocabularyData from '../../content/v1/vocabulary.json';
 import collocationData from '../../content/v1/collocations.json';
 import grammarData from '../../content/v1/grammarTopics.json';
 import listeningData from '../../content/v1/listeningSets.json';
@@ -7,6 +6,9 @@ import translationData from '../../content/v1/translations.json';
 import writingData from '../../content/v1/writingPrompts.json';
 import mockData from '../../content/v1/mockExams.json';
 import type { CatalogMockExam, CatalogQuestion, Difficulty, PracticeKind, VocabularyEntry } from '../domain/content';
+import { learningVocabulary } from './vocabularyLearning';
+
+const vocabularyData = learningVocabulary;
 
 const optionId = (index: number) => String.fromCharCode(65 + index);
 const rotate = <T,>(items: T[], offset: number): T[] => {

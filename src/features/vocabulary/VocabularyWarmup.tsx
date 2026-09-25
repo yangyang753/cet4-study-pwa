@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import vocabularyData from '../../../content/v1/vocabulary.json';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
+import { learningVocabulary } from '../../content/vocabularyLearning';
 import type { VocabularyEntry } from '../../domain/content';
 import type { KnowledgeState } from '../../domain/learning';
 import { selectWarmupWords } from './selectWarmupWords';
 
-const vocabulary = vocabularyData as VocabularyEntry[];
+const vocabulary = learningVocabulary;
 
 export function VocabularyWarmup({ repository, entries = vocabulary, limit = 10, onComplete }: {
   repository: LearningRepository;
