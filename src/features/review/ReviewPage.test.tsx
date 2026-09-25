@@ -28,6 +28,41 @@ async function unlockReviewQuestion() {
 }
 
 describe('ReviewPage', () => {
+  it('reviews a spelling card and demotes a previously mastered word after failure', async () => {
+    const repository = await setupRepository();
+    await repository.upsertReviewCard({
+      id: 'review:v0001:spelling', questionId: 'v0001:spelling', wordId: 'v0001', format: 'word-cloze',
+      stage: 2, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: true, updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+    await repository.upsertKnowledgeState({
+      id: 'knowledge:v0001', itemId: 'v0001', status: 'mastered', favorite: false, reviewStage: 2,
+      updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
+    await userEvent.click(await screen.findByRole('button', { name: '复习拼写 passage' }));
+    await userEvent.type(screen.getByRole('textbox', { name: '补全单词' }), 'wrong');
+    await userEvent.click(screen.getByRole('button', { name: '提交拼写复习' }));
+
+    expect(await screen.findByText('复习错误')).toBeVisible();
+    await waitFor(async () => expect((await repository.getDashboardSnapshot()).knowledgeStates).toContainEqual(
+      expect.objectContaining({ itemId: 'v0001', status: 'review', reviewStage: 0, lapseCount: 1 }),
+    ));
+  });
+
+  it('rebuilds a generated vocabulary meaning question for review', async () => {
+    const repository = await setupRepository();
+    await repository.upsertReviewCard({
+      id: 'review:v0001:warmup', questionId: 'v0001:warmup', wordId: 'v0001', format: 'objective',
+      stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
+    const button = await screen.findByRole('button', { name: '重新练习 passage 词义' });
+    expect(button).toBeEnabled();
+    await userEvent.click(button);
+    expect(screen.getAllByText('请选择 passage 的正确含义。')[0]).toBeVisible();
+  });
+
   it('shows a retry action when the review queue cannot be loaded', async () => {
     const repository = {
       listDueReviews: vi.fn().mockRejectedValueOnce(new Error('storage')).mockResolvedValueOnce([]),

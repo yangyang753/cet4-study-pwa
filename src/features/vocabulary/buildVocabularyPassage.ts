@@ -10,11 +10,11 @@ function containsWord(sentence: string, word: string): boolean {
 }
 
 export function buildVocabularyPassage(entries: VocabularyEntry[]): VocabularyPassage {
-  const words = entries.slice(0, 6);
+  const words = entries;
   const sentences = words.map((entry) => {
     const example = entry.example.trim();
     if (example && containsWord(example, entry.word)) return /[.!?]$/.test(example) ? example : `${example}.`;
-    return `The word ${entry.word} is important in today's study.`;
+    return `The word "${entry.word}" connects an important idea in today's reading passage.`;
   });
   return { text: sentences.join(' '), words };
 }

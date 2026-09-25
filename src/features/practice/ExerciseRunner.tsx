@@ -19,6 +19,7 @@ import { DailyVocabularySession } from '../vocabulary/DailyVocabularySession';
 import { buildWarmupQuestions } from '../vocabulary/buildWarmupQuestions';
 import { learningVocabulary } from '../../content/vocabularyLearning';
 import { QuestionTranslationGate, questionNeedsTranslation } from '../translation/QuestionTranslationGate';
+import { recordMeaningResult } from '../vocabulary/wordMastery';
 
 const starterContent = parseContentPack(rawContent);
 const defaultRepository = new DexieLearningRepository();
@@ -88,8 +89,15 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     setSaveState('saving');
     try {
       await repository.saveAttemptOnce(attempt);
+      const vocabularyWordId = attempt.questionId.endsWith(':warmup') ? attempt.questionId.replace(/:warmup$/, '') : undefined;
+      if (kind === 'vocabulary' && vocabularyWordId) {
+        const snapshot = await repository.getDashboardSnapshot(attempt.createdAt);
+        const current = snapshot.knowledgeStates.find((state) => state.itemId === vocabularyWordId);
+        await repository.upsertKnowledgeState(recordMeaningResult(current, vocabularyWordId, graded.correct, attempt.createdAt));
+      }
       if (!graded.correct) await repository.upsertReviewCard({
         id: `review:${attempt.questionId}`, questionId: attempt.questionId, stage: 0, priority: 6,
+        ...(vocabularyWordId ? { wordId: vocabularyWordId, format: 'objective' as const } : {}),
         nextReviewAt: attempt.createdAt, lastCorrect: false, updatedAt: attempt.createdAt,
       });
       setAnswered((items) => [...items, {

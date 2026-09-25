@@ -20,9 +20,10 @@ describe('buildVocabularyPassage', () => {
     expect(result.text.toLowerCase()).toContain('improve');
   });
 
-  it('limits the translation check to six words and handles an empty session', () => {
+  it('covers the entire daily word set and handles an empty session', () => {
     const result = buildVocabularyPassage(Array.from({ length: 8 }, (_, index) => word(`v${index}`, `term${index}`)));
-    expect(result.words).toHaveLength(6);
+    expect(result.words).toHaveLength(8);
+    expect(result.text).toContain('term7');
     expect(buildVocabularyPassage([])).toEqual({ text: '', words: [] });
   });
 });

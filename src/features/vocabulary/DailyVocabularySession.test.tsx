@@ -33,7 +33,7 @@ describe('DailyVocabularySession', () => {
     await userEvent.type(screen.getByLabelText('补全单词'), 'wrong');
     await userEvent.click(screen.getByRole('button', { name: '提交旧词复习' }));
     expect(await screen.findByRole('heading', { name: 'benefit' })).toBeVisible();
-    expect(learningRepository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'v1:meaning' }));
+    expect(learningRepository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'v1:spelling', format: 'word-cloze' }));
   });
 
   it('does not advance an old word when saving fails', async () => {
@@ -51,6 +51,6 @@ describe('DailyVocabularySession', () => {
     render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
     await userEvent.click(await screen.findByRole('button', { name: '想不起来，加入错题' }));
     expect(await screen.findByRole('heading', { name: 'benefit' })).toBeVisible();
-    expect(learningRepository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'v1:meaning' }));
+    expect(learningRepository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'v1:spelling', format: 'word-cloze' }));
   });
 });

@@ -229,6 +229,8 @@ describe('ExerciseRunner', () => {
     expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({
       id: '2026-09-22:vocabulary', taskId: '2026-09-22:vocabulary', kind: 'vocabulary',
     }));
+    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v0001', status: 'mastered' }));
+    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ status: 'review' }));
   });
 
   it('automatically completes grammar and opens its mastery check', async () => {

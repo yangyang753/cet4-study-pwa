@@ -20,6 +20,14 @@ describe('planDay', () => {
     expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBeLessThanOrEqual(60);
   });
 
+  it('expands vocabulary time from the actual workload while keeping the daily total fixed', () => {
+    const plan = planDay({ ...base, vocabularyMinutes: 24 });
+    expect(plan.tasks[0]).toMatchObject({ kind: 'vocabulary', minutes: 24 });
+    expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBe(60);
+    expect(plan.tasks[1].minutes).toBeGreaterThanOrEqual(15);
+    expect(plan.tasks[2].minutes).toBeGreaterThanOrEqual(10);
+  });
+
   it('moves into sprint phase within four weeks of the exam', () => {
     expect(planDay({ ...base, date: '2026-11-20' }).phase).toBe('sprint');
   });

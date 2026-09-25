@@ -10,6 +10,9 @@ export interface VocabularyWorkload {
   newWordQuota: number;
   remainingWords: number;
   projectedCompletionDate: string;
+  requiredDailyWords: number;
+  estimatedMinutes: number;
+  atRisk: boolean;
 }
 
 function dateMs(value: string): number {
@@ -34,7 +37,8 @@ export function buildVocabularyWorkload(
   const remainingWords = entries.filter((item) => stateById.get(item.id)?.status !== 'mastered').length;
   const daysRemaining = Math.max(0, Math.ceil((dateMs(examDate) - dateMs(today)) / DAY_MS));
   const learningDays = Math.max(1, daysRemaining - 14);
-  const newWordQuota = remainingWords === 0 ? 0 : Math.min(20, Math.max(10, Math.ceil(remainingWords / learningDays)));
+  const requiredDailyWords = remainingWords === 0 ? 0 : Math.ceil(remainingWords / learningDays);
+  const newWordQuota = remainingWords === 0 ? 0 : Math.min(20, Math.max(10, requiredDailyWords));
   const unseen = entries
     .filter((item) => !stateById.has(item.id))
     .sort((left, right) => (right.frequency ?? 0) - (left.frequency ?? 0));
@@ -51,13 +55,18 @@ export function buildVocabularyWorkload(
     .slice(0, 15)
     .map(({ word }) => word);
   const studyDays = newWordQuota === 0 ? 0 : Math.ceil(remainingWords / newWordQuota);
+  const projectedCompletionDate = studyDate(addDays(today, studyDays));
+  const estimatedMinutes = Math.min(35, Math.max(10, Math.ceil(newWordQuota * 1.2 + dueWords.length * 0.5 + 5)));
 
   return {
     newWords: unseen.slice(0, newWordQuota),
     dueWords,
     newWordQuota,
     remainingWords,
-    projectedCompletionDate: studyDate(addDays(today, studyDays)),
+    projectedCompletionDate,
+    requiredDailyWords,
+    estimatedMinutes,
+    atRisk: remainingWords > 0 && (requiredDailyWords > 20 || projectedCompletionDate > examDate),
   };
 }
 

@@ -21,15 +21,11 @@ describe('KnowledgePage', () => {
     expect(screen.getByRole('heading', { name: 'environment' })).toBeInTheDocument();
   });
 
-  it('stores a mastered knowledge state', async () => {
-    const user = userEvent.setup();
-    const repository = {
-      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
-      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
-    } as unknown as LearningRepository;
+  it('never offers manual mastery controls for vocabulary', async () => {
+    const repository = { getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }) } as unknown as LearningRepository;
     render(<KnowledgePage repository={repository} />);
-    await user.click(screen.getAllByRole('button', { name: '标记为已掌握' })[0]);
-    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ status: 'mastered' }));
+    await screen.findByRole('button', { name: /待学习/ });
+    expect(screen.queryByRole('button', { name: /标记为已掌握/ })).not.toBeInTheDocument();
   });
 
   it('restores mastered knowledge from the saved dashboard snapshot', async () => {
@@ -50,7 +46,9 @@ describe('KnowledgePage', () => {
 
     render(<KnowledgePage repository={repository} />);
 
-    expect(await screen.findByRole('button', { name: '已掌握' })).toBeDisabled();
+    await userEvent.click(await screen.findByRole('button', { name: /已掌握（1）/ }));
+    expect(screen.getByRole('heading', { name: 'passage' })).toBeVisible();
+    expect(screen.queryByRole('heading', { name: 'one' })).not.toBeInTheDocument();
   });
 
   it('shows and filters words that need mastery', async () => {
@@ -61,34 +59,25 @@ describe('KnowledgePage', () => {
     } as unknown as LearningRepository;
     render(<KnowledgePage repository={repository} />);
 
-    expect(await screen.findByText('待掌握')).toBeVisible();
-    await userEvent.click(screen.getByRole('button', { name: '只看待掌握（1）' }));
+    await userEvent.click(await screen.findByRole('button', { name: /学习中与待复习（1）/ }));
+    expect(await screen.findByText('待复习')).toBeVisible();
     expect(screen.getByRole('heading', { name: 'passage' })).toBeVisible();
     expect(screen.queryByRole('heading', { name: 'one' })).not.toBeInTheDocument();
   });
 
-  it('moves a review word to mastered while preserving its favorite flag', async () => {
+  it('keeps learning and mastered words in separate views', async () => {
     const repository = {
-      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [{
-        id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: true, updatedAt: '2026-09-24T08:00:00.000Z',
-      }] }),
-      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0001', itemId: 'v0001', status: 'learning', favorite: false, updatedAt: '2026-09-24T08:00:00.000Z' },
+        { id: 'knowledge:v0002', itemId: 'v0002', status: 'mastered', favorite: false, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
     } as unknown as LearningRepository;
     render(<KnowledgePage repository={repository} />);
-    await screen.findByText('待掌握');
-    await userEvent.click(screen.getAllByRole('button', { name: '标记为已掌握' })[0]);
-    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v0001', status: 'mastered', favorite: true }));
-    expect(screen.getByRole('button', { name: '已掌握' })).toBeDisabled();
-  });
-
-  it('rolls back an optimistic mastery mark when saving fails', async () => {
-    const repository = {
-      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
-      upsertKnowledgeState: vi.fn().mockRejectedValue(new Error('storage')),
-    } as unknown as LearningRepository;
-    render(<KnowledgePage repository={repository} />);
-    await userEvent.click(screen.getAllByRole('button', { name: '标记为已掌握' })[0]);
-    expect(await screen.findByRole('alert')).toHaveTextContent('保存失败');
-    expect(screen.getAllByRole('button', { name: '标记为已掌握' })[0]).toBeEnabled();
+    await userEvent.click(await screen.findByRole('button', { name: /学习中与待复习（1）/ }));
+    expect(screen.getByRole('heading', { name: 'passage' })).toBeVisible();
+    expect(screen.queryByRole('heading', { name: 'one' })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: /已掌握（1）/ }));
+    expect(screen.getByRole('heading', { name: 'one' })).toBeVisible();
+    expect(screen.queryByRole('heading', { name: 'passage' })).not.toBeInTheDocument();
   });
 });

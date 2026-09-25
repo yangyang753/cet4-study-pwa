@@ -1,7 +1,7 @@
 export type StudyKind = 'vocabulary' | 'grammar' | 'listening' | 'reading' | 'translation' | 'writing' | 'review' | 'mock';
 export type StudyPhase = 'foundation' | 'breakthrough' | 'sprint';
 export interface StudyTask { id: string; kind: StudyKind; minutes: number; priority: number }
-export interface PlannerInput { date: string; examDate: string; dailyMinutes: number; weakSkill: StudyKind; diagnosticWeakSkill?: StudyKind; hasRecentEvidence: boolean; unfinished: StudyTask[] }
+export interface PlannerInput { date: string; examDate: string; dailyMinutes: number; weakSkill: StudyKind; diagnosticWeakSkill?: StudyKind; hasRecentEvidence: boolean; unfinished: StudyTask[]; vocabularyMinutes?: number }
 export interface DailyPlan { date: string; phase: StudyPhase; tasks: StudyTask[] }
 
 function daysBetween(start: string, end: string) {
@@ -21,8 +21,10 @@ export function planDay(input: PlannerInput): DailyPlan {
   const requestedRotating: StudyKind = phase === 'sprint' ? 'mock' : evidenceWeakSkill ?? rotatingFoundationKind(input.date);
   const rotating: StudyKind = ['vocabulary', 'listening', 'review'].includes(requestedRotating) ? 'reading' : requestedRotating;
   const minutes = input.dailyMinutes;
-  const vocabularyMinutes = Math.round(minutes * 0.25);
-  const listeningMinutes = Math.round(minutes / 3);
+  const defaultVocabularyMinutes = Math.round(minutes * 0.25);
+  const maximumVocabularyMinutes = Math.max(defaultVocabularyMinutes, minutes - 30);
+  const vocabularyMinutes = Math.min(maximumVocabularyMinutes, Math.max(defaultVocabularyMinutes, input.vocabularyMinutes ?? defaultVocabularyMinutes));
+  const listeningMinutes = Math.max(15, Math.min(Math.round(minutes / 3), minutes - vocabularyMinutes - 15));
   const reviewMinutes = Math.max(5, Math.round(minutes / 12));
   const rotatingMinutes = minutes - vocabularyMinutes - listeningMinutes - reviewMinutes;
   const carryover = [...input.unfinished].sort((a, b) => b.priority - a.priority)[0];

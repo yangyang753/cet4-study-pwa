@@ -23,15 +23,21 @@ describe('learner-facing vocabulary', () => {
     });
   });
 
-  it('hides synthetic meta examples from learners', () => {
+  it('replaces synthetic meta examples with a usable contextual sentence', () => {
     const entry = qualityVocabularyEntry({
       id: 'v-test', word: 'sample', phonetic: '', partOfSpeech: 'n.', meaningZh: '样品',
       example: 'In a survey, “sample” is presented as a noun meaning “样品”.',
       exampleZh: '记忆提示：sample 在此处表示“样品”。', derivatives: [], confusables: [],
     });
 
-    expect(entry.example).toBe('');
-    expect(entry.exampleZh).toBe('');
+    expect(entry.example).toContain('sample');
+    expect(entry.example).not.toContain('is presented as');
+    expect(entry.exampleZh).toContain('样品');
+  });
+
+  it('provides a visible example for every high-frequency word', () => {
+    expect(learningVocabulary.filter((entry) => !entry.example.trim())).toEqual([]);
+    expect(learningVocabulary.filter((entry) => !entry.example.toLowerCase().includes(entry.word.toLowerCase()))).toEqual([]);
   });
 
   it('passes the learner-facing quality audit', () => {

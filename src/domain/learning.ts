@@ -11,6 +11,8 @@ export interface ReviewCard {
   lastCorrect: boolean;
   priority?: number;
   reason?: MistakeReason;
+  format?: 'objective' | 'word-cloze';
+  wordId?: string;
   updatedAt: string;
 }
 

@@ -20,12 +20,17 @@ describe('vocabulary workload', () => {
     expect(result.newWords).toHaveLength(13);
     expect(result.remainingWords).toBe(800);
     expect(result.projectedCompletionDate).toBe('2026-11-26');
+    expect(result.requiredDailyWords).toBe(13);
+    expect(result.estimatedMinutes).toBeGreaterThan(15);
+    expect(result.atRisk).toBe(false);
   });
 
   it('uses a finite capped quota inside the consolidation window', () => {
     const result = buildVocabularyWorkload(Array.from({ length: 50 }, (_, i) => entry(i)), [], '2026-12-10', '2026-12-12');
     expect(result.newWordQuota).toBe(20);
     expect(result.newWords).toHaveLength(20);
+    expect(result.requiredDailyWords).toBe(50);
+    expect(result.atRisk).toBe(true);
   });
 
   it('assigns no new words when every word is mastered', () => {

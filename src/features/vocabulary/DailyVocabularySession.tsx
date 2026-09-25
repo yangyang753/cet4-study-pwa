@@ -6,6 +6,7 @@ import type { DashboardSnapshot } from '../../domain/learning';
 import { VocabularyWarmup } from './VocabularyWarmup';
 import { VocabularyTranslationCheck } from './VocabularyTranslationCheck';
 import { applyVocabularyReviewResult, buildVocabularyWorkload, buildWordCloze, type VocabularyWorkload } from './vocabularySchedule';
+import { vocabularyReviewCard } from './wordMastery';
 
 type Phase = 'loading' | 'review' | 'warmup' | 'translation';
 
@@ -46,10 +47,7 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
     setSaving(true); setError('');
     try {
       await repository.upsertKnowledgeState(nextState);
-      if (!correct) await repository.upsertReviewCard({
-        id: `review:${reviewWord.id}:meaning`, questionId: `${reviewWord.id}:meaning`, stage: 0, priority: 6,
-        nextReviewAt: now, lastCorrect: false, updatedAt: now,
-      });
+      if (!correct) await repository.upsertReviewCard(vocabularyReviewCard(reviewWord.id, 'cloze', now));
       if (workload && reviewIndex < workload.dueWords.length - 1) setReviewIndex((value) => value + 1);
       else setPhase('warmup');
       setAnswer('');

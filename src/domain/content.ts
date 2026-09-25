@@ -19,6 +19,8 @@ export interface VocabularyEntry {
   derivatives: string[];
   confusables: string[];
   frequency?: number;
+  category?: string;
+  subcategory?: string;
 }
 
 export interface QuestionOption { id: string; text: string }

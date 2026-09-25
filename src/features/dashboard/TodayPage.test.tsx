@@ -98,6 +98,13 @@ describe('TodayPage', () => {
     expect(screen.getByText('还剩 799 个高频词')).toBeVisible();
     expect(screen.getByText(/预计.*前完成首轮/)).toBeVisible();
     expect(screen.getByText('425 参考线 · 450 安全目标')).toBeVisible();
+    expect(screen.getByRole('heading', { name: '高频词汇与词性' }).closest('article')).toHaveTextContent('22 分钟');
+  });
+
+  it('warns when the capped daily pace cannot finish before the exam', async () => {
+    render(<TodayPage today="2026-12-10" repository={repository()} />);
+    expect(await screen.findByRole('alert')).toHaveTextContent('按当前上限无法在考试前完成首轮');
+    expect(screen.getByRole('alert')).toHaveTextContent('每天至少 800 个');
   });
 
   it('celebrates a completed high-frequency vocabulary list without assigning new words', async () => {

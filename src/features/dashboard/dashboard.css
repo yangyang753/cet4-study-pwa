@@ -9,6 +9,7 @@
 .vocabulary-workload { display: flex; flex-wrap: wrap; gap: 8px 14px; margin: 14px 0 18px; padding: 12px 14px; border-radius: 14px; background: rgb(255 255 255 / 12%); }
 .vocabulary-workload b, .vocabulary-workload span, .vocabulary-workload small { flex: 1 1 180px; }
 .vocabulary-workload small { color: #ffe2a0; font-weight: 700; }
+.vocabulary-workload .pace-warning { flex: 1 1 100%; margin: 2px 0 0; padding: 9px 11px; border-radius: 10px; color: #5d2d00; background: #ffe2a0; font-weight: 800; }
 .focus-action { display: inline-block; padding: 12px 18px; border-radius: 13px; color: var(--color-green-dark); background: var(--color-yellow); font-weight: 800; }
 .knowledge-action { display: inline-block; margin-left: 16px; color: white; font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
 .countdown-card strong { display: block; color: var(--color-orange); font: 800 64px/1 Georgia, serif; }
