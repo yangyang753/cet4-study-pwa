@@ -23,8 +23,9 @@ export function StudyReminder({ repository = defaultRepository, now = () => new 
       try {
         const snapshot = await repository.getDashboardSnapshot();
         const current = now();
-        if (!active || !isStudyReminderDue(current, snapshot.settings.reminderTime ?? '', localStorage.getItem(reminderStorageKey) ?? '')) return;
         const currentDate = dateKey(current);
+        const alreadyStudied = snapshot.completions.some((completion) => completion.date === currentDate);
+        if (!active || alreadyStudied || !isStudyReminderDue(current, snapshot.settings.reminderTime ?? '', localStorage.getItem(reminderStorageKey) ?? '')) return;
         localStorage.setItem(reminderStorageKey, currentDate);
         const copy = `今天的 ${snapshot.settings.dailyMinutes} 分钟训练还没有开始。`;
         setMessage(copy);
