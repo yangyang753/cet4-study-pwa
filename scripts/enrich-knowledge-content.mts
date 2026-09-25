@@ -9,7 +9,7 @@ const inventoryPath = path.join(root, 'content/v1/inventory.json');
 const vocabulary = JSON.parse(await readFile(vocabularyPath, 'utf8')) as Array<{ word: string; partOfSpeech: string; meaningZh: string }>;
 const collocations = JSON.parse(await readFile(collocationsPath, 'utf8')) as Array<{ phrase: string }>;
 const enrichedVocabulary = vocabulary.map((entry, index) => ({ ...entry, ...buildVocabularyExample(entry, index) }));
-const enrichedCollocations = collocations.map((entry, index) => ({ ...entry, ...buildCollocationExample(entry.phrase, index) }));
+const enrichedCollocations = collocations.map((entry) => ({ ...entry, ...buildCollocationExample(entry.phrase) }));
 const inventory = JSON.parse(await readFile(inventoryPath, 'utf8')) as Record<string, unknown>;
 inventory.vocabulary = enrichedVocabulary;
 inventory.collocations = enrichedCollocations;

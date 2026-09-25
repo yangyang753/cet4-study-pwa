@@ -29,7 +29,7 @@ const connectorObject: Record<string, string> = {
   'in fact': 'The task looked difficult; in fact, it took only ten minutes.',
 };
 
-export function buildCollocationExample(phrase: string, index: number) {
+export function buildCollocationExample(phrase: string) {
   const direct = connectorObject[phrase];
   if (direct) return { example: direct, exampleZh: `记忆提示：${phrase} 表示“在句中连接原因、结果或例子”。` };
   const completed = phrase
