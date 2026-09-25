@@ -27,12 +27,12 @@ export function QuestionTranslationGate({ question, repository, vocabulary = def
   const [evaluation, setEvaluation] = useState<TranslationEvaluation | null>(null);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
-  const [knowledgeReady, setKnowledgeReady] = useState(false);
+  const [loadedRepository, setLoadedRepository] = useState<LearningRepository | null>(null);
   const [unlocked, setUnlocked] = useState(false);
+  const knowledgeReady = loadedRepository === repository;
 
   useEffect(() => {
     let active = true;
-    setKnowledgeReady(false);
     void (async () => {
       try {
         const snapshot = await repository.getDashboardSnapshot();
@@ -40,7 +40,7 @@ export function QuestionTranslationGate({ question, repository, vocabulary = def
       } catch {
         // The translation gate still works when prior state cannot be read.
       } finally {
-        if (active) setKnowledgeReady(true);
+        if (active) setLoadedRepository(repository);
       }
     })();
     return () => { active = false; };
