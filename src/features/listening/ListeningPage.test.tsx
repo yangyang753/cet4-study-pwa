@@ -6,6 +6,7 @@ import Dexie from 'dexie';
 import { LearningDatabase } from '../../data/localDb';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import { ListeningPage } from './ListeningPage';
+import vocabulary from '../../../content/v1/vocabulary.json';
 
 const databases: string[] = [];
 
@@ -13,6 +14,15 @@ function repository() {
   const name = `listening-test-${crypto.randomUUID()}`;
   databases.push(name);
   return new DexieLearningRepository(new LearningDatabase(name));
+}
+
+async function unlockListeningQuestion() {
+  const translation = vocabulary.map((item) => item.meaningZh).join(' ');
+  for (const input of screen.getAllByRole('textbox').filter((item) => item.getAttribute('aria-label')?.includes('中文翻译'))) {
+    fireEvent.change(input, { target: { value: translation } });
+  }
+  await userEvent.click(screen.getByRole('button', { name: '检查翻译并解锁选项' }));
+  await screen.findByText('高频词义覆盖通过，可以开始作答。');
 }
 
 describe('ListeningPage', () => {
@@ -69,6 +79,7 @@ describe('ListeningPage', () => {
   it('preserves the selected answer and offers text mode after audio failure', async () => {
     const user = userEvent.setup();
     const { container } = render(<ListeningPage />);
+    await unlockListeningQuestion();
     await user.click(screen.getByRole('radio', { name: /Sunday afternoon/ }));
     fireEvent.error(container.querySelector('audio')!);
     expect(screen.getByRole('radio', { name: /Sunday afternoon/ })).toBeChecked();
@@ -103,6 +114,7 @@ describe('ListeningPage', () => {
     const user = userEvent.setup();
     render(<ListeningPage repository={learningRepository} />);
 
+    await unlockListeningQuestion();
     await user.click(screen.getByRole('radio', { name: /Sunday afternoon/ }));
     resolveSnapshot({ settings: {
       id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1.25,
@@ -117,6 +129,7 @@ describe('ListeningPage', () => {
     const user = userEvent.setup();
     render(<ListeningPage repository={repository()} />);
 
+    await unlockListeningQuestion();
     await user.click(screen.getByRole('button', { name: '提交答案' }));
 
     expect(screen.getByText('请选择一个答案')).toBeVisible();
@@ -127,6 +140,7 @@ describe('ListeningPage', () => {
     const learningRepository = repository();
     render(<ListeningPage repository={learningRepository} />);
 
+    await unlockListeningQuestion();
     await user.click(screen.getByRole('radio', { name: /Sunday afternoon/ }));
     await user.dblClick(screen.getByRole('button', { name: '提交答案' }));
 
@@ -139,6 +153,7 @@ describe('ListeningPage', () => {
     const learningRepository = repository();
     render(<ListeningPage repository={learningRepository} />);
 
+    await unlockListeningQuestion();
     await user.click(screen.getByRole('radio', { name: /announced next month/ }));
     await user.click(screen.getByRole('button', { name: '提交答案' }));
 
@@ -155,6 +170,7 @@ describe('ListeningPage', () => {
       /Applications close before Thursday noon/, /student card and one picture book/, /No teaching experience is needed/, /watch the recorded briefing/,
     ];
     for (let index = 0; index < correctAnswers.length; index += 1) {
+      await unlockListeningQuestion();
       await user.click(screen.getByRole('radio', { name: correctAnswers[index] }));
       await user.click(screen.getByRole('button', { name: '提交答案' }));
       expect(await screen.findByText('回答正确')).toBeVisible();
@@ -166,3 +182,10 @@ describe('ListeningPage', () => {
     ]));
   });
 });
+  it('locks listening choices until the question and options are translated', async () => {
+    render(<ListeningPage repository={repository()} />);
+    const choice = screen.getByRole('radio', { name: /Sunday afternoon/ });
+    expect(choice).toBeDisabled();
+    await unlockListeningQuestion();
+    expect(screen.getByRole('radio', { name: /Sunday afternoon/ })).toBeEnabled();
+  });

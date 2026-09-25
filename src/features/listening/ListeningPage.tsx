@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import listeningSets from '../../../content/v1/listeningSets.json';
-import type { AudioAsset } from '../../domain/content';
+import type { AudioAsset, ObjectiveQuestion } from '../../domain/content';
 import { publicAssetUrl } from '../../lib/publicAssetUrl';
 import { DictationEditor } from './DictationEditor';
 import { useSegmentPlayer } from './useSegmentPlayer';
@@ -10,6 +10,7 @@ import { DexieLearningRepository } from '../../data/repositories/DexieLearningRe
 import { getQuestion } from '../../content/catalog';
 import { completeDailyTask, localStudyDate } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
+import { QuestionTranslationGate } from '../translation/QuestionTranslationGate';
 
 type PlayerStatus = 'loading' | 'ready' | 'playing' | 'paused' | 'buffering' | 'error';
 
@@ -41,8 +42,21 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
   const [answerError, setAnswerError] = useState('');
   const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
   const [submissionState, setSubmissionState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [translationUnlocked, setTranslationUnlocked] = useState(false);
   const [startedAt] = useState(() => Date.now());
   const submissionLock = useRef(false);
+  const translationQuestion: ObjectiveQuestion = {
+    id: `${listeningSet.id}:q${questionIndex + 1}`,
+    version: 1,
+    type: listeningSet.type as ObjectiveQuestion['type'],
+    difficulty: 'foundation',
+    prompt: question.prompt,
+    options: question.options.map((text, index) => ({ id: String.fromCharCode(65 + index), text })),
+    correctAnswer: String.fromCharCode(65 + question.answer),
+    knowledgePointIds: [],
+    explanationZh: question.explanationZh,
+    sourceNote: '原创仿真听力训练',
+  };
 
   const changeSet = (nextIndex: number) => {
     player.pause();
@@ -102,6 +116,7 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
     setSelected('');
     setResult(null);
     setSubmissionState('idle');
+    setTranslationUnlocked(false);
     submissionLock.current = false;
   };
 
@@ -144,8 +159,9 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
       <DictationEditor transcript={audio.transcript} storageKey={`dictation:${listeningSet.id}`} />
     </div><aside className="listening-question">
       <span>QUESTION · {questionIndex + 1}/{listeningSet.questions.length}</span><h2>{question.prompt}</h2>
-      {question.options.map((option, index) => { const optionId = String.fromCharCode(65 + index); return <label key={optionId}><input type="radio" name={`${listeningSet.id}:${questionIndex}`} checked={selected === optionId} disabled={Boolean(result)} onChange={() => setSelected(optionId)} />{optionId}. {option}</label>; })}
-      {!result && <button disabled={submissionState === 'saving'} onClick={() => void submit()}>{submissionState === 'saving' ? '正在保存…' : '提交答案'}</button>}
+      <QuestionTranslationGate key={translationQuestion.id} question={translationQuestion} repository={repository} onUnlocked={() => setTranslationUnlocked(true)} />
+      {question.options.map((option, index) => { const optionId = String.fromCharCode(65 + index); return <label key={optionId}><input type="radio" name={`${listeningSet.id}:${questionIndex}`} checked={selected === optionId} disabled={Boolean(result) || !translationUnlocked} onChange={() => setSelected(optionId)} />{optionId}. {option}</label>; })}
+      {!result && <button disabled={submissionState === 'saving' || !translationUnlocked} onClick={() => void submit()}>{submissionState === 'saving' ? '正在保存…' : '提交答案'}</button>}
       {answerError && <p role="alert" className="answer-error">{answerError}</p>}
       {result && <div className={`answer-result ${result}`} role="status"><strong>{result === 'correct' ? '回答正确' : '回答错误'}</strong><p>正确答案：{String.fromCharCode(65 + question.answer)}</p><p>解析：{question.explanationZh}</p>{questionIndex < listeningSet.questions.length - 1 ? <button onClick={nextQuestion}>下一题</button> : <><p>本套完成，今日听力任务已自动记录。</p><MasteryCheck kind="listening" taskId={`${today}:listening`} repository={repository} sourceQuestionIds={listeningSet.questions.map((_, index) => `${listeningSet.id}:q${index + 1}`)} /></>}</div>}
       {submissionState === 'error' && <p role="alert">保存失败，答案仍保留，请再次提交。</p>}
