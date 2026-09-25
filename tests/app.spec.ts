@@ -52,9 +52,20 @@ test('exposes installable PWA metadata', async ({ page, request }) => {
   await expect(page.getByRole('heading', { name: '安装到手机桌面' })).toBeVisible();
 });
 
-test('gives objective practice routes one page-level heading', async ({ page }) => {
+test('starts vocabulary practice with word study and unlocks questions after translation', async ({ page }) => {
   await page.goto('practice/vocabulary');
+  await expect(page.getByRole('heading', { level: 1, name: '先学单词，再开始做题' })).toBeVisible();
+  await expect(page.getByRole('radio')).toHaveCount(0);
+  for (let index = 0; index < 10; index += 1) {
+    await page.getByRole('button', { name: '显示释义' }).click();
+    await page.getByRole('button', { name: '基本认识' }).click();
+  }
   await expect(page.getByRole('heading', { level: 1, name: '专项练习' })).toBeVisible();
+  const firstChoice = page.getByRole('radio').first();
+  await expect(firstChoice).toBeDisabled();
+  await page.getByRole('textbox', { name: '题干中文翻译' }).fill('这道题询问单词的正确含义。');
+  await page.getByRole('button', { name: '检查翻译并解锁选项' }).click();
+  await expect(firstChoice).toBeEnabled();
 });
 
 test('reopens the visited study dashboard while offline', async ({ page, context }) => {

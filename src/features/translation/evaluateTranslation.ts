@@ -22,7 +22,7 @@ const partOfSpeech = /(?:^|(?<=[^a-z]))(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|pr
 export function acceptedChineseMeanings(meaning: string): string[] {
   return meaning
     .replace(partOfSpeech, ';')
-    .replace(/[\[【(（][^\]】)）]*[\]】)）]/g, '')
+    .replace(/[\u005b【(（][^\u005d】)）]*[\u005d】)）]/g, '')
     .split(/[;；,，、/]/)
     .map((fragment) => fragment.replace(/^[^\u3400-\u9fff]+|[^\u3400-\u9fff]+$/g, '').trim())
     .filter((fragment, index, all) => fragment.length >= 2 && all.indexOf(fragment) === index);

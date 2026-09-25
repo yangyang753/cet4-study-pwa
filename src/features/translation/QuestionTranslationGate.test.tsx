@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import type { ObjectiveQuestion, VocabularyEntry } from '../../domain/content';
-import { QuestionTranslationGate } from './QuestionTranslationGate';
+import { QuestionTranslationGate, questionNeedsTranslation } from './QuestionTranslationGate';
 
 const question: ObjectiveQuestion = {
   id: 'q1', version: 1, type: 'reading', difficulty: 'foundation',
@@ -30,6 +30,12 @@ async function fillGate(stem = '这个活动什么时候进行？') {
 }
 
 describe('QuestionTranslationGate', () => {
+  it('does not require a translation gate for an entirely Chinese question', () => {
+    expect(questionNeedsTranslation({ ...question, prompt: '请选择正确答案。', options: [{ id: 'A', text: '选项一' }] })).toBe(false);
+    expect(questionNeedsTranslation({ ...question, prompt: '请选择正确答案。', options: [{ id: 'A', text: 'prep.在…里面n.内部' }] })).toBe(false);
+    expect(questionNeedsTranslation(question)).toBe(true);
+  });
+
   it('requires a translation for the stem and every English option', async () => {
     const onUnlocked = vi.fn();
     render(<QuestionTranslationGate question={question} repository={repository()} vocabulary={words} onUnlocked={onUnlocked} />);

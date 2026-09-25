@@ -6,7 +6,11 @@ import type { KnowledgeState } from '../../domain/learning';
 import { evaluateTranslation, type TranslationEvaluation } from './evaluateTranslation';
 
 const defaultVocabulary = vocabularyData as VocabularyEntry[];
-const containsEnglish = (text: string) => /[A-Za-z]/.test(text.replace(/(?:^|\s)(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj)\./gi, ''));
+const containsEnglish = (text: string) => /[A-Za-z]/.test(text.replace(/(?:prep|pron|conj|modal|adj|adv|num|art|aux|vt|vi|ad|n|v|a)\./gi, ''));
+
+export function questionNeedsTranslation(question: ObjectiveQuestion): boolean {
+  return [question.prompt, ...question.options.map((option) => option.text)].some(containsEnglish);
+}
 
 export function QuestionTranslationGate({ question, repository, vocabulary = defaultVocabulary, onUnlocked }: {
   question: ObjectiveQuestion;
@@ -69,13 +73,6 @@ export function QuestionTranslationGate({ question, repository, vocabulary = def
     setEvaluation(result);
     void persistAndUnlock(result);
   }
-
-  useEffect(() => {
-    if (required.length > 0 || unlocked) return;
-    const result: TranslationEvaluation = { complete: true, auditableWords: [], missedWords: [] };
-    setUnlocked(true);
-    onUnlocked(result);
-  }, [onUnlocked, required.length, unlocked]);
 
   if (required.length === 0) return null;
 
