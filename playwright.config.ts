@@ -7,5 +7,5 @@ export default defineConfig({
   testDir: './tests',
   use: { baseURL: appUrl, trace: 'retain-on-failure' },
   projects: [{ name: 'chrome', use: { ...devices['Desktop Chrome'], channel: process.env.CI ? undefined : 'chrome' } }],
-  webServer: { command: 'pnpm preview:test', url: appUrl, reuseExistingServer: true },
+  webServer: { command: 'npm run preview:test', url: appUrl, reuseExistingServer: true },
 });

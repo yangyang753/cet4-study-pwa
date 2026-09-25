@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { TodayPage } from './TodayPage';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
+import { learningVocabulary } from '../../content/vocabularyLearning';
 
 const snapshot = {
   attempts: [], dueReviews: [], completions: [], knowledgeStates: [],
@@ -29,7 +30,7 @@ describe('TodayPage', () => {
   it('starts daily training with vocabulary before questions', async () => {
     render(<TodayPage today="2026-09-22" repository={repository()} />);
     expect(await screen.findByRole('link', { name: '先学高频词 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
-    expect(screen.getByText(/先完成单词热身/)).toBeVisible();
+    expect(screen.getByText(/先复习旧词，再学新词/)).toBeVisible();
   });
 
   it('shows the countdown and the four-part 60-minute plan', () => {
@@ -86,5 +87,24 @@ describe('TodayPage', () => {
 
     expect(await screen.findByText('优先加强重点语法')).toBeVisible();
     expect(screen.getByRole('heading', { name: '重点语法' })).toBeVisible();
+  });
+
+  it('shows the adaptive new-word quota and due old-word count', async () => {
+    render(<TodayPage today="2026-09-25" repository={repository({
+      knowledgeStates: [{ id: 'knowledge:v0001', itemId: 'v0001', status: 'mastered', favorite: false, nextReviewAt: '2026-09-24T00:00:00.000Z', updatedAt: '2026-09-23T00:00:00.000Z' }],
+    })} />);
+    expect(await screen.findByText('今日旧词 1 个')).toBeVisible();
+    expect(screen.getByText('今日新词 13 个')).toBeVisible();
+    expect(screen.getByText('还剩 799 个高频词')).toBeVisible();
+    expect(screen.getByText(/预计.*前完成首轮/)).toBeVisible();
+    expect(screen.getByText('425 参考线 · 450 安全目标')).toBeVisible();
+  });
+
+  it('celebrates a completed high-frequency vocabulary list without assigning new words', async () => {
+    render(<TodayPage today="2026-09-25" repository={repository({
+      knowledgeStates: learningVocabulary.map((word) => ({ id: `knowledge:${word.id}`, itemId: word.id, status: 'mastered', favorite: false, nextReviewAt: '2026-12-30T00:00:00.000Z', updatedAt: '2026-09-25T00:00:00.000Z' })),
+    })} />);
+    expect(await screen.findByText('今日新词 0 个')).toBeVisible();
+    expect(screen.getByText('800 个高频词已进入巩固复习')).toBeVisible();
   });
 });

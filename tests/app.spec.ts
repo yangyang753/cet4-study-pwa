@@ -56,10 +56,17 @@ test('starts vocabulary practice with word study and unlocks questions after tra
   await page.goto('practice/vocabulary');
   await expect(page.getByRole('heading', { level: 1, name: '先学单词，再开始做题' })).toBeVisible();
   await expect(page.getByRole('radio')).toHaveCount(0);
-  for (let index = 0; index < 10; index += 1) {
+  const progress = await page.locator('.vocabulary-warmup header span').textContent();
+  const total = Number(progress?.match(/\/(\d+)/)?.[1]);
+  expect(total).toBeGreaterThan(0);
+  for (let index = 0; index < total; index += 1) {
     await page.getByRole('button', { name: '显示释义' }).click();
     await page.getByRole('button', { name: '基本认识' }).click();
   }
+  await expect(page.getByRole('heading', { level: 1, name: '用一段话检查是否真正理解' })).toBeVisible();
+  await page.getByRole('textbox', { name: '我的中文翻译' }).fill('这是今天学习单词的中文翻译。');
+  await page.getByRole('button', { name: '检查翻译' }).click();
+  await page.getByRole('button', { name: '继续做词义题' }).click();
   await expect(page.getByRole('heading', { level: 1, name: '专项练习' })).toBeVisible();
   await expect(page.getByRole('group', { name: '请选择 passage 的正确含义。' })).toBeVisible();
   const firstChoice = page.getByRole('radio').first();

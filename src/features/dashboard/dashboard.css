@@ -6,6 +6,9 @@
 .focus-card, .countdown-card, .task-panel, .progress-card { padding: 26px; border-radius: var(--radius-card); background: var(--color-panel); box-shadow: var(--shadow-card); }
 .focus-card { color: white; background: linear-gradient(135deg, var(--color-green), #3c8b6d); }
 .focus-card h2 { font-size: clamp(24px, 3vw, 38px); }
+.vocabulary-workload { display: flex; flex-wrap: wrap; gap: 8px 14px; margin: 14px 0 18px; padding: 12px 14px; border-radius: 14px; background: rgb(255 255 255 / 12%); }
+.vocabulary-workload b, .vocabulary-workload span, .vocabulary-workload small { flex: 1 1 180px; }
+.vocabulary-workload small { color: #ffe2a0; font-weight: 700; }
 .focus-action { display: inline-block; padding: 12px 18px; border-radius: 13px; color: var(--color-green-dark); background: var(--color-yellow); font-weight: 800; }
 .knowledge-action { display: inline-block; margin-left: 16px; color: white; font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
 .countdown-card strong { display: block; color: var(--color-orange); font: 800 64px/1 Georgia, serif; }
