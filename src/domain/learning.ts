@@ -27,6 +27,10 @@ export interface KnowledgeState {
   itemId: string;
   status: 'learning' | 'review' | 'mastered';
   favorite: boolean;
+  reviewStage?: number;
+  nextReviewAt?: string;
+  lastReviewedAt?: string;
+  lapseCount?: number;
   updatedAt: string;
 }
 

@@ -1,0 +1,64 @@
+import { describe, expect, it } from 'vitest';
+import type { VocabularyEntry } from '../../domain/content';
+import type { KnowledgeState } from '../../domain/learning';
+import { applyVocabularyReviewResult, buildVocabularyWorkload, buildWordCloze } from './vocabularySchedule';
+
+const entry = (index: number, word = `word${index}`): VocabularyEntry => ({
+  id: `v${index}`, word, phonetic: '', partOfSpeech: 'n.', meaningZh: `词义${index}`,
+  example: '', derivatives: [], confusables: [], frequency: 1000 - index,
+});
+
+const state = (index: number, extra: Partial<KnowledgeState> = {}): KnowledgeState => ({
+  id: `knowledge:v${index}`, itemId: `v${index}`, status: 'mastered', favorite: false,
+  updatedAt: '2026-09-20T00:00:00.000Z', ...extra,
+});
+
+describe('vocabulary workload', () => {
+  it('reserves fourteen days and assigns thirteen of 800 unmastered words', () => {
+    const result = buildVocabularyWorkload(Array.from({ length: 800 }, (_, i) => entry(i)), [], '2026-09-25', '2026-12-12');
+    expect(result.newWordQuota).toBe(13);
+    expect(result.newWords).toHaveLength(13);
+    expect(result.remainingWords).toBe(800);
+    expect(result.projectedCompletionDate).toBe('2026-11-26');
+  });
+
+  it('uses a finite capped quota inside the consolidation window', () => {
+    const result = buildVocabularyWorkload(Array.from({ length: 50 }, (_, i) => entry(i)), [], '2026-12-10', '2026-12-12');
+    expect(result.newWordQuota).toBe(20);
+    expect(result.newWords).toHaveLength(20);
+  });
+
+  it('assigns no new words when every word is mastered', () => {
+    const entries = Array.from({ length: 20 }, (_, i) => entry(i));
+    const result = buildVocabularyWorkload(entries, entries.map((_, i) => state(i)), '2026-09-25', '2026-12-12');
+    expect(result.newWordQuota).toBe(0);
+    expect(result.newWords).toEqual([]);
+    expect(result.remainingWords).toBe(0);
+  });
+
+  it('returns at most fifteen due words ordered by most overdue first', () => {
+    const entries = Array.from({ length: 18 }, (_, i) => entry(i));
+    const states = entries.map((_, i) => state(i, { nextReviewAt: `2026-09-${String(i + 1).padStart(2, '0')}T00:00:00.000Z` }));
+    const result = buildVocabularyWorkload(entries, states, '2026-09-25', '2026-12-12');
+    expect(result.dueWords).toHaveLength(15);
+    expect(result.dueWords[0].id).toBe('v0');
+    expect(result.dueWords[14].id).toBe('v14');
+  });
+});
+
+describe('word cloze and review state', () => {
+  it('uses a partial cloze early and a full cloze at later stages', () => {
+    expect(buildWordCloze('passage', 0)).toBe('p_s_a_e');
+    expect(buildWordCloze('passage', 3)).toBe('_______');
+  });
+
+  it('advances a correct word and resets an incorrect word', () => {
+    const current = state(1, { status: 'review', reviewStage: 1, lapseCount: 2 });
+    expect(applyVocabularyReviewResult(current, true, '2026-09-25T08:00:00.000Z')).toMatchObject({
+      status: 'mastered', reviewStage: 2, lapseCount: 2, nextReviewAt: '2026-10-02T08:00:00.000Z',
+    });
+    expect(applyVocabularyReviewResult(current, false, '2026-09-25T08:00:00.000Z')).toMatchObject({
+      status: 'review', reviewStage: 0, lapseCount: 3, nextReviewAt: '2026-09-26T08:00:00.000Z',
+    });
+  });
+});

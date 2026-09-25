@@ -43,4 +43,18 @@ describe('learning backup', () => {
     expect((await target.syncQueue.toArray()).some((item) => item.kind === 'plan')).toBe(true);
     source.close(); target.close();
   });
+
+  it('imports older knowledge states that do not contain review scheduling fields', async () => {
+    const source = database();
+    await source.knowledgeStates.put({
+      id: 'knowledge:v0001', itemId: 'v0001', status: 'mastered', favorite: false,
+      updatedAt: '2026-09-23T10:00:00.000Z',
+    });
+    const backup = await exportLearningData(source);
+    const target = database();
+
+    await expect(importLearningData(target, backup)).resolves.toBeUndefined();
+    expect(await target.knowledgeStates.get('knowledge:v0001')).toMatchObject({ itemId: 'v0001', status: 'mastered' });
+    source.close(); target.close();
+  });
 });
