@@ -4,6 +4,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { DataManagement } from './DataManagement';
 
 describe('DataManagement', () => {
+  it('explains the manual transfer fallback in device order', () => {
+    render(<DataManagement actions={{ exportData: vi.fn(), importData: vi.fn(), clearData: vi.fn() }} />);
+    expect(screen.getByText(/旧设备导出 JSON.*新设备导入 JSON/)).toBeVisible();
+  });
+
   it('requires the exact confirmation phrase before clearing local data', async () => {
     const clear = vi.fn().mockResolvedValue(undefined);
     render(<DataManagement actions={{ exportData: vi.fn(), importData: vi.fn(), clearData: clear }} />);

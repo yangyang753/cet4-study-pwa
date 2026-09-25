@@ -37,7 +37,7 @@ pnpm preview:test
 3. 复制 `.env.example` 为 `.env.local`，填写项目 URL 和 `sb_publishable_...` Publishable Key。
 4. 在 Supabase Authentication 中启用 Email 登录，然后重新启动开发服务器。
 
-未配置 Supabase 时，应用自动进入离线体验模式；学习内容和答题记录仍优先保存到浏览器本机。
+未配置 Supabase 时，应用自动进入本地模式；学习内容和答题记录只保存在当前浏览器，手机与电脑之间不会自动同步。GitHub Pages 更新应用版本也不会把某一设备中的学习记录复制到另一台设备。换设备可在“账户同步”页从旧设备导出 JSON，再在新设备导入 JSON。
 
 完整图文顺序见 [`docs/supabase-setup.md`](docs/supabase-setup.md)。
 

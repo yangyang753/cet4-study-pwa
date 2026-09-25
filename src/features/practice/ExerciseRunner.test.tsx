@@ -89,7 +89,7 @@ describe('ExerciseRunner', () => {
     expect(screen.getByRole('button', { name: /下一题|查看结果/ })).toBeDisabled();
     await user.click(screen.getByRole('button', { name: '重新保存' }));
 
-    expect(await screen.findByText('已保存到本机，联网后自动同步')).toBeVisible();
+    expect(await screen.findByText(/已保存到本机/)).toBeVisible();
     expect(saveAttemptOnce).toHaveBeenCalledTimes(2);
     expect(screen.getByRole('button', { name: /下一题|查看结果/ })).toBeEnabled();
   });
@@ -106,7 +106,7 @@ describe('ExerciseRunner', () => {
 
     await user.click(screen.getByRole('radio', { name: /encourage/ }));
     await user.click(screen.getByRole('button', { name: '提交答案' }));
-    await screen.findByText('已保存到本机，联网后自动同步');
+    await screen.findByText(/已保存到本机/);
     await user.click(screen.getByRole('button', { name: '蒙对' }));
 
     const original = vi.mocked(repository.saveAttemptOnce).mock.calls[0][0];
@@ -132,7 +132,7 @@ describe('ExerciseRunner', () => {
     await user.click(screen.getAllByRole('radio')[1]);
     await user.click(screen.getByRole('button', { name: '提交答案' }));
 
-    await screen.findByText('已保存到本机，联网后自动同步');
+    await screen.findByText(/已保存到本机/);
     expect(repository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({
       questionId: expect.any(String),
       stage: 0,
