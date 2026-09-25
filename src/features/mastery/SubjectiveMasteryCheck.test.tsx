@@ -51,4 +51,19 @@ describe('SubjectiveMasteryCheck', () => {
     expect(learningRepository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'write-test', kind: 'writing', mode: 'mastery', correct: true }));
     expect(learningRepository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ status: 'mastered' }));
   });
+
+  it('keeps the written evidence and allows retry when saving fails', async () => {
+    const user = userEvent.setup();
+    const learningRepository = repository();
+    vi.mocked(learningRepository.saveAttemptOnce).mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce(undefined);
+    render(<SubjectiveMasteryCheck kind="writing" taskId="2026-09-24:writing" question={writingQuestion} repository={learningRepository} now="2026-09-24T12:00:00.000Z" />);
+
+    const evidence = 'I believe daily review is useful because it helps learners notice mistakes. Therefore, students can correct weak points early and become more confident before important examinations during every busy semester.';
+    await user.type(screen.getByRole('textbox', { name: '写作掌握证明' }), evidence);
+    await user.click(screen.getByRole('button', { name: '检查是否掌握' }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('保存失败');
+    expect(screen.getByRole('textbox', { name: '写作掌握证明' })).toHaveValue(evidence);
+    expect(screen.getByRole('button', { name: '检查是否掌握' })).toBeEnabled();
+  });
 });
