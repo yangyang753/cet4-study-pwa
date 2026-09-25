@@ -11,7 +11,7 @@ describe('KnowledgePage', () => {
     expect(screen.getByText('126')).toBeInTheDocument();
     expect(screen.getByText('15')).toBeInTheDocument();
     expect(screen.getByText(/原创仿真内容，不是历年官方真题/)).toBeInTheDocument();
-    expect(screen.getAllByText(/记忆提示：/).length).toBeGreaterThan(0);
+    expect(screen.getByText('Read the passage carefully before answering the questions.')).toBeVisible();
   });
 
   it('filters vocabulary by the learner query', async () => {
@@ -79,5 +79,16 @@ describe('KnowledgePage', () => {
     await userEvent.click(screen.getAllByRole('button', { name: '标记为已掌握' })[0]);
     expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v0001', status: 'mastered', favorite: true }));
     expect(screen.getByRole('button', { name: '已掌握' })).toBeDisabled();
+  });
+
+  it('rolls back an optimistic mastery mark when saving fails', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
+      upsertKnowledgeState: vi.fn().mockRejectedValue(new Error('storage')),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} />);
+    await userEvent.click(screen.getAllByRole('button', { name: '标记为已掌握' })[0]);
+    expect(await screen.findByRole('alert')).toHaveTextContent('保存失败');
+    expect(screen.getAllByRole('button', { name: '标记为已掌握' })[0]).toBeEnabled();
   });
 });

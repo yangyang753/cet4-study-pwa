@@ -16,6 +16,7 @@ export function KnowledgePage({ repository = defaultRepository }: { repository?:
   const [visibleCount, setVisibleCount] = useState(18);
   const [showReviewOnly, setShowReviewOnly] = useState(false);
   const [states, setStates] = useState<Map<string, KnowledgeState>>(() => new Map());
+  const [saveError, setSaveError] = useState('');
   useEffect(() => {
     let active = true;
     void repository.getDashboardSnapshot().then((snapshot) => {
@@ -39,11 +40,21 @@ export function KnowledgePage({ repository = defaultRepository }: { repository?:
   }, [query, showReviewOnly, states]);
   const words = filteredWords.slice(0, visibleCount);
   const reviewCount = useMemo(() => [...states.values()].filter((state) => state.status === 'review' && vocabulary.some((item) => item.id === state.itemId)).length, [states]);
-  const markMastered = (itemId: string) => {
+  const markMastered = async (itemId: string) => {
     const existing = states.get(itemId);
     const next: KnowledgeState = { id: `knowledge:${itemId}`, itemId, status: 'mastered', favorite: existing?.favorite ?? false, updatedAt: new Date().toISOString() };
+    setSaveError('');
     setStates((current) => new Map(current).set(itemId, next));
-    void repository.upsertKnowledgeState(next);
+    try {
+      await repository.upsertKnowledgeState(next);
+    } catch {
+      setStates((current) => {
+        const restored = new Map(current);
+        if (existing) restored.set(itemId, existing); else restored.delete(itemId);
+        return restored;
+      });
+      setSaveError('掌握状态保存失败，已恢复原状态，请重试。');
+    }
   };
   const isMastered = (itemId: string) => states.get(itemId)?.status === 'mastered';
 
@@ -55,8 +66,9 @@ export function KnowledgePage({ repository = defaultRepository }: { repository?:
       <button role="tab" aria-selected={tab === 'collocations'} onClick={() => setTab('collocations')}>重点搭配</button>
       <button role="tab" aria-selected={tab === 'grammar'} onClick={() => setTab('grammar')}>语法专题</button>
     </div>
-    {tab === 'vocabulary' && <><div className="knowledge-tools"><label className="knowledge-search">搜索高频词<input type="search" aria-label="搜索高频词" value={query} onChange={(event) => { setQuery(event.target.value); setVisibleCount(18); }} placeholder="输入英文或中文释义" /></label><button className="review-filter" aria-pressed={showReviewOnly} onClick={() => { setShowReviewOnly((value) => !value); setVisibleCount(18); }}>只看待掌握（{reviewCount}）</button></div><div className="word-grid">{words.map((item) => { const status = states.get(item.id)?.status; return <article key={item.id} className={`word-card ${status ?? ''}`}><span>词频 {item.frequency}</span>{status === 'review' && <b className="knowledge-status">待掌握</b>}{status === 'learning' && <b className="knowledge-status learning">学习中</b>}<h2>{item.word}</h2><p className="phonetic">{item.phonetic}</p><p>{item.meaningZh}</p><small>{item.example}</small><small>{item.exampleZh}</small><button disabled={isMastered(item.id)} onClick={() => markMastered(item.id)}>{isMastered(item.id) ? '已掌握' : '标记为已掌握'}</button></article>; })}</div>{words.length === 0 && <p className="empty-result">{showReviewOnly ? '当前没有待掌握单词。完成翻译检查后，漏译词会自动出现在这里。' : '没有匹配结果，试试更短的关键词。'}</p>}{words.length < filteredWords.length && <button className="load-more" onClick={() => setVisibleCount((count) => count + 18)}>加载更多（已显示 {words.length} / {filteredWords.length}）</button>}</>}
-    {tab === 'collocations' && <div className="phrase-list">{collocations.map((item) => <article key={item.id}><h2>{item.phrase}</h2><p>{item.meaningZh}</p><small>{item.example}</small><small>{item.exampleZh}</small><button disabled={isMastered(item.id)} onClick={() => markMastered(item.id)}>{isMastered(item.id) ? '已掌握' : '标记为已掌握'}</button></article>)}</div>}
-    {tab === 'grammar' && <div className="grammar-grid">{grammarTopics.map((item, index) => <article key={item.id}><span>{String(index + 1).padStart(2, '0')}</span><h2>{item.title}</h2><p>{item.summary}</p><ul>{item.checklist.map((line) => <li key={line}>{line}</li>)}</ul><button disabled={isMastered(item.id)} onClick={() => markMastered(item.id)}>{isMastered(item.id) ? '已掌握' : '标记为已掌握'}</button></article>)}</div>}
+    {saveError && <p role="alert">{saveError}</p>}
+    {tab === 'vocabulary' && <><div className="knowledge-tools"><label className="knowledge-search">搜索高频词<input type="search" aria-label="搜索高频词" value={query} onChange={(event) => { setQuery(event.target.value); setVisibleCount(18); }} placeholder="输入英文或中文释义" /></label><button className="review-filter" aria-pressed={showReviewOnly} onClick={() => { setShowReviewOnly((value) => !value); setVisibleCount(18); }}>只看待掌握（{reviewCount}）</button></div><div className="word-grid">{words.map((item) => { const status = states.get(item.id)?.status; return <article key={item.id} className={`word-card ${status ?? ''}`}><span>词频 {item.frequency}</span>{status === 'review' && <b className="knowledge-status">待掌握</b>}{status === 'learning' && <b className="knowledge-status learning">学习中</b>}<h2>{item.word}</h2><p className="phonetic">{item.phonetic}</p><p>{item.meaningZh}</p>{item.example && <small>{item.example}</small>}{item.exampleZh && <small>{item.exampleZh}</small>}<button disabled={isMastered(item.id)} onClick={() => void markMastered(item.id)}>{isMastered(item.id) ? '已掌握' : '标记为已掌握'}</button></article>; })}</div>{words.length === 0 && <p className="empty-result">{showReviewOnly ? '当前没有待掌握单词。完成翻译检查后，漏译词会自动出现在这里。' : '没有匹配结果，试试更短的关键词。'}</p>}{words.length < filteredWords.length && <button className="load-more" onClick={() => setVisibleCount((count) => count + 18)}>加载更多（已显示 {words.length} / {filteredWords.length}）</button>}</>}
+    {tab === 'collocations' && <div className="phrase-list">{collocations.map((item) => <article key={item.id}><h2>{item.phrase}</h2><p>{item.meaningZh}</p><small>{item.example}</small><small>{item.exampleZh}</small><button disabled={isMastered(item.id)} onClick={() => void markMastered(item.id)}>{isMastered(item.id) ? '已掌握' : '标记为已掌握'}</button></article>)}</div>}
+    {tab === 'grammar' && <div className="grammar-grid">{grammarTopics.map((item, index) => <article key={item.id}><span>{String(index + 1).padStart(2, '0')}</span><h2>{item.title}</h2><p>{item.summary}</p><ul>{item.checklist.map((line) => <li key={line}>{line}</li>)}</ul><button disabled={isMastered(item.id)} onClick={() => void markMastered(item.id)}>{isMastered(item.id) ? '已掌握' : '标记为已掌握'}</button></article>)}</div>}
   </section>;
 }

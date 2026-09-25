@@ -2,7 +2,8 @@ import 'fake-indexeddb/auto';
 import Dexie from 'dexie';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { LearningDatabase } from '../../data/localDb';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import { ReviewPage } from './ReviewPage';
@@ -27,6 +28,17 @@ async function unlockReviewQuestion() {
 }
 
 describe('ReviewPage', () => {
+  it('shows a retry action when the review queue cannot be loaded', async () => {
+    const repository = {
+      listDueReviews: vi.fn().mockRejectedValueOnce(new Error('storage')).mockResolvedValueOnce([]),
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ settings: { examDate: '2026-12-12' } }),
+    } as unknown as LearningRepository;
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
+    expect(await screen.findByRole('alert')).toHaveTextContent('复习安排读取失败');
+    await userEvent.click(screen.getByRole('button', { name: '重新读取' }));
+    expect(await screen.findByText('当前没有需要复习的题目。')).toBeVisible();
+  });
+
   it('locks queued review choices until translations are checked', async () => {
     const user = userEvent.setup();
     render(<ReviewPage repository={await setupRepository()} now="2026-09-23T12:00:00.000Z" />);
@@ -86,5 +98,22 @@ describe('ReviewPage', () => {
     await waitFor(async () => expect(await repository.getReviewCard('review:listen-01:q1')).toMatchObject({
       nextReviewAt: '2026-09-24T00:00:00.000Z',
     }));
+  });
+
+  it('keeps the answer selected and retries when review progress cannot be saved', async () => {
+    const user = userEvent.setup();
+    const repository = await setupRepository();
+    const originalSave = repository.saveAttemptOnce.bind(repository);
+    repository.saveAttemptOnce = vi.fn().mockRejectedValueOnce(new Error('storage')).mockImplementation(originalSave);
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
+    await user.click(await screen.findByRole('button', { name: '重新练习' }));
+    await unlockReviewQuestion();
+    const answer = screen.getByRole('radio', { name: /Sunday afternoon/ });
+    await user.click(answer);
+    await user.click(screen.getByRole('button', { name: '提交复习答案' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('复习进度保存失败');
+    expect(answer).toBeChecked();
+    await user.click(screen.getByRole('button', { name: '重新保存复习结果' }));
+    expect(await screen.findByText('复习正确')).toBeVisible();
   });
 });

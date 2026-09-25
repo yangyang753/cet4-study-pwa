@@ -81,4 +81,21 @@ describe('MasteryCheck', () => {
     expect(learningRepository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ status: 'review' }));
     expect(learningRepository.upsertReviewCard).toHaveBeenCalledTimes(1);
   });
+
+  it('keeps the selected answer and retries after a save failure', async () => {
+    const user = userEvent.setup();
+    const learningRepository = repository();
+    vi.mocked(learningRepository.saveAttemptOnce).mockRejectedValueOnce(new Error('storage')).mockResolvedValueOnce(undefined);
+    const question = selectMasteryQuestions('vocabulary')[0];
+    render(<MasteryCheck kind="vocabulary" taskId="2026-09-22:vocabulary" repository={learningRepository} now="2026-09-22T09:00:00.000Z" />);
+
+    const selected = screen.getAllByRole('radio').find((radio) => radio.getAttribute('value') === question.correctAnswer)!;
+    await user.click(selected);
+    await user.click(screen.getByRole('button', { name: '提交答案' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('保存失败');
+    expect(selected).toBeChecked();
+    await user.click(screen.getByRole('button', { name: '重新保存本题' }));
+    expect(await screen.findByText('回答正确')).toBeVisible();
+    expect(learningRepository.saveAttemptOnce).toHaveBeenCalledTimes(2);
+  });
 });
