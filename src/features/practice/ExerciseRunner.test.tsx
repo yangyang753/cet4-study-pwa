@@ -10,7 +10,25 @@ const validWriting = `First, daily practice helps students remember important kn
 
 Therefore, I plan to study at the same time each evening, review mistakes, and write down one question for the next day. This simple method gives every session a purpose and allows steady progress without creating unnecessary pressure. It also builds confidence because improvement becomes visible after several consistent weeks. Finally, I will compare my work every Sunday and adjust the routine when one activity is no longer useful.`;
 
+async function unlockCurrentQuestion() {
+  for (const input of screen.getAllByRole('textbox')) await userEvent.type(input, '中文翻译');
+  await userEvent.click(screen.getByRole('button', { name: '检查翻译并解锁选项' }));
+}
+
 describe('ExerciseRunner', () => {
+  it('locks ordinary practice answers until the learner translates the question and options', async () => {
+    const repository = {
+      listAttempts: vi.fn().mockResolvedValue([]),
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<ExerciseRunner kind="reading" limit={1} repository={repository} />);
+    const radios = await screen.findAllByRole('radio');
+    expect(radios[0]).toBeDisabled();
+    await unlockCurrentQuestion();
+    expect(radios[0]).toBeEnabled();
+  });
+
   it('shows vocabulary warm-up before vocabulary answer controls in practice mode', async () => {
     const repository = {
       listAttempts: vi.fn().mockResolvedValue([]),
@@ -159,8 +177,10 @@ describe('ExerciseRunner', () => {
 
   it('requires an objective response before saving', async () => {
     const user = userEvent.setup();
-    const repository = { saveAttemptOnce: vi.fn().mockResolvedValue(undefined) } as unknown as LearningRepository;
+    const repository = { saveAttemptOnce: vi.fn().mockResolvedValue(undefined), getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }), upsertKnowledgeState: vi.fn().mockResolvedValue(undefined) } as unknown as LearningRepository;
     render(<ExerciseRunner kind="reading" limit={1} repository={repository} />);
+    await screen.findByRole('button', { name: '检查翻译并解锁选项' });
+    await unlockCurrentQuestion();
     await user.click(await screen.findByRole('button', { name: '提交答案' }));
     expect(screen.getByText('请选择一个答案')).toBeVisible();
     expect(repository.saveAttemptOnce).not.toHaveBeenCalled();
@@ -178,7 +198,7 @@ describe('ExerciseRunner', () => {
 
     render(<ExerciseRunner kind="reading" limit={1} repository={repository} today="2026-09-24" />);
 
-    expect(await screen.findByText(unseen.prompt)).toBeVisible();
+    expect((await screen.findAllByText(unseen.prompt))[0]).toBeVisible();
   });
 
   it('automatically completes the matching daily task after the final answer', async () => {
@@ -195,6 +215,7 @@ describe('ExerciseRunner', () => {
       await user.click(await screen.findByRole('button', { name: '显示释义' }));
       await user.click(screen.getByRole('button', { name: '基本认识' }));
     }
+    await unlockCurrentQuestion();
     await user.click((await screen.findAllByRole('radio'))[0]);
     await user.click(screen.getByRole('button', { name: '提交答案' }));
     await user.click(await screen.findByRole('button', { name: '查看结果' }));
@@ -211,6 +232,8 @@ describe('ExerciseRunner', () => {
       saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
       upsertReviewCard: vi.fn().mockResolvedValue(undefined),
       completeTask: vi.fn().mockResolvedValue(undefined),
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
     } as unknown as LearningRepository;
     render(<ExerciseRunner kind="grammar" limit={1} repository={repository} today="2026-09-24" />);
     await user.click((await screen.findAllByRole('radio'))[0]);

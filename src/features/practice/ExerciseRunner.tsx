@@ -16,6 +16,7 @@ import { MasteryCheck } from '../mastery/MasteryCheck';
 import type { Attempt, MistakeReason } from '../../domain/attempt';
 import { selectPracticeQuestions } from './selectPracticeQuestions';
 import { VocabularyWarmup } from '../vocabulary/VocabularyWarmup';
+import { QuestionTranslationGate } from '../translation/QuestionTranslationGate';
 
 const starterContent = parseContentPack(rawContent);
 const defaultRepository = new DexieLearningRepository();
@@ -41,6 +42,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
   const [currentAttempt, setCurrentAttempt] = useState<Attempt | null>(null);
   const [selectedReason, setSelectedReason] = useState<MistakeReason | undefined>();
   const [warmupComplete, setWarmupComplete] = useState(kind !== 'vocabulary' || mode !== 'practice');
+  const [translationUnlocked, setTranslationUnlocked] = useState(mode === 'exam' || !kind);
   const question = questions?.[index];
   const plannedKind = kind;
 
@@ -134,7 +136,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
       setFinished(true); return;
     }
     setIndex((value) => value + 1);
-    setResponse(''); setResult(null); setSaveState('idle'); setAnswerError(''); setCurrentAttempt(null); setSelectedReason(undefined); setStartedAt(Date.now());
+    setResponse(''); setResult(null); setSaveState('idle'); setAnswerError(''); setCurrentAttempt(null); setSelectedReason(undefined); setTranslationUnlocked(mode === 'exam' || !kind); setStartedAt(Date.now());
   }
 
   if (!('options' in question)) return <SubjectiveEditor question={question} kind={question.type} repository={repository} onSubmit={(body, feedback) => {
@@ -145,7 +147,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     });
   }} />;
 
-  return <section className="exercise-runner"><header><h1>{mode === 'exam' ? '模拟考试' : '专项练习'}</h1><b>{index + 1} / {questions.length}</b></header><ObjectiveQuestion question={question as ObjectiveQuestionType} value={response} disabled={Boolean(result)} onChange={setResponse} />{answerError && <p role="alert" className="answer-error">{answerError}</p>}{saveState !== 'idle' && <p role={saveState === 'error' ? 'alert' : 'status'}>{saveState === 'saving' ? '正在保存…' : saveState === 'saved' ? '已保存到本机，联网后自动同步' : '保存失败，请重新保存后继续'}</p>}{saveState === 'error' && <button type="button" onClick={retrySave}>重新保存</button>}{!result ? <button className="primary-action" onClick={submit}>提交答案</button> : <>{mode === 'practice' && <ExplanationPanel question={question} correct={result.correct} onReason={saveState === 'saved' ? saveReason : undefined} selectedReason={selectedReason} />}{saveState !== 'saving' && <button className="primary-action" disabled={saveState !== 'saved'} onClick={() => void next()}>{index >= questions.length - 1 ? '查看结果' : '下一题'}</button>}</>}</section>;
+  return <section className="exercise-runner"><header><h1>{mode === 'exam' ? '模拟考试' : '专项练习'}</h1><b>{index + 1} / {questions.length}</b></header>{mode === 'practice' && kind && <QuestionTranslationGate key={question.id} question={question as ObjectiveQuestionType} repository={repository} onUnlocked={() => setTranslationUnlocked(true)} />}<ObjectiveQuestion question={question as ObjectiveQuestionType} value={response} disabled={Boolean(result) || !translationUnlocked} onChange={setResponse} />{!translationUnlocked && <p className="answer-lock-note">完成上方翻译后才能选择答案。</p>}{answerError && <p role="alert" className="answer-error">{answerError}</p>}{saveState !== 'idle' && <p role={saveState === 'error' ? 'alert' : 'status'}>{saveState === 'saving' ? '正在保存…' : saveState === 'saved' ? '已保存到本机，联网后自动同步' : '保存失败，请重新保存后继续'}</p>}{saveState === 'error' && <button type="button" onClick={retrySave}>重新保存</button>}{!result ? <button className="primary-action" disabled={!translationUnlocked} onClick={submit}>提交答案</button> : <>{mode === 'practice' && <ExplanationPanel question={question} correct={result.correct} onReason={saveState === 'saved' ? saveReason : undefined} selectedReason={selectedReason} />}{saveState !== 'saving' && <button className="primary-action" disabled={saveState !== 'saved'} onClick={() => void next()}>{index >= questions.length - 1 ? '查看结果' : '下一题'}</button>}</>}</section>;
 }
 
 export function PracticeRoute() {

@@ -24,3 +24,13 @@
 .warmup-answer > strong { color: #174c3d; font-size: 1.3rem; }
 .warmup-answer > div { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1rem; }
 @media (max-width: 640px) { .warmup-answer > div button { flex: 1 1 9rem; } }
+.translation-gate { background: #f3f8f5; border: 1px solid #c8ddd4; border-radius: 20px; padding: clamp(1rem, 3vw, 1.5rem); margin: 1rem 0; }
+.translation-gate header span { color: #28745e; font-weight: 700; }
+.translation-gate header h2 { margin: .25rem 0; }
+.translation-field { display: grid; gap: .4rem; margin-top: 1rem; }
+.translation-field > span { color: #243b34; }
+.translation-field textarea { width: 100%; min-height: 4.5rem; resize: vertical; box-sizing: border-box; border: 1px solid #aebdb7; border-radius: 12px; padding: .75rem; font: inherit; }
+.translation-result { background: #fff; border-radius: 12px; margin-top: 1rem; padding: 1rem; }
+.translation-result ul { display: flex; flex-wrap: wrap; gap: .6rem; list-style: none; padding: 0; }
+.translation-result li { background: #fff0db; border-radius: 10px; padding: .55rem .7rem; display: grid; }
+.answer-lock-note { color: #725d32; }
