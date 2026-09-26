@@ -37,13 +37,13 @@ export function buildVocabularyWorkload(
 ): VocabularyWorkload {
   const stateById = new Map(states.map((item) => [item.itemId, item]));
   const remainingWords = entries.filter((item) => stateById.get(item.id)?.status !== 'mastered').length;
-  const daysRemaining = Math.max(0, Math.ceil((dateMs(examDate) - dateMs(today)) / DAY_MS));
-  const learningDays = Math.max(1, daysRemaining - 14);
-  const requiredDailyWords = remainingWords === 0 ? 0 : Math.ceil(remainingWords / learningDays);
-  const baseNewWordQuota = remainingWords === 0 ? 0 : Math.min(20, Math.max(10, requiredDailyWords));
   const unseen = entries
     .filter((item) => !stateById.has(item.id))
     .sort((left, right) => (right.frequency ?? 0) - (left.frequency ?? 0));
+  const daysRemaining = Math.max(0, Math.ceil((dateMs(examDate) - dateMs(today)) / DAY_MS));
+  const learningDays = Math.max(1, daysRemaining - 14);
+  const requiredDailyWords = unseen.length === 0 ? 0 : Math.ceil(unseen.length / learningDays);
+  const baseNewWordQuota = unseen.length === 0 ? 0 : Math.min(20, Math.max(10, requiredDailyWords));
   const dueAt = dateMs(`${today}T23:59:59.999Z`);
   const allDueWords = entries
     .map((word) => ({ word, state: stateById.get(word.id) }))
@@ -59,7 +59,7 @@ export function buildVocabularyWorkload(
   const dueWordCount = allDueWords.length;
   const reviewBacklog = Math.max(0, dueWordCount - dueWords.length);
   const newWordQuota = dueWords.length >= 20 ? 0 : Math.min(baseNewWordQuota, 20 - dueWords.length);
-  const studyDays = newWordQuota === 0 ? 0 : Math.ceil(remainingWords / newWordQuota);
+  const studyDays = newWordQuota === 0 ? 0 : Math.ceil(unseen.length / newWordQuota);
   const projectedCompletionDate = studyDate(addDays(today, studyDays));
   const estimatedMinutes = Math.min(35, Math.max(10, Math.ceil(newWordQuota * 1.2 + dueWords.length * 0.5 + 5)));
 
@@ -73,7 +73,7 @@ export function buildVocabularyWorkload(
     projectedCompletionDate,
     requiredDailyWords,
     estimatedMinutes,
-    atRisk: remainingWords > 0 && (requiredDailyWords > 20 || projectedCompletionDate > examDate),
+    atRisk: unseen.length > 0 && (requiredDailyWords > 20 || projectedCompletionDate > examDate),
   };
 }
 

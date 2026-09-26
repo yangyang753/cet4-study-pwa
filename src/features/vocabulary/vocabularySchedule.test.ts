@@ -60,6 +60,7 @@ describe('vocabulary workload', () => {
     })], '2026-09-25', '2026-12-12');
     expect(result.dueWords.map((word) => word.id)).toEqual(['v1']);
     expect(result.newWords).toEqual([]);
+    expect(result.newWordQuota).toBe(0);
   });
 });
 
