@@ -67,6 +67,14 @@ test('starts vocabulary practice with word study and unlocks questions after tra
   await page.getByRole('textbox', { name: '我的中文翻译' }).fill('这是今天学习单词的中文翻译。');
   await page.getByRole('button', { name: '检查翻译' }).click();
   await page.getByRole('button', { name: '继续做词义题' }).click();
+  for (let index = 0; index < 3; index += 1) {
+    await expect(page.getByRole('heading', { level: 1, name: '单词之后学习重点搭配' })).toBeVisible();
+    await page.getByRole('button', { name: '显示搭配释义' }).click();
+    await page.getByRole('button', { name: '开始搭配测试' }).click();
+    await page.getByRole('radio').first().check();
+    await page.getByRole('button', { name: '提交搭配答案' }).click();
+    await page.getByRole('button', { name: index === 2 ? '完成重点搭配' : '下一个重点搭配' }).click();
+  }
   await expect(page.getByRole('heading', { level: 1, name: '专项练习' })).toBeVisible();
   await expect(page.getByRole('group', { name: '请选择 passage 的正确含义。' })).toBeVisible();
   const firstChoice = page.getByRole('radio').first();
