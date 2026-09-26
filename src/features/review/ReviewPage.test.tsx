@@ -10,6 +10,9 @@ import { ReviewPage } from './ReviewPage';
 import vocabulary from '../../../content/v1/vocabulary.json';
 
 const names: string[] = [];
+const validWriting = `First, daily reading helps students build vocabulary and understand the world from different perspectives. Because a regular habit makes difficult books easier, students can improve without feeling too much pressure. For example, reading for twenty minutes after dinner gives learners a clear and realistic routine.
+
+Moreover, the university can organize a weekly reading circle where students share one useful idea from a book. This activity encourages communication and gives every participant a reason to finish the selected pages. Therefore, I believe daily reading should become part of campus life. It improves language ability, supports independent thinking, and creates meaningful conversations among classmates. With a simple schedule and friendly group support, more students will be willing to read every day and continue the habit throughout the semester.`;
 afterEach(async () => Promise.all(names.splice(0).map((name) => Dexie.delete(name))));
 
 async function setupRepository(stage = 0) {
@@ -28,6 +31,40 @@ async function unlockReviewQuestion() {
 }
 
 describe('ReviewPage', () => {
+  it('keeps a future-scheduled mastered card visible in mastery history', async () => {
+    const name = `review-test-${crypto.randomUUID()}`;
+    names.push(name);
+    const repository = new DexieLearningRepository(new LearningDatabase(name));
+    await repository.upsertReviewCard({
+      id: 'review:listen-01:q1', questionId: 'listen-01:q1', stage: 4,
+      nextReviewAt: '2026-10-23T08:00:00.000Z', lastCorrect: true, updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
+    await userEvent.click(await screen.findByRole('button', { name: '已掌握' }));
+    expect(screen.getByText('When will the campus volunteering activity take place?')).toBeVisible();
+  });
+
+  it('offers explicit filters for every review category', async () => {
+    render(<ReviewPage repository={await setupRepository()} now="2026-09-23T12:00:00.000Z" />);
+    for (const name of ['重点搭配', '语法', '写作', '翻译']) expect(await screen.findByRole('button', { name })).toBeVisible();
+  });
+
+  it('allows a queued writing task to be resubmitted and advances its review card once', async () => {
+    const name = `review-test-${crypto.randomUUID()}`;
+    names.push(name);
+    const repository = new DexieLearningRepository(new LearningDatabase(name));
+    await repository.upsertReviewCard({ id: 'review:write-01', questionId: 'write-01', stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z' });
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
+    await userEvent.click(await screen.findByRole('button', { name: '写作' }));
+    await userEvent.click(screen.getByRole('button', { name: '重新练习' }));
+    fireEvent.change(screen.getByLabelText('写作答题区'), { target: { value: validWriting } });
+    await userEvent.click(screen.getByRole('button', { name: '提交自查' }));
+
+    expect(await screen.findByText('主观题复习已保存')).toBeVisible();
+    expect(await repository.getReviewCard('review:write-01')).toMatchObject({ stage: 1, lastCorrect: true });
+    expect((await repository.listAttempts()).filter((attempt) => attempt.questionId === 'write-01')).toHaveLength(1);
+  });
+
   it('reviews a spelling card and demotes a previously mastered word after failure', async () => {
     const repository = await setupRepository();
     await repository.upsertReviewCard({

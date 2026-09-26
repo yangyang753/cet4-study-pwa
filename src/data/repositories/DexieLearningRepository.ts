@@ -44,6 +44,10 @@ export class DexieLearningRepository implements LearningRepository {
     const cards = await this.db.reviewCards.where('nextReviewAt').belowOrEqual(at).toArray();
     return cards.sort((left, right) => (right.priority ?? 1) - (left.priority ?? 1) || left.nextReviewAt.localeCompare(right.nextReviewAt));
   }
+  async listAllReviews() {
+    const cards = await this.db.reviewCards.toArray();
+    return cards.sort((left, right) => left.nextReviewAt.localeCompare(right.nextReviewAt) || left.id.localeCompare(right.id));
+  }
   async completeTask(completion: StudyTaskCompletion) { await this.saveMutable('taskCompletion', this.db.taskCompletions, completion, completion.completedAt); }
   async upsertKnowledgeState(state: KnowledgeState) { await this.saveMutable('knowledgeState', this.db.knowledgeStates, state, state.updatedAt); }
   async saveUserSettings(settings: UserSettings) {

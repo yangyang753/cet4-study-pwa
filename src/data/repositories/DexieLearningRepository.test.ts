@@ -109,6 +109,16 @@ describe('DexieLearningRepository', () => {
     db.close();
   });
 
+  it('lists future and due review cards for mastery history', async () => {
+    const db = new LearningDatabase(databaseName());
+    const repository = new DexieLearningRepository(db);
+    await repository.upsertReviewCard({ id: 'due', questionId: 'q1', stage: 1, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: true, updatedAt: '2026-09-23T08:00:00.000Z' });
+    await repository.upsertReviewCard({ id: 'future', questionId: 'q2', stage: 4, nextReviewAt: '2026-10-23T08:00:00.000Z', lastCorrect: true, updatedAt: '2026-09-23T09:00:00.000Z' });
+
+    expect((await repository.listAllReviews()).map((card) => card.id)).toEqual(['due', 'future']);
+    db.close();
+  });
+
   it('orders due review cards by learner-specific priority', async () => {
     const db = new LearningDatabase(databaseName());
     const repository = new DexieLearningRepository(db);

@@ -13,6 +13,7 @@ export interface LearningRepository extends SyncQueue {
   upsertReviewCard(card: ReviewCard): Promise<void>;
   getReviewCard(id: string): Promise<ReviewCard | null>;
   listDueReviews(at: string): Promise<ReviewCard[]>;
+  listAllReviews(): Promise<ReviewCard[]>;
   completeTask(completion: StudyTaskCompletion): Promise<void>;
   upsertKnowledgeState(state: KnowledgeState): Promise<void>;
   saveUserSettings(settings: UserSettings): Promise<void>;
