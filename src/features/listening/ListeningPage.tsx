@@ -43,8 +43,10 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
   const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
   const [submissionState, setSubmissionState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [translationUnlocked, setTranslationUnlocked] = useState(false);
-  const questionStartedAt = useRef(Date.now());
-  const attemptId = useRef(crypto.randomUUID());
+  const [initialStartedAt] = useState(() => Date.now());
+  const [initialAttemptId] = useState(() => crypto.randomUUID());
+  const questionStartedAt = useRef(initialStartedAt);
+  const attemptId = useRef(initialAttemptId);
   const submissionLock = useRef(false);
   const translationQuestion: ObjectiveQuestion = {
     id: `${listeningSet.id}:q${questionIndex + 1}`,

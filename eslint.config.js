@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 import { globalIgnores } from 'eslint/config';
 
 export default tseslint.config(
-  globalIgnores(['dist/**', 'dev-dist/**', 'node_modules/**', 'test-results/**', 'content/**', 'public/**', 'tmp/**']),
+  globalIgnores(['dist/**', 'dev-dist/**', 'node_modules/**', 'test-results/**', 'content/**', 'public/**', 'tmp/**', '.worktrees/**', 'worktrees/**', '.superpowers/**']),
   js.configs.recommended,
   ...tseslint.configs.recommended,
   reactHooks.configs.flat.recommended,
