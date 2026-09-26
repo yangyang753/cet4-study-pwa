@@ -169,6 +169,20 @@ describe('DexieLearningRepository', () => {
     db.close();
   });
 
+  it('lists submitted exam sessions newest first for readiness trends', async () => {
+    const db = new LearningDatabase(databaseName());
+    const repository = new DexieLearningRepository(db);
+    const base: ExamSessionRecord = {
+      id: 'exam:mock-1:1', mockId: 'mock-1', contentVersion: 'v1', startedAt: '2026-09-23T00:00:00.000Z',
+      updatedAt: '2026-09-23T01:00:00.000Z', submittedAt: '2026-09-23T01:00:00.000Z', sectionDeadlines: [], currentSectionIndex: 4,
+      lockedSectionIndexes: [], answers: {}, status: 'submitted',
+    };
+    await repository.saveExamSession(base);
+    await repository.saveExamSession({ ...base, id: 'exam:mock-1:2', updatedAt: '2026-09-24T01:00:00.000Z', submittedAt: '2026-09-24T01:00:00.000Z' });
+    expect((await repository.listSubmittedExamSessions()).map((item) => item.id)).toEqual(['exam:mock-1:2', 'exam:mock-1:1']);
+    db.close();
+  });
+
   it('keeps both divergent draft bodies and remains idempotent when a pull is retried', async () => {
     const db = new LearningDatabase(databaseName());
     const repository = new DexieLearningRepository(db);

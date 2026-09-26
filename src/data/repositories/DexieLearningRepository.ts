@@ -52,6 +52,7 @@ export class DexieLearningRepository implements LearningRepository {
   }
   async saveExamSession(session: ExamSessionRecord) { await this.saveMutable('examSession', this.db.examSessions, session, session.updatedAt); }
   async getActiveExamSession() { const active = await this.db.examSessions.where('status').equals('active').toArray(); return active.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0]; }
+  async listSubmittedExamSessions() { const submitted = await this.db.examSessions.where('status').equals('submitted').toArray(); return submitted.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt)); }
   async savePlan(plan: import('../localDb').CachedPlan) { await this.saveMutable('plan', this.db.plans, plan, plan.updatedAt); }
   async getPlan(date: string) { return (await this.db.plans.where('date').equals(date).first()) ?? null; }
   async getDashboardSnapshot(at = new Date().toISOString()) {

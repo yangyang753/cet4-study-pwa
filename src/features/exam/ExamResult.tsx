@@ -1,9 +1,11 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import type { ExamSessionRecord } from '../../domain/exam';
 import type { ExamSectionKind, ResolvedExam } from './examBlueprint';
 import { summarizeExam } from './summarizeExam';
 import { estimateCetScore } from './estimateCetScore';
+import { assessMockReadiness } from './assessMockReadiness';
+import { resolveExam } from './examBlueprint';
 
 const sectionNames = { writing: '写作', listening: '听力', reading: '阅读', translation: '翻译' } as const;
 const percent = (value: number | null) => value === null ? '—' : `${Math.round(value * 100)}%`;
@@ -11,6 +13,19 @@ const percent = (value: number | null) => value === null ? '—' : `${Math.round
 export function ExamResult({ session, exam, repository }: { session: ExamSessionRecord; exam: ResolvedExam; repository: LearningRepository }) {
   const summary = useMemo(() => summarizeExam(session, exam), [exam, session]);
   const estimate = useMemo(() => estimateCetScore(session, exam), [exam, session]);
+  const [recentScores, setRecentScores] = useState<number[]>([estimate.total]);
+  const readiness = assessMockReadiness(recentScores);
+  useEffect(() => {
+    let active = true;
+    void repository.listSubmittedExamSessions().then((sessions) => {
+      if (!active) return;
+      const unique = [...new Map([session, ...sessions].map((item) => [item.id, item])).values()]
+        .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+        .slice(0, 3);
+      setRecentScores(unique.map((item) => estimateCetScore(item, resolveExam(item.mockId)).total));
+    }).catch(() => undefined);
+    return () => { active = false; };
+  }, [estimate.total, repository, session]);
   useEffect(() => {
     if (session.status !== 'submitted') return;
     const reviewedAt = session.submittedAt ?? session.updatedAt;
@@ -20,7 +35,7 @@ export function ExamResult({ session, exam, repository }: { session: ExamSession
   const subjective = exam.sections.flatMap((section) => section.questions).filter((question) => !('correctAnswer' in question));
   return <section className="exam-result">
     <header><span>MOCK EXAM REPORT</span><h1>模考分析</h1><p>已完成 {summary.answered}/{summary.total} 题 · 用时 {Math.floor(summary.elapsedSeconds / 60)} 分钟</p></header>
-    <section className="score-estimate" aria-label="四级备考估分"><div><span>备考估分</span><strong>{estimate.total} / 710</strong><p>{estimate.gapTo425 > 0 ? `距离 425 估计还差 ${estimate.gapTo425} 分` : `当前估分高于 425 分线 ${Math.abs(estimate.gapTo425)} 分`}</p></div><ul>{Object.entries(estimate.sections).map(([kind, score]) => <li key={kind}><span>{sectionNames[kind as ExamSectionKind]}</span><b>{score.toFixed(1)}</b></li>)}</ul><small>备考估分基于本应用规则，不是官方 CET-4 标准分。</small></section>
+    <section className="score-estimate" aria-label="四级备考估分"><div><span>备考估分</span><strong>{estimate.total} / 710</strong><p>{estimate.gapTo425 > 0 ? `距离 425 估计还差 ${estimate.gapTo425} 分` : `当前估分高于 425 分线 ${Math.abs(estimate.gapTo425)} 分`}</p><p>{readiness.status === 'insufficient' ? `稳定性样本不足：还需完成 ${3 - readiness.sampleSize} 次完整模考` : readiness.status === 'stable' ? `最近 3 次均达到 450 安全目标，最低 ${readiness.minimum} 分` : readiness.status === 'borderline' ? `最近 3 次达到 425，但最低 ${readiness.minimum} 分，仍需提高安全余量` : `最近 3 次最低 ${readiness.minimum} 分，尚未稳定达到 425`}</p></div><ul>{Object.entries(estimate.sections).map(([kind, score]) => <li key={kind}><span>{sectionNames[kind as ExamSectionKind]}</span><b>{score.toFixed(1)}</b></li>)}</ul><small>备考估分基于本应用规则，不是官方 CET-4 标准分，也不能保证实际成绩。</small></section>
     <h2>分项完成情况</h2><div className="exam-result-grid">{Object.entries(summary.sections).map(([kind, item]) => <article key={kind}><strong>{sectionNames[kind as keyof typeof sectionNames]}</strong><b>{Math.round(item.completion * 100)}%</b><small>客观题正确率 {percent(item.accuracy)}</small></article>)}</div>
     <section><h2>薄弱知识点</h2>{summary.weakKnowledgePoints.length ? <ul>{summary.weakKnowledgePoints.map((point) => <li key={point}>{point}</li>)}</ul> : <p>暂无足够的客观题错题数据。</p>}</section>
     <section><h2>错题解析</h2>{summary.wrongQuestions.length ? summary.wrongQuestions.map((question) => <details key={question.id}><summary>{question.prompt}</summary><p><strong>正确答案：</strong>{'correctAnswer' in question ? String(question.correctAnswer) : ''}</p><p>{question.explanationZh}</p></details>) : <p>本次没有已作答的客观错题。</p>}</section>

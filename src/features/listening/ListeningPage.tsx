@@ -43,7 +43,8 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
   const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
   const [submissionState, setSubmissionState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [translationUnlocked, setTranslationUnlocked] = useState(false);
-  const [startedAt] = useState(() => Date.now());
+  const questionStartedAt = useRef(Date.now());
+  const attemptId = useRef(crypto.randomUUID());
   const submissionLock = useRef(false);
   const translationQuestion: ObjectiveQuestion = {
     id: `${listeningSet.id}:q${questionIndex + 1}`,
@@ -92,10 +93,10 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
     const catalogQuestion = getQuestion(`${listeningSet.id}:q${questionIndex + 1}`);
     try {
       await repository.saveAttemptOnce({
-        id: crypto.randomUUID(), userId: 'local-learner', deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device',
+        id: attemptId.current, userId: 'local-learner', deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device',
         questionId: catalogQuestion?.id ?? `${listeningSet.id}:q${questionIndex + 1}`, contentVersion: 'v1', kind: 'listening', mode: 'practice',
         response: selected, correct, score: correct ? 1 : 0,
-        durationSeconds: Math.max(0, Math.round((Date.now() - startedAt) / 1000)), createdAt: now.toISOString(),
+        durationSeconds: Math.max(0, Math.round((Date.now() - questionStartedAt.current) / 1000)), createdAt: now.toISOString(),
       });
       if (!correct) await repository.upsertReviewCard({
         id: `review:${listeningSet.id}:q${questionIndex + 1}`,
@@ -119,6 +120,8 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
     setSubmissionState('idle');
     setTranslationUnlocked(false);
     submissionLock.current = false;
+    questionStartedAt.current = Date.now();
+    attemptId.current = crypto.randomUUID();
   };
 
   return <section className="listening-page">

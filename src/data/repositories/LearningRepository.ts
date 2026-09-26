@@ -20,6 +20,7 @@ export interface LearningRepository extends SyncQueue {
   getPendingOperations(): Promise<PendingOperation[]>;
   saveExamSession(session: ExamSessionRecord): Promise<void>;
   getActiveExamSession(): Promise<ExamSessionRecord | undefined>;
+  listSubmittedExamSessions(): Promise<ExamSessionRecord[]>;
   savePlan(plan: CachedPlan): Promise<void>;
   getPlan(date: string): Promise<CachedPlan | null>;
 }

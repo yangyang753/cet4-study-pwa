@@ -150,6 +150,23 @@ describe('ListeningPage', () => {
     await waitFor(async () => expect(await learningRepository.listAttempts()).toHaveLength(1));
   });
 
+  it('reuses the same attempt id when a failed save is retried', async () => {
+    const user = userEvent.setup();
+    const learningRepository = repository();
+    const originalSave = learningRepository.saveAttemptOnce.bind(learningRepository);
+    const save = vi.spyOn(learningRepository, 'saveAttemptOnce').mockRejectedValueOnce(new Error('storage')).mockImplementation(originalSave);
+    render(<ListeningPage repository={learningRepository} />);
+
+    await unlockListeningQuestion();
+    await user.click(screen.getByRole('radio', { name: /Sunday afternoon/ }));
+    await user.click(screen.getByRole('button', { name: '提交答案' }));
+    expect(await screen.findByText(/保存失败/)).toBeVisible();
+    await user.click(screen.getByRole('button', { name: '提交答案' }));
+    expect(await screen.findByText('回答正确')).toBeVisible();
+    expect(save).toHaveBeenCalledTimes(2);
+    expect(save.mock.calls[0][0].id).toBe(save.mock.calls[1][0].id);
+  });
+
   it('adds a wrong answer to the review queue', async () => {
     const user = userEvent.setup();
     const learningRepository = repository();
