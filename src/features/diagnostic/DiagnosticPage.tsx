@@ -115,9 +115,10 @@ export function DiagnosticPage({ repository = defaultRepository, now = () => new
   };
 
   if (result) {
-    const weakSkill = selectDiagnosticWeakSkill(result.levels) ?? result.weakSkills[0];
+    const fallbackWeakSkill = selectDiagnosticWeakSkill(result.levels);
+    const weakSkills = result.weakSkills.length ? result.weakSkills : fallbackWeakSkill ? [fallbackWeakSkill] : [];
     const gap = Math.max(0, 425 - result.estimatedScore);
-    return <section><h1 tabIndex={-1}>基础诊断已完成</h1><p>结果已用于安排学习计划；参考区间不是官方成绩。</p><p><strong>预计 {result.estimatedScore} 分</strong>（{result.scoreRange.low}～{result.scoreRange.high}）</p><p>{gap ? `距离 425 分还差 ${gap} 分` : '已达到 425 分参考线'}</p><h2>分项参考分</h2><ul><li>写作：{result.sectionScores.writing} / 106.5</li><li>听力：{result.sectionScores.listening} / 248.5</li><li>阅读：{result.sectionScores.reading} / 248.5</li><li>翻译：{result.sectionScores.translation} / 106.5</li></ul><h2>能力正确率</h2><ul>{Object.entries(result.levels).map(([kind, level]) => <li key={kind}>{labels[kind as CoreStudyKind]}：{Math.round(level * 100)}%</li>)}</ul>{weakSkill && <p><strong>优先加强：{labels[weakSkill]}</strong></p>}<a href={`${import.meta.env.BASE_URL}today`}>查看今日计划</a><button type="button" onClick={restart}>重新诊断</button></section>;
+    return <section><h1 tabIndex={-1}>基础诊断已完成</h1><p>结果已用于安排学习计划；参考区间不是官方成绩。</p><p><strong>预计 {result.estimatedScore} 分</strong>（{result.scoreRange.low}～{result.scoreRange.high}）</p><p>{gap ? `距离 425 分还差 ${gap} 分` : '已达到 425 分参考线'}</p><h2>分项参考分</h2><ul><li>写作：{result.sectionScores.writing} / 106.5</li><li>听力：{result.sectionScores.listening} / 248.5</li><li>阅读：{result.sectionScores.reading} / 248.5</li><li>翻译：{result.sectionScores.translation} / 106.5</li></ul><h2>能力正确率</h2><ul>{Object.entries(result.levels).map(([kind, level]) => <li key={kind}>{labels[kind as CoreStudyKind]}：{Math.round(level * 100)}%</li>)}</ul>{weakSkills.length > 0 && <p><strong>优先加强：{weakSkills.map((kind) => labels[kind]).join('、')}</strong></p>}<a href={`${import.meta.env.BASE_URL}today`}>查看今日计划</a><button type="button" onClick={restart}>重新诊断</button></section>;
   }
   if (resumePrompt) return <section><h1>继续上次诊断</h1><p>已保存 {session?.answers.length ?? 0} / {session?.questionIds.length ?? 0} 项。</p><button className="primary-action" onClick={() => setResumePrompt(false)}>继续上次诊断</button><button onClick={restart}>重新开始诊断</button></section>;
   if (!session || !question) return <section><h1>暂时无法生成基础诊断</h1><p role="alert">{saveError || initial.setupError || '请稍后重试。'}</p><button onClick={restart}>重新生成</button></section>;

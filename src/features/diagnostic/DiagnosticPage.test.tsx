@@ -71,6 +71,25 @@ describe('foundation diagnostic', () => {
     expect(screen.getByRole('button', { name: '重新保存并完成' })).toBeEnabled();
   });
 
+  it('shows both measured weak skills after a multi-skill diagnostic', async () => {
+    const user = userEvent.setup();
+    const vocabularyQuestion = getPracticeItems('vocabulary')[0];
+    const grammarQuestion = getPracticeItems('grammar')[0];
+    if (!('correctAnswer' in vocabularyQuestion) || !('correctAnswer' in grammarQuestion)) throw new Error('Expected objective questions');
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ settings: { id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-23T00:00:00.000Z' } }),
+      saveUserSettings: vi.fn().mockResolvedValue(undefined), saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<DiagnosticPage repository={repository} questions={[
+      { ...vocabularyQuestion, diagnosticKind: 'vocabulary' }, { ...grammarQuestion, diagnosticKind: 'grammar' },
+    ]} />);
+    await user.click(screen.getAllByRole('radio').find((radio) => radio.getAttribute('value') !== String(vocabularyQuestion.correctAnswer))!);
+    await user.click(screen.getByRole('button', { name: '保存并下一题' }));
+    await user.click(screen.getAllByRole('radio').find((radio) => radio.getAttribute('value') === String(grammarQuestion.correctAnswer))!);
+    await user.click(screen.getByRole('button', { name: '完成诊断' }));
+    expect(await screen.findByText('优先加强：词汇、语法')).toBeVisible();
+  });
+
   it('offers to continue or restart a valid unfinished diagnostic', async () => {
     const user = userEvent.setup();
     const grammarQuestion = getPracticeItems('grammar')[0];

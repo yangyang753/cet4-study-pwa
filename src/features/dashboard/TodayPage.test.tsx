@@ -95,7 +95,7 @@ describe('TodayPage', () => {
     })} />);
 
     await screen.findByText('优先加强短文写作');
-    await waitFor(() => expect(screen.getByText('近期表现补强')).toBeVisible());
+    await waitFor(() => expect(screen.getByText(/近期表现补强/)).toBeVisible());
     expect(screen.queryByText('昨日顺延')).not.toBeInTheDocument();
   });
 
@@ -118,7 +118,7 @@ describe('TodayPage', () => {
     expect(screen.getByText('距离 425 分还差 106 分')).toBeVisible();
     expect(screen.getByText('当前优先补强：写作、听力')).toBeVisible();
     expect(screen.getByRole('link', { name: '重新诊断' })).toHaveAttribute('href', expect.stringContaining('diagnostic'));
-    expect(screen.getByRole('heading', { name: '短文写作' }).closest('article')).toHaveTextContent('诊断补强');
+    expect(screen.getByRole('heading', { name: '短文写作' }).closest('article')).toHaveTextContent('诊断补强 · 正确率 20%');
   });
 
   it('shows the adaptive new-word quota and due old-word count', async () => {
