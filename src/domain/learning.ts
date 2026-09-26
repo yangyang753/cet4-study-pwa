@@ -38,6 +38,7 @@ export interface KnowledgeState {
 
 export interface ExamReadinessState {
   registrationConfirmed: boolean;
+  paymentConfirmed: boolean;
   admissionTicketPrepared: boolean;
   equipmentPrepared: boolean;
 }
@@ -48,6 +49,7 @@ export interface UserSettings {
   dailyMinutes: number;
   playbackRate: number;
   reminderTime?: string;
+  registrationDeadline?: string;
   readiness?: ExamReadinessState;
   diagnosticCompletedAt?: string;
   diagnosticLevels?: Partial<Record<CoreStudyKind, number>>;
@@ -70,6 +72,7 @@ export const defaultUserSettings = (): UserSettings => ({
   reminderTime: '',
   readiness: {
     registrationConfirmed: false,
+    paymentConfirmed: false,
     admissionTicketPrepared: false,
     equipmentPrepared: false,
   },

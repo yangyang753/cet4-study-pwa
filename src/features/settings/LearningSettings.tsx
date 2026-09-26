@@ -11,6 +11,7 @@ export function LearningSettings({ repository = defaultRepository }: { repositor
   const [dailyMinutes, setDailyMinutes] = useState('60');
   const [playbackRate, setPlaybackRate] = useState('1');
   const [reminderTime, setReminderTime] = useState('');
+  const [registrationDeadline, setRegistrationDeadline] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -24,6 +25,7 @@ export function LearningSettings({ repository = defaultRepository }: { repositor
       setDailyMinutes(String(normalized.dailyMinutes));
       setPlaybackRate(String(normalized.playbackRate));
       setReminderTime(normalized.reminderTime ?? '');
+      setRegistrationDeadline(normalized.registrationDeadline ?? '');
     }).catch(() => setError('读取学习设置失败，请刷新后重试。'));
     return () => { active = false; };
   }, [repository]);
@@ -47,6 +49,7 @@ export function LearningSettings({ repository = defaultRepository }: { repositor
       dailyMinutes: minutes,
       playbackRate: Number(playbackRate),
       reminderTime,
+      registrationDeadline,
       updatedAt: new Date().toISOString(),
     });
     try {
@@ -66,6 +69,8 @@ export function LearningSettings({ repository = defaultRepository }: { repositor
     <p>这些设置会同步影响今日计划、错题复习和听力播放。</p>
     <form noValidate onSubmit={(event) => void submit(event)}>
       <label>考试日期<input aria-label="考试日期" type="date" value={examDate} onChange={(event) => setExamDate(event.target.value)} /></label>
+      <label>本校报名截止日期<input aria-label="本校报名截止日期" type="date" value={registrationDeadline} onChange={(event) => setRegistrationDeadline(event.target.value)} /></label>
+      <p><small>四六级报名时间由学校安排，请按本校教务通知填写；不要只等全国统一提醒。</small></p>
       <label>每日学习分钟数<input aria-label="每日学习分钟数" type="number" min="20" max="180" value={dailyMinutes} onChange={(event) => setDailyMinutes(event.target.value)} /></label>
       <label>默认听力速度<select aria-label="默认听力速度" value={playbackRate} onChange={(event) => setPlaybackRate(event.target.value)}>{[0.75, 1, 1.25, 1.5].map((rate) => <option key={rate} value={rate}>{rate}×</option>)}</select></label>
       <label>每日提醒时间<input aria-label="每日提醒时间" type="time" value={reminderTime} onChange={(event) => setReminderTime(event.target.value)} /></label>

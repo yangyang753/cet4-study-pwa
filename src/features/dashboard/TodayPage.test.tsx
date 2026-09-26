@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { TodayPage } from './TodayPage';
+import { greetingForHour, TodayPage } from './TodayPage';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { learningVocabulary } from '../../content/vocabularyLearning';
 
@@ -27,6 +27,11 @@ function repository(overrides = {}) {
 }
 
 describe('TodayPage', () => {
+  it('uses the local hour for the greeting', () => {
+    expect(greetingForHour(7)).toBe('早上好');
+    expect(greetingForHour(13)).toBe('下午好');
+    expect(greetingForHour(21)).toBe('晚上好');
+  });
   it('starts daily training with vocabulary before questions', async () => {
     render(<TodayPage today="2026-09-22" repository={repository()} />);
     expect(await screen.findByRole('link', { name: '先学高频词 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
@@ -93,7 +98,7 @@ describe('TodayPage', () => {
     render(<TodayPage today="2026-09-25" repository={repository({
       knowledgeStates: [{ id: 'knowledge:v0001', itemId: 'v0001', status: 'mastered', favorite: false, nextReviewAt: '2026-09-24T00:00:00.000Z', updatedAt: '2026-09-23T00:00:00.000Z' }],
     })} />);
-    expect(await screen.findByText('今日旧词 1 个')).toBeVisible();
+    expect(await screen.findByText('今日复习 1/1 个')).toBeVisible();
     expect(screen.getByText('今日新词 13 个')).toBeVisible();
     expect(screen.getByText('还剩 799 个高频词')).toBeVisible();
     expect(screen.getByText(/预计.*前完成首轮/)).toBeVisible();
@@ -103,8 +108,7 @@ describe('TodayPage', () => {
 
   it('warns when the capped daily pace cannot finish before the exam', async () => {
     render(<TodayPage today="2026-12-10" repository={repository()} />);
-    expect(await screen.findByRole('alert')).toHaveTextContent('按当前上限无法在考试前完成首轮');
-    expect(screen.getByRole('alert')).toHaveTextContent('每天至少 800 个');
+    expect(await screen.findByText(/按当前上限无法在考试前完成首轮/)).toHaveTextContent('每天至少 800 个');
   });
 
   it('celebrates a completed high-frequency vocabulary list without assigning new words', async () => {

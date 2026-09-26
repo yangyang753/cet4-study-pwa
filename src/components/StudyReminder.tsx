@@ -4,6 +4,11 @@ import type { LearningRepository } from '../data/repositories/LearningRepository
 
 const reminderStorageKey = 'cet4:last-study-reminder';
 const dateKey = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+const previousDateKey = (date: Date) => {
+  const previous = new Date(date);
+  previous.setDate(previous.getDate() - 1);
+  return dateKey(previous);
+};
 
 export function isStudyReminderDue(now: Date, reminderTime: string, lastShownDate: string) {
   if (!/^\d{2}:\d{2}$/.test(reminderTime) || lastShownDate === dateKey(now)) return false;
@@ -25,9 +30,14 @@ export function StudyReminder({ repository = defaultRepository, now = () => new 
         const current = now();
         const currentDate = dateKey(current);
         const alreadyStudied = snapshot.completions.some((completion) => completion.date === currentDate);
-        if (!active || alreadyStudied || !isStudyReminderDue(current, snapshot.settings.reminderTime ?? '', localStorage.getItem(reminderStorageKey) ?? '')) return;
+        const lastShownDate = localStorage.getItem(reminderStorageKey) ?? '';
+        const missedYesterday = snapshot.completions.length > 0 && !snapshot.completions.some((completion) => completion.date === previousDateKey(current));
+        const regularReminderDue = isStudyReminderDue(current, snapshot.settings.reminderTime ?? '', lastShownDate);
+        if (!active || alreadyStudied || lastShownDate === currentDate || (!missedYesterday && !regularReminderDue)) return;
         localStorage.setItem(reminderStorageKey, currentDate);
-        const copy = `今天的 ${snapshot.settings.dailyMinutes} 分钟训练还没有开始。`;
+        const copy = missedYesterday
+          ? '昨天没有学习记录。今天先清旧词和错题，再继续新内容。'
+          : `今天的 ${snapshot.settings.dailyMinutes} 分钟训练还没有开始。`;
         setMessage(copy);
         if ('Notification' in window && Notification.permission === 'granted') new Notification('四级向前', { body: copy });
       } catch {

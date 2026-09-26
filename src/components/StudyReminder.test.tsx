@@ -36,4 +36,12 @@ describe('StudyReminder', () => {
     expect(completedRepository.getDashboardSnapshot).toHaveBeenCalled();
     expect(screen.queryByText(/今天的 60 分钟训练还没有开始/)).not.toBeInTheDocument();
   });
+
+  it('shows a catch-up cue when an established learner missed yesterday', async () => {
+    const catchUpRepository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ settings, attempts: [], completions: [{ date: '2026-09-22', taskId: '2026-09-22:listening' }] }),
+    } as unknown as LearningRepository;
+    render(<StudyReminder repository={catchUpRepository} now={() => new Date(2026, 8, 24, 10, 0)} />);
+    expect(await screen.findByText(/昨天没有学习记录/)).toBeVisible();
+  });
 });

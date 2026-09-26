@@ -11,6 +11,16 @@ const settings: UserSettings = {
 };
 
 describe('ExamReadiness', () => {
+  it('immediately warns about school-specific registration before confirmation', () => {
+    render(<ExamReadiness settings={{ ...settings, registrationDeadline: '2026-10-10' }} today="2026-09-26" repository={{} as LearningRepository} />);
+    expect(screen.getByText(/距本校报名截止还有 14 天/)).toBeVisible();
+    expect(screen.getByRole('link', { name: /官方报名入口/ })).toHaveAttribute('href', 'https://cet-kw.neea.edu.cn/Index');
+  });
+
+  it('prompts for payment after registration is confirmed', () => {
+    render(<ExamReadiness settings={{ ...settings, readiness: { registrationConfirmed: true, paymentConfirmed: false, admissionTicketPrepared: false, equipmentPrepared: false } }} today="2026-09-26" repository={{} as LearningRepository} />);
+    expect(screen.getByText(/尽快完成缴费/)).toBeVisible();
+  });
   it('shows the final-14-day preparation reminder', () => {
     render(<ExamReadiness settings={settings} today="2026-12-02" repository={{} as LearningRepository} />);
     expect(screen.getByText(/进入考前 14 天/)).toBeVisible();

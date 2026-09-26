@@ -13,9 +13,16 @@ describe('normalizeUserSettings', () => {
       reminderTime: '',
       readiness: {
         registrationConfirmed: false,
+        paymentConfirmed: false,
         admissionTicketPrepared: false,
         equipmentPrepared: false,
       },
+    });
+  });
+
+  it('preserves a school registration deadline and readiness written by a newer version', () => {
+    expect(normalizeUserSettings({ registrationDeadline: '2026-10-10', readiness: { registrationConfirmed: true, paymentConfirmed: true, admissionTicketPrepared: false, equipmentPrepared: false } })).toMatchObject({
+      registrationDeadline: '2026-10-10', readiness: { registrationConfirmed: true, paymentConfirmed: true },
     });
   });
 });

@@ -14,6 +14,11 @@ import { learningVocabulary } from '../../content/vocabularyLearning';
 import { buildVocabularyWorkload } from '../vocabulary/vocabularySchedule';
 
 const defaultRepository = new DexieLearningRepository();
+export function greetingForHour(hour: number) {
+  if (hour < 11) return '早上好';
+  if (hour < 18) return '下午好';
+  return '晚上好';
+}
 const taskCopy: Record<StudyKind, { icon: string; title: string; detail: string; href: string }> = {
   vocabulary: { icon: 'Aa', title: '高频词汇与词性', detail: '10 个核心词 + 5 道词性判断', href: 'practice/vocabulary' },
   grammar: { icon: 'Gr', title: '重点语法', detail: '找主干并检查句子形式', href: 'practice/grammar' },
@@ -54,7 +59,7 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
   }, [plan.tasks, previousPlan, repository, snapshot, today]);
 
   return <div className="today-page">
-    <header className="page-heading"><div><h1>下午好，向目标 425 分前进</h1><p>今天只需要专注 {dailyMinutes} 分钟。</p></div><a className="avatar" href={`${import.meta.env.BASE_URL}account`} aria-label="账户与同步">L</a></header>
+    <header className="page-heading"><div><h1>{greetingForHour(new Date().getHours())}，向目标 425 分前进</h1><p>今天只需要专注 {dailyMinutes} 分钟。</p></div><a className="avatar" href={`${import.meta.env.BASE_URL}account`} aria-label="账户与同步">L</a></header>
     {snapshot && !snapshot.settings.diagnosticCompletedAt && <aside className="cloud-notice"><strong>先做 10～15 分钟基础诊断</strong><p>系统会据此安排第一周学习重点；也可以稍后再做。</p><a href={`${import.meta.env.BASE_URL}diagnostic`}>开始基础诊断</a></aside>}
     <section className="dashboard-hero"><div className="focus-card"><span>今日重点</span><h2>{focusKind ? `优先加强${taskCopy[focusKind].title}` : '先建立学习记录，再定位薄弱项'}</h2><p>先复习旧词，再学新词并完成段落翻译；漏译和拼写错误会自动加入错题复习。</p>{vocabularyWorkload && <div className="vocabulary-workload" aria-label="今日词汇安排"><b>今日复习 {vocabularyWorkload.dueWords.length}/{vocabularyWorkload.dueWordCount} 个</b><b>今日新词 {vocabularyWorkload.newWords.length} 个</b>{vocabularyWorkload.reviewBacklog > 0 && <span className="pace-warning" role="alert">仍有 {vocabularyWorkload.reviewBacklog} 个到期旧词排队，新词已暂停，先清复习积压。</span>}<span>{vocabularyWorkload.remainingWords === 0 ? `${learningVocabulary.length} 个高频词已进入巩固复习` : `还剩 ${vocabularyWorkload.remainingWords} 个高频词`}</span>{vocabularyWorkload.remainingWords > 0 && vocabularyWorkload.newWordQuota > 0 && <span>预计 {vocabularyWorkload.projectedCompletionDate} 前完成首轮接触</span>}<small>425 参考线 · 450 安全目标</small>{vocabularyWorkload.atRisk && <p className="pace-warning" role="alert">按当前上限无法在考试前完成首轮接触：每天至少 {vocabularyWorkload.requiredDailyWords} 个。请延长每日学习时间，并优先完成词汇。</p>}</div>}<a className="focus-action" href={`${import.meta.env.BASE_URL}practice/vocabulary`}>先学高频词 →</a><a className="knowledge-action" href={`${import.meta.env.BASE_URL}knowledge`}>查看高频知识</a></div><div className="countdown-card"><span>距离考试</span><strong>{daysUntil(today, targetDate)}</strong><b>天</b><h3>{plan.phase === 'foundation' ? '基础补强期' : plan.phase === 'breakthrough' ? '题型突破期' : '冲刺模拟期'}</h3></div></section>
     {snapshot && <ExamReadiness settings={snapshot.settings} today={today} repository={repository} />}
