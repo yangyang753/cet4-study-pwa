@@ -7,6 +7,8 @@ const REVIEW_INTERVALS = [1, 3, 7, 14, 30] as const;
 export interface VocabularyWorkload {
   newWords: VocabularyEntry[];
   dueWords: VocabularyEntry[];
+  dueWordCount: number;
+  reviewBacklog: number;
   newWordQuota: number;
   remainingWords: number;
   projectedCompletionDate: string;
@@ -38,12 +40,12 @@ export function buildVocabularyWorkload(
   const daysRemaining = Math.max(0, Math.ceil((dateMs(examDate) - dateMs(today)) / DAY_MS));
   const learningDays = Math.max(1, daysRemaining - 14);
   const requiredDailyWords = remainingWords === 0 ? 0 : Math.ceil(remainingWords / learningDays);
-  const newWordQuota = remainingWords === 0 ? 0 : Math.min(20, Math.max(10, requiredDailyWords));
+  const baseNewWordQuota = remainingWords === 0 ? 0 : Math.min(20, Math.max(10, requiredDailyWords));
   const unseen = entries
     .filter((item) => !stateById.has(item.id))
     .sort((left, right) => (right.frequency ?? 0) - (left.frequency ?? 0));
   const dueAt = dateMs(`${today}T23:59:59.999Z`);
-  const dueWords = entries
+  const allDueWords = entries
     .map((word) => ({ word, state: stateById.get(word.id) }))
     .filter((item): item is { word: VocabularyEntry; state: KnowledgeState } => Boolean(item.state))
     .filter(({ state }) => dateMs(state.nextReviewAt ?? addDays(state.updatedAt, 1)) <= dueAt)
@@ -52,8 +54,11 @@ export function buildVocabularyWorkload(
       const rightDue = dateMs(right.state.nextReviewAt ?? addDays(right.state.updatedAt, 1));
       return leftDue - rightDue || (right.word.frequency ?? 0) - (left.word.frequency ?? 0);
     })
-    .slice(0, 15)
     .map(({ word }) => word);
+  const dueWords = allDueWords.slice(0, 20);
+  const dueWordCount = allDueWords.length;
+  const reviewBacklog = Math.max(0, dueWordCount - dueWords.length);
+  const newWordQuota = dueWords.length >= 20 ? 0 : Math.min(baseNewWordQuota, 20 - dueWords.length);
   const studyDays = newWordQuota === 0 ? 0 : Math.ceil(remainingWords / newWordQuota);
   const projectedCompletionDate = studyDate(addDays(today, studyDays));
   const estimatedMinutes = Math.min(35, Math.max(10, Math.ceil(newWordQuota * 1.2 + dueWords.length * 0.5 + 5)));
@@ -61,6 +66,8 @@ export function buildVocabularyWorkload(
   return {
     newWords: unseen.slice(0, newWordQuota),
     dueWords,
+    dueWordCount,
+    reviewBacklog,
     newWordQuota,
     remainingWords,
     projectedCompletionDate,

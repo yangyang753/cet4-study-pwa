@@ -28,6 +28,17 @@ describe('planDay', () => {
     expect(plan.tasks[2].minutes).toBeGreaterThanOrEqual(10);
   });
 
+  it.each([20, 30, 60, 180])('never creates negative time inside a %i-minute budget', (dailyMinutes) => {
+    const plan = planDay({ ...base, dailyMinutes, vocabularyMinutes: 35 });
+    expect(plan.tasks.every((task) => task.minutes > 0)).toBe(true);
+    expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBe(dailyMinutes);
+  });
+
+  it('drops the rotating task when a short plan cannot give it meaningful time', () => {
+    const plan = planDay({ ...base, dailyMinutes: 20 });
+    expect(plan.tasks.map((task) => task.kind)).toEqual(['vocabulary', 'listening', 'review']);
+  });
+
   it('moves into sprint phase within four weeks of the exam', () => {
     expect(planDay({ ...base, date: '2026-11-20' }).phase).toBe('sprint');
   });

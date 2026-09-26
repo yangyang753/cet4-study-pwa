@@ -41,13 +41,17 @@ describe('vocabulary workload', () => {
     expect(result.remainingWords).toBe(0);
   });
 
-  it('returns at most fifteen due words ordered by most overdue first', () => {
-    const entries = Array.from({ length: 18 }, (_, i) => entry(i));
-    const states = entries.map((_, i) => state(i, { nextReviewAt: `2026-09-${String(i + 1).padStart(2, '0')}T00:00:00.000Z` }));
-    const result = buildVocabularyWorkload(entries, states, '2026-09-25', '2026-12-12');
-    expect(result.dueWords).toHaveLength(15);
+  it('reports the full due backlog and pauses new words when review fills the daily capacity', () => {
+    const entries = Array.from({ length: 45 }, (_, i) => entry(i));
+    const states = entries.map((_, i) => state(i, { nextReviewAt: new Date(Date.UTC(2026, 6, 1 + i)).toISOString() }));
+    const result = buildVocabularyWorkload([...entries, ...Array.from({ length: 30 }, (_, i) => entry(i + 100))], states, '2026-10-31', '2026-12-12');
+    expect(result.dueWordCount).toBe(45);
+    expect(result.dueWords).toHaveLength(20);
+    expect(result.reviewBacklog).toBe(25);
+    expect(result.newWordQuota).toBe(0);
+    expect(result.newWords).toHaveLength(0);
     expect(result.dueWords[0].id).toBe('v0');
-    expect(result.dueWords[14].id).toBe('v14');
+    expect(result.dueWords[19].id).toBe('v19');
   });
 
   it('brings legacy learning words without a review date back for review', () => {

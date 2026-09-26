@@ -21,21 +21,29 @@ export function planDay(input: PlannerInput): DailyPlan {
   const requestedRotating: StudyKind = phase === 'sprint' ? 'mock' : evidenceWeakSkill ?? rotatingFoundationKind(input.date);
   const rotating: StudyKind = ['vocabulary', 'listening', 'review'].includes(requestedRotating) ? 'reading' : requestedRotating;
   const minutes = input.dailyMinutes;
-  const defaultVocabularyMinutes = Math.round(minutes * 0.25);
-  const maximumVocabularyMinutes = Math.max(defaultVocabularyMinutes, minutes - 30);
+  const reviewMinutes = Math.min(5, minutes);
+  const minimumListeningMinutes = Math.min(minutes - reviewMinutes, minutes >= 45 ? 15 : Math.max(5, Math.round(minutes * 0.35)));
+  const minimumRotatingMinutes = minutes >= 30 ? 5 : 0;
+  const defaultVocabularyMinutes = Math.max(5, Math.round(minutes * 0.25));
+  const maximumVocabularyMinutes = Math.max(0, minutes - reviewMinutes - minimumListeningMinutes - minimumRotatingMinutes);
   const vocabularyMinutes = Math.min(maximumVocabularyMinutes, Math.max(defaultVocabularyMinutes, input.vocabularyMinutes ?? defaultVocabularyMinutes));
-  const listeningMinutes = Math.max(15, Math.min(Math.round(minutes / 3), minutes - vocabularyMinutes - 15));
-  const reviewMinutes = Math.max(5, Math.round(minutes / 12));
+  const maximumListeningMinutes = minutes - vocabularyMinutes - reviewMinutes - minimumRotatingMinutes;
+  const listeningMinutes = Math.min(maximumListeningMinutes, Math.max(minimumListeningMinutes, Math.round(minutes / 3)));
   const rotatingMinutes = minutes - vocabularyMinutes - listeningMinutes - reviewMinutes;
   const carryover = [...input.unfinished].sort((a, b) => b.priority - a.priority)[0];
   const tasks: StudyTask[] = [
     { id: `${input.date}:vocabulary`, kind: 'vocabulary', minutes: vocabularyMinutes, priority: 3 },
     { id: `${input.date}:listening`, kind: 'listening', minutes: listeningMinutes, priority: 4 },
-    carryover ? { ...carryover, minutes: Math.min(rotatingMinutes, carryover.minutes) } : { id: `${input.date}:${rotating}`, kind: rotating, minutes: rotatingMinutes, priority: 2 },
-    { id: `${input.date}:review`, kind: 'review', minutes: reviewMinutes, priority: 5 },
   ];
+  if (rotatingMinutes >= 5) tasks.push(carryover ? { ...carryover, minutes: Math.min(rotatingMinutes, carryover.minutes) } : { id: `${input.date}:${rotating}`, kind: rotating, minutes: rotatingMinutes, priority: 2 });
+  else tasks[1] = { ...tasks[1], minutes: tasks[1].minutes + rotatingMinutes };
+  tasks.push({ id: `${input.date}:review`, kind: 'review', minutes: reviewMinutes, priority: 5 });
   const total = tasks.reduce((sum, task) => sum + task.minutes, 0);
-  if (total < minutes) tasks[2] = { ...tasks[2], minutes: tasks[2].minutes + minutes - total };
+  if (total < minutes) {
+    const targetIndex = tasks.findIndex((task) => !['vocabulary', 'listening', 'review'].includes(task.kind));
+    const index = targetIndex >= 0 ? targetIndex : 1;
+    tasks[index] = { ...tasks[index], minutes: tasks[index].minutes + minutes - total };
+  }
   return { date: input.date, phase, tasks };
 }
 
