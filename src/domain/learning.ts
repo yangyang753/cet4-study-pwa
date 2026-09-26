@@ -45,6 +45,21 @@ export interface ExamReadinessState {
   equipmentPrepared: boolean;
 }
 
+export interface DiagnosticScoreRange { low: number; high: number }
+export interface DiagnosticSectionScores { writing: number; listening: number; reading: number; translation: number }
+export interface DiagnosticProfileV2 {
+  version: 2;
+  sessionId: string;
+  completedAt: string;
+  questionCount: number;
+  levels: Partial<Record<CoreStudyKind, number>>;
+  sectionScores: DiagnosticSectionScores;
+  estimatedScore: number;
+  scoreRange: DiagnosticScoreRange;
+  weakSkills: CoreStudyKind[];
+  confidence: 'initial' | 'developing' | 'strong';
+}
+
 export interface UserSettings {
   id: 'current';
   examDate: string;
@@ -55,6 +70,7 @@ export interface UserSettings {
   readiness?: ExamReadinessState;
   diagnosticCompletedAt?: string;
   diagnosticLevels?: Partial<Record<CoreStudyKind, number>>;
+  diagnosticProfile?: DiagnosticProfileV2;
   updatedAt: string;
 }
 
