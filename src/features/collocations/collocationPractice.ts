@@ -18,7 +18,10 @@ export function buildCollocationQuestion(item: CollocationEntry, entries: Colloc
     const meaning = entries[(index + offset) % entries.length].meaningZh;
     if (meaning !== item.meaningZh && !distractors.includes(meaning)) distractors.push(meaning);
   }
-  const options = [item.meaningZh, ...distractors];
+  const rawOptions = [item.meaningZh, ...distractors];
+  const shift = index % rawOptions.length;
+  const options = [...rawOptions.slice(shift), ...rawOptions.slice(0, shift)];
+  const correctIndex = options.indexOf(item.meaningZh);
   return {
     id: `${item.id}:collocation`, version: 1, type: 'collocation', difficulty: 'foundation',
     prompt: `请选择 “${item.phrase}” 的正确含义。`,
@@ -26,10 +29,9 @@ export function buildCollocationQuestion(item: CollocationEntry, entries: Colloc
     explanationZh: `${item.phrase}：${item.meaningZh}。例句：${item.example}`,
     sourceNote: '依据 CET-4 高频搭配编写的原创练习',
     options: options.map((text, optionIndex) => ({ id: optionId(optionIndex), text })),
-    correctAnswer: 'A',
+    correctAnswer: optionId(correctIndex),
   };
 }
-
 export function selectDailyCollocations(
   entries: CollocationEntry[],
   states: KnowledgeState[],
@@ -59,4 +61,3 @@ export function collocationReviewCard(
     stage, nextReviewAt, lastCorrect: correct, priority: correct ? Math.max(1, 5 - stage) : 6, updatedAt: now,
   };
 }
-

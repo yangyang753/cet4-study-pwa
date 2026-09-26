@@ -34,7 +34,7 @@ export function CollocationCheck({ repository, entries, allEntries = entries, st
       await repository.saveAttemptOnce({
         id: crypto.randomUUID(), userId: 'local-learner', questionId: question.id, response,
         correct: graded.correct, score: graded.score, durationSeconds: 0, contentVersion: 'v1',
-        kind: 'vocabulary', mode: 'mastery', deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device', createdAt: now,
+        kind: 'collocation', mode: 'mastery', deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device', createdAt: now,
       });
       await repository.upsertKnowledgeState(next);
       await repository.upsertReviewCard(collocationReviewCard(item.id, next.reviewStage ?? 0, graded.correct ? next.nextReviewAt ?? now : now, graded.correct, now));
@@ -56,4 +56,3 @@ export function CollocationCheck({ repository, entries, allEntries = entries, st
 
   return <section className="exercise-runner collocation-check"><header><h1>重点搭配检测</h1><b>{index + 1} / {entries.length}</b></header><ObjectiveQuestion question={question} value={response} disabled={result !== null || saving} onChange={setResponse} />{error && <p role="alert">{error}</p>}{result !== null && <p role="status" className={result ? 'correct' : 'incorrect'}>{result ? '本次检测通过，已进入间隔巩固。' : `回答错误，已重新加入待复习。${question.explanationZh}`}</p>}{result === null ? <button className="primary-action" disabled={!response || saving} onClick={() => void submit()}>{saving ? '正在保存…' : '提交搭配答案'}</button> : <button className="primary-action" onClick={next}>{index >= entries.length - 1 ? '完成重点搭配' : '下一个重点搭配'}</button>}</section>;
 }
-

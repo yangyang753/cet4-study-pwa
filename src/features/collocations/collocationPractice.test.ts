@@ -18,6 +18,11 @@ describe('collocation practice', () => {
     expect(question.options.find((option) => option.id === question.correctAnswer)?.text).toBe('参加');
   });
 
+  it('does not put every correct collocation answer in the same option position', () => {
+    const answers = entries.map((entry) => buildCollocationQuestion(entry, entries).correctAnswer);
+    expect(new Set(answers).size).toBeGreaterThan(1);
+  });
+
   it('selects due collocations before unseen collocations and excludes future mastered items', () => {
     const states: KnowledgeState[] = [
       { id: 'knowledge:c1', itemId: 'c1', status: 'review', favorite: false, nextReviewAt: '2026-09-25T00:00:00.000Z', updatedAt: '2026-09-20T00:00:00.000Z' },
@@ -32,4 +37,3 @@ describe('collocation practice', () => {
     });
   });
 });
-

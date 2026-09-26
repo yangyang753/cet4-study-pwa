@@ -19,7 +19,6 @@ export function initialKnowledgeState(itemId: string, now: string): KnowledgeSta
     updatedAt: now,
   };
 }
-
 export function applyKnowledgeReviewResult(
   current: KnowledgeState | undefined,
   itemId: string,
@@ -38,4 +37,3 @@ export function applyKnowledgeReviewResult(
     updatedAt: now,
   };
 }
-

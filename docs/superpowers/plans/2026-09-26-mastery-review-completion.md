@@ -133,4 +133,3 @@
 - [ ] Run `pnpm release:verify` and inspect every result.
 - [ ] Perform final diff review; fix Important findings through RED→GREEN tests.
 - [ ] Merge to main, push to GitHub, and verify the deployed GitHub Pages URL.
-
