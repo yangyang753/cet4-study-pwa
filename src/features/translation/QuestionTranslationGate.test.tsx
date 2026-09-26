@@ -19,6 +19,7 @@ function repository(overrides = {}) {
   return {
     getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
     upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+    upsertReviewCard: vi.fn().mockResolvedValue(undefined),
     ...overrides,
   } as unknown as LearningRepository;
 }
@@ -47,7 +48,7 @@ describe('QuestionTranslationGate', () => {
   it('saves missed words for review, preserves favorite, and unlocks answering', async () => {
     const onUnlocked = vi.fn();
     const learningRepository = repository({ getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
-      { id: 'knowledge:v-available', itemId: 'v-available', status: 'mastered', favorite: true, updatedAt: '2026-09-24T00:00:00.000Z' },
+      { id: 'knowledge:v-available', itemId: 'v-available', status: 'mastered', favorite: true, reviewStage: 3, lapseCount: 2, updatedAt: '2026-09-24T00:00:00.000Z' },
     ] }) });
     render(<QuestionTranslationGate question={question} repository={learningRepository} vocabulary={words} onUnlocked={onUnlocked} />);
     await fillGate('什么时候进行？');
@@ -55,9 +56,17 @@ describe('QuestionTranslationGate', () => {
 
     expect(await screen.findByText('activity')).toBeVisible();
     expect(screen.getByText('available')).toBeVisible();
-    expect(learningRepository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v-available', status: 'review', favorite: true }));
+    expect(learningRepository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v-available', status: 'review', favorite: true, reviewStage: 0, lapseCount: 3 }));
+    expect(learningRepository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ wordId: 'v-available', format: 'word-cloze' }));
     expect(onUnlocked).toHaveBeenCalledOnce();
     expect(screen.getByText(/已识别 2 个高频词/)).toBeVisible();
+  });
+
+  it('does not accept a one-character placeholder for an English segment', async () => {
+    render(<QuestionTranslationGate question={question} repository={repository()} vocabulary={words} onUnlocked={vi.fn()} />);
+    await fillGate('中');
+    await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('请先填写题干和所有英文选项');
   });
 
   it('rejects English filler that is not a Chinese translation', async () => {

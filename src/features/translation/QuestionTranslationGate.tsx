@@ -4,6 +4,7 @@ import { learningVocabulary } from '../../content/vocabularyLearning';
 import type { ObjectiveQuestion, VocabularyEntry } from '../../domain/content';
 import type { KnowledgeState } from '../../domain/learning';
 import { evaluateTranslation, type TranslationEvaluation } from './evaluateTranslation';
+import { recordTranslationResult, vocabularyReviewCard } from '../vocabulary/wordMastery';
 
 const defaultVocabulary = learningVocabulary;
 const containsEnglish = (text: string) => /[A-Za-z]/.test(text.replace(/(?:prep|pron|conj|modal|adj|adv|num|art|aux|vt|vi|ad|n|v|a)\./gi, ''));
@@ -51,13 +52,11 @@ export function QuestionTranslationGate({ question, repository, vocabulary = def
     setError('');
     const uniqueMisses = [...new Map(result.missedWords.map((word) => [word.id, word])).values()];
     try {
-      await Promise.all(uniqueMisses.map((word) => repository.upsertKnowledgeState({
-        id: `knowledge:${word.id}`,
-        itemId: word.id,
-        status: 'review',
-        favorite: states.get(word.id)?.favorite ?? false,
-        updatedAt: new Date().toISOString(),
-      })));
+      const now = new Date().toISOString();
+      await Promise.all(uniqueMisses.flatMap((word) => [
+        repository.upsertKnowledgeState(recordTranslationResult(states.get(word.id), word.id, false, now)),
+        repository.upsertReviewCard(vocabularyReviewCard(word.id, 'cloze', now)),
+      ]));
       setUnlocked(true);
       onUnlocked(result);
     } catch {

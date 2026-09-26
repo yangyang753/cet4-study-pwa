@@ -43,7 +43,7 @@ describe('evaluateTranslation', () => {
     const result = evaluateTranslation([{ id: 'stem', text: 'Zebra.', translation: '斑马。' }], vocabulary);
     expect(result.complete).toBe(true);
     expect(result.auditableWords).toEqual([]);
-    expect(evaluateTranslation([{ id: 'stem', text: 'A?', translation: '一' }], vocabulary).complete).toBe(true);
+    expect(evaluateTranslation([{ id: 'stem', text: 'A?', translation: '一' }], vocabulary).complete).toBe(false);
   });
 
   it('maps common inflections back to an existing headword', () => {

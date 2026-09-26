@@ -96,7 +96,7 @@ export function evaluateTranslation(segments: TranslationSegment[], vocabulary: 
   }
 
   return {
-    complete: segments.every((segment) => /[\u3400-\u9fff]/.test(segment.translation)),
+    complete: segments.every((segment) => (segment.translation.match(/[\u3400-\u9fff]/g)?.length ?? 0) >= 2),
     auditableWords,
     coveredWords,
     missedWords,
