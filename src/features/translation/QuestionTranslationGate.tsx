@@ -55,8 +55,8 @@ export function QuestionTranslationGate({ question, repository, vocabulary = def
       const now = new Date().toISOString();
       await Promise.all(uniqueMisses.flatMap((word) => [
         repository.upsertKnowledgeState(recordTranslationResult(states.get(word.id), word.id, false, now)),
-        repository.upsertReviewCard(vocabularyReviewCard(word.id, 'cloze', now)),
-      ]));
+        repository.upsertReviewCard?.(vocabularyReviewCard(word.id, 'cloze', now)),
+      ].filter((operation): operation is Promise<void> => Boolean(operation))));
       setUnlocked(true);
       onUnlocked(result);
     } catch {

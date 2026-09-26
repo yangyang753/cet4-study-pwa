@@ -17,7 +17,9 @@ export function ExamResult({ session, exam, repository }: { session: ExamSession
   const readiness = assessMockReadiness(recentScores);
   useEffect(() => {
     let active = true;
-    void repository.listSubmittedExamSessions().then((sessions) => {
+    const history = repository.listSubmittedExamSessions?.();
+    if (!history) return () => { active = false; };
+    void history.then((sessions) => {
       if (!active) return;
       const unique = [...new Map([session, ...sessions].map((item) => [item.id, item])).values()]
         .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
