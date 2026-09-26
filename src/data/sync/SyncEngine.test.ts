@@ -77,13 +77,38 @@ describe('SyncEngine', () => {
     await queue.put(attemptOperation('private-a-1'));
     const controller = new AbortController();
     const firstRemote: SyncRemote = { upsertAttempt: async () => { controller.abort(); }, upsertDraft: async () => undefined };
-    await expect(new SyncEngine(queue, firstRemote).sync('user-1', controller.signal)).rejects.toMatchObject({ name: 'AbortError' });
+    await expect(new SyncEngine(queue, firstRemote).sync('user-1', controller.signal, { claimUnowned: true })).rejects.toMatchObject({ name: 'AbortError' });
     const secondUpload = vi.fn().mockResolvedValue(undefined);
     const secondRemote: SyncRemote = { upsertAttempt: secondUpload, upsertDraft: async () => undefined };
 
     await new SyncEngine(queue, secondRemote).sync('user-2');
 
     expect(secondUpload).not.toHaveBeenCalled();
+  });
+
+  it('does not let an account silently claim anonymous local operations', async () => {
+    const queue = new MemoryQueue();
+    await queue.put(attemptOperation('anonymous-a-1'));
+    const upload = vi.fn().mockResolvedValue(undefined);
+    const remote: SyncRemote = { upsertAttempt: upload, upsertDraft: async () => undefined };
+
+    await new SyncEngine(queue, remote).sync('user-1', undefined, { claimUnowned: false });
+
+    expect(upload).not.toHaveBeenCalled();
+    expect((await queue.list())[0]).toMatchObject({ id: 'anonymous-a-1' });
+    expect((await queue.list())[0].ownerId).toBeUndefined();
+  });
+
+  it('claims anonymous operations only for an explicitly attached local profile', async () => {
+    const queue = new MemoryQueue();
+    await queue.put(attemptOperation('anonymous-a-2'));
+    const upload = vi.fn().mockResolvedValue(undefined);
+    const remote: SyncRemote = { upsertAttempt: upload, upsertDraft: async () => undefined };
+
+    await new SyncEngine(queue, remote).sync('user-1', undefined, { claimUnowned: true });
+
+    expect(upload).toHaveBeenCalledOnce();
+    expect(await queue.list()).toEqual([]);
   });
 });
 

@@ -31,7 +31,7 @@ describe('learning backup', () => {
     db.close();
   });
 
-  it('restores a backup containing a queued daily plan operation', async () => {
+  it('restores learning data but regenerates rather than replaying the source sync queue', async () => {
     const source = database();
     const now = '2026-09-24T09:00:00.000Z';
     await new DexieLearningRepository(source).savePlan({ id: 'plan:2026-09-24', date: '2026-09-24', tasks: [], updatedAt: now });
@@ -40,7 +40,24 @@ describe('learning backup', () => {
 
     await expect(importLearningData(target, backup)).resolves.toBeUndefined();
     expect(await target.plans.get('plan:2026-09-24')).toBeTruthy();
-    expect((await target.syncQueue.toArray()).some((item) => item.kind === 'plan')).toBe(true);
+    const importedQueue = await target.syncQueue.toArray();
+    expect(importedQueue.some((item) => backup.data.syncQueue.some((source) => source.id === item.id))).toBe(false);
+    expect(importedQueue).toContainEqual(expect.objectContaining({ kind: 'plan', entityId: 'plan:2026-09-24' }));
+    expect(importedQueue[0].ownerId).toBeUndefined();
+    source.close(); target.close();
+  });
+
+  it('round-trips every exam readiness field including payment confirmation', async () => {
+    const source = database();
+    await source.settings.put({
+      id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1,
+      readiness: { registrationConfirmed: true, paymentConfirmed: true, admissionTicketPrepared: false, equipmentPrepared: false },
+      updatedAt: '2026-09-26T08:00:00.000Z',
+    });
+    const target = database();
+    await importLearningData(target, await exportLearningData(source));
+
+    expect((await target.settings.get('current'))?.readiness).toMatchObject({ registrationConfirmed: true, paymentConfirmed: true });
     source.close(); target.close();
   });
 

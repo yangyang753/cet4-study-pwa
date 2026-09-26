@@ -19,6 +19,7 @@ export interface SyncRemote {
   upsertOperation?(kind: OperationKind, payload: Record<string, unknown>, signal?: AbortSignal): Promise<void>;
   pullSince?(cursor: string | null, signal?: AbortSignal): Promise<RemoteBatch>;
 }
+export interface SyncOptions { claimUnowned?: boolean }
 
 export function resolveDraftConflict(local: DraftRecord, remote: DraftRecord): DraftRecord[] {
   if (local.body === remote.body) return [new Date(local.updatedAt) > new Date(remote.updatedAt) ? local : remote];
@@ -31,7 +32,7 @@ export class SyncEngine {
   constructor(private readonly queue: SyncQueue, private readonly remote: SyncRemote) {}
   enqueue(operation: PendingOperation) { return this.queue.put(operation); }
 
-  async sync(userId: string, signal?: AbortSignal) {
+  async sync(userId: string, signal?: AbortSignal, options: SyncOptions = {}) {
     if (this.remote.pullSince) {
       const cursor = await this.queue.getSyncCursor(userId);
       const batch = await this.remote.pullSince(cursor, signal);
@@ -39,16 +40,17 @@ export class SyncEngine {
       await this.queue.mergeRemoteBatch(batch);
       await this.queue.setSyncCursor(batch.cursor, userId);
     }
-    return this.flush(signal, userId);
+    return this.flush(signal, userId, options.claimUnowned ?? false);
   }
 
-  async flush(signal?: AbortSignal, userId?: string): Promise<{ synced: number; failed: number }> {
+  async flush(signal?: AbortSignal, userId?: string, claimUnowned = false): Promise<{ synced: number; failed: number }> {
     const operations = (await this.queue.list()).sort((a, b) => a.createdAt.localeCompare(b.createdAt));
     let synced = 0;
     let failed = 0;
     for (const originalOperation of operations) {
       if (signal?.aborted) throw new DOMException('Sync cancelled', 'AbortError');
       if (userId && originalOperation.ownerId && originalOperation.ownerId !== userId) continue;
+      if (userId && !originalOperation.ownerId && !claimUnowned) continue;
       const operation = userId && !originalOperation.ownerId ? { ...originalOperation, ownerId: userId } : originalOperation;
       if (operation !== originalOperation) await this.queue.replace(operation);
       if (operation.attempts >= 5) { failed += 1; continue; }

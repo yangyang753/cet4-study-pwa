@@ -9,6 +9,7 @@ import { SyncContext, type SyncState } from './SyncContext';
 
 const defaultRepository = new DexieLearningRepository();
 const retryDelays = [2_000, 5_000, 15_000, 60_000];
+const localProfileOwnerKey = 'cet4:local-profile-owner';
 
 export function SyncCoordinator({ client, children, repository = defaultRepository, remoteFactory }: PropsWithChildren<{ client: SupabaseClient | null; repository?: LearningRepository; remoteFactory?: (userId: string) => SyncRemote }>) {
   const { user } = useAuth();
@@ -35,7 +36,10 @@ export function SyncCoordinator({ client, children, repository = defaultReposito
       setLastError(null);
       try {
         const engine = new SyncEngine(repository, createRemote(user.id));
-        await engine.sync(user.id, controller.signal);
+        const localProfileOwner = localStorage.getItem(localProfileOwnerKey);
+        const claimUnowned = !localProfileOwner || localProfileOwner === user.id;
+        if (!localProfileOwner) localStorage.setItem(localProfileOwnerKey, user.id);
+        await engine.sync(user.id, controller.signal, { claimUnowned });
         if (controller.signal.aborted) return;
         const remaining = (await repository.list()).length;
         setPendingCount(remaining);

@@ -17,7 +17,7 @@ const completionSchema = z.object({ id: z.string(), date: z.string(), taskId: z.
 const knowledgeSchema = z.object({ id: z.string(), itemId: z.string(), status: z.enum(['learning', 'review', 'mastered']), favorite: z.boolean(), updatedAt: iso }).passthrough();
 const settingsSchema = z.object({
   id: z.literal('current'), examDate: z.string(), dailyMinutes: z.number(), playbackRate: z.number(), updatedAt: iso,
-  readiness: z.object({ registrationConfirmed: z.boolean(), admissionTicketPrepared: z.boolean(), equipmentPrepared: z.boolean() }).optional(),
+  readiness: z.object({ registrationConfirmed: z.boolean(), paymentConfirmed: z.boolean().optional(), admissionTicketPrepared: z.boolean(), equipmentPrepared: z.boolean() }).optional(),
 }).passthrough();
 const examSchema = z.object({ id: z.string(), mockId: z.string(), contentVersion: z.string(), startedAt: iso, updatedAt: iso, sectionDeadlines: z.array(iso), currentSectionIndex: z.number(), lockedSectionIndexes: z.array(z.number()), answers: z.record(z.string(), z.union([z.string(), z.array(z.string())])), status: z.enum(['active', 'submitted', 'stale']) }).passthrough();
 const tombstoneSchema = z.object({ id: z.string(), kind: syncEntityKindSchema, entityId: z.string(), deletedAt: iso, updatedAt: iso }).passthrough();
@@ -47,6 +47,24 @@ function parseInput(input: unknown): LearningBackupV1 {
 
 const timestamp = (value: { updatedAt?: string; completedAt?: string; createdAt?: string }) => value.updatedAt ?? value.completedAt ?? value.createdAt ?? '';
 
+function regeneratedOperations(backup: LearningBackupV1): PendingOperation[] {
+  const sources: Array<[PendingOperation['kind'], Array<Record<string, unknown> & { id: string }>]> = [
+    ['attempt', backup.data.attempts as unknown as Array<Record<string, unknown> & { id: string }>],
+    ['draft', backup.data.drafts as unknown as Array<Record<string, unknown> & { id: string }>],
+    ['plan', backup.data.plans as unknown as Array<Record<string, unknown> & { id: string }>],
+    ['reviewCard', backup.data.reviewCards as unknown as Array<Record<string, unknown> & { id: string }>],
+    ['taskCompletion', backup.data.taskCompletions as unknown as Array<Record<string, unknown> & { id: string }>],
+    ['knowledgeState', backup.data.knowledgeStates as unknown as Array<Record<string, unknown> & { id: string }>],
+    ['settings', backup.data.settings as unknown as Array<Record<string, unknown> & { id: string }>],
+    ['examSession', backup.data.examSessions as unknown as Array<Record<string, unknown> & { id: string }>],
+    ['tombstone', backup.data.tombstones as unknown as Array<Record<string, unknown> & { id: string }>],
+  ];
+  return sources.flatMap(([kind, entities]) => entities.map((entity) => {
+    const createdAt = timestamp(entity) || backup.exportedAt;
+    return { id: `import:${kind}:${entity.id}:${createdAt}`, entityId: entity.id, kind, payload: entity, createdAt, attempts: 0 };
+  }));
+}
+
 export async function importLearningData(db: LearningDatabase = learningDb, input: unknown): Promise<void> {
   const backup = parseInput(input);
   const tables = [db.attempts, db.drafts, db.plans, db.syncQueue, db.reviewCards, db.taskCompletions, db.knowledgeStates, db.settings, db.examSessions, db.tombstones];
@@ -57,7 +75,7 @@ export async function importLearningData(db: LearningDatabase = learningDb, inpu
     };
     await merge(db.drafts, backup.data.drafts);
     await merge(db.plans, backup.data.plans);
-    await db.syncQueue.bulkPut(backup.data.syncQueue);
+    await db.syncQueue.bulkPut(regeneratedOperations(backup));
     await merge(db.reviewCards, backup.data.reviewCards);
     await merge(db.taskCompletions, backup.data.taskCompletions);
     await merge(db.knowledgeStates, backup.data.knowledgeStates);
