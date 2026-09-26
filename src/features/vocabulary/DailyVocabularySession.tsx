@@ -7,8 +7,11 @@ import { VocabularyWarmup } from './VocabularyWarmup';
 import { VocabularyTranslationCheck } from './VocabularyTranslationCheck';
 import { applyVocabularyReviewResult, buildVocabularyWorkload, buildWordCloze, type VocabularyWorkload } from './vocabularySchedule';
 import { vocabularyReviewCard } from './wordMastery';
+import collocationData from '../../../content/v1/collocations.json';
+import { CollocationCheck } from '../collocations/CollocationCheck';
+import { selectDailyCollocations, type CollocationEntry } from '../collocations/collocationPractice';
 
-type Phase = 'loading' | 'review' | 'warmup' | 'translation';
+type Phase = 'loading' | 'review' | 'warmup' | 'translation' | 'collocations';
 
 export function DailyVocabularySession({ repository, entries = learningVocabulary, today, examDate, onComplete }: {
   repository: LearningRepository;
@@ -38,6 +41,7 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
 
   const reviewWord = workload?.dueWords[reviewIndex];
   const reviewState = snapshot?.knowledgeStates.find((item) => item.itemId === reviewWord?.id);
+  const dailyCollocations = selectDailyCollocations(collocationData as CollocationEntry[], snapshot?.knowledgeStates ?? [], `${today}T23:59:59.999Z`, 3);
 
   async function submitReview(forceIncorrect = false) {
     if (!reviewWord || !reviewState || (!answer.trim() && !forceIncorrect) || saving) return;
@@ -67,9 +71,11 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
   </section>;
 
   if (phase === 'warmup') {
-    if (!workload.newWords.length) return <section className="vocabulary-warmup complete"><h1>今日没有新词</h1><p>高频词已全部进入复习计划。</p><button className="primary-action" onClick={() => onComplete([])}>继续训练</button></section>;
+    if (!workload.newWords.length) return <section className="vocabulary-warmup complete"><h1>今日没有新词</h1><p>高频词已全部进入复习计划，接下来巩固重点搭配。</p><button className="primary-action" onClick={() => setPhase('collocations')}>继续学习重点搭配</button></section>;
     return <VocabularyWarmup repository={repository} entries={workload.newWords} limit={workload.newWords.length} onComplete={(words) => { setWarmedWords(words); setPhase('translation'); }} />;
   }
 
-  return <VocabularyTranslationCheck repository={repository} words={warmedWords} states={snapshot.knowledgeStates} onComplete={() => onComplete(warmedWords)} />;
+  if (phase === 'translation') return <VocabularyTranslationCheck repository={repository} words={warmedWords} states={snapshot.knowledgeStates} onComplete={() => setPhase('collocations')} />;
+
+  return <CollocationCheck repository={repository} entries={dailyCollocations} allEntries={collocationData as CollocationEntry[]} states={snapshot.knowledgeStates} onComplete={() => onComplete(warmedWords)} />;
 }

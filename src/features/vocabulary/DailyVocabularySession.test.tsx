@@ -23,6 +23,18 @@ function repository() {
 }
 
 describe('DailyVocabularySession', () => {
+  it('continues from high-frequency words into collocation learning', async () => {
+    const learningRepository = repository();
+    vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({
+      knowledgeStates: entries.map((item) => ({ id: `knowledge:${item.id}`, itemId: item.id, status: 'mastered', favorite: false, reviewStage: 4, nextReviewAt: '2026-12-20T00:00:00.000Z', updatedAt: '2026-09-23T00:00:00.000Z' })),
+      settings: { id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-20T00:00:00.000Z' },
+      attempts: [], dueReviews: [], completions: [],
+    });
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
+    await userEvent.click(await screen.findByRole('button', { name: '继续学习重点搭配' }));
+    expect(await screen.findByRole('heading', { name: 'take part in' })).toBeVisible();
+  });
+
   it('tests due old words before showing a new word', async () => {
     const learningRepository = repository();
     render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);

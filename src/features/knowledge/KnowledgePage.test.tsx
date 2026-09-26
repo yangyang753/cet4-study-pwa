@@ -28,6 +28,24 @@ describe('KnowledgePage', () => {
     expect(screen.queryByRole('button', { name: /标记为已掌握/ })).not.toBeInTheDocument();
   });
 
+  it('separates collocations by automatic mastery state and has no manual mastery button', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:c001', itemId: 'c001', status: 'mastered', favorite: false, reviewStage: 4, updatedAt: '2026-09-24T08:00:00.000Z' },
+        { id: 'knowledge:c002', itemId: 'c002', status: 'review', favorite: false, reviewStage: 1, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} />);
+    await userEvent.click(screen.getByRole('tab', { name: '重点搭配' }));
+
+    expect(await screen.findByRole('button', { name: /待学习（124）/ })).toBeVisible();
+    expect(screen.queryByRole('button', { name: /标记为已掌握/ })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: /已掌握（1）/ }));
+    expect(screen.getByRole('heading', { name: 'take part in' })).toBeVisible();
+    expect(screen.queryByRole('heading', { name: 'play an important role in' })).not.toBeInTheDocument();
+  });
+
+
   it('restores mastered knowledge from the saved dashboard snapshot', async () => {
     const repository = {
       getDashboardSnapshot: vi.fn().mockResolvedValue({

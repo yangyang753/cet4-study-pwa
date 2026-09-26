@@ -1,10 +1,10 @@
 export type Difficulty = 'foundation' | 'standard' | 'challenge';
-export type QuestionType = 'vocabulary' | 'news' | 'conversation' | 'passage' | 'cloze' | 'matching' | 'reading' | 'translation' | 'writing';
+export type QuestionType = 'vocabulary' | 'collocation' | 'grammar' | 'news' | 'conversation' | 'passage' | 'cloze' | 'matching' | 'reading' | 'translation' | 'writing';
 
 export interface KnowledgePoint {
   id: string;
   title: string;
-  category: 'vocabulary' | 'grammar' | 'listening' | 'reading' | 'translation' | 'writing';
+  category: 'vocabulary' | 'collocation' | 'grammar' | 'listening' | 'reading' | 'translation' | 'writing';
   summary?: string;
 }
 

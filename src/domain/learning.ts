@@ -13,6 +13,8 @@ export interface ReviewCard {
   reason?: MistakeReason;
   format?: 'objective' | 'word-cloze';
   wordId?: string;
+  knowledgeItemId?: string;
+  knowledgeKind?: 'vocabulary' | 'collocation' | 'grammar';
   updatedAt: string;
 }
 

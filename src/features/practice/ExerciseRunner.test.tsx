@@ -15,6 +15,16 @@ async function unlockCurrentQuestion() {
   await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
 }
 
+async function completeDailyCollocations() {
+  for (let index = 0; index < 3; index += 1) {
+    await userEvent.click(await screen.findByRole('button', { name: '显示搭配释义' }));
+    await userEvent.click(screen.getByRole('button', { name: '开始搭配测试' }));
+    await userEvent.click(screen.getAllByRole('radio')[0]);
+    await userEvent.click(screen.getByRole('button', { name: '提交搭配答案' }));
+    await userEvent.click(await screen.findByRole('button', { name: index === 2 ? '完成重点搭配' : '下一个重点搭配' }));
+  }
+}
+
 describe('ExerciseRunner', () => {
   it('locks ordinary practice answers until the learner translates the question and options', async () => {
     const repository = {
@@ -218,6 +228,7 @@ describe('ExerciseRunner', () => {
     await user.type(await screen.findByLabelText('我的中文翻译'), '这是今天单词的中文翻译。');
     await user.click(screen.getByRole('button', { name: '检查翻译' }));
     await user.click(await screen.findByRole('button', { name: '继续做词义题' }));
+    await completeDailyCollocations();
     expect((await screen.findAllByText('请选择 passage 的正确含义。'))[0]).toBeVisible();
     for (let index = 0; index < 12; index += 1) {
       await unlockCurrentQuestion();

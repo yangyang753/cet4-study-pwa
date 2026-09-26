@@ -7,8 +7,10 @@ import writingData from '../../content/v1/writingPrompts.json';
 import mockData from '../../content/v1/mockExams.json';
 import type { CatalogMockExam, CatalogQuestion, Difficulty, PracticeKind, VocabularyEntry } from '../domain/content';
 import { learningVocabulary } from './vocabularyLearning';
+import { buildCollocationQuestion, type CollocationEntry } from '../features/collocations/collocationPractice';
 
 const vocabularyData = learningVocabulary;
+const collocationQuestions = (collocationData as CollocationEntry[]).map((item) => ({ ...buildCollocationQuestion(item, collocationData as CollocationEntry[]), groupId: item.id }));
 
 const optionId = (index: number) => String.fromCharCode(65 + index);
 const rotate = <T,>(items: T[], offset: number): T[] => {
@@ -118,7 +120,7 @@ const grammarQuestions: CatalogQuestion[] = grammarData.map((item, index) => {
   return {
   id: `${item.id}:check`,
   version: 1,
-  type: 'vocabulary',
+  type: 'grammar',
   difficulty: 'foundation',
   prompt: `${item.title}：请选择首先应执行的检查步骤。`,
   knowledgePointIds: [`grammar:${item.id}`],
@@ -153,7 +155,7 @@ const questionsByKind: Record<PracticeKind, CatalogQuestion[]> = {
   writing: writingQuestions,
 };
 
-const questionById = new Map(Object.values(questionsByKind).flat().map((question) => [question.id, question]));
+const questionById = new Map([...Object.values(questionsByKind).flat(), ...collocationQuestions].map((question) => [question.id, question]));
 
 export function getQuestion(id: string): CatalogQuestion | null {
   return questionById.get(id) ?? null;
@@ -161,6 +163,10 @@ export function getQuestion(id: string): CatalogQuestion | null {
 
 export function getPracticeItems(kind: PracticeKind): CatalogQuestion[] {
   return questionsByKind[kind];
+}
+
+export function getCollocationQuestions(): CatalogQuestion[] {
+  return collocationQuestions;
 }
 
 export function validateCatalogReferences(): string[] {
