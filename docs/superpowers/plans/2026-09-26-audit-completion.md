@@ -55,4 +55,3 @@
 - [ ] Record/display successful export time and stale-backup reminders.
 - [ ] Ignore isolated worktrees and execution ledgers in lint.
 - [ ] Run full release verification, review the diff, merge to main, push, and verify GitHub Pages.
-
