@@ -40,6 +40,11 @@ describe('learner-facing vocabulary', () => {
     expect(learningVocabulary.filter((entry) => !entry.example.toLowerCase().includes(entry.word.toLowerCase()))).toEqual([]);
   });
 
+  it('uses varied deterministic contexts instead of repeating five sentences across the library', () => {
+    const shapes = learningVocabulary.slice(0, 300).map((entry) => entry.example.toLowerCase().replaceAll(entry.word.toLowerCase(), '<word>'));
+    expect(new Set(shapes).size).toBeGreaterThanOrEqual(20);
+  });
+
   it('passes the learner-facing quality audit', () => {
     expect(auditLearningVocabulary(learningVocabulary)).toEqual([]);
   });
