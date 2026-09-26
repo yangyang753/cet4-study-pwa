@@ -73,7 +73,7 @@ describe('word cloze and review state', () => {
   it('advances a correct word and resets an incorrect word', () => {
     const current = state(1, { status: 'review', reviewStage: 1, lapseCount: 2 });
     expect(applyVocabularyReviewResult(current, true, '2026-09-25T08:00:00.000Z')).toMatchObject({
-      status: 'mastered', reviewStage: 2, lapseCount: 2, nextReviewAt: '2026-10-02T08:00:00.000Z',
+      status: 'review', reviewStage: 2, lapseCount: 2, nextReviewAt: '2026-10-02T08:00:00.000Z',
     });
     expect(applyVocabularyReviewResult(current, false, '2026-09-25T08:00:00.000Z')).toMatchObject({
       status: 'review', reviewStage: 0, lapseCount: 3, nextReviewAt: '2026-09-26T08:00:00.000Z',

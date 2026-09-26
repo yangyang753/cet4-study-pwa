@@ -1,8 +1,8 @@
 import type { VocabularyEntry } from '../../domain/content';
 import type { KnowledgeState } from '../../domain/learning';
+import { applyKnowledgeReviewResult } from '../mastery/knowledgeMastery';
 
 const DAY_MS = 86_400_000;
-const REVIEW_INTERVALS = [1, 3, 7, 14, 30] as const;
 
 export interface VocabularyWorkload {
   newWords: VocabularyEntry[];
@@ -87,15 +87,5 @@ export function applyVocabularyReviewResult(
   correct: boolean,
   now: string,
 ): KnowledgeState {
-  const reviewStage = correct ? Math.min(4, (current.reviewStage ?? 0) + 1) : 0;
-  const interval = REVIEW_INTERVALS[reviewStage];
-  return {
-    ...current,
-    status: correct ? 'mastered' : 'review',
-    reviewStage,
-    nextReviewAt: addDays(now, interval),
-    lastReviewedAt: now,
-    lapseCount: (current.lapseCount ?? 0) + (correct ? 0 : 1),
-    updatedAt: now,
-  };
+  return applyKnowledgeReviewResult(current, current.itemId, correct, now);
 }

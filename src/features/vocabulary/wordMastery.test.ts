@@ -13,9 +13,9 @@ describe('word mastery state machine', () => {
     expect(recordTranslationResult(undefined, 'v1', true, now)).toMatchObject({ status: 'learning', reviewStage: 0 });
   });
 
-  it('promotes a word only after a correct meaning assessment', () => {
+  it('keeps a word in review after its first correct meaning assessment', () => {
     expect(recordMeaningResult(recordTranslationResult(undefined, 'v1', true, now), 'v1', true, now)).toMatchObject({
-      status: 'mastered', itemId: 'v1', reviewStage: 1,
+      status: 'review', itemId: 'v1', reviewStage: 1,
     });
   });
 

@@ -1,16 +1,9 @@
 import type { KnowledgeState, ReviewCard } from '../../domain/learning';
 import { applyVocabularyReviewResult } from './vocabularySchedule';
+import { initialKnowledgeState } from '../mastery/knowledgeMastery';
 
 function baseState(current: KnowledgeState | undefined, wordId: string, now: string): KnowledgeState {
-  return current ?? {
-    id: `knowledge:${wordId}`,
-    itemId: wordId,
-    status: 'learning',
-    favorite: false,
-    reviewStage: 0,
-    lapseCount: 0,
-    updatedAt: now,
-  };
+  return current ?? initialKnowledgeState(wordId, now);
 }
 
 export function recordTranslationResult(
