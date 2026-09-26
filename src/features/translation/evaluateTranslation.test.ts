@@ -66,4 +66,20 @@ describe('evaluateTranslation', () => {
     expect(resolveVocabularyToken('studied', vocabulary.filter((entry) => entry.word !== 'study'))).toBeNull();
     expect(resolveVocabularyToken('studied', vocabulary)?.word).toBe('study');
   });
+
+  it('rejects keyword stuffing that leaves a tested concept untranslated', () => {
+    const result = evaluateTranslation([
+      { id: 'stem', text: 'The activity is available.', translation: '活动活动活动。' },
+    ], vocabulary);
+    expect(result.complete).toBe(false);
+    expect(result.missedWords.map((item) => item.word)).toContain('available');
+  });
+
+  it('accepts a common Chinese synonym instead of requiring one dictionary fragment', () => {
+    const result = evaluateTranslation([
+      { id: 'stem', text: 'The activity is available.', translation: '这项活动现在可以参加。' },
+    ], vocabulary);
+    expect(result.complete).toBe(true);
+    expect(result.missedWords).toEqual([]);
+  });
 });

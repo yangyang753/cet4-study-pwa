@@ -33,7 +33,7 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
     let active = true;
     void repository.getDashboardSnapshot().then((value) => {
       if (!active) return;
-      const next = buildVocabularyWorkload(entries, value.knowledgeStates ?? [], today, examDate ?? value.settings?.examDate ?? '2026-12-12');
+      const next = buildVocabularyWorkload(entries, value.knowledgeStates ?? [], today, examDate ?? value.settings?.examDate ?? '2026-12-12', value.settings?.dailyMinutes ?? 60);
       setSnapshot(value); setWorkload(next); setPhase(next.dueWords.length ? 'review' : 'warmup');
     }).catch(() => { if (active) setError('今日词汇计划读取失败，请刷新后重试。'); });
     return () => { active = false; };

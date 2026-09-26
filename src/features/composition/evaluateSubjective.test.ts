@@ -19,4 +19,17 @@ describe('evaluateSubjective', () => {
     expect(feedback.checks.find((item) => item.label === '关键词覆盖')?.passed).toBe(true);
     expect(feedback.checks.find((item) => item.label === '句子完整性')?.passed).toBe(true);
   });
+
+  it('does not pass a writing response made from repeated filler words', () => {
+    const filler = `First, ${Array(125).fill('practice').join(' ')}.`;
+    const feedback = evaluateSubjective('writing', filler, []);
+    expect(feedback.checks.find((item) => item.label === '词汇多样性')?.passed).toBe(false);
+    expect(feedback.passed).toBe(false);
+  });
+
+  it('requires a plausible predicate rather than punctuation alone', () => {
+    const feedback = evaluateSubjective('translation', 'Culture development community responsibility.', ['culture', 'development']);
+    expect(feedback.checks.find((item) => item.label === '基本句法')?.passed).toBe(false);
+    expect(feedback.passed).toBe(false);
+  });
 });

@@ -35,7 +35,7 @@ describe('TodayPage', () => {
   it('starts daily training with vocabulary before questions', async () => {
     render(<TodayPage today="2026-09-22" repository={repository()} />);
     expect(await screen.findByRole('link', { name: '先学高频词 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
-    expect(screen.getByText(/先复习旧词，再学新词/)).toBeVisible();
+    expect(screen.getByText(/先复习旧词和重点搭配，再学新内容/)).toBeVisible();
   });
 
   it('shows the countdown and the four-part 60-minute plan', () => {
@@ -99,11 +99,13 @@ describe('TodayPage', () => {
       knowledgeStates: [{ id: 'knowledge:v0001', itemId: 'v0001', status: 'mastered', favorite: false, nextReviewAt: '2026-09-24T00:00:00.000Z', updatedAt: '2026-09-23T00:00:00.000Z' }],
     })} />);
     expect(await screen.findByText('今日复习 1/1 个')).toBeVisible();
-    expect(screen.getByText('今日新词 13 个')).toBeVisible();
+    expect(screen.getByText('今日新词 15 个')).toBeVisible();
     expect(screen.getByText('还剩 799 个高频词')).toBeVisible();
     expect(screen.getByText(/预计.*前完成首轮/)).toBeVisible();
+    expect(screen.getByText(/预计.*前完成稳定掌握/)).toBeVisible();
+    expect(screen.getByText(/仍需完成.*次巩固检测/)).toBeVisible();
     expect(screen.getByText('425 参考线 · 450 安全目标')).toBeVisible();
-    expect(screen.getByRole('heading', { name: '高频词汇与词性' }).closest('article')).toHaveTextContent('22 分钟');
+    expect(screen.getByRole('heading', { name: '高频词汇与词性' }).closest('article')).toHaveTextContent('24 分钟');
   });
 
   it('warns when the capped daily pace cannot finish before the exam', async () => {

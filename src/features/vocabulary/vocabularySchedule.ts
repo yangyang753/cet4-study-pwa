@@ -3,6 +3,7 @@ import type { KnowledgeState } from '../../domain/learning';
 import { applyKnowledgeReviewResult } from '../mastery/knowledgeMastery';
 
 const DAY_MS = 86_400_000;
+const STABLE_REVIEW_SPACING_DAYS = 24;
 
 export interface VocabularyWorkload {
   newWords: VocabularyEntry[];
@@ -15,6 +16,11 @@ export interface VocabularyWorkload {
   requiredDailyWords: number;
   estimatedMinutes: number;
   atRisk: boolean;
+  remainingReviewStages: number;
+  requiredDailyMasteryChecks: number;
+  projectedMasteryDate: string;
+  dailyKnowledgeCapacity: number;
+  masteryAtRisk: boolean;
 }
 
 function dateMs(value: string): number {
@@ -34,6 +40,7 @@ export function buildVocabularyWorkload(
   states: KnowledgeState[],
   today: string,
   examDate: string,
+  dailyMinutes = 60,
 ): VocabularyWorkload {
   const stateById = new Map(states.map((item) => [item.itemId, item]));
   const remainingWords = entries.filter((item) => stateById.get(item.id)?.status !== 'mastered').length;
@@ -41,9 +48,10 @@ export function buildVocabularyWorkload(
     .filter((item) => !stateById.has(item.id))
     .sort((left, right) => (right.frequency ?? 0) - (left.frequency ?? 0));
   const daysRemaining = Math.max(0, Math.ceil((dateMs(examDate) - dateMs(today)) / DAY_MS));
-  const learningDays = Math.max(1, daysRemaining - 14);
+  const learningDays = Math.max(1, daysRemaining - STABLE_REVIEW_SPACING_DAYS);
+  const dailyKnowledgeCapacity = Math.max(10, Math.min(45, Math.floor(dailyMinutes * 0.75)));
   const requiredDailyWords = unseen.length === 0 ? 0 : Math.ceil(unseen.length / learningDays);
-  const baseNewWordQuota = unseen.length === 0 ? 0 : Math.min(20, Math.max(10, requiredDailyWords));
+  const baseNewWordQuota = unseen.length === 0 ? 0 : Math.min(dailyKnowledgeCapacity, Math.max(10, requiredDailyWords));
   const dueAt = dateMs(`${today}T23:59:59.999Z`);
   const allDueWords = entries
     .map((word) => ({ word, state: stateById.get(word.id) }))
@@ -55,13 +63,28 @@ export function buildVocabularyWorkload(
       return leftDue - rightDue || (right.word.frequency ?? 0) - (left.word.frequency ?? 0);
     })
     .map(({ word }) => word);
-  const dueWords = allDueWords.slice(0, 20);
+  const dueWords = allDueWords.slice(0, dailyKnowledgeCapacity);
   const dueWordCount = allDueWords.length;
   const reviewBacklog = Math.max(0, dueWordCount - dueWords.length);
-  const newWordQuota = dueWords.length >= 20 ? 0 : Math.min(baseNewWordQuota, 20 - dueWords.length);
-  const studyDays = newWordQuota === 0 ? 0 : Math.ceil(unseen.length / newWordQuota);
+  const newWordQuota = dueWords.length >= dailyKnowledgeCapacity ? 0 : Math.min(baseNewWordQuota, dailyKnowledgeCapacity - dueWords.length);
+  const sustainableNewWordQuota = unseen.length === 0 ? 0 : Math.min(dailyKnowledgeCapacity, Math.max(10, requiredDailyWords));
+  const studyDays = sustainableNewWordQuota === 0 ? 0 : Math.ceil(unseen.length / sustainableNewWordQuota);
   const projectedCompletionDate = studyDate(addDays(today, studyDays));
-  const estimatedMinutes = Math.min(35, Math.max(10, Math.ceil(newWordQuota * 1.2 + dueWords.length * 0.5 + 5)));
+  const estimatedMinutes = Math.min(dailyMinutes, Math.max(10, Math.ceil(newWordQuota * 1.2 + dueWords.length * 0.5 + 5)));
+  const remainingReviewStages = entries.reduce((total, item) => {
+    const current = stateById.get(item.id);
+    if (current?.status === 'mastered') return total;
+    return total + Math.max(0, 4 - (current?.reviewStage ?? 0));
+  }, 0);
+  const requiredDailyMasteryChecks = remainingReviewStages === 0 ? 0 : Math.ceil(remainingReviewStages / Math.max(1, daysRemaining));
+  const masteryStudyDays = remainingReviewStages === 0 ? 0 : Math.ceil(remainingReviewStages / dailyKnowledgeCapacity);
+  const throughputMasteryDate = studyDate(addDays(today, masteryStudyDays));
+  const spacedMasteryDate = unseen.length === 0
+    ? studyDate(today)
+    : studyDate(addDays(projectedCompletionDate, STABLE_REVIEW_SPACING_DAYS));
+  const projectedMasteryDate = throughputMasteryDate > spacedMasteryDate ? throughputMasteryDate : spacedMasteryDate;
+  const masteryAtRisk = remainingReviewStages > 0
+    && (requiredDailyMasteryChecks > dailyKnowledgeCapacity || projectedMasteryDate > examDate);
 
   return {
     newWords: unseen.slice(0, newWordQuota),
@@ -73,7 +96,12 @@ export function buildVocabularyWorkload(
     projectedCompletionDate,
     requiredDailyWords,
     estimatedMinutes,
-    atRisk: unseen.length > 0 && (requiredDailyWords > 20 || projectedCompletionDate > examDate),
+    atRisk: unseen.length > 0 && (requiredDailyWords > dailyKnowledgeCapacity || projectedCompletionDate > examDate),
+    remainingReviewStages,
+    requiredDailyMasteryChecks,
+    projectedMasteryDate,
+    dailyKnowledgeCapacity,
+    masteryAtRisk,
   };
 }
 

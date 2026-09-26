@@ -20,6 +20,15 @@ export interface TranslationEvaluation {
 
 const partOfSpeech = /(?:^|(?<=[^a-z]))(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./gi;
 
+const meaningAliases: Record<string, string[]> = {
+  activity: ['活动'],
+  available: ['可以', '可用', '有空'],
+  large: ['大的', '较大', '宽敞'],
+  one: ['一个', '一项', '一位'],
+  study: ['学习', '研究'],
+  use: ['使用', '利用', '采用'],
+};
+
 export function acceptedChineseMeanings(meaning: string): string[] {
   return meaning
     .replace(partOfSpeech, ';')
@@ -78,7 +87,10 @@ export function evaluateTranslation(segments: TranslationSegment[], vocabulary: 
     for (const token of englishTokens(segment.text)) {
       const entry = wordCandidates(token).map((candidate) => vocabularyByWord.get(candidate)).find(Boolean);
       if (!entry) continue;
-      const acceptedMeanings = acceptedChineseMeanings(entry.meaningZh);
+      const acceptedMeanings = [...new Set([
+        ...acceptedChineseMeanings(entry.meaningZh),
+        ...(meaningAliases[entry.word.toLowerCase()] ?? []),
+      ])];
       if (acceptedMeanings.length === 0) continue;
       const key = `${segment.id}:${entry.id}`;
       if (seen.has(key)) continue;
@@ -96,7 +108,11 @@ export function evaluateTranslation(segments: TranslationSegment[], vocabulary: 
   }
 
   return {
-    complete: segments.every((segment) => (segment.translation.match(/[\u3400-\u9fff]/g)?.length ?? 0) >= 2),
+    complete: segments.every((segment) => {
+      const chinese = segment.translation.match(/[\u3400-\u9fff]/g)?.join('') ?? '';
+      if (chinese.length < 2) return false;
+      return !/^([\u3400-\u9fff]{1,4})\1{2,}$/.test(chinese);
+    }),
     auditableWords,
     coveredWords,
     missedWords,

@@ -45,7 +45,12 @@ function parseInput(input: unknown): LearningBackupV1 {
   return result.data as unknown as LearningBackupV1;
 }
 
-const timestamp = (value: { updatedAt?: string; completedAt?: string; createdAt?: string }) => value.updatedAt ?? value.completedAt ?? value.createdAt ?? '';
+const timestamp = (value: unknown) => {
+  if (!value || typeof value !== 'object') return '';
+  const record = value as { updatedAt?: unknown; completedAt?: unknown; createdAt?: unknown };
+  const candidate = record.updatedAt ?? record.completedAt ?? record.createdAt;
+  return typeof candidate === 'string' ? candidate : '';
+};
 
 function regeneratedOperations(backup: LearningBackupV1): PendingOperation[] {
   const sources: Array<[PendingOperation['kind'], Array<Record<string, unknown> & { id: string }>]> = [

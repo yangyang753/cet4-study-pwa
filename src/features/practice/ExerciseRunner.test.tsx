@@ -221,7 +221,7 @@ describe('ExerciseRunner', () => {
       upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
     } as unknown as LearningRepository;
     render(<ExerciseRunner kind="vocabulary" limit={1} repository={repository} today="2026-09-22" />);
-    for (let index = 0; index < 12; index += 1) {
+    for (let index = 0; index < 15; index += 1) {
       await user.click(await screen.findByRole('button', { name: '显示释义' }));
       await user.click(screen.getByRole('button', { name: '基本认识' }));
     }
@@ -230,11 +230,11 @@ describe('ExerciseRunner', () => {
     await user.click(await screen.findByRole('button', { name: '继续做词义题' }));
     await completeDailyCollocations();
     expect((await screen.findAllByText('请选择 passage 的正确含义。'))[0]).toBeVisible();
-    for (let index = 0; index < 12; index += 1) {
+    for (let index = 0; index < 15; index += 1) {
       await unlockCurrentQuestion();
       await user.click((await screen.findAllByRole('radio'))[0]);
       await user.click(screen.getByRole('button', { name: '提交答案' }));
-      await user.click(await screen.findByRole('button', { name: index === 11 ? '查看结果' : '下一题' }));
+      await user.click(await screen.findByRole('button', { name: index === 14 ? '查看结果' : '下一题' }));
     }
     expect(await screen.findByText('掌握度检测')).toBeVisible();
     expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({
@@ -242,7 +242,7 @@ describe('ExerciseRunner', () => {
     }));
     expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v0001', status: 'review', reviewStage: 1 }));
     expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ status: 'review' }));
-  });
+  }, 20_000);
 
   it('automatically completes grammar and opens its mastery check', async () => {
     const user = userEvent.setup();
