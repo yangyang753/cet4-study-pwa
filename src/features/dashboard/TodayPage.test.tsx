@@ -10,6 +10,19 @@ const snapshot = {
   settings: { id: 'current' as const, examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-22T00:00:00.000Z' },
 };
 
+const diagnosticProfile = {
+  version: 2 as const,
+  sessionId: 'diagnostic-1',
+  completedAt: '2026-09-23T09:00:00.000Z',
+  questionCount: 20,
+  levels: { vocabulary: 0.7, grammar: 0.65, listening: 0.35, reading: 0.6, writing: 0.2, translation: 0.55 },
+  sectionScores: { writing: 35, listening: 90, reading: 149, translation: 45 },
+  estimatedScore: 319,
+  scoreRange: { low: 264, high: 374 },
+  weakSkills: ['writing', 'listening'] as const,
+  confidence: 'initial' as const,
+};
+
 function repository(overrides = {}) {
   return {
     getDashboardSnapshot: async () => ({ ...snapshot, ...overrides }),
@@ -66,7 +79,7 @@ describe('TodayPage', () => {
     expect(screen.getByText('已掌握')).toBeVisible();
   });
 
-  it('labels an unfinished specialist task carried over from yesterday', async () => {
+  it('lets recent weakness evidence replace an unfinished carried task', async () => {
     const attempts = Array.from({ length: 5 }, (_, index) => ({
       id: `attempt-${index}`, userId: 'local', questionId: `q-${index}`, response: 'A',
       correct: false, score: 0, durationSeconds: 10, kind: 'writing', mode: 'practice' as const,
@@ -82,7 +95,8 @@ describe('TodayPage', () => {
     })} />);
 
     await screen.findByText('优先加强短文写作');
-    await waitFor(() => expect(screen.getByText('昨日顺延')).toBeVisible());
+    await waitFor(() => expect(screen.getByText('近期表现补强')).toBeVisible());
+    expect(screen.queryByText('昨日顺延')).not.toBeInTheDocument();
   });
 
   it('uses the diagnostic weakness before enough recent attempts exist', async () => {
@@ -92,6 +106,19 @@ describe('TodayPage', () => {
 
     expect(await screen.findByText('优先加强重点语法')).toBeVisible();
     expect(screen.getByRole('heading', { name: '重点语法' })).toBeVisible();
+  });
+
+  it('shows the estimated score, pass gap, two weak skills, and diagnostic adaptation reason', async () => {
+    render(<TodayPage today="2026-09-24" repository={repository({
+      settings: { ...snapshot.settings, diagnosticCompletedAt: diagnosticProfile.completedAt, diagnosticProfile },
+    })} />);
+
+    expect(await screen.findByText('预计 319 分')).toBeVisible();
+    expect(screen.getByText('参考区间 264～374')).toBeVisible();
+    expect(screen.getByText('距离 425 分还差 106 分')).toBeVisible();
+    expect(screen.getByText('当前优先补强：写作、听力')).toBeVisible();
+    expect(screen.getByRole('link', { name: '重新诊断' })).toHaveAttribute('href', expect.stringContaining('diagnostic'));
+    expect(screen.getByRole('heading', { name: '短文写作' }).closest('article')).toHaveTextContent('诊断补强');
   });
 
   it('shows the adaptive new-word quota and due old-word count', async () => {

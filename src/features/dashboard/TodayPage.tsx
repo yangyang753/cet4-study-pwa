@@ -8,6 +8,7 @@ import type { DashboardSnapshot } from '../../domain/learning';
 import type { CachedPlan } from '../../data/localDb';
 import { previousStudyDate, studyDate } from '../../lib/studyDate';
 import { selectDiagnosticWeakSkill } from '../diagnostic/diagnostic';
+import { deriveAdaptivePriorities } from '../diagnostic/adaptivePriorities';
 import { ExamReadiness } from './ExamReadiness';
 import './dashboard.css';
 import { learningVocabulary } from '../../content/vocabularyLearning';
@@ -29,6 +30,7 @@ const taskCopy: Record<StudyKind, { icon: string; title: string; detail: string;
   review: { icon: '↻', title: '错题回顾', detail: '今日到期的薄弱知识点', href: 'review' },
   mock: { icon: '✓', title: '限时模拟', detail: '按考试节奏完成混合训练', href: 'exam' },
 };
+const priorityLabels = { vocabulary: '词汇', grammar: '语法', listening: '听力', reading: '阅读', writing: '写作', translation: '翻译' } as const;
 
 export function TodayPage({ today = studyDate(), examDate, repository = defaultRepository }: { today?: string; examDate?: string; repository?: LearningRepository }) {
   const [snapshot, setSnapshot] = useState<DashboardSnapshot | null>(null);
@@ -49,10 +51,11 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
   const dailyMinutes = snapshot?.settings.dailyMinutes ?? 60;
   const weakKind: StudyKind | undefined = metrics.weakSkill?.kind;
   const diagnosticWeakKind = selectDiagnosticWeakSkill(snapshot?.settings.diagnosticLevels) ?? undefined;
-  const focusKind = metrics.hasEnoughData ? weakKind : diagnosticWeakKind;
+  const priorities = useMemo(() => deriveAdaptivePriorities(snapshot?.settings.diagnosticProfile, snapshot?.attempts ?? [], `${today}T23:59:59.999Z`), [snapshot, today]);
+  const focusKind = priorities[0]?.kind ?? (metrics.hasEnoughData ? weakKind : diagnosticWeakKind);
   const unfinished = carryoverFromPlan(previousPlan?.tasks ?? [], metrics.completedTaskIds);
   const vocabularyWorkload = snapshot ? buildVocabularyWorkload(learningVocabulary, snapshot.knowledgeStates, today, targetDate, dailyMinutes) : null;
-  const plan = planDay({ date: today, examDate: targetDate, dailyMinutes, weakSkill: weakKind ?? 'listening', diagnosticWeakSkill: diagnosticWeakKind, hasRecentEvidence: metrics.hasEnoughData, unfinished, vocabularyMinutes: vocabularyWorkload?.estimatedMinutes });
+  const plan = planDay({ date: today, examDate: targetDate, dailyMinutes, weakSkill: weakKind ?? 'listening', diagnosticWeakSkill: diagnosticWeakKind, hasRecentEvidence: metrics.hasEnoughData, unfinished, vocabularyMinutes: vocabularyWorkload?.estimatedMinutes, priorities });
   useEffect(() => {
     if (!snapshot || previousPlan === undefined) return;
     void repository.savePlan({ id: `plan:${today}`, date: today, tasks: plan.tasks, updatedAt: new Date().toISOString() });
@@ -61,16 +64,18 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
   return <div className="today-page">
     <header className="page-heading"><div><h1>{greetingForHour(new Date().getHours())}，向目标 425 分前进</h1><p>今天只需要专注 {dailyMinutes} 分钟。</p></div><a className="avatar" href={`${import.meta.env.BASE_URL}account`} aria-label="账户与同步">L</a></header>
     {snapshot && !snapshot.settings.diagnosticCompletedAt && <aside className="cloud-notice"><strong>先做 10～15 分钟基础诊断</strong><p>系统会据此安排第一周学习重点；也可以稍后再做。</p><a href={`${import.meta.env.BASE_URL}diagnostic`}>开始基础诊断</a></aside>}
+    {snapshot?.settings.diagnosticProfile && <aside className="diagnostic-summary" aria-labelledby="diagnostic-summary-title"><div><span id="diagnostic-summary-title">基础诊断参考估分</span><strong>预计 {snapshot.settings.diagnosticProfile.estimatedScore} 分</strong><small>参考区间 {snapshot.settings.diagnosticProfile.scoreRange.low}～{snapshot.settings.diagnosticProfile.scoreRange.high}</small></div><div><b>{snapshot.settings.diagnosticProfile.estimatedScore >= 425 ? '已达到 425 分参考线' : `距离 425 分还差 ${425 - snapshot.settings.diagnosticProfile.estimatedScore} 分`}</b><span>当前优先补强：{priorities.length ? priorities.map((item) => priorityLabels[item.kind]).join('、') : snapshot.settings.diagnosticProfile.weakSkills.map((kind) => priorityLabels[kind]).join('、')}</span><small>估分用于学习规划，不是官方成绩。</small></div><a href={`${import.meta.env.BASE_URL}diagnostic`}>重新诊断</a></aside>}
     <section className="dashboard-hero"><div className="focus-card"><span>今日重点</span><h2>{focusKind ? `优先加强${taskCopy[focusKind].title}` : '先建立学习记录，再定位薄弱项'}</h2><p>先复习旧词和重点搭配，再学新内容并完成段落翻译；漏译和拼写错误会自动加入错题复习。</p>{vocabularyWorkload && <div className="vocabulary-workload" aria-label="今日词汇安排"><b>今日复习 {vocabularyWorkload.dueWords.length}/{vocabularyWorkload.dueWordCount} 个</b><b>今日新词 {vocabularyWorkload.newWords.length} 个</b>{vocabularyWorkload.reviewBacklog > 0 && <span className="pace-warning" role="alert">仍有 {vocabularyWorkload.reviewBacklog} 个到期旧词排队，新词已暂停，先清复习积压。</span>}<span>{vocabularyWorkload.remainingWords === 0 ? `${learningVocabulary.length} 个高频词已进入巩固复习` : `还剩 ${vocabularyWorkload.remainingWords} 个高频词`}</span>{vocabularyWorkload.remainingWords > 0 && vocabularyWorkload.newWordQuota > 0 && <span>预计 {vocabularyWorkload.projectedCompletionDate} 前完成首轮接触</span>}{vocabularyWorkload.remainingWords > 0 && vocabularyWorkload.newWordQuota === 0 && vocabularyWorkload.reviewBacklog === 0 && <span>新词首轮已完成，继续按计划复习直到稳定掌握。</span>}<span>预计 {vocabularyWorkload.projectedMasteryDate} 前完成稳定掌握</span><span>仍需完成 {vocabularyWorkload.remainingReviewStages} 次巩固检测（建议每日 {vocabularyWorkload.requiredDailyMasteryChecks} 次）</span><small>425 参考线 · 450 安全目标</small>{vocabularyWorkload.atRisk && <p className="pace-warning" role="alert">按当前上限无法在考试前完成首轮接触：每天至少 {vocabularyWorkload.requiredDailyWords} 个。请延长每日学习时间，并优先完成词汇。</p>}{vocabularyWorkload.masteryAtRisk && <p className="pace-warning" role="alert">按当前学习时长无法在考试前完成稳定掌握。建议增加每日学习时间，并优先清理到期复习。</p>}</div>}<a className="focus-action" href={`${import.meta.env.BASE_URL}practice/vocabulary`}>先学高频词 →</a><a className="knowledge-action" href={`${import.meta.env.BASE_URL}knowledge`}>查看高频知识</a></div><div className="countdown-card"><span>距离考试</span><strong>{daysUntil(today, targetDate)}</strong><b>天</b><h3>{plan.phase === 'foundation' ? '基础补强期' : plan.phase === 'breakthrough' ? '题型突破期' : '冲刺模拟期'}</h3></div></section>
     {snapshot && <ExamReadiness settings={snapshot.settings} today={today} repository={repository} />}
     <section className="dashboard-grid"><div className="task-panel"><h2>今日 {dailyMinutes} 分钟计划</h2>{plan.tasks.map((task) => {
       const copy = taskCopy[task.kind];
       const detail = task.kind === 'vocabulary' && vocabularyWorkload ? `${vocabularyWorkload.newWords.length} 个新词 + ${vocabularyWorkload.dueWords.length} 个旧词复习` : copy.detail;
+      const priority = priorities.find((item) => item.kind === task.kind);
       const completed = metrics.completedTaskIds.has(task.id);
       const mastery = snapshot?.knowledgeStates.find((item) => item.itemId === task.id)?.status;
       const status = mastery === 'mastered' ? '已掌握' : mastery === 'review' ? '需要复习' : completed ? '待检测' : '未完成';
       const carried = !task.id.startsWith(`${today}:`);
-      return <article key={task.id} className={`task-card ${mastery ?? (completed ? 'completed' : '')}`}><span className="task-icon">{copy.icon}</span><div><h3>{copy.title}</h3><p>{detail}</p>{carried && <small>昨日顺延</small>}{completed ? <a href={`${import.meta.env.BASE_URL}mastery/${task.kind}?taskId=${encodeURIComponent(task.id)}`}>{mastery === 'mastered' ? '再次检测' : '开始掌握检测'}</a> : <a href={`${import.meta.env.BASE_URL}${copy.href}`}>开始任务</a>}</div><b>{task.minutes} 分钟</b><span className={`task-status ${mastery ?? (completed ? 'pending' : 'idle')}`}>{status}</span></article>;
+      return <article key={task.id} className={`task-card ${mastery ?? (completed ? 'completed' : '')}`}><span className="task-icon">{copy.icon}</span><div><h3>{copy.title}</h3><p>{detail}</p>{priority && <small className="adaptation-reason">{priority.source === 'recent' ? '近期表现补强' : '诊断补强'}</small>}{carried && <small>昨日顺延</small>}{completed ? <a href={`${import.meta.env.BASE_URL}mastery/${task.kind}?taskId=${encodeURIComponent(task.id)}`}>{mastery === 'mastered' ? '再次检测' : '开始掌握检测'}</a> : <a href={`${import.meta.env.BASE_URL}${copy.href}`}>开始任务</a>}</div><b>{task.minutes} 分钟</b><span className={`task-status ${mastery ?? (completed ? 'pending' : 'idle')}`}>{status}</span></article>;
     })}</div><ProgressCards metrics={metrics} /></section>
   </div>;
 }

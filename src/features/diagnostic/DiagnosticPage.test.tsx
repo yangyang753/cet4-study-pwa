@@ -51,6 +51,9 @@ describe('foundation diagnostic', () => {
     await user.click(screen.getByRole('button', { name: '完成诊断' }));
     expect(await screen.findByText('语法：100%')).toBeVisible();
     expect(screen.getByText('优先加强：语法')).toBeVisible();
+    expect(screen.getByText(/距离 425 分还差/)).toBeVisible();
+    expect(screen.getByText('分项参考分')).toBeVisible();
+    expect(screen.getByRole('button', { name: '重新诊断' })).toBeVisible();
     expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ mode: 'diagnostic', kind: 'grammar' }));
     expect(repository.saveUserSettings).toHaveBeenCalledWith(expect.objectContaining({ diagnosticProfile: expect.objectContaining({ version: 2 }) }));
   });
@@ -86,8 +89,9 @@ describe('foundation diagnostic', () => {
   it('reuses the same attempt id when final profile saving must be retried', async () => {
     const user = userEvent.setup();
     const grammarQuestion = getPracticeItems('grammar')[0];
+    const saveAttemptOnce = vi.fn().mockResolvedValue(undefined);
     const repository = {
-      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+      saveAttemptOnce,
       getDashboardSnapshot: vi.fn().mockResolvedValue({ settings: { id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-23T00:00:00.000Z' } }),
       saveUserSettings: vi.fn().mockRejectedValueOnce(new Error('offline')).mockResolvedValue(undefined),
     } as unknown as LearningRepository;
@@ -97,7 +101,7 @@ describe('foundation diagnostic', () => {
     await screen.findByRole('alert');
     await user.click(screen.getByRole('button', { name: '重新保存并完成' }));
     expect(await screen.findByText(/预计.*分/)).toBeVisible();
-    expect(repository.saveAttemptOnce).toHaveBeenCalledTimes(2);
-    expect(repository.saveAttemptOnce.mock.calls[0][0].id).toBe(repository.saveAttemptOnce.mock.calls[1][0].id);
+    expect(saveAttemptOnce).toHaveBeenCalledTimes(2);
+    expect(saveAttemptOnce.mock.calls[0][0].id).toBe(saveAttemptOnce.mock.calls[1][0].id);
   });
 });

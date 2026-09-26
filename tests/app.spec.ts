@@ -26,13 +26,51 @@ test('keeps the core navigation usable on a phone', async ({ page }) => {
 
 test('keeps core pages within a 360px viewport without serious accessibility violations', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
-  for (const route of ['today', 'listen', 'practice', 'account']) {
+  for (const route of ['today', 'listen', 'practice', 'diagnostic', 'account']) {
     await page.goto(route);
     await expect(page.locator('main')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), `${route} must not scroll horizontally`).toBeTruthy();
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact ?? ''))).toEqual([]);
   }
+});
+
+test('shows a diagnostic estimate and targeted task on desktop and phone', async ({ page }) => {
+  await page.goto('today');
+  await page.getByRole('heading', { name: /向目标 425 分前进/ }).waitFor();
+  await page.evaluate(async () => {
+    const database = await new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open('cet4-study');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    await new Promise<void>((resolve, reject) => {
+      const transaction = database.transaction('settings', 'readwrite');
+      transaction.objectStore('settings').put({
+        id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1,
+        diagnosticCompletedAt: '2026-09-26T08:00:00.000Z',
+        diagnosticProfile: {
+          version: 2, sessionId: 'e2e-profile', completedAt: '2026-09-26T08:00:00.000Z', questionCount: 20,
+          levels: { vocabulary: 0.7, grammar: 0.6, listening: 0.35, reading: 0.65, writing: 0.2, translation: 0.55 },
+          sectionScores: { writing: 35, listening: 90, reading: 149, translation: 45 }, estimatedScore: 319,
+          scoreRange: { low: 264, high: 374 }, weakSkills: ['writing', 'listening'], confidence: 'initial',
+        },
+        updatedAt: '2026-09-26T08:00:00.000Z',
+      });
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error);
+    });
+    database.close();
+  });
+  await page.reload();
+  await expect(page.getByText('预计 319 分')).toBeVisible();
+  await expect(page.getByRole('heading', { name: '短文写作', exact: true })).toBeVisible();
+  await expect(page.getByText('诊断补强').first()).toBeVisible();
+
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.reload();
+  await expect(page.getByText('参考区间 264～374')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
 });
 
 test('exposes installable PWA metadata', async ({ page, request }) => {

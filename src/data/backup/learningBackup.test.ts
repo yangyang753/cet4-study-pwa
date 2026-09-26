@@ -61,6 +61,33 @@ describe('learning backup', () => {
     source.close(); target.close();
   });
 
+  it('round-trips a valid diagnostic score profile and rejects a malformed one', async () => {
+    const source = database();
+    await source.settings.put({
+      id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1,
+      diagnosticProfile: {
+        version: 2, sessionId: 'session-1', completedAt: '2026-09-26T08:00:00.000Z', questionCount: 20,
+        levels: { vocabulary: 0.5, grammar: 0.4, listening: 0.3, reading: 0.6, writing: 0.2, translation: 0.5 },
+        sectionScores: { writing: 32, listening: 91, reading: 149, translation: 43 },
+        estimatedScore: 315, scoreRange: { low: 260, high: 370 }, weakSkills: ['writing', 'listening'], confidence: 'initial',
+      },
+      updatedAt: '2026-09-26T08:00:00.000Z',
+    });
+    const backup = await exportLearningData(source);
+    const target = database();
+
+    await importLearningData(target, backup);
+    expect((await target.settings.get('current'))?.diagnosticProfile?.estimatedScore).toBe(315);
+
+    const malformed = structuredClone(backup) as unknown as { data: { settings: Array<Record<string, unknown>> } };
+    malformed.data.settings[0].diagnosticProfile = { version: 2, estimatedScore: 999 };
+    await expect(importLearningData(target, malformed)).rejects.toThrow('Invalid backup file');
+    const inverted = structuredClone(backup);
+    inverted.data.settings[0].diagnosticProfile!.scoreRange = { low: 400, high: 300 };
+    await expect(importLearningData(target, inverted)).rejects.toThrow('Invalid backup file');
+    source.close(); target.close();
+  });
+
   it('imports older knowledge states that do not contain review scheduling fields', async () => {
     const source = database();
     await source.knowledgeStates.put({

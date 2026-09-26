@@ -15,9 +15,19 @@ const operationSchema = z.object({ id: z.string(), entityId: z.string(), kind: z
 const reviewSchema = z.object({ id: z.string(), questionId: z.string(), stage: z.number(), nextReviewAt: iso, lastCorrect: z.boolean(), updatedAt: iso }).passthrough();
 const completionSchema = z.object({ id: z.string(), date: z.string(), taskId: z.string(), kind: z.string(), completedAt: iso }).passthrough();
 const knowledgeSchema = z.object({ id: z.string(), itemId: z.string(), status: z.enum(['learning', 'review', 'mastered']), favorite: z.boolean(), updatedAt: iso }).passthrough();
+const coreStudyKindSchema = z.enum(['vocabulary', 'grammar', 'listening', 'reading', 'writing', 'translation']);
+const levelSchema = z.number().min(0).max(1);
+const diagnosticProfileSchema = z.object({
+  version: z.literal(2), sessionId: z.string().min(1), completedAt: iso, questionCount: z.number().int().positive(),
+  levels: z.object({ vocabulary: levelSchema.optional(), grammar: levelSchema.optional(), listening: levelSchema.optional(), reading: levelSchema.optional(), writing: levelSchema.optional(), translation: levelSchema.optional() }),
+  sectionScores: z.object({ writing: z.number().min(0).max(106.5), listening: z.number().min(0).max(248.5), reading: z.number().min(0).max(248.5), translation: z.number().min(0).max(106.5) }),
+  estimatedScore: z.number().int().min(0).max(710), scoreRange: z.object({ low: z.number().min(0).max(710), high: z.number().min(0).max(710) }),
+  weakSkills: z.array(coreStudyKindSchema).max(2), confidence: z.enum(['initial', 'developing', 'strong']),
+}).refine((profile) => profile.scoreRange.low <= profile.estimatedScore && profile.estimatedScore <= profile.scoreRange.high, { message: 'Estimated score must be inside score range' });
 const settingsSchema = z.object({
   id: z.literal('current'), examDate: z.string(), dailyMinutes: z.number(), playbackRate: z.number(), updatedAt: iso,
   readiness: z.object({ registrationConfirmed: z.boolean(), paymentConfirmed: z.boolean().optional(), admissionTicketPrepared: z.boolean(), equipmentPrepared: z.boolean() }).optional(),
+  diagnosticProfile: diagnosticProfileSchema.optional(),
 }).passthrough();
 const examSchema = z.object({ id: z.string(), mockId: z.string(), contentVersion: z.string(), startedAt: iso, updatedAt: iso, sectionDeadlines: z.array(iso), currentSectionIndex: z.number(), lockedSectionIndexes: z.array(z.number()), answers: z.record(z.string(), z.union([z.string(), z.array(z.string())])), status: z.enum(['active', 'submitted', 'stale']) }).passthrough();
 const tombstoneSchema = z.object({ id: z.string(), kind: syncEntityKindSchema, entityId: z.string(), deletedAt: iso, updatedAt: iso }).passthrough();
