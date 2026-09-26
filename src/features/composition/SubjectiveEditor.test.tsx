@@ -67,4 +67,15 @@ describe('SubjectiveEditor', () => {
     expect(screen.getByLabelText('写作答题区')).toHaveValue('Too short.');
     expect(onSubmit).not.toHaveBeenCalled();
   });
+
+  it('can submit diagnostic feedback without revealing suggestions or the reference answer', async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+    render(<SubjectiveEditor question={question} kind="writing" onSubmit={onSubmit} revealFeedback={false} />);
+    fireEvent.change(screen.getByLabelText('写作答题区'), { target: { value: validWriting } });
+    await user.click(screen.getByRole('button', { name: '提交自查' }));
+    expect(onSubmit).toHaveBeenCalledOnce();
+    expect(screen.queryByText('Daily practice is useful.')).not.toBeInTheDocument();
+    expect(screen.queryByText('针对性修改建议')).not.toBeInTheDocument();
+  });
 });
