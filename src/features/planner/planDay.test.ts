@@ -70,4 +70,37 @@ describe('planDay', () => {
       { id: '2026-10-19:writing', kind: 'writing', minutes: 20, priority: 2 },
     ]);
   });
+
+  it('moves five minutes into vocabulary when diagnosis identifies vocabulary weakness', () => {
+    const plan = planDay({ ...base, priorities: [{ kind: 'vocabulary', level: 0.2, source: 'diagnostic', attempts: 0 }] });
+    expect(plan.tasks.find((task) => task.kind === 'vocabulary')?.minutes).toBe(20);
+    expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBe(60);
+  });
+
+  it('moves five minutes into listening when recent evidence identifies listening weakness', () => {
+    const plan = planDay({ ...base, priorities: [{ kind: 'listening', level: 0.2, source: 'recent', attempts: 3 }] });
+    expect(plan.tasks.find((task) => task.kind === 'listening')?.minutes).toBe(25);
+    expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBe(60);
+  });
+
+  it('uses and rotates two non-core measured weaknesses instead of stale carryover', () => {
+    const priorities = [
+      { kind: 'writing' as const, level: 0.2, source: 'diagnostic' as const, attempts: 0 },
+      { kind: 'grammar' as const, level: 0.3, source: 'diagnostic' as const, attempts: 0 },
+    ];
+    const unfinished = [{ id: 'old-reading', kind: 'reading' as const, minutes: 20, priority: 10 }];
+    const kinds = ['2026-09-26', '2026-09-27'].map((date) => planDay({ ...base, date, priorities, unfinished }).tasks[2].kind);
+    expect(new Set(kinds)).toEqual(new Set(['writing', 'grammar']));
+    expect(kinds).not.toContain('reading');
+  });
+
+  it('keeps short adaptive plans positive and exactly inside the budget', () => {
+    const plan = planDay({ ...base, dailyMinutes: 20, priorities: [
+      { kind: 'vocabulary', level: 0.1, source: 'diagnostic', attempts: 0 },
+      { kind: 'listening', level: 0.2, source: 'diagnostic', attempts: 0 },
+    ] });
+    expect(plan.tasks.map((task) => task.kind)).toEqual(['vocabulary', 'listening', 'review']);
+    expect(plan.tasks.every((task) => task.minutes >= 5)).toBe(true);
+    expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBe(20);
+  });
 });
