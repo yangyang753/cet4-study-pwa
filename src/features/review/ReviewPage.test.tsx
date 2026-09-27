@@ -31,6 +31,24 @@ async function unlockReviewQuestion() {
 }
 
 describe('ReviewPage', () => {
+  it('presents the review queue as a structured study dashboard', async () => {
+    render(<ReviewPage repository={await setupRepository()} now="2026-09-23T12:00:00.000Z" />);
+    expect(await screen.findByRole('heading', { name: '错题复习中心' })).toBeVisible();
+    const overview = screen.getByRole('region', { name: '复习概览' });
+    expect(overview).toHaveTextContent('今日待复习1');
+    expect(overview).toHaveTextContent('学习中1');
+    expect(screen.getByRole('group', { name: '复习分类' })).toBeVisible();
+    expect(screen.getByRole('article')).toHaveClass('review-card');
+    expect(screen.getByRole('progressbar', { name: '掌握进度' })).toHaveAttribute('aria-valuenow', '0');
+  });
+
+  it('counts a due mastered card consistently with the due review list', async () => {
+    render(<ReviewPage repository={await setupRepository(4)} now="2026-09-23T12:00:00.000Z" />);
+    const overview = await screen.findByRole('region', { name: '复习概览' });
+    expect(overview).toHaveTextContent('今日待复习1');
+    expect(screen.getByText('When will the campus volunteering activity take place?')).toBeVisible();
+  });
+
   it('keeps a future-scheduled mastered card visible in mastery history', async () => {
     const name = `review-test-${crypto.randomUUID()}`;
     names.push(name);
