@@ -1,13 +1,10 @@
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { resolveRuntimeConfiguration } from '../src/lib/runtimeConfiguration';
 
 export type RuntimeMode = 'offline' | 'cloud';
 export function determineRuntimeMode(environment: Record<string, string | undefined>): RuntimeMode {
-  const url = environment.VITE_SUPABASE_URL?.trim();
-  const key = environment.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
-  if (Boolean(url) !== Boolean(key)) throw new Error('VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY must be provided together.');
-  if (key && !key.startsWith('sb_publishable_')) throw new Error('Use a Supabase Publishable Key beginning with sb_publishable_.');
-  return url && key ? 'cloud' : 'offline';
+  return resolveRuntimeConfiguration(environment).mode;
 }
 
 export function describeRuntimeConfiguration(environment: Record<string, string | undefined>): string {

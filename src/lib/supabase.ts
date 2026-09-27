@@ -1,10 +1,10 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { AuthService, AuthUser } from '../features/auth/AuthProvider';
+import { resolveRuntimeConfiguration, type RuntimeEnv } from './runtimeConfiguration';
 
-export function createConfiguredSupabaseClient(): SupabaseClient | null {
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  return url && key ? createClient(url, key) : null;
+export function createConfiguredSupabaseClient(environment: RuntimeEnv = import.meta.env): SupabaseClient | null {
+  const configuration = resolveRuntimeConfiguration(environment);
+  return configuration.mode === 'cloud' ? createClient(configuration.url, configuration.publishableKey) : null;
 }
 
 function toUser(user: { id: string; email?: string } | null): AuthUser | null {

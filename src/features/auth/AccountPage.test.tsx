@@ -20,11 +20,14 @@ describe('AccountPage sync explanation', () => {
     expect(screen.getByText(/网页版本更新也不会把学习记录同步/)).toBeVisible();
     expect(screen.getByText(/导出 JSON.*另一台设备.*导入 JSON/)).toBeVisible();
     expect(screen.getByText(/生产站点还没有配置云同步连接/)).toBeVisible();
+    expect(screen.getByRole('button', { name: '导出 JSON 备份' })).toBeVisible();
+    expect(screen.getByText('导入 JSON')).toBeVisible();
   });
 
   it('does not show the local-only warning when cloud sync is configured', async () => {
     render(<AuthProvider service={service}><AccountPage cloudConfigured repository={repository} /></AuthProvider>);
     await screen.findByRole('heading', { name: '登录四级向前' });
+    expect(screen.getByText(/登录后.*电脑和手机/)).toBeVisible();
     expect(screen.queryByText(/手机和电脑不会自动同步/)).not.toBeInTheDocument();
   });
 });

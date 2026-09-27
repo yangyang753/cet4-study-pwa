@@ -43,6 +43,8 @@ pnpm preview:test
 
 GitHub Pages 部署可在仓库 Settings → Secrets and variables → Actions 中同时添加 `VITE_SUPABASE_URL` 和 `VITE_SUPABASE_PUBLISHABLE_KEY`。两项都不设置时会安全构建为离线模式；只设置其中一项会中止部署，避免产生无法登录的半配置版本。网页端仅使用 `sb_publishable_...` 公钥，禁止配置 Secret Key 或 `service_role` 密钥。
 
+部署后可在“账户同步”页面核对当前状态：显示“仅保存在本机”代表尚未启用跨设备同步；登录后显示“已同步”及时间才代表记录已经传到云端。首次登录会为该账户认领当前浏览器中的未归属学习记录，随后手机和电脑通过同一邮箱合并同步。发生网络错误时，记录仍留在本机，可点击“重试”；上线云同步前仍建议定期导出 JSON 备份。
+
 ## 内容维护
 
 ```bash
