@@ -32,14 +32,35 @@ test('keeps the core navigation usable on a phone', async ({ page }) => {
   await expect(page.getByRole('button', { name: '登录' })).toHaveCount(0);
 });
 
-test('keeps core pages within a 360px viewport without serious accessibility violations', async ({ page }) => {
+test('keeps every primary page within a 360px viewport without serious accessibility violations', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
-  for (const route of ['today', 'listen', 'practice', 'diagnostic', 'account']) {
+  for (const route of ['today', 'listen', 'practice', 'review', 'exam', 'knowledge', 'account', 'print']) {
     await page.goto(`#/${route}`);
     await expect(page.locator('main')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), `${route} must not scroll horizontally`).toBeTruthy();
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact ?? ''))).toEqual([]);
+  }
+});
+
+test('keeps mobile secondary navigation operable at 200% text size with reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.goto('#/today');
+  await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+  const trigger = page.getByRole('button', { name: '更多' });
+  await trigger.click();
+  await page.getByRole('button', { name: '关闭更多学习功能' }).click();
+  await expect(trigger).toBeFocused();
+  for (const [label, route] of [['限时模拟', 'exam'], ['高频知识', 'knowledge'], ['账户同步', 'account'], ['A4 打印', 'print']] as const) {
+    await trigger.click();
+    await page.getByRole('navigation', { name: '移动端更多导航' }).getByRole('link', { name: new RegExp(label) }).click();
+    await expect(page).toHaveURL(new RegExp(`#/${route}$`));
+    const overflow = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>('body *')].filter((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.right > window.innerWidth + 1 || rect.left < -1;
+    }).map((element) => ({ tag: element.tagName, className: element.className, text: element.textContent?.trim().slice(0, 80), left: element.getBoundingClientRect().left, right: element.getBoundingClientRect().right })));
+    expect(overflow, `${route} must not overflow at 200% text`).toEqual([]);
   }
 });
 

@@ -61,6 +61,13 @@ try {
   const audioResponse = await page.request.get(`http://127.0.0.1:4189${audioUrl}`);
   assert.equal(audioResponse.status(), 200);
   assert.match(audioResponse.headers()['content-type'] ?? '', /^audio\//);
+  await page.setViewportSize({ width: 360, height: 800 });
+  for (const route of ['today', 'listen', 'practice', 'review', 'exam', 'knowledge', 'account', 'print']) {
+    await page.goto(`http://127.0.0.1:4189${repositoryBase}#/${route}`);
+    await page.locator('main').waitFor();
+    const fitsViewport = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
+    assert.equal(fitsViewport, true, `${route} must fit the Pages mobile viewport`);
+  }
 } finally {
   await browser.close();
   await new Promise<void>((resolve, reject) => server.httpServer.close((error) => error ? reject(error) : resolve()));

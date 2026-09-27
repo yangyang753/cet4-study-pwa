@@ -7,8 +7,10 @@ import { LearningDatabase } from '../../data/localDb';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import { ListeningPage } from './ListeningPage';
 import vocabulary from '../../../content/v1/vocabulary.json';
+import listeningSets from '../../../content/v1/listeningSets.json';
 
 const databases: string[] = [];
+const optionName = (text: string) => new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
 
 function repository() {
   const name = `listening-test-${crypto.randomUUID()}`;
@@ -173,7 +175,9 @@ describe('ListeningPage', () => {
     render(<ListeningPage repository={learningRepository} />);
 
     await unlockListeningQuestion();
-    await user.click(screen.getByRole('radio', { name: /announced next month/ }));
+    const question = listeningSets[0].questions[0];
+    const wrongAnswer = question.options.find((_, index) => index !== question.answer)!;
+    await user.click(screen.getByRole('radio', { name: optionName(wrongAnswer) }));
     await user.click(screen.getByRole('button', { name: '提交答案' }));
 
     expect(await screen.findByText('回答错误')).toBeVisible();
@@ -184,10 +188,7 @@ describe('ListeningPage', () => {
     const user = userEvent.setup();
     const learningRepository = repository();
     render(<ListeningPage repository={learningRepository} today="2026-09-22" />);
-    const correctAnswers = [
-      /new group will meet on Sunday afternoon/, /Saturday team reached its maximum size/, /student volunteer office is organizing reading visits/,
-      /Applications close before Thursday noon/, /student card and one picture book/, /No teaching experience is needed/, /watch the recorded briefing/,
-    ];
+    const correctAnswers = listeningSets[0].questions.map((question) => optionName(question.options[question.answer]));
     for (let index = 0; index < correctAnswers.length; index += 1) {
       await unlockListeningQuestion();
       await user.click(screen.getByRole('radio', { name: correctAnswers[index] }));
