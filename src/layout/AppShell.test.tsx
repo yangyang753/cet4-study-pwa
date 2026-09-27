@@ -1,19 +1,38 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import type { LearningRepository } from '../data/repositories/LearningRepository';
 import { AppShell } from './AppShell';
 
+const repository = {
+  getDashboardSnapshot: vi.fn().mockResolvedValue({
+    attempts: [], dueReviews: [], knowledgeStates: [], completions: [],
+    settings: { id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-27T00:00:00.000Z' },
+  }),
+} as unknown as LearningRepository;
+
 describe('AppShell', () => {
-  it('exposes the four primary study destinations', () => {
+  it('groups desktop navigation and exposes four primary mobile destinations', async () => {
+    const user = userEvent.setup();
     render(
-      <MemoryRouter>
-        <AppShell><p>学习内容</p></AppShell>
+      <MemoryRouter initialEntries={['/today']}>
+        <AppShell repository={repository} today="2026-09-27"><p>学习内容</p></AppShell>
       </MemoryRouter>,
     );
 
-    for (const label of ['今日学习', '听力精练', '专项练习', '错题复习', '限时模拟', '账户同步', 'A4 打印']) {
-      expect(screen.getAllByRole('link', { name: label }).length).toBeGreaterThan(0);
-    }
+    expect(screen.getByText('每日训练')).toBeInTheDocument();
+    expect(screen.getByText('巩固提升')).toBeInTheDocument();
+    expect(screen.getByText('工具与数据')).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: '移动端主导航' }).querySelectorAll('a')).toHaveLength(4);
+    expect(screen.getAllByRole('link', { name: '今日学习' })[0]).toHaveAttribute('aria-current', 'page');
+    expect(await screen.findByRole('progressbar', { name: '今日学习进度' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '备份学习数据' })).toHaveAttribute('href', '/account');
+
+    await user.click(screen.getByRole('button', { name: '更多' }));
+    const dialog = screen.getByRole('dialog', { name: '更多学习功能' });
+    expect(dialog).toBeInTheDocument();
+    for (const label of ['限时模拟', '高频知识', '账户同步', 'A4 打印']) expect(within(dialog).getByRole('link', { name: label })).toBeInTheDocument();
     expect(screen.getByText('学习内容')).toBeInTheDocument();
   });
 
@@ -21,7 +40,7 @@ describe('AppShell', () => {
     render(
       <MemoryRouter initialEntries={['/today']}>
         <Routes>
-          <Route element={<AppShell />}>
+          <Route element={<AppShell repository={repository} today="2026-09-27" />}>
             <Route path="today" element={<h1>今日任务</h1>} />
           </Route>
         </Routes>
