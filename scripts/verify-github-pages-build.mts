@@ -30,8 +30,9 @@ const manifest = JSON.parse(readFileSync('dist/manifest.webmanifest', 'utf8')) a
 };
 
 assert.match(indexHtml, /\/cet4-study-pwa\/assets\//, 'built assets must use the repository base path');
-assert.equal(fallbackHtml, indexHtml, 'GitHub Pages must serve the app shell for direct route visits');
-assert.equal(manifest.start_url, `${repositoryBase}today`);
+assert.match(fallbackHtml, /location\.replace\(target\)/, 'GitHub Pages must redirect legacy direct routes to the Hash URL');
+assert.match(fallbackHtml, /location\.search/, 'legacy direct-route migration must preserve query parameters');
+assert.equal(manifest.start_url, `${repositoryBase}#/today`);
 assert.equal(manifest.scope, repositoryBase);
 assert.ok(manifest.icons.some((icon) => icon.src === `${repositoryBase}icon-192.png`), 'manifest must include the 192px PNG icon');
 assert.ok(manifest.icons.some((icon) => icon.src === `${repositoryBase}icon-512.png`), 'manifest must include the 512px PNG icon');
@@ -49,12 +50,12 @@ const server = await preview({
 const browser = await chromium.launch({ channel: 'chrome' });
 try {
   const page = await browser.newPage();
-  await page.goto(`http://127.0.0.1:4189${repositoryBase}today`);
+  await page.goto(`http://127.0.0.1:4189${repositoryBase}#/today`);
   await page.getByRole('heading', { name: /向目标 425 分前进/ }).waitFor();
   await page.getByRole('link', { name: /先学高频词/ }).click();
-  await page.waitForURL(`**${repositoryBase}practice/vocabulary`);
+  await page.waitForURL(`**${repositoryBase}#/practice/vocabulary`);
   await page.getByRole('heading', { name: '先学单词，再开始做题' }).waitFor();
-  await page.goto(`http://127.0.0.1:4189${repositoryBase}listen`);
+  await page.goto(`http://127.0.0.1:4189${repositoryBase}#/listen`);
   const audioUrl = await page.locator('audio').getAttribute('src');
   assert.equal(audioUrl, `${repositoryBase}audio/v1/listen-01.wav`);
   const audioResponse = await page.request.get(`http://127.0.0.1:4189${audioUrl}`);

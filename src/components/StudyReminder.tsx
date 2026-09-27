@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { DexieLearningRepository } from '../data/repositories/DexieLearningRepository';
 import type { LearningRepository } from '../data/repositories/LearningRepository';
+import { appHref } from '../lib/appHref';
 
 const reminderStorageKey = 'cet4:last-study-reminder';
 const dateKey = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -50,5 +51,5 @@ export function StudyReminder({ repository = defaultRepository, now = () => new 
   }, [now, repository]);
 
   if (!message) return null;
-  return <aside className="study-reminder" role="status"><span>{message}</span><a href={`${import.meta.env.BASE_URL}today`}>开始学习</a><button aria-label="关闭学习提醒" onClick={() => setMessage('')}>×</button></aside>;
+  return <aside className="study-reminder" role="status"><span>{message}</span><a href={appHref('today')}>开始学习</a><button aria-label="关闭学习提醒" onClick={() => setMessage('')}>×</button></aside>;
 }

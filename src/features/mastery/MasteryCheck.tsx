@@ -4,6 +4,7 @@ import { getPracticeItems, getQuestion } from '../../content/catalog';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import type { CatalogQuestion, ObjectiveQuestion as ObjectiveQuestionType, PracticeKind, SubjectiveQuestion } from '../../domain/content';
+import { appHref } from '../../lib/appHref';
 import type { StudyKind } from '../planner/planDay';
 import { gradeAnswer } from '../practice/gradeAnswer';
 import { ObjectiveQuestion } from '../practice/ObjectiveQuestion';
@@ -74,7 +75,7 @@ function ObjectiveMasteryCheck({ kind, taskId, repository, now, sourceQuestionId
   };
 
   if (!question) return <p>暂时无法生成掌握检测题。</p>;
-  if (finished) return <section className={`mastery-result ${finished}`}><h1>{finished === 'mastered' ? '已完全掌握' : '需要继续复习'}</h1><p>{finished === 'mastered' ? '检测正确率达到 80%，今日任务已真正掌握。' : '检测中还有薄弱点，错题已自动加入复习安排。'}</p><a href={`${import.meta.env.BASE_URL}today`}>返回今日计划</a></section>;
+  if (finished) return <section className={`mastery-result ${finished}`}><h1>{finished === 'mastered' ? '已完全掌握' : '需要继续复习'}</h1><p>{finished === 'mastered' ? '检测正确率达到 80%，今日任务已真正掌握。' : '检测中还有薄弱点，错题已自动加入复习安排。'}</p><a href={appHref('today')}>返回今日计划</a></section>;
 
   return <section className="mastery-check"><header><span>掌握度检测</span><h1>完成后再确认：你真的掌握了吗？</h1><p>{sourceQuestionIds.length ? '题目优先来自本次练习内容。' : '题目来自当前学习类别。'}达到 80% 才算掌握。</p><b>{index + 1} / {questions.length}</b></header><ObjectiveQuestion question={question} value={response} disabled={answerResult !== null || saving} onChange={setResponse} />{answerResult !== null && <p role="status" className={answerResult ? 'correct' : 'incorrect'}>{answerResult ? '回答正确' : `回答错误。${question.explanationZh}`}</p>}{saveError && <p role="alert">{saveError}</p>}{answerResult === null ? <button className="primary-action" disabled={!response || saving} onClick={() => void submit()}>{saveError ? '重新保存本题' : index === questions.length - 1 ? '完成检测' : '提交答案'}</button> : index < questions.length - 1 && <button className="primary-action" onClick={() => { setIndex((value) => value + 1); setResponse(''); setAnswerResult(null); setAttemptId(''); setSaveError(''); }}>下一题</button>}</section>;
 }

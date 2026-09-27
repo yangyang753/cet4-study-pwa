@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import { copyFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 
 const isGitHubPages = process.env.GITHUB_ACTIONS === 'true';
 const base = isGitHubPages ? '/cet4-study-pwa/' : '/';
@@ -30,7 +30,7 @@ export default defineConfig({
       theme_color: '#183f33',
       background_color: '#f7f4ec',
       display: 'standalone',
-      start_url: `${base}today`,
+      start_url: `${base}#/today`,
       scope: base,
       lang: 'zh-CN',
       icons: [
@@ -53,7 +53,10 @@ export default defineConfig({
   }), {
     name: 'github-pages-spa-fallback',
     closeBundle() {
-      if (isGitHubPages) copyFileSync('dist/index.html', 'dist/404.html');
+      if (isGitHubPages) {
+        const safeBase = JSON.stringify(base);
+        writeFileSync('dist/404.html', `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>正在打开四级向前…</title></head><body><p>正在打开学习页面…</p><script>(function(){var base=${safeBase};var route=location.pathname.indexOf(base)===0?location.pathname.slice(base.length):'';var target=base+'#/'+route.replace(/^\\/+|\\/+$/g,'')+location.search;location.replace(target);})();</script></body></html>`);
+      }
     },
   }],
   test: {

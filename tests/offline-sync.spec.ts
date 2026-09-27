@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('an offline listening answer survives a reload in IndexedDB', async ({ context, page }) => {
-  await page.goto('listen');
+  await page.goto('#/listen');
   await page.evaluate(() => navigator.serviceWorker.ready);
   const translationFields = page.locator('.translation-gate textarea');
   for (let index = 0; index < await translationFields.count(); index += 1) await translationFields.nth(index).fill('中文翻译');

@@ -1,8 +1,16 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+test('preserves legacy deep-link queries when migrating to Hash routing', async ({ page }) => {
+  await page.goto('review?source=reminder');
+  await page.waitForURL(/#\/review\?source=reminder$/);
+  await expect(page.getByRole('heading', { name: '错题复习' })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('heading', { name: '错题复习' })).toBeVisible();
+});
+
 test('supports the daily learning journey on desktop', async ({ page }) => {
-  await page.goto('today');
+  await page.goto('#/today');
   await expect(page.getByRole('heading', { name: /向目标 425 分前进/ })).toBeVisible();
   await expect(page.getByText('今日 60 分钟计划')).toBeVisible();
   await page.getByRole('link', { name: '高频知识', exact: true }).click();
@@ -13,13 +21,13 @@ test('supports the daily learning journey on desktop', async ({ page }) => {
 
 test('keeps the core navigation usable on a phone', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('today');
+  await page.goto('#/today');
   const mobileNav = page.getByRole('navigation', { name: '移动端主导航' });
   await expect(mobileNav).toBeVisible();
   await mobileNav.getByRole('link', { name: /听力精练/ }).click();
   await expect(page.getByRole('heading', { name: '听力精练' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
-  await page.goto('account');
+  await page.goto('#/account');
   await expect(page.getByText('当前没有启用云端同步')).toBeVisible();
   await expect(page.getByRole('button', { name: '登录' })).toHaveCount(0);
 });
@@ -27,7 +35,7 @@ test('keeps the core navigation usable on a phone', async ({ page }) => {
 test('keeps core pages within a 360px viewport without serious accessibility violations', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
   for (const route of ['today', 'listen', 'practice', 'diagnostic', 'account']) {
-    await page.goto(route);
+    await page.goto(`#/${route}`);
     await expect(page.locator('main')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), `${route} must not scroll horizontally`).toBeTruthy();
     const results = await new AxeBuilder({ page }).analyze();
@@ -36,7 +44,7 @@ test('keeps core pages within a 360px viewport without serious accessibility vio
 });
 
 test('shows a diagnostic estimate and targeted task on desktop and phone', async ({ page }) => {
-  await page.goto('today');
+  await page.goto('#/today');
   await page.getByRole('heading', { name: /向目标 425 分前进/ }).waitFor();
   await page.evaluate(async () => {
     const database = await new Promise<IDBDatabase>((resolve, reject) => {
@@ -74,7 +82,7 @@ test('shows a diagnostic estimate and targeted task on desktop and phone', async
 });
 
 test('exposes installable PWA metadata', async ({ page, request }) => {
-  await page.goto('today');
+  await page.goto('#/today');
   const manifestHref = await page.locator('link[rel="manifest"]').getAttribute('href');
   expect(manifestHref).toBeTruthy();
   const manifestResponse = await request.get(manifestHref!);
@@ -86,12 +94,12 @@ test('exposes installable PWA metadata', async ({ page, request }) => {
     expect.objectContaining({ sizes: '192x192', type: 'image/png' }),
     expect.objectContaining({ sizes: '512x512', purpose: expect.stringContaining('maskable') }),
   ]));
-  await page.goto('account');
+  await page.goto('#/account');
   await expect(page.getByRole('heading', { name: '安装到手机桌面' })).toBeVisible();
 });
 
 test('starts vocabulary practice with word study and unlocks questions after translation', async ({ page }) => {
-  await page.goto('practice/vocabulary');
+  await page.goto('#/practice/vocabulary');
   await expect(page.getByRole('heading', { level: 1, name: '先学单词，再开始做题' })).toBeVisible();
   await expect(page.getByRole('radio')).toHaveCount(0);
   const progress = await page.locator('.vocabulary-warmup header span').textContent();
@@ -123,7 +131,7 @@ test('starts vocabulary practice with word study and unlocks questions after tra
 });
 
 test('reopens the visited study dashboard while offline', async ({ page, context }) => {
-  await page.goto('today');
+  await page.goto('#/today');
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.reload();
   await context.setOffline(true);
@@ -132,7 +140,7 @@ test('reopens the visited study dashboard while offline', async ({ page, context
 });
 
 test('continues a full mock into the next locked section', async ({ page, request }) => {
-  await page.goto('exam/mock-1');
+  await page.goto('#/exam/mock-1');
   page.on('dialog', (dialog) => dialog.accept());
   await page.getByRole('button', { name: '完成写作并进入听力' }).click();
   await expect(page.getByText('当前分区：听力（25 分钟）')).toBeVisible();

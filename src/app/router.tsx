@@ -1,8 +1,10 @@
 import { Suspense, lazy, type ReactNode } from 'react';
-import { Navigate, createBrowserRouter, useParams } from 'react-router-dom';
+import { Navigate, createHashRouter, useParams } from 'react-router-dom';
 import { AppShell } from '../layout/AppShell';
 import { TodayPage } from '../features/dashboard/TodayPage';
 import { supabaseClient } from '../lib/runtime';
+import { appHref } from '../lib/appHref';
+import { LegacyPathRedirect } from './LegacyPathRedirect';
 const PracticeRoute = lazy(() => import('../features/practice/ExerciseRunner').then((module) => ({ default: module.PracticeRoute })));
 const PracticeHub = lazy(() => import('../features/practice/PracticeHub').then((module) => ({ default: module.PracticeHub })));
 const ListeningPage = lazy(() => import('../features/listening/ListeningPage').then((module) => ({ default: module.ListeningPage })));
@@ -15,14 +17,13 @@ const DiagnosticPage = lazy(() => import('../features/diagnostic/DiagnosticPage'
 const PasswordRecoveryPage = lazy(() => import('../features/auth/PasswordRecoveryPage').then((module) => ({ default: module.PasswordRecoveryPage })));
 const KnowledgePage = lazy(() => import('../features/knowledge/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
 const PrintPage = lazy(() => import('../features/print/PrintPage').then((module) => ({ default: module.PrintPage })));
-const basename = import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL.replace(/\/$/, '');
 const loading = (message: string, element: ReactNode) => <Suspense fallback={<p role="status">{message}</p>}>{element}</Suspense>;
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: '/',
-    element: <AppShell />,
-    errorElement: <main><h1>页面暂时无法显示</h1><a href={`${import.meta.env.BASE_URL}today`}>返回今日学习</a></main>,
+    element: <><LegacyPathRedirect /><AppShell /></>,
+    errorElement: <main><h1>页面暂时无法显示</h1><a href={appHref('today')}>返回今日学习</a></main>,
     children: [
       { index: true, element: <Navigate replace to="/today" /> },
       { path: 'today', element: <TodayPage /> },
@@ -40,7 +41,7 @@ export const router = createBrowserRouter([
       { path: 'recover', element: loading('正在验证密码重置链接…', <PasswordRecoveryPage />) },
     ],
   },
-], { basename });
+]);
 
 function ExamRoute() {
   const { mockId = 'mock-1' } = useParams();

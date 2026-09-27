@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from './AuthProvider';
+import { appHref } from '../../lib/appHref';
 
 export function PasswordRecoveryPage() {
   const auth = useAuth();
@@ -10,8 +11,8 @@ export function PasswordRecoveryPage() {
   const [success, setSuccess] = useState(false);
 
   if (auth.status === 'loading') return <p>正在验证密码重置链接…</p>;
-  if (success) return <section className="login-card"><h1>密码已更新</h1><p>现在可以使用新密码登录手机和电脑。</p><a href={`${import.meta.env.BASE_URL}account`}>返回账户页面</a></section>;
-  if (!auth.isRecoverySession) return <section className="login-card"><h1>链接无效或已过期</h1><p>请返回账户页面重新发送密码重置邮件。</p><a href={`${import.meta.env.BASE_URL}account`}>重新发送邮件</a></section>;
+  if (success) return <section className="login-card"><h1>密码已更新</h1><p>现在可以使用新密码登录手机和电脑。</p><a href={appHref('account')}>返回账户页面</a></section>;
+  if (!auth.isRecoverySession) return <section className="login-card"><h1>链接无效或已过期</h1><p>请返回账户页面重新发送密码重置邮件。</p><a href={appHref('account')}>重新发送邮件</a></section>;
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();

@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useAuth } from './AuthProvider';
+import { appHref } from '../../lib/appHref';
 
 export function LoginPage() {
   const auth = useAuth();
@@ -21,7 +22,7 @@ export function LoginPage() {
 
   async function resetPassword() {
     if (!email.includes('@')) { setMessage('请先填写有效邮箱'); return; }
-    const redirectTo = new URL(`${import.meta.env.BASE_URL}recover`, window.location.origin).toString();
+    const redirectTo = new URL(appHref('recover'), window.location.origin).toString();
     try { await auth.resetPassword(email, redirectTo); setMessage('重置邮件已发送，请检查收件箱。'); } catch { setMessage('暂时无法发送重置邮件，请稍后再试'); }
   }
 
