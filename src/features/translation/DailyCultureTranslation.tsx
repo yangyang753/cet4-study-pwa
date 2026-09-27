@@ -33,7 +33,7 @@ export function DailyCultureTranslation({ repository, prompt, vocabulary, states
         questionId: prompt.id,
         response: answer,
         correct: evaluation.passed,
-        score: Math.round((evaluation.coveredWordIds.length / prompt.targetWordIds.length) * 100),
+        score: evaluation.coveredWordIds.length / prompt.targetWordIds.length,
         durationSeconds: 0,
         contentVersion: 'v1',
         kind: 'translation',

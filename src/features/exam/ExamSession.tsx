@@ -69,18 +69,23 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
   const sessionRef = useRef<ExamSessionRecord | null>(null);
   const finalWriteStarted = useRef(false);
   const saveSequence = useRef(0);
+  const saveQueue = useRef<Promise<boolean>>(Promise.resolve(true));
 
-  const persistSession = useCallback(async (next: ExamSessionRecord) => {
+  const persistSession = useCallback((next: ExamSessionRecord) => {
     const sequence = ++saveSequence.current;
     setSaveState('saving');
-    try {
-      await repository.saveExamSession(next);
-      if (sequence === saveSequence.current) setSaveState('saved');
-      return true;
-    } catch {
-      if (sequence === saveSequence.current) setSaveState('error');
-      return false;
-    }
+    const operation = saveQueue.current.then(async () => {
+      try {
+        await repository.saveExamSession(next);
+        if (sequence === saveSequence.current) setSaveState('saved');
+        return true;
+      } catch {
+        if (sequence === saveSequence.current) setSaveState('error');
+        return false;
+      }
+    });
+    saveQueue.current = operation;
+    return operation;
   }, [repository]);
 
   const updateSession = useCallback((next: ExamSessionRecord, persist = false) => {

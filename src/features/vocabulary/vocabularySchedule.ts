@@ -66,7 +66,8 @@ export function buildVocabularyWorkload(
       return leftDue - rightDue || (right.word.frequency ?? 0) - (left.word.frequency ?? 0);
     })
     .map(({ word }) => word);
-  const dueWords = allDueWords.slice(0, dailyKnowledgeCapacity);
+  const unseenCultureWordCount = unseen.filter((word) => cultureWordIds.has(word.id)).length;
+  const dueWords = allDueWords.slice(0, Math.max(0, dailyKnowledgeCapacity - unseenCultureWordCount));
   const occupied = new Set(dueWords.map((word) => word.id));
   const cultureWords = entries.filter((word) => cultureWordIds.has(word.id) && stateById.has(word.id) && !occupied.has(word.id));
   const dueWordCount = allDueWords.length;

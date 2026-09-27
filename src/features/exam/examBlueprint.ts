@@ -33,7 +33,7 @@ export function resolveExam(mockId: string): ResolvedExam {
   return {
     id: mock.id,
     title: mock.title,
-    contentVersion: 'v1',
+    contentVersion: 'v2',
     totalMinutes: 125,
     sections: [
       { kind: 'writing', minutes: 30, questions: writing },

@@ -83,6 +83,14 @@ describe('vocabulary workload', () => {
       result.newWords.length + result.dueWords.length + result.cultureWords.length,
     );
   });
+
+  it('reserves room to teach unseen culture targets even when old-word reviews fill capacity', () => {
+    const entries = Array.from({ length: 60 }, (_, i) => entry(i));
+    const states = Array.from({ length: 45 }, (_, i) => state(i, { nextReviewAt: '2026-09-20T00:00:00.000Z' }));
+    const result = buildVocabularyWorkload(entries, states, '2026-09-25', '2026-12-12', 60, { cultureWordIds: ['v50', 'v51', 'v52'] });
+    expect(result.newWords.slice(0, 3).map((word) => word.id)).toEqual(['v50', 'v51', 'v52']);
+    expect(result.dueWords.length + result.newWords.length + result.cultureWords.length).toBeLessThanOrEqual(45);
+  });
 });
 
 describe('word cloze and review state', () => {

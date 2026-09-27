@@ -70,4 +70,21 @@ describe('ExamSession', () => {
     await userEvent.click(screen.getByRole('button', { name: '重新保存' }));
     expect(await screen.findByRole('status')).toHaveTextContent('已保存');
   });
+
+  it('serializes rapid answer saves so an older write cannot overwrite the latest answer', async () => {
+    const repo = repository();
+    render(<ExamSession mockId="mock-1" repository={repo} />);
+    const answer = await screen.findByLabelText('写作答题区');
+    await waitFor(() => expect(repo.saveExamSession).toHaveBeenCalledTimes(1));
+    let releaseFirst!: () => void;
+    vi.mocked(repo.saveExamSession).mockImplementationOnce(() => new Promise<void>((resolve) => { releaseFirst = resolve; })).mockResolvedValue(undefined);
+    fireEvent.change(answer, { target: { value: 'old' } });
+    fireEvent.change(answer, { target: { value: 'latest answer' } });
+    await waitFor(() => expect(repo.saveExamSession).toHaveBeenCalledTimes(2));
+    expect(repo.saveExamSession).toHaveBeenCalledTimes(2);
+    releaseFirst();
+    await waitFor(() => expect(repo.saveExamSession).toHaveBeenCalledTimes(3));
+    const questionId = resolveExam('mock-1').sections[0].questions[0].id;
+    expect(vi.mocked(repo.saveExamSession).mock.calls[2][0].answers[questionId]).toBe('latest answer');
+  });
 });

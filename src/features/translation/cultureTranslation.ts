@@ -59,6 +59,9 @@ export function auditCultureTranslations(prompts: CultureTranslationPrompt[], vo
     if (prompt.targetWordIds.length < 3 || prompt.targetWordIds.length > 5) errors.push(`${prompt.id}: expected 3-5 target words`);
     for (const id of prompt.targetWordIds) if (!vocabularyIds.has(id)) errors.push(`${prompt.id}: unknown vocabulary ${id}`);
     if (prompt.keyPoints.length < 3) errors.push(`${prompt.id}: insufficient key points`);
+    const referenceEvaluation = evaluateCultureTranslation(prompt, prompt.referenceAnswer, vocabulary);
+    if (referenceEvaluation.missedWordIds.length) errors.push(`${prompt.id}: reference answer misses ${referenceEvaluation.missedWordIds.join(', ')}`);
+    if (!referenceEvaluation.complete) errors.push(`${prompt.id}: reference answer is incomplete`);
   }
   return errors;
 }

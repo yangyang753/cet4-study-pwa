@@ -51,7 +51,7 @@ describe('exam session reducer', () => {
 
   it('makes a content-version mismatch read-only', () => {
     const session = createExamSession(exam, startedAt);
-    const changedExam = { ...exam, contentVersion: 'v2' };
+    const changedExam = { ...exam, contentVersion: 'v3' };
     const restored = restoreExamSession(session, changedExam, '2026-09-23T00:05:00.000Z');
     expect(restored.status).toBe('stale');
     expect(reduceExamSession(restored, { type: 'answer', questionId: 'q1', response: 'B' })).toBe(restored);
