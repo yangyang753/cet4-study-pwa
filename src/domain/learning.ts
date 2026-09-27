@@ -64,6 +64,7 @@ export interface DiagnosticProfileV2 {
 export interface UserSettings {
   id: 'current';
   examDate: string;
+  examDateConfirmedAt?: string;
   dailyMinutes: number;
   playbackRate: number;
   reminderTime?: string;

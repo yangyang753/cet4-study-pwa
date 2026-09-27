@@ -61,6 +61,21 @@ describe('learning backup', () => {
     source.close(); target.close();
   });
 
+  it('round-trips exam-date confirmation while older settings remain importable', async () => {
+    const source = database();
+    await source.settings.put({ id: 'current', examDate: '2026-12-12', examDateConfirmedAt: '2026-09-27T08:00:00.000Z', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-27T08:00:00.000Z' });
+    const target = database();
+    await importLearningData(target, await exportLearningData(source));
+    expect((await target.settings.get('current'))?.examDateConfirmedAt).toBe('2026-09-27T08:00:00.000Z');
+
+    const oldBackup = await exportLearningData(source);
+    delete oldBackup.data.settings[0].examDateConfirmedAt;
+    const olderTarget = database();
+    await expect(importLearningData(olderTarget, oldBackup)).resolves.toBeUndefined();
+    expect((await olderTarget.settings.get('current'))?.examDate).toBe('2026-12-12');
+    source.close(); target.close(); olderTarget.close();
+  });
+
   it('round-trips a valid diagnostic score profile and rejects a malformed one', async () => {
     const source = database();
     await source.settings.put({

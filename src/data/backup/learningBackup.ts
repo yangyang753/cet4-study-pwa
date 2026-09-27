@@ -26,6 +26,7 @@ const diagnosticProfileSchema = z.object({
 }).refine((profile) => profile.scoreRange.low <= profile.estimatedScore && profile.estimatedScore <= profile.scoreRange.high, { message: 'Estimated score must be inside score range' });
 const settingsSchema = z.object({
   id: z.literal('current'), examDate: z.string(), dailyMinutes: z.number(), playbackRate: z.number(), updatedAt: iso,
+  examDateConfirmedAt: iso.optional(),
   readiness: z.object({ registrationConfirmed: z.boolean(), paymentConfirmed: z.boolean().optional(), admissionTicketPrepared: z.boolean(), equipmentPrepared: z.boolean() }).optional(),
   diagnosticProfile: diagnosticProfileSchema.optional(),
 }).passthrough();

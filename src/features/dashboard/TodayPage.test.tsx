@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { greetingForHour, TodayPage } from './TodayPage';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
@@ -36,6 +37,7 @@ function repository(overrides = {}) {
       ],
     } : null,
     savePlan: async () => undefined,
+    saveUserSettings: async () => undefined,
   } as unknown as LearningRepository;
 }
 
@@ -62,6 +64,15 @@ describe('TodayPage', () => {
     expect(screen.getByRole('region', { name: '本周概览' })).toHaveTextContent('1 / 7');
     expect(screen.getByText('听力 · 1 次')).toBeVisible();
     expect(screen.getByText(/再完成 3 次整套模考/)).toBeVisible();
+  });
+
+  it('asks for school-notice exam-date confirmation and hides the card after confirmation', async () => {
+    const learningRepository = repository();
+    render(<TodayPage today="2026-09-27" repository={learningRepository} />);
+    expect(await screen.findByText('请确认本校考试日期')).toBeVisible();
+    expect(screen.getByText(/2026 年 12 月 12 日/)).toBeVisible();
+    await userEvent.click(screen.getByRole('button', { name: '日期正确，确认' }));
+    await waitFor(() => expect(screen.queryByText('请确认本校考试日期')).not.toBeInTheDocument());
   });
 
   it('shows the countdown and the four-part 60-minute plan', () => {

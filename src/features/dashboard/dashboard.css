@@ -25,6 +25,12 @@
 .exam-readiness > div { display: flex; gap: 18px; flex-wrap: wrap; }
 .exam-readiness label { display: flex; gap: 8px; align-items: center; font-weight: 700; }
 .exam-readiness input { width: 18px; height: 18px; accent-color: var(--color-green); }
+.exam-date-confirmation { display: flex; justify-content: space-between; gap: 24px; align-items: center; margin: 0 0 20px; padding: 22px 26px; border: 1px solid #e8c56b; border-radius: var(--radius-card); background: #fff4d5; box-shadow: var(--shadow-card); }
+.exam-date-confirmation h2, .exam-date-confirmation p { margin: 5px 0; }
+.exam-date-confirmation > div:last-of-type { display: flex; gap: 10px; align-items: center; flex: 0 0 auto; }
+.exam-date-confirmation a, .exam-date-confirmation button { padding: 10px 14px; border-radius: 12px; font-weight: 800; }
+.exam-date-confirmation a { color: var(--color-green); border: 1px solid var(--color-green); }
+.exam-date-confirmation button { color: white; border: 0; background: var(--color-green); }
 .weekly-report { margin: 0 0 20px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-panel); box-shadow: var(--shadow-card); }
 .weekly-report > summary { display: flex; justify-content: space-between; gap: 18px; align-items: center; padding: 20px 26px; cursor: pointer; list-style: none; }
 .weekly-report > summary::-webkit-details-marker { display: none; }
@@ -59,5 +65,5 @@
 .progress-card p b { float: right; }
 .meter { height: 9px; overflow: hidden; border-radius: 9px; background: #e7ebe6; }
 .meter i { display: block; height: 100%; border-radius: inherit; background: var(--color-green); }
-@media (max-width: 900px) { .dashboard-hero, .dashboard-grid, .diagnostic-summary { grid-template-columns: 1fr; } .diagnostic-summary a { width: max-content; } .weekly-report-stats { grid-template-columns: repeat(2, 1fr); } .task-card { grid-template-columns: 42px 1fr auto; } .task-card > b { grid-column: 2; width: max-content; } .task-status { grid-column: 3; grid-row: 1 / span 2; } }
+@media (max-width: 900px) { .dashboard-hero, .dashboard-grid, .diagnostic-summary { grid-template-columns: 1fr; } .diagnostic-summary a { width: max-content; } .exam-date-confirmation { align-items: flex-start; flex-direction: column; } .weekly-report-stats { grid-template-columns: repeat(2, 1fr); } .task-card { grid-template-columns: 42px 1fr auto; } .task-card > b { grid-column: 2; width: max-content; } .task-status { grid-column: 3; grid-row: 1 / span 2; } }
 @media (max-width: 480px) { .weekly-report > summary, .weekly-report-body { padding-left: 16px; padding-right: 16px; } .weekly-report > summary > strong { display: none; } .weekly-report-stats { grid-template-columns: 1fr 1fr; } }

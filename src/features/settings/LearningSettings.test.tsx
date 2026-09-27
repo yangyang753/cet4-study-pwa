@@ -37,13 +37,22 @@ describe('LearningSettings', () => {
 
     expect(learningRepository.saveUserSettings).toHaveBeenCalledWith(expect.objectContaining({
       examDate: '2026-12-19', dailyMinutes: 75, playbackRate: 1.25, reminderTime: '20:30', registrationDeadline: '2026-10-10',
+      examDateConfirmedAt: undefined,
     }));
     expect(await screen.findByText('设置已保存')).toBeVisible();
   });
 
   it('explains that browser reminders require the app to be open', async () => {
     render(<LearningSettings repository={repository()} />);
-    expect(await screen.findByText(/应用打开时检查提醒/)).toBeVisible();
+    expect(await screen.findByText(/需要打开应用.*检查学习提醒/)).toBeVisible();
+  });
+
+  it('preserves confirmation when the exam date does not change', async () => {
+    const learningRepository = repository();
+    vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({ settings: { ...savedSettings, examDateConfirmedAt: '2026-09-27T08:00:00.000Z' } } as never);
+    render(<LearningSettings repository={learningRepository} />);
+    await userEvent.click(await screen.findByRole('button', { name: '保存学习设置' }));
+    expect(learningRepository.saveUserSettings).toHaveBeenCalledWith(expect.objectContaining({ examDateConfirmedAt: '2026-09-27T08:00:00.000Z' }));
   });
 
   it('rejects a daily study time outside the supported range', async () => {

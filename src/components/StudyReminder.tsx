@@ -17,6 +17,12 @@ export function isStudyReminderDue(now: Date, reminderTime: string, lastShownDat
   return current >= reminderTime;
 }
 
+export function reminderCapability(configuredCloud: boolean, notificationPermission: NotificationPermission) {
+  if (!configuredCloud) return { background: false, message: '当前为本机模式：需要打开应用，系统才会检查学习提醒。' };
+  if (notificationPermission === 'granted') return { background: false, message: '浏览器通知已允许，但站点没有后台推送服务；仍需打开应用才能按时检查提醒。' };
+  return { background: false, message: '云同步不等于后台推送；需要打开应用才能检查提醒。' };
+}
+
 const defaultRepository = new DexieLearningRepository();
 
 export function StudyReminder({ repository = defaultRepository, now = () => new Date() }: { repository?: LearningRepository; now?: () => Date }) {

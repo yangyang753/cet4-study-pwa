@@ -25,4 +25,9 @@ describe('normalizeUserSettings', () => {
       registrationDeadline: '2026-10-10', readiness: { registrationConfirmed: true, paymentConfirmed: true },
     });
   });
+
+  it('keeps old settings valid and preserves an optional exam-date confirmation', () => {
+    expect(normalizeUserSettings({ examDate: '2026-12-12' }).examDateConfirmedAt).toBeUndefined();
+    expect(normalizeUserSettings({ examDateConfirmedAt: '2026-09-27T08:00:00.000Z' }).examDateConfirmedAt).toBe('2026-09-27T08:00:00.000Z');
+  });
 });

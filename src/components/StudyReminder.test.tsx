@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { LearningRepository } from '../data/repositories/LearningRepository';
-import { isStudyReminderDue, StudyReminder } from './StudyReminder';
+import { isStudyReminderDue, reminderCapability, StudyReminder } from './StudyReminder';
 
 const settings = {
     id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1,
@@ -20,6 +20,11 @@ describe('StudyReminder', () => {
     expect(isStudyReminderDue(now, '20:00', '2026-09-24')).toBe(false);
     expect(isStudyReminderDue(new Date(2026, 8, 24, 19, 59), '20:00', '')).toBe(false);
     expect(isStudyReminderDue(now, '', '')).toBe(false);
+  });
+
+  it('never claims background push from cloud configuration or browser permission alone', () => {
+    expect(reminderCapability(false, 'default')).toEqual(expect.objectContaining({ background: false, message: expect.stringMatching(/打开应用/) }));
+    expect(reminderCapability(true, 'granted')).toEqual(expect.objectContaining({ background: false, message: expect.stringMatching(/没有后台推送服务/) }));
   });
 
   it('shows an in-app reminder even when browser notifications are unavailable', async () => {

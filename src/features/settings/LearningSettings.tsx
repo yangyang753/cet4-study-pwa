@@ -2,10 +2,11 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { normalizeUserSettings, type UserSettings } from '../../domain/learning';
+import { reminderCapability } from '../../components/StudyReminder';
 
 const defaultRepository = new DexieLearningRepository();
 
-export function LearningSettings({ repository = defaultRepository }: { repository?: LearningRepository }) {
+export function LearningSettings({ repository = defaultRepository, configuredCloud = false }: { repository?: LearningRepository; configuredCloud?: boolean }) {
   const [settings, setSettings] = useState<UserSettings | null>(null);
   const [examDate, setExamDate] = useState('');
   const [dailyMinutes, setDailyMinutes] = useState('60');
@@ -46,6 +47,7 @@ export function LearningSettings({ repository = defaultRepository }: { repositor
     const next = normalizeUserSettings({
       ...settings,
       examDate,
+      examDateConfirmedAt: examDate === settings?.examDate ? settings?.examDateConfirmedAt : undefined,
       dailyMinutes: minutes,
       playbackRate: Number(playbackRate),
       reminderTime,
@@ -64,6 +66,8 @@ export function LearningSettings({ repository = defaultRepository }: { repositor
   }
 
   if (!settings && !error) return <p role="status">正在读取学习设置…</p>;
+  const permission: NotificationPermission = typeof Notification === 'undefined' ? 'denied' : Notification.permission;
+  const capability = reminderCapability(configuredCloud, permission);
   return <section className="account-card" aria-labelledby="learning-settings-title">
     <h2 id="learning-settings-title">学习设置</h2>
     <p>这些设置会同步影响今日计划、错题复习和听力播放。</p>
@@ -74,7 +78,7 @@ export function LearningSettings({ repository = defaultRepository }: { repositor
       <label>每日学习分钟数<input aria-label="每日学习分钟数" type="number" min="20" max="180" value={dailyMinutes} onChange={(event) => setDailyMinutes(event.target.value)} /></label>
       <label>默认听力速度<select aria-label="默认听力速度" value={playbackRate} onChange={(event) => setPlaybackRate(event.target.value)}>{[0.75, 1, 1.25, 1.5].map((rate) => <option key={rate} value={rate}>{rate}×</option>)}</select></label>
       <label>每日提醒时间<input aria-label="每日提醒时间" type="time" value={reminderTime} onChange={(event) => setReminderTime(event.target.value)} /></label>
-      <p><small>留空表示关闭。应用打开时检查提醒；浏览器无法保证应用完全关闭后仍按时通知。</small></p>
+      <p><small>{capability.message} 留空表示关闭。</small></p>
       {'Notification' in window && Notification.permission === 'default' && <button type="button" onClick={() => void Notification.requestPermission().then((permission) => setMessage(permission === 'granted' ? '浏览器通知已开启' : '未开启浏览器通知，应用内提醒仍可使用'))}>开启浏览器通知</button>}
       <button type="submit">保存学习设置</button>
     </form>
