@@ -16,14 +16,19 @@ export interface WeeklyLearningReport {
 }
 
 const modeWeight = { practice: 1, exam: 1, review: 0.75, mastery: 0.5, diagnostic: 0 } as const;
+const localDate = (iso: string) => {
+  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date(iso));
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+};
 
 export function buildWeeklyLearningReport(snapshot: DashboardSnapshot, today: string): WeeklyLearningReport {
   const start = new Date(`${today}T12:00:00.000Z`);
   start.setUTCDate(start.getUTCDate() - 6);
   const startDate = start.toISOString().slice(0, 10);
-  const attempts = snapshot.attempts.filter((attempt) => attempt.createdAt.slice(0, 10) >= startDate && attempt.createdAt.slice(0, 10) <= today);
+  const attempts = snapshot.attempts.filter((attempt) => localDate(attempt.createdAt) >= startDate && localDate(attempt.createdAt) <= today);
   const completions = snapshot.completions.filter((completion) => completion.date >= startDate && completion.date <= today);
-  const activeDates = new Set([...attempts.map((attempt) => attempt.createdAt.slice(0, 10)), ...completions.map((completion) => completion.date)]);
+  const activeDates = new Set([...attempts.map((attempt) => localDate(attempt.createdAt)), ...completions.map((completion) => completion.date)]);
   const groups = new Map<CoreStudyKind, { attempts: number; earned: number; possible: number }>();
   for (const attempt of attempts) {
     const kind = normalizeStudyKind(attempt.kind);

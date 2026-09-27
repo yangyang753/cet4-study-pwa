@@ -16,8 +16,8 @@ describe('buildWeeklyLearningReport', () => {
   it('includes the seven-day boundary and excludes older activity', () => {
     const report = buildWeeklyLearningReport(base({
       attempts: [
-        { id: 'a1', userId: 'local', questionId: 'q1', response: 'A', correct: true, score: 1, durationSeconds: 10, kind: 'reading', mode: 'practice', createdAt: '2026-09-21T01:00:00.000Z' },
-        { id: 'a2', userId: 'local', questionId: 'q2', response: 'A', correct: false, score: 0, durationSeconds: 10, kind: 'reading', mode: 'practice', createdAt: '2026-09-20T23:59:59.000Z' },
+        { id: 'a1', userId: 'local', questionId: 'q1', response: 'A', correct: true, score: 1, durationSeconds: 10, kind: 'reading', mode: 'practice', createdAt: '2026-09-20T16:00:00.000Z' },
+        { id: 'a2', userId: 'local', questionId: 'q2', response: 'A', correct: false, score: 0, durationSeconds: 10, kind: 'reading', mode: 'practice', createdAt: '2026-09-20T15:59:59.000Z' },
       ],
       completions: [{ id: 'c1', date: '2026-09-27', taskId: '2026-09-27:listening', kind: 'listening', completedAt: '2026-09-27T02:00:00.000Z' }],
     }), '2026-09-27');
