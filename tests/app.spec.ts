@@ -101,10 +101,10 @@ test('starts vocabulary practice with word study and unlocks questions after tra
     await page.getByRole('button', { name: '显示释义' }).click();
     await page.getByRole('button', { name: '基本认识' }).click();
   }
-  await expect(page.getByRole('heading', { level: 1, name: '用一段话检查是否真正理解' })).toBeVisible();
-  await page.getByRole('textbox', { name: '我的中文翻译' }).fill('这是今天学习单词的中文翻译。');
-  await page.getByRole('button', { name: '检查翻译' }).click();
-  await page.getByRole('button', { name: '继续做词义题' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: '中国文化翻译' })).toBeVisible();
+  await page.getByRole('textbox', { name: '我的英文翻译' }).fill('Chinese culture has a long history and remains important in modern society.');
+  await page.getByRole('button', { name: '提交文化翻译' }).click();
+  await page.getByRole('button', { name: '继续学习重点搭配' }).click();
   for (let index = 0; index < 3; index += 1) {
     await expect(page.getByRole('heading', { level: 1, name: '单词之后学习重点搭配' })).toBeVisible();
     await page.getByRole('button', { name: '显示搭配释义' }).click();
@@ -114,7 +114,7 @@ test('starts vocabulary practice with word study and unlocks questions after tra
     await page.getByRole('button', { name: index === 2 ? '完成重点搭配' : '下一个重点搭配' }).click();
   }
   await expect(page.getByRole('heading', { level: 1, name: '专项练习' })).toBeVisible();
-  await expect(page.getByRole('group', { name: '请选择 passage 的正确含义。' })).toBeVisible();
+  await expect(page.getByRole('group', { name: /^请选择 .+ 的正确含义。$/ })).toBeVisible();
   const firstChoice = page.getByRole('radio').first();
   await expect(firstChoice).toBeDisabled();
   await page.getByRole('textbox', { name: '题干中文翻译' }).fill('这道题询问单词的正确含义。');
