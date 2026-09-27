@@ -1,5 +1,6 @@
 export type Difficulty = 'foundation' | 'standard' | 'challenge';
 export type QuestionType = 'vocabulary' | 'collocation' | 'grammar' | 'news' | 'conversation' | 'passage' | 'cloze' | 'matching' | 'reading' | 'translation' | 'writing';
+export type QuestionSkillTag = 'detail' | 'reason' | 'purpose' | 'action' | 'attitude' | 'inference' | 'main-idea' | 'paraphrase' | 'vocabulary-in-context' | 'reference' | 'paragraph-role' | 'structure';
 
 export interface KnowledgePoint {
   id: string;
@@ -34,6 +35,7 @@ export interface QuestionBase {
   knowledgePointIds: string[];
   explanationZh: string;
   sourceNote: string;
+  skillTag?: QuestionSkillTag;
 }
 
 export interface ObjectiveQuestion extends QuestionBase {

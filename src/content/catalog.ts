@@ -5,7 +5,7 @@ import readingData from '../../content/v1/readingSets.json';
 import translationData from '../../content/v1/translations.json';
 import writingData from '../../content/v1/writingPrompts.json';
 import mockData from '../../content/v1/mockExams.json';
-import type { CatalogMockExam, CatalogQuestion, Difficulty, PracticeKind, VocabularyEntry } from '../domain/content';
+import type { CatalogMockExam, CatalogQuestion, Difficulty, PracticeKind, QuestionSkillTag, VocabularyEntry } from '../domain/content';
 import { learningVocabulary } from './vocabularyLearning';
 import { buildCollocationQuestion, type CollocationEntry } from '../features/collocations/collocationPractice';
 
@@ -35,6 +35,7 @@ function listeningQuestions(): CatalogQuestion[] {
     knowledgePointIds: [listeningKnowledgePoints[index] ?? `听力:${set.type}`],
     explanationZh: question.explanationZh,
     sourceNote: '依据 CET-4 题型与高频考点编写的原创仿真练习',
+    skillTag: question.skillTag as QuestionSkillTag,
     options: question.options.map((text, optionIndex) => ({ id: optionId(optionIndex), text })),
     correctAnswer: optionId(question.answer),
     audioAssetId: set.id,
@@ -53,6 +54,7 @@ function readingQuestions(): CatalogQuestion[] {
     knowledgePointIds: [readingKnowledgePoints[index] ?? `阅读:${set.type}`],
     explanationZh: question.explanationZh,
     sourceNote: '依据 CET-4 题型与高频考点编写的原创仿真练习',
+    skillTag: question.skillTag as QuestionSkillTag,
     options: question.options.map((text, optionIndex) => ({ id: optionId(optionIndex), text })),
     correctAnswer: optionId(question.answer),
     passage: set.passage,

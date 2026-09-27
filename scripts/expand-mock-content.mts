@@ -5,6 +5,7 @@ const contentDir = path.join(process.cwd(), 'content/v1');
 const readJson = async <T>(name: string): Promise<T> => JSON.parse(await readFile(path.join(contentDir, name), 'utf8')) as T;
 const writeJson = async (name: string, value: unknown) => writeFile(path.join(contentDir, name), `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 
+type QuestionSkillTag = 'detail' | 'reason' | 'purpose' | 'action' | 'attitude' | 'inference' | 'main-idea' | 'vocabulary-in-context' | 'reference' | 'paragraph-role' | 'structure';
 type SetItem = { id: string; theme: string; themeEn?: string; type: string; difficulty: string; audioSrc?: string };
 type ListeningScenario = { intro: string; schedule: string; reason: string; deadline: string; bring: string; experience: string; fallback: string };
 
@@ -35,22 +36,35 @@ const listeningScenarios: ListeningScenario[] = [
   { intro: 'The computing center is teaching students to run accessible online meetings.', schedule: 'The workshop is held Friday at three in a computer room.', reason: 'Several student groups reported problems with captions and turn-taking.', deadline: 'Group leaders need to register by Wednesday.', bring: 'Participants should bring their usual meeting invitation.', experience: 'The trainer starts with basic platform controls.', fallback: 'A checklist and captioning guide will be emailed afterward.' },
 ];
 
-function choices(correct: string, distractors: string[], position: number) { const options = [...distractors.slice(0, 3)]; options.splice(position, 0, correct); return { options, answer: position }; }
+function choices(correct: string, distractors: string[], position: number) { const options = [...new Set(distractors.filter((item) => item !== correct))].slice(0, 3); options.splice(position, 0, correct); return { options, answer: position }; }
+function alternateFacts<T extends readonly unknown[]>(rows: readonly T[], rowIndex: number, factIndex: number) {
+  return [1, 7, 13].map((offset) => String(rows[(rowIndex + offset) % rows.length][factIndex]));
+}
 
 const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set, index) => {
   const scenario = listeningScenarios[index];
   if (!scenario) throw new Error(`Missing listening scenario ${index + 1}`);
   const themeEn = set.themeEn ?? set.theme;
   const segments = [scenario.intro, `${scenario.reason} ${scenario.schedule}`, `${scenario.deadline} ${scenario.bring}`, scenario.experience, scenario.fallback];
-  const values = [scenario.schedule, scenario.reason, scenario.intro, scenario.deadline, scenario.bring, scenario.experience, scenario.fallback];
-  const prompts = [`When will the ${themeEn} activity take place?`, `Why was the ${themeEn} arrangement introduced?`, `What is the ${themeEn} announcement mainly about?`, `What is the deadline connected with ${themeEn}?`, `What should participants bring for ${themeEn}?`, `What experience is needed for ${themeEn}?`, `What alternative is offered in the ${themeEn} notice?`];
-  const distractors = [
-    ['It will be announced next month.', 'It happens every morning.', 'It has been cancelled.'], ['A teacher became unavailable.', 'The participation fee increased.', 'A building closed permanently.'],
-    ['A change to examination rules.', 'A complaint about cafeteria prices.', 'A request to cancel a course.'], ['Registration remains open all term.', 'No advance action is needed.', 'The deadline was yesterday.'],
-    ['Only cash and a passport.', 'Sports equipment from home.', 'No materials of any kind.'], ['Professional experience is compulsory.', 'A formal certificate is required.', 'Only final-year students may join.'],
-    ['There is no alternative.', 'Participants must pay another fee.', 'They should repeat the whole course.'],
+  const summarySkill: QuestionSkillTag = index % 2 === 0 ? 'main-idea' : 'purpose';
+  const values = [scenario.schedule, scenario.reason, scenario.intro, scenario.deadline, scenario.bring, scenario.experience];
+  const prompts = [
+    `After hearing that ${scenario.reason.toLowerCase()}, which announced time should listeners remember?`,
+    `What situation led organizers to schedule the event described as “${scenario.schedule}”?`,
+    summarySkill === 'main-idea' ? `Which statement best summarizes the notice that begins “${scenario.intro}”?` : `What is the central purpose of the message introducing “${scenario.intro}”?`,
+    `By what point must a listener act before following the plan “${scenario.schedule}”?`,
+    `Which preparation matches the notice after the deadline “${scenario.deadline}”?`,
+    `What can a first-time participant infer from the statement “${scenario.experience}”?`,
   ];
-  const questions = prompts.map((prompt, questionIndex) => ({ prompt, ...choices(values[questionIndex], distractors[questionIndex], (index + questionIndex) % 4), explanationZh: `原文关键信息：${values[questionIndex]}` })).slice(0, index % 4 === 0 ? 7 : 6);
+  const skillTags: QuestionSkillTag[] = ['detail', 'reason', summarySkill, 'action', 'action', 'inference'];
+  const scenarioRows = listeningScenarios.map((item) => [item.schedule, item.reason, item.intro, item.deadline, item.bring, item.experience] as const);
+  const questions = prompts.map((prompt, questionIndex) => ({ prompt, skillTag: skillTags[questionIndex], ...choices(values[questionIndex], alternateFacts(scenarioRows, index, questionIndex), (index + questionIndex) % 4), explanationZh: `原文依据：${values[questionIndex]}` }));
+  if (index % 4 === 0) questions.push({
+    prompt: `By offering “${scenario.fallback}”, what attitude do the organizers show toward possible difficulties?`,
+    skillTag: 'attitude',
+    ...choices('They are flexible and willing to help participants.', [`They dismiss every concern raised about ${themeEn}.`, `They insist that no plan connected with ${themeEn} can change.`, `They blame participants before the ${themeEn} activity begins.`], (index + 2) % 4),
+    explanationZh: `原文提供替代安排，体现组织者愿意灵活解决困难：${scenario.fallback}`,
+  });
   return { ...set, transcript: segments.join(' '), segments: segments.map((text, segmentIndex) => ({ start: segmentIndex * 10, end: (segmentIndex + 1) * 10, text })), questions };
 });
 
@@ -76,10 +90,27 @@ const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, in
   const [project, duration, participants, aid, challenge, response] = readingFacts[index];
   const endings = ['Most participants wanted the project to continue, and the organizers will measure longer-term results next term.', 'The final survey showed stronger satisfaction, although the team says more evidence is still needed.', 'After the change, participation became steadier and the revised method will be used in a larger trial.'];
   const sentences = [`${set.theme} was examined through ${project} lasting ${duration}.`, `The project involved ${participants} and collected both activity records and short interviews.`, `Participants said ${aid} helped them make consistent progress.`, `The main difficulty was ${challenge}, which reduced the benefit for some people.`, `Organizers responded by introducing ${response} instead of abandoning the project.`, endings[index % endings.length]];
-  const answers = [`The results of ${project}`, duration, participants, aid, challenge, response];
-  const prompts = [`What is the ${set.theme} passage mainly about?`, `How long did the ${set.theme} project last?`, `Who or how many took part in the ${set.theme} project?`, `What helped people in the ${set.theme} project?`, `What difficulty affected the ${set.theme} project?`, `How did organizers improve the ${set.theme} project?`];
-  const distractors = [['A new national examination rule', 'A commercial advertising dispute', 'A cancelled university course'], ['one day', 'two years', 'an unspecified period'], ['Only university teachers', 'No volunteers at all', 'A single organizer'], ['Higher prices', 'Longer compulsory meetings', 'Less information'], ['Perfect attendance', 'Too much free equipment', 'A lack of any goals'], ['They ended the project immediately.', 'They ignored all feedback.', 'They charged every participant more.']];
-  const questions = prompts.map((prompt, questionIndex) => ({ prompt, ...choices(answers[questionIndex], distractors[questionIndex], (index * 2 + questionIndex) % 4), explanationZh: `原文信息：${sentences[questionIndex]}` }));
+  const finalSkill: QuestionSkillTag = index % 2 === 0 ? 'paragraph-role' : 'structure';
+  const answers = [`The results of ${project}`, duration, participants, 'steady improvement over time', 'The difficulty prevented some participants from receiving the same benefit.', `It presents the practical solution: ${response}.`];
+  const prompts = [
+    `Which title best captures the findings from ${project} rather than merely naming the topic?`,
+    `What duration is reported for ${project}, the study involving ${participants}?`,
+    `In the sentence following “The project involved ${participants}”, who does “Participants” refer to?`,
+    `In the account where ${aid} helped, what does “consistent progress” most nearly mean?`,
+    `What can be inferred about the effect of ${challenge} on the people studied?`,
+    finalSkill === 'paragraph-role' ? `What role does the sentence about ${response} play after the problem of ${challenge}?` : `How does the passage move from the problem of ${challenge} to its conclusion?`,
+  ];
+  const skillTags: QuestionSkillTag[] = ['main-idea', 'detail', 'reference', 'vocabulary-in-context', 'inference', finalSkill];
+  const genericDistractors = [
+    alternateFacts(readingFacts, index, 0).map((item) => `The results of ${item}`),
+    alternateFacts(readingFacts, index, 1),
+    alternateFacts(readingFacts, index, 2),
+    ['rapid change without a clear direction', 'a single success that cannot be repeated', 'less effort with no measurable result'],
+    ['Every participant benefited equally from the project.', 'The challenge caused the entire project to end immediately.', 'The difficulty was unrelated to the project results.'],
+    alternateFacts(readingFacts, index, 5).map((item) => `It introduces an unrelated detail about ${item}.`),
+  ];
+  const evidence = [sentences[0], sentences[0], sentences[1], sentences[2], sentences[3], `${sentences[3]} ${sentences[4]}`];
+  const questions = prompts.map((prompt, questionIndex) => ({ prompt, skillTag: skillTags[questionIndex], ...choices(answers[questionIndex], genericDistractors[questionIndex], (index * 2 + questionIndex) % 4), explanationZh: `原文依据：${evidence[questionIndex]}` }));
   return { ...set, passage: sentences.join(' '), questions };
 });
 

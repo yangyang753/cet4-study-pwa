@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { auditContentDiversity, auditContentInventory, auditGeneratedQuestions, auditKnowledgeExamples } from './contentAudit';
 import { getPracticeItems } from './catalog';
 import inventory from '../../content/v1/inventory.json';
+import { auditQuestionTemplateDiversity } from './questionDiversity';
 
 describe('auditContentInventory', () => {
   it('reports every category below the approved minimum', () => {
@@ -58,6 +59,8 @@ describe('auditContentDiversity', () => {
 
   it('accepts the shipped content diversity contract', () => {
     expect(auditContentDiversity(inventory)).toEqual([]);
+    expect(auditQuestionTemplateDiversity(inventory.listeningSets, 'listening')).toEqual([]);
+    expect(auditQuestionTemplateDiversity(inventory.readingSets, 'reading')).toEqual([]);
   });
 });
 

@@ -20,7 +20,7 @@ interface MockCandidate {
 
 interface QuestionSetCandidate { id?: string; questions?: unknown[] }
 
-interface DiversityQuestionCandidate { prompt?: string; answer?: number }
+interface DiversityQuestionCandidate { prompt?: string; answer?: number; options?: string[]; skillTag?: string }
 interface ListeningDiversityCandidate extends QuestionSetCandidate { theme?: string; themeEn?: string; transcript?: string; audioSrc?: string; questions?: DiversityQuestionCandidate[] }
 interface ReadingDiversityCandidate extends QuestionSetCandidate { theme?: string; passage?: string; questions?: DiversityQuestionCandidate[] }
 interface SubjectiveDiversityCandidate { id?: string; theme?: string; topic?: string; prompt?: string }
@@ -135,8 +135,11 @@ export function auditContentDiversity(inventory: DiversityInventory): string[] {
   if (repeatedShapes(inventory.readingSets.map((set) => ({ text: set.passage ?? '', removable: [set.theme] })))) errors.push('readingSets: repeated normalized passage');
   errors.push(...auditQuestionGroup('listeningSets', inventory.listeningSets));
   errors.push(...auditQuestionGroup('readingSets', inventory.readingSets));
+  errors.push(...auditQuestionTemplateDiversity(inventory.listeningSets, 'listening'));
+  errors.push(...auditQuestionTemplateDiversity(inventory.readingSets, 'reading'));
   for (const set of inventory.listeningSets) if (!set.audioSrc?.trim()) errors.push(`listeningSets:${set.id ?? 'unknown'}: missing audio reference`);
   if (inventory.translations.length > 1 && repeatedShapes(inventory.translations.map((item) => ({ text: item.prompt ?? '', removable: [item.theme] })))) errors.push('translations: repeated normalized prompt');
   if (inventory.writingPrompts.length > 1 && repeatedShapes(inventory.writingPrompts.map((item) => ({ text: item.prompt ?? '', removable: [item.topic] })))) errors.push('writingPrompts: repeated normalized prompt');
   return errors;
 }
+import { auditQuestionTemplateDiversity } from './questionDiversity';
