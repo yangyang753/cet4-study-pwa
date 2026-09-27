@@ -11,6 +11,7 @@ test('an offline listening answer survives a reload in IndexedDB', async ({ cont
   await answer.check();
   await context.setOffline(true);
   await page.getByRole('button', { name: '提交答案' }).click();
+  await expect(page.locator('.answer-result')).toBeVisible();
   await expect(page.getByText(/已保存在本机|仅保存在本机/).first()).toBeVisible();
   await page.reload();
   const attempts = await page.evaluate(async () => new Promise<number>((resolve, reject) => {
