@@ -60,8 +60,8 @@ export class DexieLearningRepository implements LearningRepository {
   async savePlan(plan: import('../localDb').CachedPlan) { await this.saveMutable('plan', this.db.plans, plan, plan.updatedAt); }
   async getPlan(date: string) { return (await this.db.plans.where('date').equals(date).first()) ?? null; }
   async getDashboardSnapshot(at = new Date().toISOString()) {
-    const [attempts, dueReviews, completions, knowledgeStates, settings] = await Promise.all([this.db.attempts.toArray(), this.listDueReviews(at), this.db.taskCompletions.toArray(), this.db.knowledgeStates.toArray(), this.db.settings.get('current')]);
-    return { attempts, dueReviews, completions, knowledgeStates, settings: normalizeUserSettings(settings) };
+    const [attempts, dueReviews, completions, knowledgeStates, settings, examSessions] = await Promise.all([this.db.attempts.toArray(), this.listDueReviews(at), this.db.taskCompletions.toArray(), this.db.knowledgeStates.toArray(), this.db.settings.get('current'), this.listSubmittedExamSessions()]);
+    return { attempts, dueReviews, completions, knowledgeStates, settings: normalizeUserSettings(settings), examSessions };
   }
   list() { return this.db.syncQueue.toArray(); }
   async put(operation: PendingOperation) { if (!await this.db.syncQueue.get(operation.id)) await this.db.syncQueue.put(operation); }

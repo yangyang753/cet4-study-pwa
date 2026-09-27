@@ -51,6 +51,19 @@ describe('TodayPage', () => {
     expect(screen.getByText(/先复习旧词，再学新词并检测翻译强化词/)).toBeVisible();
   });
 
+  it('shows an expandable seven-day learning report from saved progress', async () => {
+    render(<TodayPage today="2026-09-27" repository={repository({
+      attempts: [{ id: 'weekly-1', userId: 'local', questionId: 'q1', response: 'A', correct: false, score: 0, durationSeconds: 10, kind: 'listening', mode: 'practice', createdAt: '2026-09-27T01:00:00.000Z' }],
+      knowledgeStates: [{ id: 'k1', itemId: 'v1', status: 'mastered', favorite: false, lapseCount: 1, updatedAt: '2026-09-27T01:00:00.000Z' }],
+    })} />);
+    const summary = await screen.findByText('本周学习报告');
+    expect(summary.closest('details')).not.toHaveAttribute('open');
+    summary.closest('summary')?.click();
+    expect(screen.getByRole('region', { name: '本周概览' })).toHaveTextContent('1 / 7');
+    expect(screen.getByText('听力 · 1 次')).toBeVisible();
+    expect(screen.getByText(/再完成 3 次整套模考/)).toBeVisible();
+  });
+
   it('shows the countdown and the four-part 60-minute plan', () => {
     render(<TodayPage today="2026-09-22" examDate="2026-12-12" />);
     expect(screen.getByText('81')).toBeInTheDocument();

@@ -2,6 +2,7 @@ import type { Attempt } from './attempt';
 import type { MistakeReason } from './attempt';
 import type { StudyKind } from '../features/planner/planDay';
 import type { CoreStudyKind } from '../features/dashboard/learningEvidence';
+import type { ExamSessionRecord } from './exam';
 
 export interface ReviewCard {
   id: string;
@@ -80,6 +81,7 @@ export interface DashboardSnapshot {
   completions: StudyTaskCompletion[];
   knowledgeStates: KnowledgeState[];
   settings: UserSettings;
+  examSessions?: ExamSessionRecord[];
 }
 
 export const defaultUserSettings = (): UserSettings => ({
