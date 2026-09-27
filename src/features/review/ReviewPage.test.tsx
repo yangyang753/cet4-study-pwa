@@ -8,8 +8,10 @@ import { LearningDatabase } from '../../data/localDb';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import { ReviewPage } from './ReviewPage';
 import vocabulary from '../../../content/v1/vocabulary.json';
+import { getQuestion } from '../../content/catalog';
 
 const names: string[] = [];
+const queuedListeningPrompt = getQuestion('listen-01:q1')?.prompt;
 const validWriting = `First, daily reading helps students build vocabulary and understand the world from different perspectives. Because a regular habit makes difficult books easier, students can improve without feeling too much pressure. For example, reading for twenty minutes after dinner gives learners a clear and realistic routine.
 
 Moreover, the university can organize a weekly reading circle where students share one useful idea from a book. This activity encourages communication and gives every participant a reason to finish the selected pages. Therefore, I believe daily reading should become part of campus life. It improves language ability, supports independent thinking, and creates meaningful conversations among classmates. With a simple schedule and friendly group support, more students will be willing to read every day and continue the habit throughout the semester.`;
@@ -46,7 +48,7 @@ describe('ReviewPage', () => {
     render(<ReviewPage repository={await setupRepository(4)} now="2026-09-23T12:00:00.000Z" />);
     const overview = await screen.findByRole('region', { name: '复习概览' });
     expect(overview).toHaveTextContent('今日待复习1');
-    expect(screen.getByText('When will the campus volunteering activity take place?')).toBeVisible();
+    expect(screen.getByText(queuedListeningPrompt!)).toBeVisible();
   });
 
   it('keeps a future-scheduled mastered card visible in mastery history', async () => {
@@ -59,7 +61,7 @@ describe('ReviewPage', () => {
     });
     render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
     await userEvent.click(await screen.findByRole('button', { name: '已掌握' }));
-    expect(screen.getByText('When will the campus volunteering activity take place?')).toBeVisible();
+    expect(screen.getByText(queuedListeningPrompt!)).toBeVisible();
   });
 
   it('offers explicit filters for every review category', async () => {
@@ -142,7 +144,7 @@ describe('ReviewPage', () => {
     const user = userEvent.setup();
     render(<ReviewPage repository={await setupRepository()} now="2026-09-23T12:00:00.000Z" />);
     await user.click(await screen.findByRole('button', { name: '重新练习' }));
-    expect(screen.getAllByText('When will the campus volunteering activity take place?')[0]).toBeVisible();
+    expect(screen.getAllByText(queuedListeningPrompt!)[0]).toBeVisible();
   });
 
   it('advances the review card after a correct re-practice answer', async () => {

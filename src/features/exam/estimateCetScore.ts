@@ -21,10 +21,11 @@ function subjectiveRatio(session: ExamSessionRecord, section: ResolvedExam['sect
     if ('correctAnswer' in question) return sum;
     const response = session.answers[question.id];
     const body = typeof response === 'string' ? response : '';
+    if (!body.trim()) return sum;
     const keywords = question.type === 'translation'
       ? [...new Set(question.referenceAnswer.toLowerCase().match(/[a-z]{5,}/g) ?? [])].slice(0, 4)
       : [];
-    return sum + evaluateSubjective(question.type, body, keywords).score;
+    return sum + evaluateSubjective(question.type, body, keywords, question).score;
   }, 0);
   return total / section.questions.length;
 }

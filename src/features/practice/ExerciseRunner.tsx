@@ -156,6 +156,10 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
   if (!('options' in question)) return <SubjectiveEditor question={question} kind={question.type} repository={repository} onSubmit={(body, feedback) => {
     const seconds = duration();
     void repository.saveAttemptOnce(baseAttempt(body, feedback.passed, feedback.score)).then(async () => {
+      if (!feedback.passed) {
+        const updatedAt = new Date().toISOString();
+        await repository.upsertReviewCard({ id: `review:${question.id}`, questionId: question.id, stage: 0, nextReviewAt: updatedAt, lastCorrect: false, priority: Math.max(4, feedback.errorCodes.length), updatedAt });
+      }
       if (plannedKind && mode === 'practice') await completeDailyTask(repository, plannedKind, today);
       setAnswered([{ questionId: question.id, correct: null, durationSeconds: seconds }]); setFinished(true);
     });

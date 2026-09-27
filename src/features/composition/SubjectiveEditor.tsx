@@ -28,7 +28,7 @@ export function SubjectiveEditor({ question, kind, repository = defaultRepositor
   }, [body, question.id, repository, storageKey]);
   const count = useMemo(() => countEnglishWords(body), [body]);
   const keywords = useMemo(() => [...new Set(question.referenceAnswer.toLowerCase().match(/[a-z]{5,}/g) ?? [])].slice(0, 4), [question.referenceAnswer]);
-  const feedback = useMemo(() => evaluateSubjective(kind, body, keywords), [body, kind, keywords]);
+  const feedback = useMemo(() => evaluateSubjective(kind, body, keywords, question), [body, kind, keywords, question]);
   return <section className="subjective-editor">
     <header><h1>{kind === 'writing' ? '写作练习' : '翻译练习'}</h1><span>{count} 词</span></header>
     <p>{question.prompt}</p>

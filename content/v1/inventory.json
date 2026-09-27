@@ -13074,7 +13074,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that a saturday team reached its maximum size., which announced time should listeners remember?",
+          "prompt": "After hearing that a saturday team reached its maximum size, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The new group will meet on Sunday afternoon.",
@@ -13196,7 +13196,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that many students requested help after the daytime desks closed., which announced time should listeners remember?",
+          "prompt": "After hearing that many students requested help after the daytime desks closed, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The seminar takes place at noon on Wednesday.",
@@ -13306,7 +13306,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that several popular modules changed their entry requirements., which announced time should listeners remember?",
+          "prompt": "After hearing that several popular modules changed their entry requirements, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "Residents will gather on Friday evening in the common room.",
@@ -13416,7 +13416,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that recent complaints increased during the examination period., which announced time should listeners remember?",
+          "prompt": "After hearing that recent complaints increased during the examination period, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The fair opens Tuesday afternoon in the sports hall.",
@@ -13526,7 +13526,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that more organizations registered than the original room could hold., which announced time should listeners remember?",
+          "prompt": "After hearing that more organizations registered than the original room could hold, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The fair opens Tuesday afternoon in the sports hall.",
@@ -13648,7 +13648,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that the first session filled within one day., which announced time should listeners remember?",
+          "prompt": "After hearing that the first session filled within one day, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The trial bus leaves the main gate at ten thirty each night.",
@@ -13758,7 +13758,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that a survey showed that evening students lacked a safe connection., which announced time should listeners remember?",
+          "prompt": "After hearing that a survey showed that evening students lacked a safe connection, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The launch event is Saturday morning beside the central café.",
@@ -13868,7 +13868,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that disposable cup waste rose sharply last semester., which announced time should listeners remember?",
+          "prompt": "After hearing that disposable cup waste rose sharply last semester, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The demonstration is scheduled for Sunday at eleven.",
@@ -13978,7 +13978,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that students reported relying too often on takeaway food., which announced time should listeners remember?",
+          "prompt": "After hearing that students reported relying too often on takeaway food, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The demonstration is scheduled for Sunday at eleven.",
@@ -14100,7 +14100,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that a pilot found that brief movement improved afternoon concentration., which announced time should listeners remember?",
+          "prompt": "After hearing that a pilot found that brief movement improved afternoon concentration, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "Training starts online at seven on Tuesday evening.",
@@ -14210,7 +14210,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that teachers want evidence about which digital tools reduce revision time., which announced time should listeners remember?",
+          "prompt": "After hearing that teachers want evidence about which digital tools reduce revision time, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "Small groups meet Wednesday afternoon for forty minutes.",
@@ -14320,7 +14320,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that many students said long task lists made them postpone important work., which announced time should listeners remember?",
+          "prompt": "After hearing that many students said long task lists made them postpone important work, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The first visit is next Saturday at the neighborhood center.",
@@ -14430,7 +14430,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that residents asked for support with hospital and transport applications., which announced time should listeners remember?",
+          "prompt": "After hearing that residents asked for support with hospital and transport applications, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The first visit is next Saturday at the neighborhood center.",
@@ -14552,7 +14552,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that saturday was avoided because several departments hold tests then., which announced time should listeners remember?",
+          "prompt": "After hearing that saturday was avoided because several departments hold tests then, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "Host practice takes place Friday after classes.",
@@ -14662,7 +14662,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that this year the festival includes twice as many visiting groups., which announced time should listeners remember?",
+          "prompt": "After hearing that this year the festival includes twice as many visiting groups, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "Safety tours are offered Tuesday and Thursday mornings.",
@@ -14772,7 +14772,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that new equipment cannot be used before students complete an introduction., which announced time should listeners remember?",
+          "prompt": "After hearing that new equipment cannot be used before students complete an introduction, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "Interviews will be held on Monday evening.",
@@ -14882,7 +14882,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that graduating students requested feedback before the autumn recruitment fair., which announced time should listeners remember?",
+          "prompt": "After hearing that graduating students requested feedback before the autumn recruitment fair, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "Interviews will be held on Monday evening.",
@@ -15004,7 +15004,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that construction has made several common routes confusing for visitors., which announced time should listeners remember?",
+          "prompt": "After hearing that construction has made several common routes confusing for visitors, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "Checks take place outside the north gate on Thursday afternoon.",
@@ -15114,7 +15114,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that several bicycles were found with weak lights and brakes., which announced time should listeners remember?",
+          "prompt": "After hearing that several bicycles were found with weak lights and brakes, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "Volunteers visit both stores on Sunday morning.",
@@ -15224,7 +15224,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that the club wants to test whether packaging-free shopping really costs less., which announced time should listeners remember?",
+          "prompt": "After hearing that the club wants to test whether packaging-free shopping really costs less, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "Sensor teams meet at the laboratory on Tuesday afternoon.",
@@ -15334,7 +15334,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that local temperature records are needed for a climate study., which announced time should listeners remember?",
+          "prompt": "After hearing that local temperature records are needed for a climate study, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "Sensor teams meet at the laboratory on Tuesday afternoon.",
@@ -15456,7 +15456,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that the museum wants clearer directions before the guide is released publicly., which announced time should listeners remember?",
+          "prompt": "After hearing that the museum wants clearer directions before the guide is released publicly, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The lecture starts Wednesday at half past six.",
@@ -15566,7 +15566,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that a larger hall was booked after registrations passed two hundred., which announced time should listeners remember?",
+          "prompt": "After hearing that a larger hall was booked after registrations passed two hundred, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The workshop is held Friday at three in a computer room.",
@@ -15676,7 +15676,7 @@
       ],
       "questions": [
         {
-          "prompt": "After hearing that several student groups reported problems with captions and turn-taking., which announced time should listeners remember?",
+          "prompt": "After hearing that several student groups reported problems with captions and turn-taking, which announced time should listeners remember?",
           "skillTag": "detail",
           "options": [
             "The new group will meet on Sunday afternoon.",

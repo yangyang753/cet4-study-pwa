@@ -48,8 +48,9 @@ const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set
   const segments = [scenario.intro, `${scenario.reason} ${scenario.schedule}`, `${scenario.deadline} ${scenario.bring}`, scenario.experience, scenario.fallback];
   const summarySkill: QuestionSkillTag = index % 2 === 0 ? 'main-idea' : 'purpose';
   const values = [scenario.schedule, scenario.reason, scenario.intro, scenario.deadline, scenario.bring, scenario.experience];
+  const reasonClause = scenario.reason.replace(/[.!?]\s*$/, '').toLowerCase();
   const prompts = [
-    `After hearing that ${scenario.reason.toLowerCase()}, which announced time should listeners remember?`,
+    `After hearing that ${reasonClause}, which announced time should listeners remember?`,
     `What situation led organizers to schedule the event described as “${scenario.schedule}”?`,
     summarySkill === 'main-idea' ? `Which statement best summarizes the notice that begins “${scenario.intro}”?` : `What is the central purpose of the message introducing “${scenario.intro}”?`,
     `By what point must a listener act before following the plan “${scenario.schedule}”?`,

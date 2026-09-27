@@ -22,9 +22,9 @@ describe('diagnostic score profile', () => {
       sessionId: 'session-1',
       completedAt: '2026-09-26T09:00:00.000Z',
       questionCount: 20,
-      estimatedScore: 418,
-      scoreRange: { low: 363, high: 473 },
-      sectionScores: { writing: 85.2, listening: 124.3, reading: 155.3, translation: 53.3 },
+      estimatedScore: 407,
+      scoreRange: { low: 352, high: 462 },
+      sectionScores: { writing: 74.6, listening: 124.3, reading: 155.3, translation: 53.3 },
       weakSkills: ['vocabulary', 'listening'],
       confidence: 'initial',
     });
@@ -51,6 +51,7 @@ describe('diagnostic score profile', () => {
     expect(zero.scoreRange.low).toBeGreaterThanOrEqual(0);
     expect(zero.scoreRange.high).toBeGreaterThanOrEqual(zero.estimatedScore);
     expect(perfect.sectionScores).toMatchObject({ listening: 217.4, reading: 217.4 });
+    expect(perfect.sectionScores).toMatchObject({ writing: 74.6, translation: 74.6 });
     expect(perfect.scoreRange.high).toBeLessThanOrEqual(710);
     expect(perfect.scoreRange.low).toBeLessThanOrEqual(perfect.estimatedScore);
   });

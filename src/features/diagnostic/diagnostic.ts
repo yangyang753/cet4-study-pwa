@@ -30,10 +30,10 @@ export function scoreDiagnostic(responses: DiagnosticResponse[], completedAt = n
     return items.length ? (items.reduce((sum, item) => sum + responseScore(item), 0) + 1) / (items.length + 2) : 0;
   };
   const rawSectionRatios = {
-    writing: levels.writing ?? 0,
+    writing: Math.min(levels.writing ?? 0, 0.7),
     listening: smoothedRatio('listening'),
     reading: smoothedRatio('reading'),
-    translation: levels.translation ?? 0,
+    translation: Math.min(levels.translation ?? 0, 0.7),
   };
   const sectionScores: DiagnosticSectionScores = {
     writing: rounded(rawSectionRatios.writing * sectionWeights.writing),
