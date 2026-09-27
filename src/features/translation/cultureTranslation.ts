@@ -12,8 +12,10 @@ export interface CultureTranslationPrompt {
 export interface CultureTranslationEvaluation {
   coveredWordIds: string[];
   missedWordIds: string[];
+  reviewWordIds: string[];
   wordCount: number;
   complete: boolean;
+  meaningComplete: boolean;
   passed: boolean;
 }
 
@@ -25,6 +27,7 @@ export function selectDailyCultureTranslation<T extends CultureTranslationPrompt
 }
 
 const tokens = (text: string) => text.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) ?? [];
+const referenceStopWords = new Set(['a', 'an', 'and', 'are', 'as', 'at', 'be', 'been', 'by', 'for', 'from', 'has', 'have', 'in', 'into', 'is', 'it', 'many', 'of', 'on', 'or', 'that', 'the', 'their', 'them', 'they', 'this', 'through', 'to', 'was', 'were', 'while', 'with']);
 function forms(word: string) {
   const lower = word.toLowerCase();
   const result = new Set([lower, `${lower}s`, `${lower}ed`, `${lower}ing`]);
@@ -42,10 +45,19 @@ export function evaluateCultureTranslation(prompt: CultureTranslationPrompt, ans
   });
   const missedWordIds = prompt.targetWordIds.filter((id) => !coveredWordIds.includes(id));
   const wordCount = tokens(answer).length;
+  const targetForms = new Set(prompt.targetWordIds.flatMap((id) => {
+    const word = byId.get(id);
+    return word ? [...forms(word.word)] : [];
+  }));
+  const referenceAnchors = [...new Set(tokens(prompt.referenceAnswer).filter((token) => !referenceStopWords.has(token) && !targetForms.has(token)))];
+  const requiredAnchors = referenceAnchors.length ? Math.max(1, Math.ceil(referenceAnchors.length * 0.2)) : 0;
+  const matchedAnchors = referenceAnchors.filter((anchor) => answerTokens.has(anchor)).length;
+  const meaningComplete = matchedAnchors >= requiredAnchors;
   const referenceWordCount = tokens(prompt.referenceAnswer).length;
   const minimumWordCount = Math.max(5, Math.floor(referenceWordCount * 0.55));
   const complete = wordCount >= minimumWordCount && /[.!?]\s*$/.test(answer.trim());
-  return { coveredWordIds, missedWordIds, wordCount, complete, passed: complete && missedWordIds.length === 0 };
+  const reviewWordIds = meaningComplete ? missedWordIds : [...prompt.targetWordIds];
+  return { coveredWordIds, missedWordIds, reviewWordIds, wordCount, complete, meaningComplete, passed: complete && meaningComplete && missedWordIds.length === 0 };
 }
 
 export function auditCultureTranslations(prompts: CultureTranslationPrompt[], vocabulary: VocabularyEntry[]): string[] {

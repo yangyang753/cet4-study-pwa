@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { resolveExam } from './examBlueprint';
-import { createExamSession } from './examSessionReducer';
+import { createExamSession, reduceExamSession } from './examSessionReducer';
 import { ExamSession } from './ExamSession';
 
 function repository(active = undefined as ReturnType<typeof createExamSession> | undefined) {
@@ -17,6 +17,15 @@ function repository(active = undefined as ReturnType<typeof createExamSession> |
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllEnvs(); });
 
 describe('ExamSession', () => {
+  it('restores a played listening group without allowing another playback', async () => {
+    const active = reduceExamSession(createExamSession(resolveExam('mock-1')), { type: 'go-to-section', sectionIndex: 1 });
+    const groupId = resolveExam('mock-1').sections[1].questions[0].groupId!;
+    const played = reduceExamSession(active, { type: 'mark-listening-played', groupId });
+    render(<ExamSession mockId="mock-1" repository={repository(played)} />);
+    await userEvent.click(await screen.findByRole('button', { name: '继续考试' }));
+    expect(await screen.findByRole('button', { name: '本组听力已播放' })).toBeDisabled();
+  });
+
   it('renders the official section without revealing feedback and submits once on double click', async () => {
     const repo = repository();
     vi.spyOn(window, 'confirm').mockReturnValue(true);

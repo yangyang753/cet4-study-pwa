@@ -23,6 +23,20 @@ function repository() {
 }
 
 describe('DailyVocabularySession', () => {
+  it('tests a learned culture target before opening the culture translation', async () => {
+    const learningRepository = repository();
+    vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({
+      knowledgeStates: entries.map((item) => ({ id: `knowledge:${item.id}`, itemId: item.id, status: 'mastered' as const, favorite: false, reviewStage: 4, nextReviewAt: '2026-12-20T00:00:00.000Z', updatedAt: '2026-09-23T00:00:00.000Z' })),
+      settings: { id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-20T00:00:00.000Z' },
+      attempts: [], dueReviews: [], completions: [],
+    });
+    const culturePrompts = [{ id: 'test', theme: '测试', promptZh: '文化带来益处。', referenceAnswer: 'Culture brings a benefit.', targetWordIds: ['v2'], keyPoints: ['益处'] }];
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} culturePrompts={culturePrompts} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
+    await userEvent.click(await screen.findByRole('button', { name: '开始翻译强化词检测' }));
+    expect(await screen.findByRole('heading', { name: '先检测翻译强化词' })).toBeVisible();
+    expect(screen.getByText('_______')).toBeVisible();
+  });
+
   it('continues into a daily culture translation even when there are no new words', async () => {
     const learningRepository = repository();
     vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({

@@ -24,9 +24,9 @@ function formatSeconds(seconds: number) {
   return `${hours ? `${hours}:` : ''}${String(minutes).padStart(hours ? 2 : 1, '0')}:${String(remainder).padStart(2, '0')}`;
 }
 
-function ExamListeningPlayer({ src }: { src: string }) {
+function ExamListeningPlayer({ src, played, onPlayed }: { src: string; played: boolean; onPlayed: () => void }) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [started, setStarted] = useState(false);
+  const [started, setStarted] = useState(played);
   const [ended, setEnded] = useState(false);
   const [error, setError] = useState('');
 
@@ -36,6 +36,7 @@ function ExamListeningPlayer({ src }: { src: string }) {
     try {
       await audioRef.current.play();
       setStarted(true);
+      onPlayed();
     } catch {
       setError('音频暂时无法播放，请检查网络或浏览器声音权限后重试。');
     }
@@ -44,7 +45,7 @@ function ExamListeningPlayer({ src }: { src: string }) {
   return <section className="exam-listening-player">
     <audio ref={audioRef} aria-label="模考听力音频" preload="metadata" src={publicAssetUrl(src)} onEnded={() => setEnded(true)} onError={() => setError('音频加载失败，请重新加载后再播放。')}>您的浏览器不支持音频播放。</audio>
     <p>本组听力只完整播放一次，组内切题不会重新开始。</p>
-    <button type="button" disabled={started} onClick={() => void play()}>{ended ? '本组播放完毕' : started ? '正在播放本组听力' : '播放本组听力（仅一次）'}</button>
+    <button type="button" disabled={started} onClick={() => void play()}>{played ? '本组听力已播放' : ended ? '本组播放完毕' : started ? '正在播放本组听力' : '播放本组听力（仅一次）'}</button>
     {error && <p role="alert">{error} <button type="button" onClick={() => { setError(''); audioRef.current?.load(); }}>重新加载音频</button></p>}
   </section>;
 }
@@ -64,7 +65,6 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
   const [session, setSession] = useState<ExamSessionRecord | null>(null);
   const [recovery, setRecovery] = useState<ExamSessionRecord | null>(null);
   const [clock, setClock] = useState(now);
-  const [questionIndex, setQuestionIndex] = useState(0);
   const [saveState, setSaveState] = useState<'saving' | 'saved' | 'error'>('saving');
   const sessionRef = useRef<ExamSessionRecord | null>(null);
   const finalWriteStarted = useRef(false);
@@ -117,7 +117,6 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
     if (current?.status !== 'active') return;
     const restored = restoreExamSession(current, exam, clock);
     if (restored !== current) {
-      setQuestionIndex(0);
       if (restored.status === 'submitted') finalWriteStarted.current = true;
       updateSession(restored, true);
     }
@@ -149,6 +148,7 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
   if (session.status === 'submitted') { const taskId = `${studyDate(new Date(session.submittedAt ?? now()))}:mock`; return <><ExamResult session={session} exam={exam} repository={repository} /><MasteryCheck kind="mock" taskId={taskId} repository={repository} sourceQuestionIds={Object.keys(session.answers)} /></>; }
 
   const section = exam.sections[session.currentSectionIndex];
+  const questionIndex = Math.min(session.currentQuestionIndex ?? 0, Math.max(0, section.questions.length - 1));
   const question = section.questions[questionIndex];
   const seconds = remainingSeconds(session, clock);
   const answer = session.answers[question.id];
@@ -159,8 +159,7 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
   const moveQuestion = async (nextIndex: number) => {
     if (nextIndex < 0 || nextIndex >= section.questions.length) return;
     if (saveState === 'error' && !(await persistSession(session))) return;
-    setQuestionIndex(nextIndex);
-    void persistSession(session);
+    updateSession(reduceExamSession(session, { type: 'go-to-question', questionIndex: nextIndex, now: now() }), true);
   };
   const submit = async () => {
     if (finalWriteStarted.current || !window.confirm('确认提前交卷吗？交卷后不能再修改答案。')) return;
@@ -175,7 +174,6 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
   const advanceSection = () => {
     if (!nextSection || !window.confirm(`确认完成${sectionNames[section.kind]}并进入${sectionNames[nextSection.kind]}吗？进入后不能返回上一部分。`)) return;
     const advanced = reduceExamSession(session, { type: 'go-to-section', sectionIndex: session.currentSectionIndex + 1, now: now() });
-    setQuestionIndex(0);
     updateSession(advanced, true);
   };
   const sharedTime = section.kind === 'reading' || section.kind === 'translation';
@@ -185,9 +183,9 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
     <header className="exam-header"><div><span>完整模拟 · 原创仿真</span><h1>{exam.title}</h1></div><div className="exam-timer"><small>全卷剩余</small><strong role="timer">{formatSeconds(seconds)}</strong></div></header>
     <nav className="exam-sections" aria-label="考试分区">{exam.sections.map((item, index) => <span key={item.kind} className={index === session.currentSectionIndex ? 'active' : ''} aria-current={index === session.currentSectionIndex ? 'step' : undefined}>{sectionNames[item.kind]} · {item.kind === 'reading' || item.kind === 'translation' ? '共用 70' : item.minutes} 分钟{session.lockedSectionIndexes.includes(index) ? ' · 已锁定' : ''}</span>)}</nav>
     <div className="exam-progress"><span>当前分区：{sectionNames[section.kind]}（{sharedTime ? '阅读与翻译共用 70' : section.minutes} 分钟）</span><span>本区 {questionIndex + 1}/{section.questions.length} · 全卷已答 {answered}/57</span></div>
-    {section.kind === 'listening' && question.audioSrc && <ExamListeningPlayer key={question.groupId ?? question.audioSrc} src={question.audioSrc} />}
+    {section.kind === 'listening' && question.audioSrc && <ExamListeningPlayer key={question.groupId ?? question.audioSrc} src={question.audioSrc} played={session.playedListeningGroupIds?.includes(question.groupId ?? question.audioSrc) ?? false} onPlayed={() => updateSession(reduceExamSession(session, { type: 'mark-listening-played', groupId: question.groupId ?? question.audioSrc!, now: now() }), true)} />}
     <main className="exam-question"><QuestionView question={question} response={response} onChange={saveAnswer} /></main>
-    <footer className="exam-actions"><button disabled={questionIndex === 0} onClick={() => void moveQuestion(questionIndex - 1)}>上一题</button><button disabled={questionIndex === section.questions.length - 1} onClick={() => void moveQuestion(questionIndex + 1)}>下一题</button>{returnToReading && <button className="section-action" onClick={() => { setQuestionIndex(0); updateSession(reduceExamSession(session, { type: 'go-to-section', sectionIndex: 2, now: now() }), true); }}>返回阅读</button>}{nextSection && <button className="section-action" onClick={advanceSection}>{section.kind === 'reading' ? '切换到翻译（可返回）' : `完成${sectionNames[section.kind]}并进入${sectionNames[nextSection.kind]}`}</button>}<button className="danger-action" onClick={() => void submit()}>交卷</button></footer>
+    <footer className="exam-actions"><button disabled={questionIndex === 0} onClick={() => void moveQuestion(questionIndex - 1)}>上一题</button><button disabled={questionIndex === section.questions.length - 1} onClick={() => void moveQuestion(questionIndex + 1)}>下一题</button>{returnToReading && <button className="section-action" onClick={() => updateSession(reduceExamSession(session, { type: 'go-to-section', sectionIndex: 2, now: now() }), true)}>返回阅读</button>}{nextSection && <button className="section-action" onClick={advanceSection}>{section.kind === 'reading' ? '切换到翻译（可返回）' : `完成${sectionNames[section.kind]}并进入${sectionNames[nextSection.kind]}`}</button>}<button className="danger-action" onClick={() => void submit()}>交卷</button></footer>
     {saveState === 'error' ? <p className="exam-save-note" role="alert">保存失败，答案仍保留在当前页面。<button onClick={() => sessionRef.current && void persistSession(sessionRef.current)}>重新保存</button></p> : <p className="exam-save-note" role="status">{saveState === 'saving' ? '正在保存…' : '已保存'}；每次作答、切题及每 30 秒自动保存到本机。考试中不显示答案和解析。</p>}
   </section>;
 }

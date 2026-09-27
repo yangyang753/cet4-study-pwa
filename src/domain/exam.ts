@@ -8,7 +8,9 @@ export interface ExamSessionRecord {
   updatedAt: string;
   sectionDeadlines: string[];
   currentSectionIndex: number;
+  currentQuestionIndex?: number;
   lockedSectionIndexes: number[];
+  playedListeningGroupIds?: string[];
   answers: Record<string, string | string[]>;
   status: ExamSessionStatus;
   submittedAt?: string;

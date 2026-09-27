@@ -9,28 +9,30 @@ import { vocabularyReviewCard } from './wordMastery';
 import collocationData from '../../../content/v1/collocations.json';
 import { CollocationCheck } from '../collocations/CollocationCheck';
 import { selectDailyCollocations, type CollocationEntry } from '../collocations/collocationPractice';
-import cultureTranslationData from '../../../content/v1/cultureTranslations.json';
+import { cultureTranslationBank } from '../../content/cultureTranslations';
 import { DailyCultureTranslation } from '../translation/DailyCultureTranslation';
 import { selectDailyCultureTranslation, type CultureTranslationPrompt } from '../translation/cultureTranslation';
 
-type Phase = 'loading' | 'review' | 'warmup' | 'culture-translation' | 'collocations';
+type Phase = 'loading' | 'review' | 'warmup' | 'culture-review' | 'culture-translation' | 'collocations';
 
-export function DailyVocabularySession({ repository, entries = learningVocabulary, today, examDate, onComplete }: {
+export function DailyVocabularySession({ repository, entries = learningVocabulary, today, examDate, culturePrompts, onComplete }: {
   repository: LearningRepository;
   entries?: VocabularyEntry[];
   today: string;
   examDate?: string;
+  culturePrompts?: CultureTranslationPrompt[];
   onComplete: (entries: VocabularyEntry[]) => void;
 }) {
   const [phase, setPhase] = useState<Phase>('loading');
   const [snapshot, setSnapshot] = useState<DashboardSnapshot | null>(null);
   const [workload, setWorkload] = useState<VocabularyWorkload | null>(null);
   const [reviewIndex, setReviewIndex] = useState(0);
+  const [cultureReviewIndex, setCultureReviewIndex] = useState(0);
   const [answer, setAnswer] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [warmedWords, setWarmedWords] = useState<VocabularyEntry[]>([]);
-  const dailyCulturePrompt = selectDailyCultureTranslation(cultureTranslationData as CultureTranslationPrompt[], today);
+  const dailyCulturePrompt = selectDailyCultureTranslation(culturePrompts ?? cultureTranslationBank, today);
 
   useEffect(() => {
     let active = true;
@@ -65,6 +67,27 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
     }
   }
 
+  const cultureReviewWord = workload?.cultureWords[cultureReviewIndex];
+  const cultureReviewState = snapshot?.knowledgeStates.find((item) => item.itemId === cultureReviewWord?.id);
+
+  async function submitCultureReview(forceIncorrect = false) {
+    if (!cultureReviewWord || !cultureReviewState || (!answer.trim() && !forceIncorrect) || saving) return;
+    const now = new Date().toISOString();
+    const correct = !forceIncorrect && answer.trim().toLowerCase() === cultureReviewWord.word.toLowerCase();
+    setSaving(true); setError('');
+    try {
+      await repository.upsertKnowledgeState(applyVocabularyReviewResult(cultureReviewState, correct, now));
+      if (!correct) await repository.upsertReviewCard(vocabularyReviewCard(cultureReviewWord.id, 'cloze', now));
+      if (workload && cultureReviewIndex < workload.cultureWords.length - 1) setCultureReviewIndex((value) => value + 1);
+      else setPhase('culture-translation');
+      setAnswer('');
+    } catch {
+      setError('翻译强化词结果保存失败，答案已保留，请重新提交。');
+    } finally {
+      setSaving(false);
+    }
+  }
+
   if (phase === 'loading') return <p role={error ? 'alert' : 'status'}>{error || '正在准备今日词汇计划…'}</p>;
   if (!workload || !snapshot) return <p role="alert">今日词汇计划暂不可用。</p>;
 
@@ -74,9 +97,15 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
   </section>;
 
   if (phase === 'warmup') {
-    if (!workload.newWords.length) return <section className="vocabulary-warmup complete"><h1>今日没有新词</h1><p>先用今天安排的目标词完成中国文化翻译，再巩固重点搭配。</p><button className="primary-action" onClick={() => setPhase('culture-translation')}>开始今日文化翻译</button></section>;
-    return <VocabularyWarmup repository={repository} entries={workload.newWords} limit={workload.newWords.length} onComplete={(words) => { setWarmedWords(words); setPhase('culture-translation'); }} />;
+    const nextPhase = workload.cultureWords.length ? 'culture-review' : 'culture-translation';
+    if (!workload.newWords.length) return <section className="vocabulary-warmup complete"><h1>今日没有新词</h1><p>先检测今天的翻译强化词，再完成中国文化翻译。</p><button className="primary-action" onClick={() => setPhase(nextPhase)}>{workload.cultureWords.length ? '开始翻译强化词检测' : '开始今日文化翻译'}</button></section>;
+    return <VocabularyWarmup repository={repository} entries={workload.newWords} limit={workload.newWords.length} onComplete={(words) => { setWarmedWords(words); setPhase(nextPhase); }} />;
   }
+
+  if (phase === 'culture-review' && cultureReviewWord) return <section className="daily-word-review">
+    <header><span>翻译强化词 · {cultureReviewIndex + 1}/{workload.cultureWords.length}</span><h1>先检测翻译强化词</h1><p>根据中文补全英文；答错会自动回到待复习。</p></header>
+    <article className="warmup-card"><h2>{buildWordCloze(cultureReviewWord.word, cultureReviewState?.reviewStage ?? 0)}</h2><p>{cultureReviewWord.meaningZh}</p><label>补全强化词<input aria-label="补全强化词" autoComplete="off" value={answer} onChange={(event) => setAnswer(event.target.value)} /></label>{error && <p role="alert">{error}</p>}<div><button disabled={saving} onClick={() => void submitCultureReview(true)}>想不起来，加入错题</button><button className="primary-action" disabled={!answer.trim() || saving} onClick={() => void submitCultureReview()}>{saving ? '正在保存…' : '提交强化词检测'}</button></div></article>
+  </section>;
 
   if (phase === 'culture-translation') return <DailyCultureTranslation repository={repository} prompt={dailyCulturePrompt} vocabulary={entries} states={snapshot.knowledgeStates} date={today} onComplete={() => setPhase('collocations')} />;
 

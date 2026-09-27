@@ -28,6 +28,15 @@ describe('exam session reducer', () => {
     expect(reduceExamSession(answered, { type: 'submit', now: '2026-09-23T00:10:00.000Z' }).status).toBe('submitted');
   });
 
+  it('persists the current question and one-play listening groups', () => {
+    const session = createExamSession(exam, startedAt);
+    const navigated = reduceExamSession(session, { type: 'go-to-question', questionIndex: 3, now: '2026-09-23T00:01:00.000Z' });
+    const played = reduceExamSession(navigated, { type: 'mark-listening-played', groupId: 'listening-01', now: '2026-09-23T00:02:00.000Z' });
+    expect(played.currentQuestionIndex).toBe(3);
+    expect(played.playedListeningGroupIds).toEqual(['listening-01']);
+    expect(reduceExamSession(played, { type: 'mark-listening-played', groupId: 'listening-01' }).playedListeningGroupIds).toEqual(['listening-01']);
+  });
+
   it('lets reading and translation share 70 minutes and switch in either direction', () => {
     const session = createExamSession(exam, startedAt);
     const reading = reduceExamSession(session, { type: 'go-to-section', sectionIndex: 2, now: '2026-09-23T00:55:00.000Z' });

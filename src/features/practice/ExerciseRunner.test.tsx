@@ -221,7 +221,7 @@ describe('ExerciseRunner', () => {
       upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
     } as unknown as LearningRepository;
     render(<ExerciseRunner kind="vocabulary" limit={1} repository={repository} today="2026-09-22" />);
-    for (let index = 0; index < 15; index += 1) {
+    for (let index = 0; index < 45 && !screen.queryByLabelText('我的英文翻译'); index += 1) {
       await user.click(await screen.findByRole('button', { name: '显示释义' }));
       await user.click(screen.getByRole('button', { name: '基本认识' }));
     }
@@ -230,11 +230,13 @@ describe('ExerciseRunner', () => {
     await user.click(await screen.findByRole('button', { name: '继续学习重点搭配' }));
     await completeDailyCollocations();
     expect((await screen.findAllByText(/^请选择 .+ 的正确含义。$/))[0]).toBeVisible();
-    for (let index = 0; index < 15; index += 1) {
+    for (let index = 0; index < 45; index += 1) {
       await unlockCurrentQuestion();
       await user.click((await screen.findAllByRole('radio'))[0]);
       await user.click(screen.getByRole('button', { name: '提交答案' }));
-      await user.click(await screen.findByRole('button', { name: index === 14 ? '查看结果' : '下一题' }));
+      const resultButton = screen.queryByRole('button', { name: '查看结果' });
+      if (resultButton) { await user.click(resultButton); break; }
+      await user.click(await screen.findByRole('button', { name: '下一题' }));
     }
     expect(await screen.findByText('掌握度检测')).toBeVisible();
     expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({

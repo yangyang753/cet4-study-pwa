@@ -14,6 +14,8 @@ export interface VocabularyWorkload {
   newWordQuota: number;
   remainingWords: number;
   projectedCompletionDate: string;
+  firstPassTargetDate: string;
+  consolidationDays: number;
   requiredDailyWords: number;
   estimatedMinutes: number;
   atRisk: boolean;
@@ -51,7 +53,12 @@ export function buildVocabularyWorkload(
     .filter((item) => !stateById.has(item.id))
     .sort((left, right) => Number(cultureWordIds.has(right.id)) - Number(cultureWordIds.has(left.id)) || (right.frequency ?? 0) - (left.frequency ?? 0));
   const daysRemaining = Math.max(0, Math.ceil((dateMs(examDate) - dateMs(today)) / DAY_MS));
-  const learningDays = Math.max(1, daysRemaining - STABLE_REVIEW_SPACING_DAYS);
+  const consolidationDays = Math.max(0, Math.min(
+    Math.max(0, daysRemaining - 1),
+    daysRemaining >= 60 ? 35 : Math.max(STABLE_REVIEW_SPACING_DAYS, Math.floor(daysRemaining * 0.45)),
+  ));
+  const learningDays = Math.max(1, daysRemaining - consolidationDays);
+  const firstPassTargetDate = studyDate(addDays(examDate, -consolidationDays));
   const dailyKnowledgeCapacity = Math.max(10, Math.min(45, Math.floor(dailyMinutes * 0.75)));
   const requiredDailyWords = unseen.length === 0 ? 0 : Math.ceil(unseen.length / learningDays);
   const baseNewWordQuota = unseen.length === 0 ? 0 : Math.min(dailyKnowledgeCapacity, Math.max(10, requiredDailyWords));
@@ -101,9 +108,11 @@ export function buildVocabularyWorkload(
     newWordQuota,
     remainingWords,
     projectedCompletionDate,
+    firstPassTargetDate,
+    consolidationDays,
     requiredDailyWords,
     estimatedMinutes,
-    atRisk: unseen.length > 0 && (requiredDailyWords > dailyKnowledgeCapacity || projectedCompletionDate > examDate),
+    atRisk: unseen.length > 0 && (requiredDailyWords > dailyKnowledgeCapacity || projectedCompletionDate > firstPassTargetDate),
     remainingReviewStages,
     requiredDailyMasteryChecks,
     projectedMasteryDate,

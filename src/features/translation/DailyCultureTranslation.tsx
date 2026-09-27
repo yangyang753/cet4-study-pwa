@@ -24,7 +24,7 @@ export function DailyCultureTranslation({ repository, prompt, vocabulary, states
   async function submit() {
     if (!answer.trim() || saving) return;
     const evaluation = evaluateCultureTranslation(prompt, answer, vocabulary);
-    const missed = new Set(evaluation.missedWordIds);
+    const missed = new Set(evaluation.reviewWordIds);
     setSaving(true); setError('');
     try {
       await repository.saveAttemptOnce({
@@ -55,15 +55,17 @@ export function DailyCultureTranslation({ repository, prompt, vocabulary, states
   }
 
   return <section className="vocabulary-translation-check culture-translation-check">
-    <header><span>今日主题 · {prompt.theme}</span><h1>中国文化翻译</h1><p>请把中文译成英文，尽量用上今天学习和复习的目标词。漏用或用错的目标词会自动加入错题复习。</p></header>
+    <header><span>今日主题 · {prompt.theme}</span><h1>中国文化翻译</h1><p>请把中文译成英文。提交前只提供中文提示；漏用的目标词会自动加入错题复习。</p></header>
     <article className="translation-passage"><p lang="zh-CN">{prompt.promptZh}</p></article>
     <label>我的英文翻译<textarea aria-label="我的英文翻译" value={answer} disabled={Boolean(result)} onChange={(event) => setAnswer(event.target.value)} rows={7} /></label>
-    <div className="translation-targets" aria-label="今日目标词">目标词：{prompt.targetWordIds.map((id) => wordById.get(id)?.word).filter(Boolean).join(' · ')}</div>
+    {!result && <div className="translation-targets" aria-label="今日中文提示">中文提示：{prompt.targetWordIds.map((id) => wordById.get(id)?.meaningZh).filter(Boolean).join(' · ')}</div>}
     {error && <p role="alert">{error}</p>}
     {!result ? <button className="primary-action" disabled={!answer.trim() || saving} onClick={() => void submit()}>{saving ? '正在保存…' : error ? '重新保存翻译' : '提交文化翻译'}</button> : <div className="translation-result" role="status">
-      <strong>{result.missedWordIds.length ? `${result.missedWordIds.length} 个目标词需要加强` : '目标词已全部覆盖'}</strong>
-      {result.missedWordIds.map((id) => { const word = wordById.get(id); return word ? <div key={id}><span>{word.word}：{word.meaningZh}</span><small>已自动改为待复习，并加入拼写补全。</small></div> : null; })}
+      <strong>{result.reviewWordIds.length ? `${result.reviewWordIds.length} 个目标词需要加强` : '目标词已全部覆盖且主题信息完整'}</strong>
+      <p>参考目标词：{prompt.targetWordIds.map((id) => wordById.get(id)?.word).filter(Boolean).join(' · ')}</p>
+      {result.reviewWordIds.map((id) => { const word = wordById.get(id); return word ? <div key={id}><span>{word.word}：{word.meaningZh}</span><small>已自动改为待复习，并加入拼写补全。</small></div> : null; })}
       {!result.complete && <p>译文过短或缺少结束标点，本次暂不判定通过。</p>}
+      {!result.meaningComplete && <p>译文缺少题目主题的关键信息，本次暂不判定通过；请对照参考译文检查遗漏。</p>}
       <details><summary>查看参考译文与要点</summary><p>{prompt.referenceAnswer}</p><ul>{prompt.keyPoints.map((point) => <li key={point}>{point}</li>)}</ul></details>
       <button className="primary-action" onClick={onComplete}>继续学习重点搭配</button>
     </div>}

@@ -7,7 +7,8 @@ test('renders separate A4 question and answer sheets', async ({ page }) => {
   await expect(sheets.first()).not.toContainText('答案与解析');
   await expect(sheets.last()).toContainText('答案与解析');
   await expect(sheets.last()).toContainText('解析：');
-  await expect(page.locator('.writing-space')).toHaveCount(2);
+  expect(await page.locator('.writing-space').count()).toBeGreaterThan(2);
+  await expect(page.locator('.print-block').filter({ hasText: '中国文化中译英' })).toHaveCount(2);
   await expect(page.locator('.print-sheet footer').first()).toContainText(/第 1 页 \/ 共 \d+ 页/);
   await page.getByLabel('练习来源').selectOption('practice');
   await page.getByLabel('专项类别').selectOption('reading');

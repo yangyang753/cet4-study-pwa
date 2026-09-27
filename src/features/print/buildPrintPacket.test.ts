@@ -1,8 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import { getPracticeItems } from '../../content/catalog';
 import { buildPrintPacket } from './buildPrintPacket';
+import type { VocabularyEntry } from '../../domain/content';
 
 describe('buildPrintPacket', () => {
+  it('builds the daily packet from assigned words and the daily culture translation', () => {
+    const words: VocabularyEntry[] = [{ id: 'v1', word: 'culture', phonetic: '', partOfSpeech: 'n.', meaningZh: '文化', example: 'Culture connects people.', derivatives: [], confusables: [] }];
+    const culturePrompt = { id: 'culture-day', theme: '文化传承', promptZh: '中国文化代代相传。', referenceAnswer: 'Chinese culture is passed down through generations.', targetWordIds: ['v1'], keyPoints: ['文化', '传承'] };
+    const packet = buildPrintPacket({ kind: 'daily', dailyVocabulary: words, dailyCulturePrompt: culturePrompt, pageCapacity: 8 });
+    const questions = packet.questionPages.flatMap((page) => page.blocks);
+    const answers = packet.answerPages.flatMap((page) => page.blocks);
+    expect(questions.some((block) => block.questionId === 'daily-word:v1' && block.text.includes('c_l_u_e'))).toBe(true);
+    expect(questions.some((block) => block.questionId === 'culture-day' && block.text.includes('中国文化代代相传'))).toBe(true);
+    expect(answers.some((block) => block.questionId.startsWith('daily-word:v1') && block.answer === 'culture')).toBe(true);
+    expect(answers.some((block) => block.questionId.startsWith('culture-day') && block.answer === culturePrompt.referenceAnswer)).toBe(true);
+  });
+
   it('numbers every calculated page and includes full answer explanations', () => {
     const questions = getPracticeItems('listening').slice(0, 10);
     const packet = buildPrintPacket({ kind: 'practice', questions, pageCapacity: 8 });

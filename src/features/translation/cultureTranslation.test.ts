@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import culturePrompts from '../../../content/v1/cultureTranslations.json';
+import { cultureTranslationBank as culturePrompts } from '../../content/cultureTranslations';
 import vocabulary from '../../../content/v1/vocabulary.json';
 import { auditCultureTranslations, evaluateCultureTranslation, selectDailyCultureTranslation } from './cultureTranslation';
 
@@ -24,9 +24,22 @@ describe('daily culture translation', () => {
     expect(evaluateCultureTranslation(prompt, 'Chinese culture is meaningful.', vocabulary).missedWordIds).toEqual(['v0100', 'v0290']);
   });
 
+  it('does not pass a target-word list that omits the subject meaning', () => {
+    const prompt = {
+      id: 'culture-test', theme: '文化传承', promptZh: '中国文化在不同世代之间传承。',
+      referenceAnswer: 'Chinese culture has developed across generations.',
+      targetWordIds: ['v0164', 'v0100', 'v0290'], keyPoints: ['中国文化', '发展', '世代'],
+    };
+    const result = evaluateCultureTranslation(prompt, 'Culture develops through generations today.', vocabulary);
+    expect(result.missedWordIds).toEqual([]);
+    expect(result.meaningComplete).toBe(false);
+    expect(result.reviewWordIds).toEqual(['v0164', 'v0100', 'v0290']);
+    expect(result.passed).toBe(false);
+  });
+
   it('contains a valid original culture bank with auditable target words', () => {
-    expect(culturePrompts).toHaveLength(24);
+    expect(culturePrompts.length).toBeGreaterThanOrEqual(60);
     expect(auditCultureTranslations(culturePrompts, vocabulary)).toEqual([]);
-    expect(new Set(culturePrompts.map((item) => item.theme)).size).toBe(24);
+    expect(new Set(culturePrompts.map((item) => item.theme)).size).toBe(culturePrompts.length);
   });
 });

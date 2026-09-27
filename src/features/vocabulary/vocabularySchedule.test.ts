@@ -14,13 +14,15 @@ const state = (index: number, extra: Partial<KnowledgeState> = {}): KnowledgeSta
 });
 
 describe('vocabulary workload', () => {
-  it('reserves the full spaced-review interval and assigns fifteen of 800 unmastered words', () => {
+  it('finishes first exposure early enough to reserve at least thirty-five consolidation days', () => {
     const result = buildVocabularyWorkload(Array.from({ length: 800 }, (_, i) => entry(i)), [], '2026-09-25', '2026-12-12');
-    expect(result.newWordQuota).toBe(15);
-    expect(result.newWords).toHaveLength(15);
+    expect(result.newWordQuota).toBe(19);
+    expect(result.newWords).toHaveLength(19);
     expect(result.remainingWords).toBe(800);
-    expect(result.projectedCompletionDate).toBe('2026-11-18');
-    expect(result.requiredDailyWords).toBe(15);
+    expect(result.firstPassTargetDate).toBe('2026-11-07');
+    expect(result.consolidationDays).toBe(35);
+    expect(result.projectedCompletionDate).toBe('2026-11-07');
+    expect(result.requiredDailyWords).toBe(19);
     expect(result.estimatedMinutes).toBeGreaterThan(15);
     expect(result.atRisk).toBe(false);
     expect(result.remainingReviewStages).toBe(3200);

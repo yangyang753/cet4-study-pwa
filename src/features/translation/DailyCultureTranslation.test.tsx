@@ -22,6 +22,16 @@ function repository(overrides = {}) {
 }
 
 describe('DailyCultureTranslation', () => {
+  it('keeps English target words hidden until after submission', async () => {
+    const learningRepository = repository();
+    render(<DailyCultureTranslation repository={learningRepository} prompt={prompt} vocabulary={words} states={[]} date="2026-09-27" onComplete={() => undefined} />);
+    expect(screen.queryByText(/目标词：culture/)).not.toBeInTheDocument();
+    expect(screen.getByText(/中文提示：文化/)).toBeVisible();
+    await userEvent.type(screen.getByLabelText('我的英文翻译'), 'Chinese culture develops through generations.');
+    await userEvent.click(screen.getByRole('button', { name: '提交文化翻译' }));
+    expect(await screen.findByText(/参考目标词：culture/)).toBeVisible();
+  });
+
   it('demotes missed target words and adds them to review automatically', async () => {
     const learningRepository = repository();
     render(<DailyCultureTranslation repository={learningRepository} prompt={prompt} vocabulary={words} states={[]} date="2026-09-27" now="2026-09-27T08:00:00.000Z" onComplete={() => undefined} />);
