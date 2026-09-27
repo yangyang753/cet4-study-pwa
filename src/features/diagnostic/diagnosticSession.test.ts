@@ -29,5 +29,7 @@ describe('diagnostic session', () => {
     expect(restoreDiagnosticSession('{broken', catalog)).toBeNull();
     expect(restoreDiagnosticSession(JSON.stringify({ ...session, questionIds: [...session.questionIds, 'deleted-question'] }), catalog)).toBeNull();
     expect(restoreDiagnosticSession(JSON.stringify({ ...session, version: 1 }), catalog)).toBeNull();
+    expect(restoreDiagnosticSession(JSON.stringify({ ...session, questionIds: [session.questionIds[0], session.questionIds[0]] }), catalog)).toBeNull();
+    expect(restoreDiagnosticSession(JSON.stringify({ ...session, answers: [{ questionId: session.questionIds[5], kind: 'writing', response: '', correct: true, score: 2, attemptId: '' }] }), catalog)).toBeNull();
   });
 });

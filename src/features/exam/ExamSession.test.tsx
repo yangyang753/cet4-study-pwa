@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
@@ -57,5 +57,17 @@ describe('ExamSession', () => {
       currentSectionIndex: 1,
       lockedSectionIndexes: [0],
     })));
+  });
+
+  it('shows a real save failure, keeps the answer, and retries before claiming success', async () => {
+    const repo = repository();
+    vi.mocked(repo.saveExamSession).mockResolvedValueOnce(undefined).mockRejectedValueOnce(new Error('disk')).mockResolvedValue(undefined);
+    render(<ExamSession mockId="mock-1" repository={repo} />);
+    const answer = await screen.findByLabelText('写作答题区');
+    fireEvent.change(answer, { target: { value: 'My saved draft.' } });
+    expect(await screen.findByRole('alert')).toHaveTextContent('保存失败');
+    expect(answer).toHaveValue('My saved draft.');
+    await userEvent.click(screen.getByRole('button', { name: '重新保存' }));
+    expect(await screen.findByRole('status')).toHaveTextContent('已保存');
   });
 });

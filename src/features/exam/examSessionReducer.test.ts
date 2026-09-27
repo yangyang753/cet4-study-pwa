@@ -22,9 +22,19 @@ describe('exam session reducer', () => {
   it('uses an absolute final deadline and records answers', () => {
     const session = createExamSession(exam, startedAt);
     expect(remainingSeconds(session, '2026-09-23T00:00:30.000Z')).toBe(7470);
+    expect(session.sectionDeadlines[2]).toBe(session.sectionDeadlines[3]);
     const answered = reduceExamSession(session, { type: 'answer', questionId: exam.sections[0].questions[0].id, response: 'draft' });
     expect(answered.answers[exam.sections[0].questions[0].id]).toBe('draft');
     expect(reduceExamSession(answered, { type: 'submit', now: '2026-09-23T00:10:00.000Z' }).status).toBe('submitted');
+  });
+
+  it('lets reading and translation share 70 minutes and switch in either direction', () => {
+    const session = createExamSession(exam, startedAt);
+    const reading = reduceExamSession(session, { type: 'go-to-section', sectionIndex: 2, now: '2026-09-23T00:55:00.000Z' });
+    const translation = reduceExamSession(reading, { type: 'go-to-section', sectionIndex: 3, now: '2026-09-23T01:00:00.000Z' });
+    const backToReading = reduceExamSession(translation, { type: 'go-to-section', sectionIndex: 2, now: '2026-09-23T01:05:00.000Z' });
+    expect(translation.lockedSectionIndexes).toEqual([0, 1]);
+    expect(backToReading.currentSectionIndex).toBe(2);
   });
 
   it('advances at the exact section deadline after refresh', () => {

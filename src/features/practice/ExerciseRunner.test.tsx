@@ -225,11 +225,11 @@ describe('ExerciseRunner', () => {
       await user.click(await screen.findByRole('button', { name: '显示释义' }));
       await user.click(screen.getByRole('button', { name: '基本认识' }));
     }
-    await user.type(await screen.findByLabelText('我的中文翻译'), '这是今天单词的中文翻译。');
-    await user.click(screen.getByRole('button', { name: '检查翻译' }));
-    await user.click(await screen.findByRole('button', { name: '继续做词义题' }));
+    await user.type(await screen.findByLabelText('我的英文翻译'), 'Ancient trade helped language and culture develop, and it remains important in the world today.');
+    await user.click(screen.getByRole('button', { name: '提交文化翻译' }));
+    await user.click(await screen.findByRole('button', { name: '继续学习重点搭配' }));
     await completeDailyCollocations();
-    expect((await screen.findAllByText('请选择 passage 的正确含义。'))[0]).toBeVisible();
+    expect((await screen.findAllByText(/^请选择 .+ 的正确含义。$/))[0]).toBeVisible();
     for (let index = 0; index < 15; index += 1) {
       await unlockCurrentQuestion();
       await user.click((await screen.findAllByRole('radio'))[0]);

@@ -48,7 +48,7 @@ describe('TodayPage', () => {
   it('starts daily training with vocabulary before questions', async () => {
     render(<TodayPage today="2026-09-22" repository={repository()} />);
     expect(await screen.findByRole('link', { name: '先学高频词 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
-    expect(screen.getByText(/先复习旧词和重点搭配，再学新内容/)).toBeVisible();
+    expect(screen.getByText(/先复习旧词，再学新词，随后完成/)).toBeVisible();
   });
 
   it('shows the countdown and the four-part 60-minute plan', () => {
@@ -119,6 +119,13 @@ describe('TodayPage', () => {
     expect(screen.getByText('当前优先补强：写作、听力')).toBeVisible();
     expect(screen.getByRole('link', { name: '重新诊断' })).toHaveAttribute('href', expect.stringContaining('diagnostic'));
     expect(screen.getByRole('heading', { name: '短文写作' }).closest('article')).toHaveTextContent('诊断补强 · 正确率 20%');
+  });
+
+  it('recommends a fresh diagnostic after 21 days', async () => {
+    render(<TodayPage today="2026-10-15" repository={repository({
+      settings: { ...snapshot.settings, diagnosticCompletedAt: diagnosticProfile.completedAt, diagnosticProfile },
+    })} />);
+    expect(await screen.findByText(/诊断结果已超过 21 天/)).toBeVisible();
   });
 
   it('shows the adaptive new-word quota and due old-word count', async () => {

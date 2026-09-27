@@ -29,13 +29,14 @@ function repository() {
 describe('SubjectiveMasteryCheck', () => {
   it('checks a writing micro-paragraph for length, structure, connection and punctuation', () => {
     const strong = 'I believe daily review is useful because it helps learners notice mistakes. Therefore, students can correct weak points early and become more confident before important examinations during every busy semester.';
-    expect(evaluateSubjectiveMastery('writing', strong, writingQuestion).filter((check) => check.passed)).toHaveLength(4);
-    expect(evaluateSubjectiveMastery('writing', 'Daily review helps.', writingQuestion).filter((check) => check.passed).length).toBeLessThan(4);
+    expect(evaluateSubjectiveMastery('writing', strong, writingQuestion).every((check) => check.passed)).toBe(true);
+    expect(evaluateSubjectiveMastery('writing', 'Daily review helps.', writingQuestion).every((check) => check.passed)).toBe(false);
+    expect(evaluateSubjectiveMastery('writing', `${'because '.repeat(35)}.` , writingQuestion).every((check) => check.passed)).toBe(false);
   });
 
   it('checks translation evidence against core reference words instead of grammar questions', () => {
     const strong = 'More and more college students take part in volunteer service because they sincerely want to help other people.';
-    expect(evaluateSubjectiveMastery('translation', strong, translationQuestion).filter((check) => check.passed)).toHaveLength(4);
+    expect(evaluateSubjectiveMastery('translation', strong, translationQuestion).every((check) => check.passed)).toBe(true);
   });
 
   it('records a mastered writing outcome only after aligned written evidence passes', async () => {

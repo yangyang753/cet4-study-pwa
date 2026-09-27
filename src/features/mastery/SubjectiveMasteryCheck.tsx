@@ -9,6 +9,10 @@ export interface MasteryEvidenceCheck { label: string; passed: boolean; hint: st
 
 const completeSentence = (body: string) => /[.!?。！？]\s*$/.test(body.trim());
 const sentenceCount = (body: string) => body.split(/[.!?。！？]+/).filter((sentence) => sentence.trim()).length;
+const hasLexicalVariety = (body: string) => {
+  const words = body.toLowerCase().match(/[a-z]+/g) ?? [];
+  return words.length >= 8 && new Set(words).size / words.length >= 0.45 && !/(\b[a-z]+\b)(?:\s+\1){3,}/i.test(body);
+};
 const referenceKeywords = (question: SubjectiveQuestion) => [...new Set(question.referenceAnswer.toLowerCase().match(/[a-z]{5,}/g) ?? [])]
   .filter((word) => !['because', 'their', 'about', 'which', 'these', 'those', 'there', 'would', 'could', 'should'].includes(word))
   .slice(0, 6);
@@ -21,6 +25,7 @@ export function evaluateSubjectiveMastery(kind: 'writing' | 'translation', body:
     { label: '观点与展开', passed: sentenceCount(body) >= 2, hint: '至少写两句：一句观点，一句理由或例子。' },
     { label: '逻辑连接', passed: /\b(because|however|therefore|moreover|for example|as a result)\b/i.test(body), hint: '加入 because、however、therefore 等连接表达。' },
     { label: '句子完整', passed: completeSentence(body), hint: '补全句子并添加结尾标点。' },
+    { label: '有效表达', passed: hasLexicalVariety(body), hint: '不要重复堆砌同一个词，请写有实际含义的句子。' },
   ];
   const keywords = referenceKeywords(question);
   const covered = keywords.filter((keyword) => normalized.includes(keyword)).length;
@@ -29,6 +34,7 @@ export function evaluateSubjectiveMastery(kind: 'writing' | 'translation', body:
     { label: '核心信息', passed: covered >= Math.min(3, keywords.length), hint: `重新检查核心表达：${keywords.slice(0, 4).join('、')}。` },
     { label: '谓语结构', passed: /\b(is|are|was|were|has|have|had|will|can|want|wants|help|helps|take|takes|make|makes)\b/i.test(body), hint: '检查主语后是否有正确的谓语动词。' },
     { label: '句子完整', passed: completeSentence(body), hint: '补全译文并添加结尾标点。' },
+    { label: '有效表达', passed: hasLexicalVariety(body), hint: '不要复制或重复关键词，请完成连贯译文。' },
   ];
 }
 
@@ -46,7 +52,7 @@ export function SubjectiveMasteryCheck({ kind, taskId, question, repository = de
     setSaving(true);
     setSaveError('');
     const passedCount = checks.filter((check) => check.passed).length;
-    const passed = passedCount / checks.length >= 0.8;
+    const passed = checks.every((check) => check.passed);
     try {
       await repository.saveAttemptOnce({
         id: crypto.randomUUID(), userId: 'local-learner', questionId: question.id, response: body,
@@ -63,7 +69,7 @@ export function SubjectiveMasteryCheck({ kind, taskId, question, repository = de
     }
   }
 
-  if (finished) return <section className={`mastery-result ${finished}`}><h1>{finished === 'mastered' ? '已完全掌握' : '需要继续复习'}</h1><p>{finished === 'mastered' ? '书面证明达到 80%，今日任务已真正掌握。' : '书面证明中还有薄弱点，题目已自动加入复习安排。'}</p><a href={`${import.meta.env.BASE_URL}today`}>返回今日计划</a></section>;
+  if (finished) return <section className={`mastery-result ${finished}`}><h1>{finished === 'mastered' ? '已完全掌握' : '需要继续复习'}</h1><p>{finished === 'mastered' ? '全部书面证明条件已达到，今日任务已真正掌握。' : '书面证明中还有薄弱点，题目已自动加入复习安排。'}</p><a href={`${import.meta.env.BASE_URL}today`}>返回今日计划</a></section>;
 
   return <section className="mastery-check subjective-mastery"><header><span>掌握度检测</span><h1>{kind === 'writing' ? '用一个微段落证明你会写' : '不看答案，再译一次关键句'}</h1><p>{kind === 'writing' ? '不用重写全文，请写 30～60 词，包含观点、理由和连接词。' : question.prompt}</p></header><label>{kind === 'writing' ? '写作掌握证明' : '翻译掌握证明'}<textarea aria-label={kind === 'writing' ? '写作掌握证明' : '翻译掌握证明'} value={body} onChange={(event) => { setBody(event.target.value); setSaveError(''); }} /></label><ul className="mastery-rules">{checks.map((check) => <li key={check.label} className={check.passed ? 'passed' : ''}><strong>{check.passed ? '✓' : '○'} {check.label}</strong><span>{check.passed ? '已达到' : check.hint}</span></li>)}</ul>{saveError && <p role="alert">{saveError}</p>}<button className="primary-action" disabled={!body.trim() || saving} onClick={() => void submit()}>检查是否掌握</button></section>;
 }

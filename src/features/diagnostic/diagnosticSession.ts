@@ -60,11 +60,23 @@ export function restoreDiagnosticSession(raw: string | null, questions: CatalogQ
   if (!raw) return null;
   try {
     const value = JSON.parse(raw) as Partial<DiagnosticSessionV2>;
-    const available = new Set(questions.map((question) => question.id));
+    const byId = new Map(questions.map((question) => [question.id, question]));
+    const available = new Set(byId.keys());
     if (value.version !== 2 || typeof value.sessionId !== 'string' || typeof value.date !== 'string'
       || !Array.isArray(value.questionIds) || value.questionIds.length === 0 || value.questionIds.some((id) => typeof id !== 'string' || !available.has(id))
+      || new Set(value.questionIds).size !== value.questionIds.length
       || !Number.isInteger(value.currentIndex) || value.currentIndex! < 0 || value.currentIndex! >= value.questionIds.length
       || !Array.isArray(value.answers) || typeof value.startedAt !== 'string' || typeof value.updatedAt !== 'string' || !value.kinds) return null;
+    const answers = value.answers as Partial<DiagnosticSessionAnswer>[];
+    const answerIds = answers.map((answer) => answer.questionId);
+    if (answers.length > value.currentIndex! + 1 || new Set(answerIds).size !== answerIds.length || answers.some((answer) => {
+      const question = typeof answer.questionId === 'string' ? byId.get(answer.questionId) : undefined;
+      const questionIndex = typeof answer.questionId === 'string' ? value.questionIds!.indexOf(answer.questionId) : -1;
+      return !question || questionIndex < 0 || questionIndex > value.currentIndex!
+        || answer.kind !== diagnosticKind(question) || typeof answer.attemptId !== 'string' || !answer.attemptId
+        || typeof answer.correct !== 'boolean' || typeof answer.score !== 'number' || !Number.isFinite(answer.score) || answer.score < 0 || answer.score > 1
+        || answer.response === null || answer.response === undefined || (typeof answer.response === 'string' && !answer.response.trim());
+    })) return null;
     return value as DiagnosticSessionV2;
   } catch {
     return null;
