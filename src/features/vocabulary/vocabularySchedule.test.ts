@@ -71,6 +71,18 @@ describe('vocabulary workload', () => {
     expect(result.newWords).toEqual([]);
     expect(result.newWordQuota).toBe(0);
   });
+
+  it('prioritizes unseen culture words and separately strengthens learned culture words without duplicates', () => {
+    const entries = Array.from({ length: 30 }, (_, i) => entry(i));
+    const result = buildVocabularyWorkload(entries, [state(2, { nextReviewAt: '2026-12-30T00:00:00.000Z' })], '2026-09-25', '2026-12-12', 60, {
+      cultureWordIds: ['v20', 'v2', 'v21'],
+    });
+    expect(result.newWords.slice(0, 2).map((word) => word.id)).toEqual(['v20', 'v21']);
+    expect(result.cultureWords.map((word) => word.id)).toEqual(['v2']);
+    expect(new Set([...result.newWords, ...result.dueWords, ...result.cultureWords].map((word) => word.id)).size).toBe(
+      result.newWords.length + result.dueWords.length + result.cultureWords.length,
+    );
+  });
 });
 
 describe('word cloze and review state', () => {

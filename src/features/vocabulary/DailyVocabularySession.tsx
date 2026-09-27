@@ -4,14 +4,16 @@ import { learningVocabulary } from '../../content/vocabularyLearning';
 import type { VocabularyEntry } from '../../domain/content';
 import type { DashboardSnapshot } from '../../domain/learning';
 import { VocabularyWarmup } from './VocabularyWarmup';
-import { VocabularyTranslationCheck } from './VocabularyTranslationCheck';
 import { applyVocabularyReviewResult, buildVocabularyWorkload, buildWordCloze, type VocabularyWorkload } from './vocabularySchedule';
 import { vocabularyReviewCard } from './wordMastery';
 import collocationData from '../../../content/v1/collocations.json';
 import { CollocationCheck } from '../collocations/CollocationCheck';
 import { selectDailyCollocations, type CollocationEntry } from '../collocations/collocationPractice';
+import cultureTranslationData from '../../../content/v1/cultureTranslations.json';
+import { DailyCultureTranslation } from '../translation/DailyCultureTranslation';
+import { selectDailyCultureTranslation, type CultureTranslationPrompt } from '../translation/cultureTranslation';
 
-type Phase = 'loading' | 'review' | 'warmup' | 'translation' | 'collocations';
+type Phase = 'loading' | 'review' | 'warmup' | 'culture-translation' | 'collocations';
 
 export function DailyVocabularySession({ repository, entries = learningVocabulary, today, examDate, onComplete }: {
   repository: LearningRepository;
@@ -28,16 +30,17 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [warmedWords, setWarmedWords] = useState<VocabularyEntry[]>([]);
+  const dailyCulturePrompt = selectDailyCultureTranslation(cultureTranslationData as CultureTranslationPrompt[], today);
 
   useEffect(() => {
     let active = true;
     void repository.getDashboardSnapshot().then((value) => {
       if (!active) return;
-      const next = buildVocabularyWorkload(entries, value.knowledgeStates ?? [], today, examDate ?? value.settings?.examDate ?? '2026-12-12', value.settings?.dailyMinutes ?? 60);
+      const next = buildVocabularyWorkload(entries, value.knowledgeStates ?? [], today, examDate ?? value.settings?.examDate ?? '2026-12-12', value.settings?.dailyMinutes ?? 60, { cultureWordIds: dailyCulturePrompt.targetWordIds });
       setSnapshot(value); setWorkload(next); setPhase(next.dueWords.length ? 'review' : 'warmup');
     }).catch(() => { if (active) setError('今日词汇计划读取失败，请刷新后重试。'); });
     return () => { active = false; };
-  }, [entries, examDate, repository, today]);
+  }, [dailyCulturePrompt.targetWordIds, entries, examDate, repository, today]);
 
   const reviewWord = workload?.dueWords[reviewIndex];
   const reviewState = snapshot?.knowledgeStates.find((item) => item.itemId === reviewWord?.id);
@@ -71,11 +74,11 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
   </section>;
 
   if (phase === 'warmup') {
-    if (!workload.newWords.length) return <section className="vocabulary-warmup complete"><h1>今日没有新词</h1><p>高频词已全部进入复习计划，接下来巩固重点搭配。</p><button className="primary-action" onClick={() => setPhase('collocations')}>继续学习重点搭配</button></section>;
-    return <VocabularyWarmup repository={repository} entries={workload.newWords} limit={workload.newWords.length} onComplete={(words) => { setWarmedWords(words); setPhase('translation'); }} />;
+    if (!workload.newWords.length) return <section className="vocabulary-warmup complete"><h1>今日没有新词</h1><p>先用今天安排的目标词完成中国文化翻译，再巩固重点搭配。</p><button className="primary-action" onClick={() => setPhase('culture-translation')}>开始今日文化翻译</button></section>;
+    return <VocabularyWarmup repository={repository} entries={workload.newWords} limit={workload.newWords.length} onComplete={(words) => { setWarmedWords(words); setPhase('culture-translation'); }} />;
   }
 
-  if (phase === 'translation') return <VocabularyTranslationCheck repository={repository} words={warmedWords} states={snapshot.knowledgeStates} onComplete={() => setPhase('collocations')} />;
+  if (phase === 'culture-translation') return <DailyCultureTranslation repository={repository} prompt={dailyCulturePrompt} vocabulary={entries} states={snapshot.knowledgeStates} date={today} onComplete={() => setPhase('collocations')} />;
 
   return <CollocationCheck repository={repository} entries={dailyCollocations} allEntries={collocationData as CollocationEntry[]} states={snapshot.knowledgeStates} onComplete={() => onComplete(warmedWords)} />;
 }

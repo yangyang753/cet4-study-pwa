@@ -23,7 +23,7 @@ function repository() {
 }
 
 describe('DailyVocabularySession', () => {
-  it('continues from high-frequency words into collocation learning', async () => {
+  it('continues into a daily culture translation even when there are no new words', async () => {
     const learningRepository = repository();
     vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({
       knowledgeStates: entries.map((item) => ({ id: `knowledge:${item.id}`, itemId: item.id, status: 'mastered', favorite: false, reviewStage: 4, nextReviewAt: '2026-12-20T00:00:00.000Z', updatedAt: '2026-09-23T00:00:00.000Z' })),
@@ -31,8 +31,8 @@ describe('DailyVocabularySession', () => {
       attempts: [], dueReviews: [], completions: [],
     });
     render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
-    await userEvent.click(await screen.findByRole('button', { name: '继续学习重点搭配' }));
-    expect(await screen.findByRole('heading', { name: 'take part in' })).toBeVisible();
+    await userEvent.click(await screen.findByRole('button', { name: '开始今日文化翻译' }));
+    expect(await screen.findByRole('heading', { name: /中国文化翻译/ })).toBeVisible();
   });
 
   it('tests due old words before showing a new word', async () => {
