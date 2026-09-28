@@ -3,11 +3,14 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { resolveExam } from './examBlueprint';
 import { ExamQuestionView } from './ExamQuestionView';
+import { isFormattedObjective } from './examQuestionFormat';
 
 describe('ExamQuestionView', () => {
   it('renders cloze as a shared word-bank selector instead of ordinary radios', async () => {
     const user = userEvent.setup();
     const question = resolveExam('mock-1').sections.find((section) => section.kind === 'reading')!.questions.find((item) => item.type === 'cloze')!;
+    expect(isFormattedObjective(question)).toBe(true);
+    if (!isFormattedObjective(question)) throw new Error('Expected a formatted objective cloze question');
     const onChange = vi.fn();
     render(<ExamQuestionView question={question} response="" onChange={onChange} />);
     expect(screen.getByRole('heading', { name: '选词填空词库' })).toBeVisible();
