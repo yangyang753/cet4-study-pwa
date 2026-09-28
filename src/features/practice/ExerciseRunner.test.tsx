@@ -157,8 +157,8 @@ describe('ExerciseRunner', () => {
 
   it('saves valid subjective submissions with bounded local self-check evidence', async () => {
     const user = userEvent.setup();
-    const repository = { saveDraft: vi.fn().mockResolvedValue(undefined), saveAttemptOnce: vi.fn().mockResolvedValue(undefined), completeTask: vi.fn().mockResolvedValue(undefined) } as unknown as LearningRepository;
-    render(<ExerciseRunner kind="writing" limit={1} repository={repository} />);
+    const repository = { saveDraft: vi.fn().mockResolvedValue(undefined), saveAttemptOnce: vi.fn().mockResolvedValue(undefined), upsertReviewCard: vi.fn().mockResolvedValue(undefined), completeTask: vi.fn().mockResolvedValue(undefined) } as unknown as LearningRepository;
+    render(<ExerciseRunner kind="writing" limit={1} repository={repository} today="2026-01-03" />);
     fireEvent.change(await screen.findByRole('textbox', { name: '写作答题区' }), { target: { value: validWriting } });
     await user.click(screen.getByRole('button', { name: '提交自查' }));
     expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ response: validWriting, correct: true, score: 1 }));
@@ -270,9 +270,10 @@ describe('ExerciseRunner', () => {
       listAttempts: vi.fn().mockResolvedValue([]),
       saveDraft: vi.fn().mockResolvedValue(undefined),
       saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
       completeTask: vi.fn().mockResolvedValue(undefined),
     } as unknown as LearningRepository;
-    render(<ExerciseRunner kind="writing" limit={1} repository={repository} />);
+    render(<ExerciseRunner kind="writing" limit={1} repository={repository} today="2026-01-03" />);
     fireEvent.change(await screen.findByRole('textbox', { name: '写作答题区' }), { target: { value: validWriting } });
     await user.click(screen.getByRole('button', { name: '提交自查' }));
     expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ kind: 'writing', correct: true, score: 1 }));
