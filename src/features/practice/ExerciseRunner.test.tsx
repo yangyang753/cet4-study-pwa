@@ -11,7 +11,7 @@ const validWriting = `First, daily practice helps students remember important kn
 Therefore, I plan to study at the same time each evening, review mistakes, and write down one question for the next day. This simple method gives every session a purpose and allows steady progress without creating unnecessary pressure. It also builds confidence because improvement becomes visible after several consistent weeks. Finally, I will compare my work every Sunday and adjust the routine when one activity is no longer useful.`;
 
 async function unlockCurrentQuestion() {
-  for (const input of screen.getAllByRole('textbox')) await userEvent.type(input, '这是什么以及如何安排，什么时候进行，为什么这样做，星期天下午或星期一早上。');
+  for (const input of screen.getAllByRole('textbox')) fireEvent.change(input, { target: { value: '这是什么以及如何安排，什么时候进行，为什么这样做，星期天下午或星期一早上。' } });
   await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
 }
 
