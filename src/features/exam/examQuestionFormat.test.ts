@@ -22,6 +22,8 @@ describe('official reading question formats', () => {
     expect(matching).toHaveLength(10);
     expect(matching.every((question) => question.examFormat === 'paragraph-matching')).toBe(true);
     expect(matching.every((question) => question.options.map((option) => option.id).join('') === 'ABCDEFGHIJ')).toBe(true);
+    expect(new Set(matching.map((question) => question.groupId))).toHaveLength(1);
+    expect(new Set(matching.map((question) => question.examContext))).toHaveLength(1);
     expect(new Set(matching.map((question) => question.correctAnswer))).toEqual(new Set('ABCDEFGHIJ'));
     expect(matching[0].examContext).toContain('[A]');
     expect(matching[0].examContext).toContain('[J]');

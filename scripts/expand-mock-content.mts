@@ -6,8 +6,9 @@ const readJson = async <T>(name: string): Promise<T> => JSON.parse(await readFil
 const writeJson = async (name: string, value: unknown) => writeFile(path.join(contentDir, name), `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 
 type QuestionSkillTag = 'detail' | 'reason' | 'purpose' | 'action' | 'attitude' | 'inference' | 'main-idea' | 'vocabulary-in-context' | 'reference' | 'paragraph-role' | 'structure';
-type SetItem = { id: string; theme: string; themeEn?: string; type: string; difficulty: string; audioSrc?: string; segments?: Array<{ start: number; end: number; text: string }> };
-type WritingItem = { id: string; topic: string; prompt: string; outline: string[]; referenceOpening: string };
+type SetItem = { id: string; theme: string; themeEn?: string; type: string; difficulty: string; audioSrc?: string; segments?: Array<{ start: number; end: number; text: string; speaker?: string }> };
+type WritingItem = { id: string; topic: string; prompt: string; outline: string[]; referenceOpening: string; referenceAnswer?: string };
+type TranslationItem = { id: string; theme: string; prompt: string; referenceAnswer: string; rubric: string[] };
 type ListeningScenario = { intro: string; schedule: string; reason: string; deadline: string; bring: string; experience: string; fallback: string };
 
 const listeningScenarios: ListeningScenario[] = [
@@ -46,7 +47,34 @@ const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set
   const scenario = listeningScenarios[index];
   if (!scenario) throw new Error(`Missing listening scenario ${index + 1}`);
   const themeEn = set.themeEn ?? set.theme;
-  const segments = [scenario.intro, `${scenario.reason} ${scenario.schedule}`, `${scenario.deadline} ${scenario.bring}`, scenario.experience, scenario.fallback];
+  const segmentRows = set.type === 'conversation'
+    ? [
+        { speaker: 'Woman', text: `Have you heard? ${scenario.intro}` },
+        { speaker: 'Man', text: `Yes. ${scenario.reason}` },
+        { speaker: 'Woman', text: `Then remember this change. ${scenario.schedule}` },
+        { speaker: 'Man', text: `When do we need to respond? ${scenario.deadline}` },
+        { speaker: 'Woman', text: `We should also prepare carefully. ${scenario.bring}` },
+        { speaker: 'Man', text: `I have not done this before. ${scenario.experience}` },
+        { speaker: 'Woman', text: `That should be fine. ${scenario.fallback}` },
+        { speaker: 'Man', text: 'Great. I will follow the instructions and register in time.' },
+      ]
+    : set.type === 'passage'
+      ? [
+          { text: scenario.intro },
+          { text: `The program responds to a clear need. ${scenario.reason}` },
+          { text: `Its timetable is designed to be practical. ${scenario.schedule}` },
+          { text: `Students should plan ahead. ${scenario.deadline} ${scenario.bring}` },
+          { text: `Beginners can take part with confidence. ${scenario.experience}` },
+          { text: `The organizers have also prepared another option. ${scenario.fallback}` },
+        ]
+      : [
+          { text: scenario.intro },
+          { text: `${scenario.reason} ${scenario.schedule}` },
+          { text: `${scenario.deadline} ${scenario.bring}` },
+          { text: scenario.experience },
+          { text: scenario.fallback },
+        ];
+  const segments = segmentRows.map((segment) => segment.text);
   const audioDuration = set.segments?.at(-1)?.end ?? 50;
   const segmentDuration = audioDuration / segments.length;
   const summarySkill: QuestionSkillTag = index % 2 === 0 ? 'main-idea' : 'purpose';
@@ -87,7 +115,8 @@ const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set
     ...choices('They can participate because guidance or support is available.', ['They are automatically refused a place.', 'They must organize the entire activity alone.', 'They may join only after completing a university degree.'], index % 4),
     explanationZh: `原文说明会提供支持，因此缺少经验并不会阻止参加：${scenario.experience}`,
   });
-  return { ...set, transcript: segments.join(' '), segments: segments.map((text, segmentIndex) => ({ start: Number((segmentIndex * segmentDuration).toFixed(3)), end: Number(((segmentIndex + 1) * segmentDuration).toFixed(3)), text })), questions };
+  const transcript = segmentRows.map((segment) => `${segment.speaker ? `${segment.speaker}: ` : ''}${segment.text}`).join(' ');
+  return { ...set, transcript, segments: segmentRows.map((segment, segmentIndex) => ({ start: Number((segmentIndex * segmentDuration).toFixed(3)), end: Number(((segmentIndex + 1) * segmentDuration).toFixed(3)), ...segment })), questions };
 });
 
 const readingFacts = [
@@ -135,6 +164,41 @@ const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, in
       explanationZh: `结合上下文与词性，空格 ${questionIndex + 1} 应填 ${word}。`,
     }));
     return { ...set, passage: clozePassage, questions };
+  }
+  if (set.type === 'matching') {
+    const paragraphs = [
+      `The report begins with ${project}, a practical attempt to improve everyday campus life rather than a purely theoretical study.`,
+      `The trial continued for ${duration}, giving the organizers enough time to observe changes instead of relying on a single event.`,
+      `In total, ${participants} took part, so the team could compare experiences across a reasonably varied group.`,
+      `Participants repeatedly identified ${aid} as the feature that made progress easier to maintain.`,
+      `The organizers collected activity records as well as short interviews, combining numerical evidence with personal explanations.`,
+      `However, ${challenge} emerged as the main obstacle and prevented some people from receiving the same benefit.`,
+      `Rather than ending the project, the team introduced ${response} to deal directly with that difficulty.`,
+      `After this adjustment, attendance and satisfaction became steadier, although improvement differed from person to person.`,
+      `The researchers warn that the present findings should not be treated as final because the trial covered only one campus community.`,
+      `A larger follow-up is planned for the next term, when the revised method will be tested for longer and with new participants.`,
+    ];
+    const statements = [
+      'This paragraph introduces the project as a response to an ordinary campus need.',
+      'This paragraph explains why the study lasted long enough to reveal patterns.',
+      'This paragraph identifies the size and variety of the participant group.',
+      'This paragraph names the resource participants considered most helpful.',
+      'This paragraph describes the two kinds of evidence used by the researchers.',
+      'This paragraph presents the chief barrier to equal benefits.',
+      'This paragraph explains the practical change made after a problem appeared.',
+      'This paragraph reports improvement while noting that results were not identical.',
+      'This paragraph states a limitation that prevents an overconfident conclusion.',
+      'This paragraph describes how the research will continue in the future.',
+    ];
+    const paragraphOptions = 'ABCDEFGHIJ'.split('');
+    const questions = statements.map((prompt, questionIndex) => ({
+      prompt,
+      skillTag: questionIndex === 8 ? 'inference' : questionIndex === 9 ? 'action' : 'detail',
+      options: paragraphOptions,
+      answer: questionIndex,
+      explanationZh: `应匹配段落 ${paragraphOptions[questionIndex]}：${paragraphs[questionIndex]}`,
+    }));
+    return { ...set, passage: paragraphs.join('\n\n'), questions };
   }
   const finalSkill: QuestionSkillTag = index % 2 === 0 ? 'paragraph-role' : 'structure';
   const answers = [`The results of ${project}`, duration, participants, 'steady improvement over time', 'The difficulty prevented some participants from receiving the same benefit.', `It presents the practical solution: ${response}.`, response, `It was intended to address ${challenge}.`, 'The organizers see promise in the revised method but still want stronger evidence.', 'Cautiously positive.'];
@@ -201,14 +265,46 @@ const writingPrompts = (await readJson<WritingItem[]>('writingPrompts.json')).ma
   ...item,
   outline: writingOutlines[index],
   referenceOpening: writingOpenings[index],
+  referenceAnswer: [
+    writingOpenings[index],
+    `This issue deserves attention because it directly influences students' ability to learn, cooperate, and make responsible decisions.`,
+    `A useful first step is to turn the idea into a small weekly action with a clear goal, instead of waiting for motivation or trying to change everything at once.`,
+    `For example, the university could organize a four-week activity in which students record their progress, exchange practical advice, and reflect on one difficulty they have overcome.`,
+    `Teachers and student volunteers could provide simple guidance, while participants would remain responsible for choosing a method that fits their own schedule.`,
+    `This arrangement would make improvement visible and give beginners enough support without creating unnecessary pressure.`,
+    `Most importantly, regular practice would help the action become a lasting habit rather than a short campaign.`,
+    `With realistic planning and steady participation, the proposal could benefit both individual students and the wider campus community.`,
+  ].join(' '),
+}));
+
+const cultureExtensions = [
+  ['这种服务体现了中国社会重视互助与集体责任的传统，许多高校还把社区实践作为劳动教育和社会教育的重要组成部分。', 'This service reflects the Chinese tradition of mutual help and collective responsibility. Many universities also regard community practice as an important part of labor and social education.'],
+  ['春节、中秋节和端午节等节日承载着丰富的历史记忆，各地还通过庙会、灯会和非遗展示延续独特的地方传统。', 'Festivals such as the Spring Festival, the Mid-Autumn Festival and the Dragon Boat Festival carry rich historical memories. Local traditions are also continued through temple fairs, lantern shows and displays of intangible cultural heritage.'],
+  ['高铁网络把许多城市连接起来，使跨地区旅行更加高效，也为中小城市的旅游业和人员往来创造了新的机会。', 'The high-speed railway network connects many cities, making interregional travel more efficient and creating new opportunities for tourism and communication in smaller cities.'],
+  ['移动支付覆盖商店、公共交通和生活服务，为居民带来便利，也推动商家不断改进数字化经营方式。', 'Mobile payment covers shops, public transport and daily services. It brings convenience to residents and encourages businesses to improve digital operations.'],
+  ['一些博物馆和公共文化机构也推出在线课程，让不同地区的人能够共享优质教育资源并了解中华文明。', 'Museums and public cultural institutions also offer online courses, allowing people in different regions to share quality educational resources and learn about Chinese civilization.'],
+  ['中国许多城市正在建设绿色社区，居民通过垃圾分类、公共交通和低碳消费共同改善生活环境。', 'Many Chinese cities are building green communities, where residents improve the environment through waste sorting, public transport and low-carbon consumption.'],
+  ['不同地区形成了各具特色的制茶工艺和饮茶礼仪，茶也成为中国与世界开展文化交流的重要媒介。', 'Different regions have developed distinctive tea-making skills and customs. Tea has also become an important medium for cultural exchange between China and the world.'],
+  ['不少公园融入传统园林设计，通过山水布局、亭台和季节性植物展现人与自然和谐相处的理念。', 'Many parks incorporate traditional garden design and express harmony between people and nature through landscapes, pavilions and seasonal plants.'],
+  ['从古代四大发明到现代航天工程，中国的创新实践始终与改善生产、传播知识和服务社会密切相关。', 'From the four great inventions of ancient China to modern space projects, Chinese innovation has remained closely connected with production, knowledge sharing and public service.'],
+  ['太极拳等传统运动把身体锻炼与呼吸、节奏和内心平静结合起来，至今仍受到不同年龄人群的喜爱。', 'Traditional exercises such as tai chi combine physical training with breathing, rhythm and inner calm, and remain popular among people of different ages.'],
+  ['近年来，数字技术被用于记录古建筑和传统技艺，使珍贵资料能够长期保存并以更生动的方式向公众展示。', 'Digital technology is now used to record historic buildings and traditional skills, preserving valuable materials and presenting them to the public in more vivid ways.'],
+  ['许多乡村依托传统手工艺、特色农业和自然景观发展旅游，在增加收入的同时也努力保护当地文化和生态环境。', 'Many villages develop tourism through traditional crafts, local agriculture and natural scenery, increasing income while protecting local culture and the environment.'],
+] as const;
+const translations = (await readJson<TranslationItem[]>('translations.json')).map((item, index) => ({
+  ...item,
+  prompt: item.prompt.includes(cultureExtensions[index][0]) ? item.prompt : `${item.prompt}${cultureExtensions[index][0]}`,
+  referenceAnswer: item.referenceAnswer.includes(cultureExtensions[index][1]) ? item.referenceAnswer : `${item.referenceAnswer} ${cultureExtensions[index][1]}`,
 }));
 
 await writeJson('listeningSets.json', listeningSets);
 await writeJson('readingSets.json', readingSets);
 await writeJson('writingPrompts.json', writingPrompts);
+await writeJson('translations.json', translations);
 const inventory = await readJson<Record<string, unknown>>('inventory.json');
 inventory.listeningSets = listeningSets;
 inventory.readingSets = readingSets;
 inventory.writingPrompts = writingPrompts;
+inventory.translations = translations;
 await writeJson('inventory.json', inventory);
 console.log({ listeningQuestions: listeningSets.reduce((sum, set) => sum + set.questions.length, 0), readingQuestions: readingSets.reduce((sum, set) => sum + set.questions.length, 0) });

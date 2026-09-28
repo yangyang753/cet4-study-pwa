@@ -15,8 +15,17 @@ foreach ($set in $sets) {
   $speaker.SetOutputToWaveFile($target)
   $segments = @($set.segments)
   if ($segments.Count -eq 0) { $segments = @([pscustomobject]@{ text = $set.transcript }) }
+  $speakerVoices = @{}
   for ($index = 0; $index -lt $segments.Count; $index += 1) {
-    $voice = $voices[$index % $voices.Count]
+    $speakerName = [string]$segments[$index].speaker
+    if ($speakerName) {
+      if (-not $speakerVoices.ContainsKey($speakerName)) {
+        $speakerVoices[$speakerName] = $voices[$speakerVoices.Count % $voices.Count]
+      }
+      $voice = $speakerVoices[$speakerName]
+    } else {
+      $voice = $voices[0]
+    }
     $speaker.SelectVoice($voice)
     [void]$usedVoices.Add($voice)
     $speaker.Speak([string]$segments[$index].text)

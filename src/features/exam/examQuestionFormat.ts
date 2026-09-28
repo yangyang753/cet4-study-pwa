@@ -52,11 +52,15 @@ export function formatOfficialReadingQuestions(questions: CatalogQuestion[]): Ca
 
   const labels = matching.map((_, index) => optionId(index));
   const matchingOptions = labels.map((id) => ({ id, text: `段落 ${id}` }));
-  const matchingContext = matching.map((question, index) => `[${labels[index]}] ${question.passage ?? question.prompt}`).join('\n\n');
+  const sharedMatchingPassage = matching[0]?.passage?.trim();
+  const matchingParagraphs = sharedMatchingPassage && matching.every((question) => question.passage?.trim() === sharedMatchingPassage)
+    ? sharedMatchingPassage.split(/\n\s*\n/).filter(Boolean)
+    : matching.map((question) => question.passage ?? question.prompt);
+  const matchingContext = matchingParagraphs.slice(0, 10).map((paragraph, index) => `[${labels[index]}] ${paragraph.replace(/^\[[A-J]\]\s*/, '')}`).join('\n\n');
   const formattedMatching = matching.map((question, index) => ({
     ...question,
     options: matchingOptions,
-    correctAnswer: labels[index],
+    correctAnswer: 'correctAnswer' in question && typeof question.correctAnswer === 'string' ? question.correctAnswer : labels[index],
     examFormat: 'paragraph-matching' as const,
     examContext: matchingContext,
     examNumber: index + 1,

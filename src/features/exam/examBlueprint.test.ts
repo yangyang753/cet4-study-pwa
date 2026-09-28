@@ -27,7 +27,7 @@ describe('resolveExam', () => {
       expect(new Set(listening.filter((question) => question.type === 'conversation').map((question) => question.groupId))).toHaveLength(2);
       expect(new Set(listening.filter((question) => question.type === 'passage').map((question) => question.groupId))).toHaveLength(3);
       expect(new Set(reading.filter((question) => question.type === 'cloze').map((question) => question.groupId))).toHaveLength(1);
-      expect(new Set(reading.filter((question) => question.type === 'matching').map((question) => question.groupId))).toHaveLength(10);
+      expect(new Set(reading.filter((question) => question.type === 'matching').map((question) => question.groupId))).toHaveLength(1);
       const carefulGroups = [...new Set(reading.filter((question) => question.type === 'reading').map((question) => question.groupId))];
       expect(carefulGroups).toHaveLength(2);
       expect(carefulGroups.map((groupId) => reading.filter((question) => question.groupId === groupId).length)).toEqual([5, 5]);

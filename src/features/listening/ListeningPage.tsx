@@ -126,21 +126,37 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
     attemptId.current = crypto.randomUUID();
   };
 
+  const completionPercent = Math.round((questionIndex / listeningSet.questions.length) * 100);
+  const currentStage = result ? 4 : translationUnlocked || !translationRequired ? 3 : 2;
+
   return <section className="listening-page">
     <header className="listening-heading">
-      <div><h1>听力精练</h1><p>慢一点、再听一遍，直到真正听懂。</p></div>
+      <div><span className="listening-eyebrow">LISTENING LAB · 听力训练舱</span><h1>听力精练</h1><p>从辨音、定位到复盘，把每一套材料真正听懂。</p></div>
       <div className="set-navigation" aria-label="听力题组导航">
         <button disabled={setIndex === 0} onClick={() => changeSet(setIndex - 1)}>上一套</button>
         <strong>第 {setIndex + 1} / {listeningSets.length} 套</strong>
         <button disabled={setIndex === listeningSets.length - 1} onClick={() => changeSet(setIndex + 1)}>下一套</button>
       </div>
     </header>
-    <div className="listening-grid"><div>
+    <section className="listening-progress" aria-label="本组训练进度">
+      <div><span>题组 </span><strong>{setIndex + 1} / {listeningSets.length}</strong></div>
+      <div><span>题目 </span><strong>{questionIndex + 1} / {listeningSet.questions.length}</strong></div>
+      <div><span>材料类型</span><strong>{typeCopy[listeningSet.type as keyof typeof typeCopy]}</strong></div>
+      <div><span>训练模式</span><strong>逐句精听</strong></div>
+      <span className="progress-track" aria-hidden="true"><i style={{ width: `${completionPercent}%` }} /></span>
+    </section>
+    <nav className="listening-stages" aria-label="听力训练步骤">
+      {['01 精听定位', '02 翻译解锁', '03 选择答案', '04 听写复盘'].map((stage, index) => <span key={stage} className={currentStage >= index + 1 ? 'active' : ''}>{stage}</span>)}
+    </nav>
+    <div className="listening-grid">
       <section className="audio-player">
-        <span>{typeCopy[listeningSet.type as keyof typeof typeCopy]} · {listeningSet.theme}</span>
+        <div className="player-kicker"><span>{typeCopy[listeningSet.type as keyof typeof typeCopy]}</span><span>合成语音训练材料 · 原创仿真内容</span></div>
         <h2>{listeningSet.themeEn}</h2>
-        <p className="audio-source-note">合成语音训练材料 · 原创仿真内容，用于精听与定位练习</p>
-        <div className="wave" aria-hidden="true">{Array.from({ length: 32 }, (_, index) => <i key={index} style={{ height: `${20 + (index * 17) % 54}px` }} />)}</div>
+        <p className="audio-theme">{listeningSet.theme}</p>
+        <section className="audio-timeline" aria-label="音频训练进度">
+          <div className="wave" aria-hidden="true">{Array.from({ length: 36 }, (_, index) => <i key={index} className={index <= player.segmentIndex * 5 ? 'heard' : ''} style={{ height: `${18 + (index * 17) % 50}px` }} />)}</div>
+          <div className="timeline-meta"><span>当前句 {player.segmentIndex + 1} / {audio.segments.length}</span><span>{Math.round(audio.durationSeconds)} 秒</span></div>
+        </section>
         <audio
           ref={player.mediaRef}
           src={audio.src}
@@ -153,25 +169,29 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
           onTimeUpdate={player.onTimeUpdate}
           onError={() => { setStatus('error'); setMediaError('音频加载失败，当前答案已保留。'); }}
         />
-        <p className={`player-status status-${status}`} aria-live="polite">{statusCopy[status]}</p>
+        <div className="player-command-row">
+          <p className={`player-status status-${status}`} aria-live="polite"><i />{statusCopy[status]}</p>
+          <span>建议先盲听，再逐句定位关键词</span>
+        </div>
         <div className="controls">
-          <button onClick={() => void play()}>播放</button><button onClick={player.pause}>暂停</button>
-          <button onClick={player.previous}>上一句</button><button aria-pressed={player.looping} onClick={player.loopSegment}>单句循环</button><button onClick={player.next}>下一句</button>
+          <button className="primary-player-control" aria-label="播放" onClick={() => void play()}>▶ 播放</button><button onClick={player.pause}>暂停</button>
+          <button onClick={player.previous}>← 上一句</button><button aria-pressed={player.looping} onClick={player.loopSegment}>↻ 单句循环</button><button onClick={player.next}>下一句 →</button>
           <label>播放速度<select value={String(player.rate)} onChange={(event) => player.setRate(Number(event.target.value))}>{[0.75, 1, 1.25, 1.5].map((rate) => <option key={rate} value={rate}>{rate}×</option>)}</select></label>
         </div>
+        {mediaError && <div role="alert" className="media-error"><span>{mediaError}</span><button onClick={retry}>重试</button><button onClick={() => setShowTranscript(true)}>文本模式</button></div>}
       </section>
-      {mediaError && <div role="alert" className="media-error">{mediaError}<button onClick={retry}>重试</button><button onClick={() => setShowTranscript(true)}>文本模式</button></div>}
-      <section className="transcript"><button onClick={() => setShowTranscript((value) => !value)}>{showTranscript ? '隐藏原文' : '显示原文'}</button>{showTranscript && audio.segments.map((segment, index) => <p key={segment.id} className={player.segmentIndex === index ? 'active' : ''} onClick={() => player.selectSegment(index)}>{segment.text}</p>)}</section>
-      <DictationEditor transcript={audio.transcript} storageKey={`dictation:${listeningSet.id}`} />
-    </div><aside className="listening-question">
-      <span>QUESTION · {questionIndex + 1}/{listeningSet.questions.length}</span><h2>{question.prompt}</h2>
+      <aside className="listening-question">
+      <header className="question-header"><span>QUESTION · {questionIndex + 1}/{listeningSet.questions.length}</span><b>{typeCopy[listeningSet.type as keyof typeof typeCopy]}</b></header><h2>{question.prompt}</h2>
       {translationRequired && <QuestionTranslationGate key={translationQuestion.id} question={translationQuestion} repository={repository} onUnlocked={() => setTranslationUnlocked(true)} />}
-      {question.options.map((option, index) => { const optionId = String.fromCharCode(65 + index); return <label key={optionId}><input type="radio" name={`${listeningSet.id}:${questionIndex}`} checked={selected === optionId} disabled={Boolean(result) || (translationRequired && !translationUnlocked)} onChange={() => setSelected(optionId)} />{optionId}. {option}</label>; })}
-      {!result && <button disabled={submissionState === 'saving' || (translationRequired && !translationUnlocked)} onClick={() => void submit()}>{submissionState === 'saving' ? '正在保存…' : '提交答案'}</button>}
+      <div className="answer-options">{question.options.map((option, index) => { const optionId = String.fromCharCode(65 + index); return <label key={optionId} className={selected === optionId ? 'selected' : ''}><input type="radio" name={`${listeningSet.id}:${questionIndex}`} checked={selected === optionId} disabled={Boolean(result) || (translationRequired && !translationUnlocked)} onChange={() => setSelected(optionId)} /><strong>{optionId}</strong><span>{option}</span></label>; })}</div>
+      {!result && <button className="submit-listening-answer" disabled={submissionState === 'saving' || (translationRequired && !translationUnlocked)} onClick={() => void submit()}>{submissionState === 'saving' ? '正在保存…' : translationRequired && !translationUnlocked ? '完成翻译后作答' : '提交答案'}</button>}
       {answerError && <p role="alert" className="answer-error">{answerError}</p>}
       {result && <div className={`answer-result ${result}`} role="status"><strong>{result === 'correct' ? '回答正确' : '回答错误'}</strong><p>正确答案：{String.fromCharCode(65 + question.answer)}</p><p>解析：{question.explanationZh}</p>{questionIndex < listeningSet.questions.length - 1 ? <button onClick={nextQuestion}>下一题</button> : <><p>本套完成，今日听力任务已自动记录。</p><MasteryCheck kind="listening" taskId={`${today}:listening`} repository={repository} sourceQuestionIds={listeningSet.questions.map((_, index) => `${listeningSet.id}:q${index + 1}`)} /></>}</div>}
       {submissionState === 'error' && <p role="alert">保存失败，答案仍保留，请再次提交。</p>}
-    </aside></div>
+      </aside>
+      <section className="transcript"><header><div><span>TRANSCRIPT</span><h2>逐句精听原文</h2></div><button onClick={() => setShowTranscript((value) => !value)}>{showTranscript ? '隐藏原文' : '显示原文'}</button></header>{showTranscript ? <div className="transcript-lines">{audio.segments.map((segment, index) => <p key={segment.id} className={player.segmentIndex === index ? 'active' : ''} onClick={() => player.selectSegment(index)}><b>{String(index + 1).padStart(2, '0')}</b><span>{segment.text}</span></p>)}</div> : <p className="transcript-placeholder">先完成盲听；需要核对关键词时再展开原文。</p>}</section>
+      <DictationEditor transcript={audio.transcript} storageKey={`dictation:${listeningSet.id}`} />
+    </div>
   </section>;
 }
 

@@ -82,6 +82,18 @@ describe('auditContentDiversity', () => {
     expect(auditQuestionTemplateDiversity(inventory.listeningSets, 'listening')).toEqual([]);
     expect(auditQuestionTemplateDiversity(inventory.readingSets, 'reading')).toEqual([]);
   });
+
+  it('ships genuine dialogue, full model essays, and paragraph-length translations', () => {
+    const conversations = inventory.listeningSets.filter((set) => set.type === 'conversation');
+    const speaker = (segment: (typeof conversations)[number]['segments'][number]) => 'speaker' in segment ? segment.speaker : undefined;
+    expect(conversations.every((set) => new Set(set.segments.map(speaker)).size >= 2)).toBe(true);
+    expect(conversations.every((set) => set.segments.every((segment, index) => index === 0 || speaker(segment) !== speaker(set.segments[index - 1])))).toBe(true);
+    expect(inventory.writingPrompts.every((item) => {
+      const count = item.referenceAnswer.trim().split(/\s+/).length;
+      return count >= 120 && count <= 180;
+    })).toBe(true);
+    expect(inventory.translations.every((item) => item.prompt.replace(/\s/g, '').length >= 80)).toBe(true);
+  });
 });
 
 describe('auditKnowledgeExamples', () => {

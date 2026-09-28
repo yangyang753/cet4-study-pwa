@@ -11,9 +11,7 @@ function submittedSession(perfect: boolean) {
       for (const question of section.questions) {
         if ('correctAnswer' in question) active.answers[question.id] = question.correctAnswer;
         else if (question.type === 'writing') active.answers[question.id] = `First, daily reading matters because it builds confidence and helps university students understand the world. A practical suggestion for encouraging this habit is a campus reading circle. Learners can read short reports, discuss one useful idea, and record new expressions in a notebook. They should also compare different opinions and revise their summaries before unclear ideas become habits. These activities make each reading session purposeful and manageable.\n\nMoreover, steady effort is more valuable than occasional long sessions. Students can set a realistic goal, review difficult vocabulary, discuss one book with classmates, and write a brief summary afterward. For example, a weekly activity can invite each member to explain one passage. When progress is measured every week, weaknesses become easier to notice and correct. Therefore, this workable plan gradually improves accuracy, memory, and confidence while making daily reading part of college life.`;
-        else {
-          active.answers[question.id] = 'At weekends, numerous university learners join volunteer service projects. By assisting local families, they strengthen their communication abilities and develop a deeper awareness of social responsibility.';
-        }
+        else active.answers[question.id] = 'On weekends, college students often participate in volunteer service and offer practical help to community residents. The experience strengthens communication skills and gives young people a clearer sense of social responsibility. This practice also reflects a long Chinese tradition of mutual support and shared duty. Therefore, many universities include community work in labor education and broader social learning.';
       }
     }
   }

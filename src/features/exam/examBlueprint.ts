@@ -44,15 +44,6 @@ function groupedSlice(questions: CatalogQuestion[], type: CatalogQuestion['type'
   });
 }
 
-function matchingSlice(questions: CatalogQuestion[], mockIndex: number) {
-  const groups = [...new Set(questions.filter((question) => question.type === 'matching').map((question) => question.groupId))].slice(0, 10);
-  if (groups.length < 10) throw new Error(`Insufficient matching passages: expected 10, received ${groups.length}`);
-  return groups.map((groupId) => {
-    const group = questions.filter((question) => question.type === 'matching' && question.groupId === groupId);
-    return group[mockIndex % group.length];
-  });
-}
-
 export function resolveExam(mockId: string): ResolvedExam {
   const mock = contentCatalog.mocks.find((candidate) => candidate.id === mockId);
   if (!mock) throw new Error(`Unknown mock exam: ${mockId}`);
@@ -68,7 +59,7 @@ export function resolveExam(mockId: string): ResolvedExam {
   const readingPool = getPracticeItems('reading');
   const reading = formatOfficialReadingQuestions([
     ...groupedSlice(readingPool, 'cloze', [10], mockIndex),
-    ...matchingSlice(readingPool, mockIndex),
+    ...groupedSlice(readingPool, 'matching', [10], mockIndex),
     ...groupedSlice(readingPool, 'reading', [5, 5], mockIndex),
   ]);
   const translation = getPracticeItems('translation').filter((question) => question.id === mock.translationId);

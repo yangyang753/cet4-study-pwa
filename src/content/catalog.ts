@@ -86,7 +86,7 @@ const writingQuestions: CatalogQuestion[] = writingData.map((item) => ({
   explanationZh: item.outline.join('；'),
   sourceNote: '依据 CET-4 题型与高频考点编写的原创仿真练习',
   rubric: item.outline,
-  referenceAnswer: item.referenceOpening,
+  referenceAnswer: item.referenceAnswer ?? item.referenceOpening,
   groupId: item.id,
 }));
 

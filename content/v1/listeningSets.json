@@ -9,26 +9,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 6.166,
+        "end": 6.26,
         "text": "The student volunteer office is organizing reading visits to a nearby primary school."
       },
       {
-        "start": 6.166,
-        "end": 12.332,
+        "start": 6.26,
+        "end": 13.49,
         "text": "A Saturday team reached its maximum size. The new group will meet on Sunday afternoon."
       },
       {
-        "start": 12.332,
-        "end": 18.498,
+        "start": 13.49,
+        "end": 20.71,
         "text": "Applications close before Thursday noon. Volunteers should bring a student card and one picture book."
       },
       {
-        "start": 18.498,
-        "end": 24.664,
+        "start": 20.71,
+        "end": 26.49,
         "text": "No teaching experience is needed because mentors will give a short orientation."
       },
       {
-        "start": 24.664,
+        "start": 26.49,
         "end": 30.83,
         "text": "Students who miss orientation can watch the recorded briefing."
       }
@@ -163,32 +163,55 @@
     "theme": "图书馆服务",
     "themeEn": "library services",
     "difficulty": "foundation",
-    "transcript": "The library has launched appointments for its research-support desk. Many students requested help after the daytime desks closed. Individual consultations are available on Monday evening. Bookings must be made by Friday at six. Visitors need a library card and a draft search question. First-year students are welcome and do not need database experience. A librarian will answer remaining questions by email.",
+    "transcript": "Woman: Have you heard? The library has launched appointments for its research-support desk. Man: Yes. Many students requested help after the daytime desks closed. Woman: Then remember this change. Individual consultations are available on Monday evening. Man: When do we need to respond? Bookings must be made by Friday at six. Woman: We should also prepare carefully. Visitors need a library card and a draft search question. Man: I have not done this before. First-year students are welcome and do not need database experience. Woman: That should be fine. A librarian will answer remaining questions by email. Man: Great. I will follow the instructions and register in time.",
     "segments": [
       {
         "start": 0,
-        "end": 6.156,
-        "text": "The library has launched appointments for its research-support desk."
+        "end": 6.19,
+        "speaker": "Woman",
+        "text": "Have you heard? The library has launched appointments for its research-support desk."
       },
       {
-        "start": 6.156,
-        "end": 12.312,
-        "text": "Many students requested help after the daytime desks closed. Individual consultations are available on Monday evening."
+        "start": 6.19,
+        "end": 11.35,
+        "speaker": "Man",
+        "text": "Yes. Many students requested help after the daytime desks closed."
       },
       {
-        "start": 12.312,
-        "end": 18.468,
-        "text": "Bookings must be made by Friday at six. Visitors need a library card and a draft search question."
+        "start": 11.35,
+        "end": 17.03,
+        "speaker": "Woman",
+        "text": "Then remember this change. Individual consultations are available on Monday evening."
       },
       {
-        "start": 18.468,
-        "end": 24.624,
-        "text": "First-year students are welcome and do not need database experience."
+        "start": 17.03,
+        "end": 24.25,
+        "speaker": "Man",
+        "text": "When do we need to respond? Bookings must be made by Friday at six."
       },
       {
-        "start": 24.624,
-        "end": 30.78,
-        "text": "A librarian will answer remaining questions by email."
+        "start": 24.25,
+        "end": 31.99,
+        "speaker": "Woman",
+        "text": "We should also prepare carefully. Visitors need a library card and a draft search question."
+      },
+      {
+        "start": 31.99,
+        "end": 40.24,
+        "speaker": "Man",
+        "text": "I have not done this before. First-year students are welcome and do not need database experience."
+      },
+      {
+        "start": 40.24,
+        "end": 46.43,
+        "speaker": "Woman",
+        "text": "That should be fine. A librarian will answer remaining questions by email."
+      },
+      {
+        "start": 46.43,
+        "end": 51.59,
+        "speaker": "Man",
+        "text": "Great. I will follow the instructions and register in time."
       }
     ],
     "questions": [
@@ -321,32 +344,37 @@
     "theme": "课程选择",
     "themeEn": "course selection",
     "difficulty": "foundation",
-    "transcript": "The academic office is offering a seminar on choosing optional courses. Several popular modules changed their entry requirements. The seminar takes place at noon on Wednesday. Students should reserve a seat before Tuesday morning. They should bring their timetable and degree checklist. Advisers will explain the system, so prior planning is unnecessary. Slides will be posted for anyone with a class conflict.",
+    "transcript": "The academic office is offering a seminar on choosing optional courses. The program responds to a clear need. Several popular modules changed their entry requirements. Its timetable is designed to be practical. The seminar takes place at noon on Wednesday. Students should plan ahead. Students should reserve a seat before Tuesday morning. They should bring their timetable and degree checklist. Beginners can take part with confidence. Advisers will explain the system, so prior planning is unnecessary. The organizers have also prepared another option. Slides will be posted for anyone with a class conflict.",
     "segments": [
       {
         "start": 0,
-        "end": 6.11,
+        "end": 5.52,
         "text": "The academic office is offering a seminar on choosing optional courses."
       },
       {
-        "start": 6.11,
-        "end": 12.22,
-        "text": "Several popular modules changed their entry requirements. The seminar takes place at noon on Wednesday."
+        "start": 5.52,
+        "end": 12.53,
+        "text": "The program responds to a clear need. Several popular modules changed their entry requirements."
       },
       {
-        "start": 12.22,
-        "end": 18.33,
-        "text": "Students should reserve a seat before Tuesday morning. They should bring their timetable and degree checklist."
+        "start": 12.53,
+        "end": 20.06,
+        "text": "Its timetable is designed to be practical. The seminar takes place at noon on Wednesday."
       },
       {
-        "start": 18.33,
-        "end": 24.44,
-        "text": "Advisers will explain the system, so prior planning is unnecessary."
+        "start": 20.06,
+        "end": 30.08,
+        "text": "Students should plan ahead. Students should reserve a seat before Tuesday morning. They should bring their timetable and degree checklist."
       },
       {
-        "start": 24.44,
-        "end": 30.55,
-        "text": "Slides will be posted for anyone with a class conflict."
+        "start": 30.08,
+        "end": 38.11,
+        "text": "Beginners can take part with confidence. Advisers will explain the system, so prior planning is unnecessary."
+      },
+      {
+        "start": 38.11,
+        "end": 46.63,
+        "text": "The organizers have also prepared another option. Slides will be posted for anyone with a class conflict."
       }
     ],
     "questions": [
@@ -483,26 +511,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 6.13,
+        "end": 5.66,
         "text": "Residence staff have arranged a meeting about reducing noise in shared halls."
       },
       {
-        "start": 6.13,
-        "end": 12.26,
+        "start": 5.66,
+        "end": 13.68,
         "text": "Recent complaints increased during the examination period. Residents will gather on Friday evening in the common room."
       },
       {
-        "start": 12.26,
-        "end": 18.39,
+        "start": 13.68,
+        "end": 20.75,
         "text": "Suggestions can be submitted online until Wednesday. Participants are asked to bring one practical proposal."
       },
       {
-        "start": 18.39,
-        "end": 24.52,
+        "start": 20.75,
+        "end": 26.41,
         "text": "Everyone may speak, even if they have never joined a hall meeting."
       },
       {
-        "start": 24.52,
+        "start": 26.41,
         "end": 30.65,
         "text": "Anonymous comments will also be accepted after the meeting."
       }
@@ -637,32 +665,55 @@
     "theme": "学生社团",
     "themeEn": "student clubs",
     "difficulty": "foundation",
-    "transcript": "The student union is holding a fair for clubs seeking new members. More organizations registered than the original room could hold. The fair opens Tuesday afternoon in the sports hall. Clubs must confirm their tables by Sunday night. Each group should bring a sign and a short activity. New clubs receive setup guidance from union volunteers. Late groups can submit a digital introduction for the union website.",
+    "transcript": "Woman: Have you heard? The student union is holding a fair for clubs seeking new members. Man: Yes. More organizations registered than the original room could hold. Woman: Then remember this change. The fair opens Tuesday afternoon in the sports hall. Man: When do we need to respond? Clubs must confirm their tables by Sunday night. Woman: We should also prepare carefully. Each group should bring a sign and a short activity. Man: I have not done this before. New clubs receive setup guidance from union volunteers. Woman: That should be fine. Late groups can submit a digital introduction for the union website. Man: Great. I will follow the instructions and register in time.",
     "segments": [
       {
         "start": 0,
-        "end": 6.002,
-        "text": "The student union is holding a fair for clubs seeking new members."
+        "end": 7.19,
+        "speaker": "Woman",
+        "text": "Have you heard? The student union is holding a fair for clubs seeking new members."
       },
       {
-        "start": 6.002,
-        "end": 12.004,
-        "text": "More organizations registered than the original room could hold. The fair opens Tuesday afternoon in the sports hall."
+        "start": 7.19,
+        "end": 11.99,
+        "speaker": "Man",
+        "text": "Yes. More organizations registered than the original room could hold."
       },
       {
-        "start": 12.004,
-        "end": 18.006,
-        "text": "Clubs must confirm their tables by Sunday night. Each group should bring a sign and a short activity."
+        "start": 11.99,
+        "end": 18.22,
+        "speaker": "Woman",
+        "text": "Then remember this change. The fair opens Tuesday afternoon in the sports hall."
       },
       {
-        "start": 18.006,
-        "end": 24.008,
-        "text": "New clubs receive setup guidance from union volunteers."
+        "start": 18.22,
+        "end": 24.93,
+        "speaker": "Man",
+        "text": "When do we need to respond? Clubs must confirm their tables by Sunday night."
       },
       {
-        "start": 24.008,
-        "end": 30.01,
-        "text": "Late groups can submit a digital introduction for the union website."
+        "start": 24.93,
+        "end": 32.12,
+        "speaker": "Woman",
+        "text": "We should also prepare carefully. Each group should bring a sign and a short activity."
+      },
+      {
+        "start": 32.12,
+        "end": 38.84,
+        "speaker": "Man",
+        "text": "I have not done this before. New clubs receive setup guidance from union volunteers."
+      },
+      {
+        "start": 38.84,
+        "end": 46.03,
+        "speaker": "Woman",
+        "text": "That should be fine. Late groups can submit a digital introduction for the union website."
+      },
+      {
+        "start": 46.03,
+        "end": 50.82,
+        "speaker": "Man",
+        "text": "Great. I will follow the instructions and register in time."
       }
     ],
     "questions": [
@@ -795,32 +846,37 @@
     "theme": "实习安排",
     "themeEn": "internship arrangements",
     "difficulty": "foundation",
-    "transcript": "The careers center has added a workshop on preparing for internships. The first session filled within one day. The added workshop begins Thursday at four. Students must upload a résumé before Wednesday. They should also bring a printed vacancy description. The workshop is designed for applicants with no previous internship. A résumé checklist will be sent to students who cannot attend.",
+    "transcript": "The careers center has added a workshop on preparing for internships. The program responds to a clear need. The first session filled within one day. Its timetable is designed to be practical. The added workshop begins Thursday at four. Students should plan ahead. Students must upload a résumé before Wednesday. They should also bring a printed vacancy description. Beginners can take part with confidence. The workshop is designed for applicants with no previous internship. The organizers have also prepared another option. A résumé checklist will be sent to students who cannot attend.",
     "segments": [
       {
         "start": 0,
-        "end": 5.65,
+        "end": 5.3,
         "text": "The careers center has added a workshop on preparing for internships."
       },
       {
-        "start": 5.65,
-        "end": 11.3,
-        "text": "The first session filled within one day. The added workshop begins Thursday at four."
+        "start": 5.3,
+        "end": 12.04,
+        "text": "The program responds to a clear need. The first session filled within one day."
       },
       {
-        "start": 11.3,
-        "end": 16.95,
-        "text": "Students must upload a résumé before Wednesday. They should also bring a printed vacancy description."
+        "start": 12.04,
+        "end": 18.79,
+        "text": "Its timetable is designed to be practical. The added workshop begins Thursday at four."
       },
       {
-        "start": 16.95,
-        "end": 22.6,
-        "text": "The workshop is designed for applicants with no previous internship."
+        "start": 18.79,
+        "end": 27.94,
+        "text": "Students should plan ahead. Students must upload a résumé before Wednesday. They should also bring a printed vacancy description."
       },
       {
-        "start": 22.6,
-        "end": 28.25,
-        "text": "A résumé checklist will be sent to students who cannot attend."
+        "start": 27.94,
+        "end": 35.65,
+        "text": "Beginners can take part with confidence. The workshop is designed for applicants with no previous internship."
+      },
+      {
+        "start": 35.65,
+        "end": 44.32,
+        "text": "The organizers have also prepared another option. A résumé checklist will be sent to students who cannot attend."
       }
     ],
     "questions": [
@@ -957,26 +1013,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.92,
+        "end": 4.29,
         "text": "The city transport office is testing a later campus bus."
       },
       {
-        "start": 5.92,
-        "end": 11.84,
+        "start": 4.29,
+        "end": 13.73,
         "text": "A survey showed that evening students lacked a safe connection. The trial bus leaves the main gate at ten thirty each night."
       },
       {
-        "start": 11.84,
-        "end": 17.76,
+        "start": 13.73,
+        "end": 20.59,
         "text": "Feedback is requested by the end of the month. Passengers only need their campus travel card."
       },
       {
-        "start": 17.76,
-        "end": 23.68,
+        "start": 20.59,
+        "end": 24.03,
         "text": "No advance booking is required during the trial."
       },
       {
-        "start": 23.68,
+        "start": 24.03,
         "end": 29.6,
         "text": "If the bus is full, an extra vehicle will arrive within fifteen minutes."
       }
@@ -1111,32 +1167,55 @@
     "theme": "环境保护",
     "themeEn": "environmental protection",
     "difficulty": "foundation",
-    "transcript": "An environmental group is starting a reusable-cup campaign in campus cafés. Disposable cup waste rose sharply last semester. The launch event is Saturday morning beside the central café. Volunteers should register by Thursday. They need comfortable shoes and a refillable bottle. Campaign training will be provided at the start. Rain will move the activity into the student center.",
+    "transcript": "Woman: Have you heard? An environmental group is starting a reusable-cup campaign in campus cafés. Man: Yes. Disposable cup waste rose sharply last semester. Woman: Then remember this change. The launch event is Saturday morning beside the central café. Man: When do we need to respond? Volunteers should register by Thursday. Woman: We should also prepare carefully. They need comfortable shoes and a refillable bottle. Man: I have not done this before. Campaign training will be provided at the start. Woman: That should be fine. Rain will move the activity into the student center. Man: Great. I will follow the instructions and register in time.",
     "segments": [
       {
         "start": 0,
-        "end": 5.62,
-        "text": "An environmental group is starting a reusable-cup campaign in campus cafés."
+        "end": 7.06,
+        "speaker": "Woman",
+        "text": "Have you heard? An environmental group is starting a reusable-cup campaign in campus cafés."
       },
       {
-        "start": 5.62,
-        "end": 11.24,
-        "text": "Disposable cup waste rose sharply last semester. The launch event is Saturday morning beside the central café."
+        "start": 7.06,
+        "end": 11.09,
+        "speaker": "Man",
+        "text": "Yes. Disposable cup waste rose sharply last semester."
       },
       {
-        "start": 11.24,
-        "end": 16.86,
-        "text": "Volunteers should register by Thursday. They need comfortable shoes and a refillable bottle."
+        "start": 11.09,
+        "end": 18.15,
+        "speaker": "Woman",
+        "text": "Then remember this change. The launch event is Saturday morning beside the central café."
       },
       {
-        "start": 16.86,
-        "end": 22.48,
-        "text": "Campaign training will be provided at the start."
+        "start": 18.15,
+        "end": 23.7,
+        "speaker": "Man",
+        "text": "When do we need to respond? Volunteers should register by Thursday."
       },
       {
-        "start": 22.48,
-        "end": 28.1,
-        "text": "Rain will move the activity into the student center."
+        "start": 23.7,
+        "end": 30.26,
+        "speaker": "Woman",
+        "text": "We should also prepare carefully. They need comfortable shoes and a refillable bottle."
+      },
+      {
+        "start": 30.26,
+        "end": 37.32,
+        "speaker": "Man",
+        "text": "I have not done this before. Campaign training will be provided at the start."
+      },
+      {
+        "start": 37.32,
+        "end": 43.87,
+        "speaker": "Woman",
+        "text": "That should be fine. Rain will move the activity into the student center."
+      },
+      {
+        "start": 43.87,
+        "end": 48.91,
+        "speaker": "Man",
+        "text": "Great. I will follow the instructions and register in time."
       }
     ],
     "questions": [
@@ -1269,32 +1348,37 @@
     "theme": "健康饮食",
     "themeEn": "healthy eating",
     "difficulty": "standard",
-    "transcript": "The health center is offering a class on planning affordable meals. Students reported relying too often on takeaway food. The demonstration is scheduled for Sunday at eleven. Free places can be booked until Friday afternoon. Participants should bring a food container and a pen. Basic ingredients and instructions will be supplied. The recipes will be published after the class.",
+    "transcript": "The health center is offering a class on planning affordable meals. The program responds to a clear need. Students reported relying too often on takeaway food. Its timetable is designed to be practical. The demonstration is scheduled for Sunday at eleven. Students should plan ahead. Free places can be booked until Friday afternoon. Participants should bring a food container and a pen. Beginners can take part with confidence. Basic ingredients and instructions will be supplied. The organizers have also prepared another option. The recipes will be published after the class.",
     "segments": [
       {
         "start": 0,
-        "end": 5.578,
+        "end": 5.37,
         "text": "The health center is offering a class on planning affordable meals."
       },
       {
-        "start": 5.578,
-        "end": 11.156,
-        "text": "Students reported relying too often on takeaway food. The demonstration is scheduled for Sunday at eleven."
+        "start": 5.37,
+        "end": 12.7,
+        "text": "The program responds to a clear need. Students reported relying too often on takeaway food."
       },
       {
-        "start": 11.156,
-        "end": 16.734,
-        "text": "Free places can be booked until Friday afternoon. Participants should bring a food container and a pen."
+        "start": 12.7,
+        "end": 20.03,
+        "text": "Its timetable is designed to be practical. The demonstration is scheduled for Sunday at eleven."
       },
       {
-        "start": 16.734,
-        "end": 22.312,
-        "text": "Basic ingredients and instructions will be supplied."
+        "start": 20.03,
+        "end": 30.29,
+        "text": "Students should plan ahead. Free places can be booked until Friday afternoon. Participants should bring a food container and a pen."
       },
       {
-        "start": 22.312,
-        "end": 27.89,
-        "text": "The recipes will be published after the class."
+        "start": 30.29,
+        "end": 36.64,
+        "text": "Beginners can take part with confidence. Basic ingredients and instructions will be supplied."
+      },
+      {
+        "start": 36.64,
+        "end": 43.96,
+        "text": "The organizers have also prepared another option. The recipes will be published after the class."
       }
     ],
     "questions": [
@@ -1431,26 +1515,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 6.16,
+        "end": 5.22,
         "text": "The sports department has introduced short exercise sessions between lectures."
       },
       {
-        "start": 6.16,
-        "end": 12.32,
+        "start": 5.22,
+        "end": 14.62,
         "text": "A pilot found that brief movement improved afternoon concentration. Sessions run at one o’clock on Mondays and Thursdays."
       },
       {
-        "start": 12.32,
-        "end": 18.48,
+        "start": 14.62,
+        "end": 23.49,
         "text": "Students can join the list until the previous evening. Comfortable clothing is recommended, but equipment is provided."
       },
       {
-        "start": 18.48,
-        "end": 24.64,
+        "start": 23.49,
+        "end": 26.62,
         "text": "Every activity has a beginner version."
       },
       {
-        "start": 24.64,
+        "start": 26.62,
         "end": 30.8,
         "text": "Recorded stretching routines are available during bad weather."
       }
@@ -1585,32 +1669,55 @@
     "theme": "数字学习",
     "themeEn": "digital learning",
     "difficulty": "standard",
-    "transcript": "The learning center is testing a note-taking application with volunteers. Teachers want evidence about which digital tools reduce revision time. Training starts online at seven on Tuesday evening. Volunteers must install the application before Monday night. They need a charged laptop and one set of lecture notes. Technical support will guide anyone unfamiliar with the software. A telephone help session is offered the following morning.",
+    "transcript": "Woman: Have you heard? The learning center is testing a note-taking application with volunteers. Man: Yes. Teachers want evidence about which digital tools reduce revision time. Woman: Then remember this change. Training starts online at seven on Tuesday evening. Man: When do we need to respond? Volunteers must install the application before Monday night. Woman: We should also prepare carefully. They need a charged laptop and one set of lecture notes. Man: I have not done this before. Technical support will guide anyone unfamiliar with the software. Woman: That should be fine. A telephone help session is offered the following morning. Man: Great. I will follow the instructions and register in time.",
     "segments": [
       {
         "start": 0,
-        "end": 6.296,
-        "text": "The learning center is testing a note-taking application with volunteers."
+        "end": 6.54,
+        "speaker": "Woman",
+        "text": "Have you heard? The learning center is testing a note-taking application with volunteers."
       },
       {
-        "start": 6.296,
-        "end": 12.592,
-        "text": "Teachers want evidence about which digital tools reduce revision time. Training starts online at seven on Tuesday evening."
+        "start": 6.54,
+        "end": 12.07,
+        "speaker": "Man",
+        "text": "Yes. Teachers want evidence about which digital tools reduce revision time."
       },
       {
-        "start": 12.592,
-        "end": 18.888,
-        "text": "Volunteers must install the application before Monday night. They need a charged laptop and one set of lecture notes."
+        "start": 12.07,
+        "end": 18.1,
+        "speaker": "Woman",
+        "text": "Then remember this change. Training starts online at seven on Tuesday evening."
       },
       {
-        "start": 18.888,
-        "end": 25.184,
-        "text": "Technical support will guide anyone unfamiliar with the software."
+        "start": 18.1,
+        "end": 25.14,
+        "speaker": "Man",
+        "text": "When do we need to respond? Volunteers must install the application before Monday night."
       },
       {
-        "start": 25.184,
-        "end": 31.48,
-        "text": "A telephone help session is offered the following morning."
+        "start": 25.14,
+        "end": 33.19,
+        "speaker": "Woman",
+        "text": "We should also prepare carefully. They need a charged laptop and one set of lecture notes."
+      },
+      {
+        "start": 33.19,
+        "end": 40.73,
+        "speaker": "Man",
+        "text": "I have not done this before. Technical support will guide anyone unfamiliar with the software."
+      },
+      {
+        "start": 40.73,
+        "end": 47.26,
+        "speaker": "Woman",
+        "text": "That should be fine. A telephone help session is offered the following morning."
+      },
+      {
+        "start": 47.26,
+        "end": 52.29,
+        "speaker": "Man",
+        "text": "Great. I will follow the instructions and register in time."
       }
     ],
     "questions": [
@@ -1743,32 +1850,37 @@
     "theme": "时间管理",
     "themeEn": "time management",
     "difficulty": "standard",
-    "transcript": "A study-skills tutor is running a clinic on weekly planning. Many students said long task lists made them postpone important work. Small groups meet Wednesday afternoon for forty minutes. A short time-use survey is due on Tuesday. Students should bring their current calendar. The clinic begins with a simple method suitable for beginners. Those absent receive a blank planning sheet and instructions.",
+    "transcript": "A study-skills tutor is running a clinic on weekly planning. The program responds to a clear need. Many students said long task lists made them postpone important work. Its timetable is designed to be practical. Small groups meet Wednesday afternoon for forty minutes. Students should plan ahead. A short time-use survey is due on Tuesday. Students should bring their current calendar. Beginners can take part with confidence. The clinic begins with a simple method suitable for beginners. The organizers have also prepared another option. Those absent receive a blank planning sheet and instructions.",
     "segments": [
       {
         "start": 0,
-        "end": 5.812,
+        "end": 4.85,
         "text": "A study-skills tutor is running a clinic on weekly planning."
       },
       {
-        "start": 5.812,
-        "end": 11.624,
-        "text": "Many students said long task lists made them postpone important work. Small groups meet Wednesday afternoon for forty minutes."
+        "start": 4.85,
+        "end": 13.59,
+        "text": "The program responds to a clear need. Many students said long task lists made them postpone important work."
       },
       {
-        "start": 11.624,
-        "end": 17.436,
-        "text": "A short time-use survey is due on Tuesday. Students should bring their current calendar."
+        "start": 13.59,
+        "end": 20.87,
+        "text": "Its timetable is designed to be practical. Small groups meet Wednesday afternoon for forty minutes."
       },
       {
-        "start": 17.436,
-        "end": 23.248,
-        "text": "The clinic begins with a simple method suitable for beginners."
+        "start": 20.87,
+        "end": 29.6,
+        "text": "Students should plan ahead. A short time-use survey is due on Tuesday. Students should bring their current calendar."
       },
       {
-        "start": 23.248,
-        "end": 29.06,
-        "text": "Those absent receive a blank planning sheet and instructions."
+        "start": 29.6,
+        "end": 37.37,
+        "text": "Beginners can take part with confidence. The clinic begins with a simple method suitable for beginners."
+      },
+      {
+        "start": 37.37,
+        "end": 45.13,
+        "text": "The organizers have also prepared another option. Those absent receive a blank planning sheet and instructions."
       }
     ],
     "questions": [
@@ -1905,26 +2017,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 6.52,
+        "end": 5.59,
         "text": "The community office needs students to help older residents use mobile services."
       },
       {
-        "start": 6.52,
-        "end": 13.04,
+        "start": 5.59,
+        "end": 14.44,
         "text": "Residents asked for support with hospital and transport applications. The first visit is next Saturday at the neighborhood center."
       },
       {
-        "start": 13.04,
-        "end": 19.56,
+        "start": 14.44,
+        "end": 21.89,
         "text": "Volunteer names are needed by Wednesday. Helpers should bring a charged phone but no personal documents."
       },
       {
-        "start": 19.56,
-        "end": 26.08,
+        "start": 21.89,
+        "end": 27.01,
         "text": "Privacy training is compulsory and will be given before the visit."
       },
       {
-        "start": 26.08,
+        "start": 27.01,
         "end": 32.6,
         "text": "Students who cannot travel may answer questions through a supervised video call."
       }
@@ -2059,32 +2171,55 @@
     "theme": "旅游计划",
     "themeEn": "travel planning",
     "difficulty": "standard",
-    "transcript": "The international office is arranging a low-cost weekend trip to a historic town. Saturday was avoided because several departments hold tests then. The coach departs at eight on Sunday morning. Payment and registration are due by Tuesday. Travelers need an identity card and packed lunch. A guide will explain the sites in both Chinese and English. The fee will be refunded if severe weather cancels the trip.",
+    "transcript": "Woman: Have you heard? The international office is arranging a low-cost weekend trip to a historic town. Man: Yes. Saturday was avoided because several departments hold tests then. Woman: Then remember this change. The coach departs at eight on Sunday morning. Man: When do we need to respond? Payment and registration are due by Tuesday. Woman: We should also prepare carefully. Travelers need an identity card and packed lunch. Man: I have not done this before. A guide will explain the sites in both Chinese and English. Woman: That should be fine. The fee will be refunded if severe weather cancels the trip. Man: Great. I will follow the instructions and register in time.",
     "segments": [
       {
         "start": 0,
-        "end": 5.918,
-        "text": "The international office is arranging a low-cost weekend trip to a historic town."
+        "end": 7.61,
+        "speaker": "Woman",
+        "text": "Have you heard? The international office is arranging a low-cost weekend trip to a historic town."
       },
       {
-        "start": 5.918,
-        "end": 11.836,
-        "text": "Saturday was avoided because several departments hold tests then. The coach departs at eight on Sunday morning."
+        "start": 7.61,
+        "end": 12.36,
+        "speaker": "Man",
+        "text": "Yes. Saturday was avoided because several departments hold tests then."
       },
       {
-        "start": 11.836,
-        "end": 17.754,
-        "text": "Payment and registration are due by Tuesday. Travelers need an identity card and packed lunch."
+        "start": 12.36,
+        "end": 18.07,
+        "speaker": "Woman",
+        "text": "Then remember this change. The coach departs at eight on Sunday morning."
       },
       {
-        "start": 17.754,
-        "end": 23.672,
-        "text": "A guide will explain the sites in both Chinese and English."
+        "start": 18.07,
+        "end": 24.25,
+        "speaker": "Man",
+        "text": "When do we need to respond? Payment and registration are due by Tuesday."
       },
       {
-        "start": 23.672,
-        "end": 29.59,
-        "text": "The fee will be refunded if severe weather cancels the trip."
+        "start": 24.25,
+        "end": 30.43,
+        "speaker": "Woman",
+        "text": "We should also prepare carefully. Travelers need an identity card and packed lunch."
+      },
+      {
+        "start": 30.43,
+        "end": 38.52,
+        "speaker": "Man",
+        "text": "I have not done this before. A guide will explain the sites in both Chinese and English."
+      },
+      {
+        "start": 38.52,
+        "end": 45.65,
+        "speaker": "Woman",
+        "text": "That should be fine. The fee will be refunded if severe weather cancels the trip."
+      },
+      {
+        "start": 45.65,
+        "end": 50.4,
+        "speaker": "Man",
+        "text": "Great. I will follow the instructions and register in time."
       }
     ],
     "questions": [
@@ -2217,32 +2352,37 @@
     "theme": "文化节日",
     "themeEn": "cultural festivals",
     "difficulty": "standard",
-    "transcript": "The language club is recruiting hosts for a campus cultural festival. This year the festival includes twice as many visiting groups. Host practice takes place Friday after classes. Applications close at noon on Wednesday. Candidates should prepare a thirty-second welcome. Clear communication matters more than stage experience. Unselected applicants can still help at information desks.",
+    "transcript": "The language club is recruiting hosts for a campus cultural festival. The program responds to a clear need. This year the festival includes twice as many visiting groups. Its timetable is designed to be practical. Host practice takes place Friday after classes. Students should plan ahead. Applications close at noon on Wednesday. Candidates should prepare a thirty-second welcome. Beginners can take part with confidence. Clear communication matters more than stage experience. The organizers have also prepared another option. Unselected applicants can still help at information desks.",
     "segments": [
       {
         "start": 0,
-        "end": 5.856,
+        "end": 5.8,
         "text": "The language club is recruiting hosts for a campus cultural festival."
       },
       {
-        "start": 5.856,
-        "end": 11.712,
-        "text": "This year the festival includes twice as many visiting groups. Host practice takes place Friday after classes."
+        "start": 5.8,
+        "end": 14.77,
+        "text": "The program responds to a clear need. This year the festival includes twice as many visiting groups."
       },
       {
-        "start": 11.712,
-        "end": 17.568,
-        "text": "Applications close at noon on Wednesday. Candidates should prepare a thirty-second welcome."
+        "start": 14.77,
+        "end": 22.15,
+        "text": "Its timetable is designed to be practical. Host practice takes place Friday after classes."
       },
       {
-        "start": 17.568,
-        "end": 23.424,
-        "text": "Clear communication matters more than stage experience."
+        "start": 22.15,
+        "end": 30.59,
+        "text": "Students should plan ahead. Applications close at noon on Wednesday. Candidates should prepare a thirty-second welcome."
       },
       {
-        "start": 23.424,
-        "end": 29.28,
-        "text": "Unselected applicants can still help at information desks."
+        "start": 30.59,
+        "end": 37.45,
+        "text": "Beginners can take part with confidence. Clear communication matters more than stage experience."
+      },
+      {
+        "start": 37.45,
+        "end": 45.36,
+        "text": "The organizers have also prepared another option. Unselected applicants can still help at information desks."
       }
     ],
     "questions": [
@@ -2379,26 +2519,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 6.076,
+        "end": 4.56,
         "text": "The engineering school is opening a student innovation laboratory."
       },
       {
-        "start": 6.076,
-        "end": 12.152,
+        "start": 4.56,
+        "end": 13.67,
         "text": "New equipment cannot be used before students complete an introduction. Safety tours are offered Tuesday and Thursday mornings."
       },
       {
-        "start": 12.152,
-        "end": 18.228,
+        "start": 13.67,
+        "end": 22.28,
         "text": "Tour reservations close one day in advance. Students must wear closed shoes and carry their university card."
       },
       {
-        "start": 18.228,
-        "end": 24.304,
+        "start": 22.28,
+        "end": 25.32,
         "text": "The tour assumes no laboratory background."
       },
       {
-        "start": 24.304,
+        "start": 25.32,
         "end": 30.38,
         "text": "A virtual tour is available for students studying off campus."
       }
@@ -2533,32 +2673,55 @@
     "theme": "就业准备",
     "themeEn": "career preparation",
     "difficulty": "standard",
-    "transcript": "The careers team is organizing practice interviews with local employers. Graduating students requested feedback before the autumn recruitment fair. Interviews will be held on Monday evening. A résumé must be submitted by Thursday. Candidates should bring the job description they selected. Advisers will provide sample questions beforehand. Anyone without a booking may attend a group feedback session.",
+    "transcript": "Woman: Have you heard? The careers team is organizing practice interviews with local employers. Man: Yes. Graduating students requested feedback before the autumn recruitment fair. Woman: Then remember this change. Interviews will be held on Monday evening. Man: When do we need to respond? A résumé must be submitted by Thursday. Woman: We should also prepare carefully. Candidates should bring the job description they selected. Man: I have not done this before. Advisers will provide sample questions beforehand. Woman: That should be fine. Anyone without a booking may attend a group feedback session. Man: Great. I will follow the instructions and register in time.",
     "segments": [
       {
         "start": 0,
-        "end": 5.782,
-        "text": "The careers team is organizing practice interviews with local employers."
+        "end": 6.73,
+        "speaker": "Woman",
+        "text": "Have you heard? The careers team is organizing practice interviews with local employers."
       },
       {
-        "start": 5.782,
-        "end": 11.564,
-        "text": "Graduating students requested feedback before the autumn recruitment fair. Interviews will be held on Monday evening."
+        "start": 6.73,
+        "end": 11.91,
+        "speaker": "Man",
+        "text": "Yes. Graduating students requested feedback before the autumn recruitment fair."
       },
       {
-        "start": 11.564,
-        "end": 17.346,
-        "text": "A résumé must be submitted by Thursday. Candidates should bring the job description they selected."
+        "start": 11.91,
+        "end": 17.61,
+        "speaker": "Woman",
+        "text": "Then remember this change. Interviews will be held on Monday evening."
       },
       {
-        "start": 17.346,
-        "end": 23.128,
-        "text": "Advisers will provide sample questions beforehand."
+        "start": 17.61,
+        "end": 24.34,
+        "speaker": "Man",
+        "text": "When do we need to respond? A résumé must be submitted by Thursday."
       },
       {
-        "start": 23.128,
-        "end": 28.91,
-        "text": "Anyone without a booking may attend a group feedback session."
+        "start": 24.34,
+        "end": 31.08,
+        "speaker": "Woman",
+        "text": "We should also prepare carefully. Candidates should bring the job description they selected."
+      },
+      {
+        "start": 31.08,
+        "end": 37.29,
+        "speaker": "Man",
+        "text": "I have not done this before. Advisers will provide sample questions beforehand."
+      },
+      {
+        "start": 37.29,
+        "end": 44.54,
+        "speaker": "Woman",
+        "text": "That should be fine. Anyone without a booking may attend a group feedback session."
+      },
+      {
+        "start": 44.54,
+        "end": 49.72,
+        "speaker": "Man",
+        "text": "Great. I will follow the instructions and register in time."
       }
     ],
     "questions": [
@@ -2691,32 +2854,37 @@
     "theme": "团队合作",
     "themeEn": "teamwork",
     "difficulty": "standard",
-    "transcript": "A leadership course is looking for teams to solve a campus navigation problem. Construction has made several common routes confusing for visitors. The challenge begins Saturday at nine. Teams of four must register before Wednesday. Each team needs one phone capable of taking photographs. Design experience is helpful but not required. Solo applicants will be matched with a team on Friday.",
+    "transcript": "A leadership course is looking for teams to solve a campus navigation problem. The program responds to a clear need. Construction has made several common routes confusing for visitors. Its timetable is designed to be practical. The challenge begins Saturday at nine. Students should plan ahead. Teams of four must register before Wednesday. Each team needs one phone capable of taking photographs. Beginners can take part with confidence. Design experience is helpful but not required. The organizers have also prepared another option. Solo applicants will be matched with a team on Friday.",
     "segments": [
       {
         "start": 0,
-        "end": 5.836,
+        "end": 6.4,
         "text": "A leadership course is looking for teams to solve a campus navigation problem."
       },
       {
-        "start": 5.836,
-        "end": 11.672,
-        "text": "Construction has made several common routes confusing for visitors. The challenge begins Saturday at nine."
+        "start": 6.4,
+        "end": 14.27,
+        "text": "The program responds to a clear need. Construction has made several common routes confusing for visitors."
       },
       {
-        "start": 11.672,
-        "end": 17.508,
-        "text": "Teams of four must register before Wednesday. Each team needs one phone capable of taking photographs."
+        "start": 14.27,
+        "end": 20.66,
+        "text": "Its timetable is designed to be practical. The challenge begins Saturday at nine."
       },
       {
-        "start": 17.508,
-        "end": 23.344,
-        "text": "Design experience is helpful but not required."
+        "start": 20.66,
+        "end": 30.5,
+        "text": "Students should plan ahead. Teams of four must register before Wednesday. Each team needs one phone capable of taking photographs."
       },
       {
-        "start": 23.344,
-        "end": 29.18,
-        "text": "Solo applicants will be matched with a team on Friday."
+        "start": 30.5,
+        "end": 36.9,
+        "text": "Beginners can take part with confidence. Design experience is helpful but not required."
+      },
+      {
+        "start": 36.9,
+        "end": 45.26,
+        "text": "The organizers have also prepared another option. Solo applicants will be matched with a team on Friday."
       }
     ],
     "questions": [
@@ -2853,26 +3021,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 6.008,
+        "end": 3.94,
         "text": "Campus security is offering bicycle-safety checks before winter."
       },
       {
-        "start": 6.008,
-        "end": 12.016,
+        "start": 3.94,
+        "end": 13.3,
         "text": "Several bicycles were found with weak lights and brakes. Checks take place outside the north gate on Thursday afternoon."
       },
       {
-        "start": 12.016,
-        "end": 18.024,
+        "start": 13.3,
+        "end": 21.67,
         "text": "Owners may reserve a slot until Wednesday evening. They should bring the bicycle key and student identification."
       },
       {
-        "start": 18.024,
-        "end": 24.032,
+        "start": 21.67,
+        "end": 25.61,
         "text": "Mechanics will explain simple maintenance during the check."
       },
       {
-        "start": 24.032,
+        "start": 25.61,
         "end": 30.04,
         "text": "Rain will postpone the service until the following Tuesday."
       }
@@ -3007,32 +3175,55 @@
     "theme": "消费选择",
     "themeEn": "consumer choices",
     "difficulty": "challenge",
-    "transcript": "The consumer club is comparing refill shops with ordinary supermarkets. The club wants to test whether packaging-free shopping really costs less. Volunteers visit both stores on Sunday morning. Participants must join the shared list by Friday. They need a calculator and two reusable bags. A price-comparison form will be explained before departure. Receipts can be analyzed online by students unable to visit.",
+    "transcript": "Woman: Have you heard? The consumer club is comparing refill shops with ordinary supermarkets. Man: Yes. The club wants to test whether packaging-free shopping really costs less. Woman: Then remember this change. Volunteers visit both stores on Sunday morning. Man: When do we need to respond? Participants must join the shared list by Friday. Woman: We should also prepare carefully. They need a calculator and two reusable bags. Man: I have not done this before. A price-comparison form will be explained before departure. Woman: That should be fine. Receipts can be analyzed online by students unable to visit. Man: Great. I will follow the instructions and register in time.",
     "segments": [
       {
         "start": 0,
-        "end": 6.156,
-        "text": "The consumer club is comparing refill shops with ordinary supermarkets."
+        "end": 6.64,
+        "speaker": "Woman",
+        "text": "Have you heard? The consumer club is comparing refill shops with ordinary supermarkets."
       },
       {
-        "start": 6.156,
-        "end": 12.312,
-        "text": "The club wants to test whether packaging-free shopping really costs less. Volunteers visit both stores on Sunday morning."
+        "start": 6.64,
+        "end": 12.77,
+        "speaker": "Man",
+        "text": "Yes. The club wants to test whether packaging-free shopping really costs less."
       },
       {
-        "start": 12.312,
-        "end": 18.468,
-        "text": "Participants must join the shared list by Friday. They need a calculator and two reusable bags."
+        "start": 12.77,
+        "end": 18.39,
+        "speaker": "Woman",
+        "text": "Then remember this change. Volunteers visit both stores on Sunday morning."
       },
       {
-        "start": 18.468,
-        "end": 24.624,
-        "text": "A price-comparison form will be explained before departure."
+        "start": 18.39,
+        "end": 25.54,
+        "speaker": "Man",
+        "text": "When do we need to respond? Participants must join the shared list by Friday."
       },
       {
-        "start": 24.624,
-        "end": 30.78,
-        "text": "Receipts can be analyzed online by students unable to visit."
+        "start": 25.54,
+        "end": 32.18,
+        "speaker": "Woman",
+        "text": "We should also prepare carefully. They need a calculator and two reusable bags."
+      },
+      {
+        "start": 32.18,
+        "end": 39.33,
+        "speaker": "Man",
+        "text": "I have not done this before. A price-comparison form will be explained before departure."
+      },
+      {
+        "start": 39.33,
+        "end": 46.48,
+        "speaker": "Woman",
+        "text": "That should be fine. Receipts can be analyzed online by students unable to visit."
+      },
+      {
+        "start": 46.48,
+        "end": 51.59,
+        "speaker": "Man",
+        "text": "Great. I will follow the instructions and register in time."
       }
     ],
     "questions": [
@@ -3165,32 +3356,37 @@
     "theme": "气候变化",
     "themeEn": "climate change",
     "difficulty": "challenge",
-    "transcript": "The geography department is installing small weather sensors around campus. Local temperature records are needed for a climate study. Sensor teams meet at the laboratory on Tuesday afternoon. Students should select a location before Monday. Each team needs a notebook; all instruments are supplied. A technician will demonstrate calibration. Indoor data analysis is planned if a storm prevents fieldwork.",
+    "transcript": "The geography department is installing small weather sensors around campus. The program responds to a clear need. Local temperature records are needed for a climate study. Its timetable is designed to be practical. Sensor teams meet at the laboratory on Tuesday afternoon. Students should plan ahead. Students should select a location before Monday. Each team needs a notebook; all instruments are supplied. Beginners can take part with confidence. A technician will demonstrate calibration. The organizers have also prepared another option. Indoor data analysis is planned if a storm prevents fieldwork.",
     "segments": [
       {
         "start": 0,
-        "end": 6.082,
+        "end": 5.16,
         "text": "The geography department is installing small weather sensors around campus."
       },
       {
-        "start": 6.082,
-        "end": 12.164,
-        "text": "Local temperature records are needed for a climate study. Sensor teams meet at the laboratory on Tuesday afternoon."
+        "start": 5.16,
+        "end": 13.43,
+        "text": "The program responds to a clear need. Local temperature records are needed for a climate study."
       },
       {
-        "start": 12.164,
-        "end": 18.246,
-        "text": "Students should select a location before Monday. Each team needs a notebook; all instruments are supplied."
+        "start": 13.43,
+        "end": 21.69,
+        "text": "Its timetable is designed to be practical. Sensor teams meet at the laboratory on Tuesday afternoon."
       },
       {
-        "start": 18.246,
-        "end": 24.328,
-        "text": "A technician will demonstrate calibration."
+        "start": 21.69,
+        "end": 32.02,
+        "text": "Students should plan ahead. Students should select a location before Monday. Each team needs a notebook; all instruments are supplied."
       },
       {
-        "start": 24.328,
-        "end": 30.41,
-        "text": "Indoor data analysis is planned if a storm prevents fieldwork."
+        "start": 32.02,
+        "end": 37.7,
+        "text": "Beginners can take part with confidence. A technician will demonstrate calibration."
+      },
+      {
+        "start": 37.7,
+        "end": 46.48,
+        "text": "The organizers have also prepared another option. Indoor data analysis is planned if a storm prevents fieldwork."
       }
     ],
     "questions": [
@@ -3327,26 +3523,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.634,
+        "end": 5.63,
         "text": "The city museum has invited students to test a new audio guide."
       },
       {
-        "start": 5.634,
-        "end": 11.268,
+        "start": 5.63,
+        "end": 14.08,
         "text": "The museum wants clearer directions before the guide is released publicly. Testing begins at ten on Saturday morning."
       },
       {
-        "start": 11.268,
-        "end": 16.902,
+        "start": 14.08,
+        "end": 21.13,
         "text": "Volunteers must complete a language survey by Thursday. They should bring wired headphones if possible."
       },
       {
-        "start": 16.902,
-        "end": 22.536,
+        "start": 21.13,
+        "end": 24.41,
         "text": "No knowledge of art history is expected."
       },
       {
-        "start": 22.536,
+        "start": 24.41,
         "end": 28.17,
         "text": "Remote volunteers may review the guide transcript instead."
       }
@@ -3481,32 +3677,55 @@
     "theme": "学术讲座",
     "themeEn": "academic lectures",
     "difficulty": "challenge",
-    "transcript": "A visiting scientist will speak about reliable information on social media. A larger hall was booked after registrations passed two hundred. The lecture starts Wednesday at half past six. Students should claim free tickets before Tuesday noon. Attendees may bring one example of a doubtful online claim. The talk is intended for a general audience. Questions can be submitted online and the lecture will be streamed.",
+    "transcript": "Woman: Have you heard? A visiting scientist will speak about reliable information on social media. Man: Yes. A larger hall was booked after registrations passed two hundred. Woman: Then remember this change. The lecture starts Wednesday at half past six. Man: When do we need to respond? Students should claim free tickets before Tuesday noon. Woman: We should also prepare carefully. Attendees may bring one example of a doubtful online claim. Man: I have not done this before. The talk is intended for a general audience. Woman: That should be fine. Questions can be submitted online and the lecture will be streamed. Man: Great. I will follow the instructions and register in time.",
     "segments": [
       {
         "start": 0,
-        "end": 6.12,
-        "text": "A visiting scientist will speak about reliable information on social media."
+        "end": 6.86,
+        "speaker": "Woman",
+        "text": "Have you heard? A visiting scientist will speak about reliable information on social media."
       },
       {
-        "start": 6.12,
+        "start": 6.86,
         "end": 12.24,
-        "text": "A larger hall was booked after registrations passed two hundred. The lecture starts Wednesday at half past six."
+        "speaker": "Man",
+        "text": "Yes. A larger hall was booked after registrations passed two hundred."
       },
       {
         "start": 12.24,
-        "end": 18.36,
-        "text": "Students should claim free tickets before Tuesday noon. Attendees may bring one example of a doubtful online claim."
+        "end": 18.12,
+        "speaker": "Woman",
+        "text": "Then remember this change. The lecture starts Wednesday at half past six."
       },
       {
-        "start": 18.36,
-        "end": 24.48,
-        "text": "The talk is intended for a general audience."
+        "start": 18.12,
+        "end": 24.97,
+        "speaker": "Man",
+        "text": "When do we need to respond? Students should claim free tickets before Tuesday noon."
       },
       {
-        "start": 24.48,
-        "end": 30.6,
-        "text": "Questions can be submitted online and the lecture will be streamed."
+        "start": 24.97,
+        "end": 32.32,
+        "speaker": "Woman",
+        "text": "We should also prepare carefully. Attendees may bring one example of a doubtful online claim."
+      },
+      {
+        "start": 32.32,
+        "end": 39.17,
+        "speaker": "Man",
+        "text": "I have not done this before. The talk is intended for a general audience."
+      },
+      {
+        "start": 39.17,
+        "end": 46.52,
+        "speaker": "Woman",
+        "text": "That should be fine. Questions can be submitted online and the lecture will be streamed."
+      },
+      {
+        "start": 46.52,
+        "end": 51.41,
+        "speaker": "Man",
+        "text": "Great. I will follow the instructions and register in time."
       }
     ],
     "questions": [
@@ -3639,32 +3858,37 @@
     "theme": "在线会议",
     "themeEn": "online meetings",
     "difficulty": "challenge",
-    "transcript": "The computing center is teaching students to run accessible online meetings. Several student groups reported problems with captions and turn-taking. The workshop is held Friday at three in a computer room. Group leaders need to register by Wednesday. Participants should bring their usual meeting invitation. The trainer starts with basic platform controls. A checklist and captioning guide will be emailed afterward.",
+    "transcript": "The computing center is teaching students to run accessible online meetings. The program responds to a clear need. Several student groups reported problems with captions and turn-taking. Its timetable is designed to be practical. The workshop is held Friday at three in a computer room. Students should plan ahead. Group leaders need to register by Wednesday. Participants should bring their usual meeting invitation. Beginners can take part with confidence. The trainer starts with basic platform controls. The organizers have also prepared another option. A checklist and captioning guide will be emailed afterward.",
     "segments": [
       {
         "start": 0,
-        "end": 6.036,
+        "end": 5.53,
         "text": "The computing center is teaching students to run accessible online meetings."
       },
       {
-        "start": 6.036,
-        "end": 12.072,
-        "text": "Several student groups reported problems with captions and turn-taking. The workshop is held Friday at three in a computer room."
+        "start": 5.53,
+        "end": 13.57,
+        "text": "The program responds to a clear need. Several student groups reported problems with captions and turn-taking."
       },
       {
-        "start": 12.072,
-        "end": 18.108,
-        "text": "Group leaders need to register by Wednesday. Participants should bring their usual meeting invitation."
+        "start": 13.57,
+        "end": 22.62,
+        "text": "Its timetable is designed to be practical. The workshop is held Friday at three in a computer room."
       },
       {
-        "start": 18.108,
-        "end": 24.144,
-        "text": "The trainer starts with basic platform controls."
+        "start": 22.62,
+        "end": 31.67,
+        "text": "Students should plan ahead. Group leaders need to register by Wednesday. Participants should bring their usual meeting invitation."
       },
       {
-        "start": 24.144,
-        "end": 30.18,
-        "text": "A checklist and captioning guide will be emailed afterward."
+        "start": 31.67,
+        "end": 38.21,
+        "text": "Beginners can take part with confidence. The trainer starts with basic platform controls."
+      },
+      {
+        "start": 38.21,
+        "end": 46.25,
+        "text": "The organizers have also prepared another option. A checklist and captioning guide will be emailed afterward."
       }
     ],
     "questions": [

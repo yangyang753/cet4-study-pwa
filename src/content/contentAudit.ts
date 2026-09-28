@@ -23,9 +23,9 @@ interface MockCandidate {
 interface QuestionSetCandidate { id?: string; type?: string; questions?: unknown[] }
 
 interface DiversityQuestionCandidate { prompt?: string; answer?: number; options?: string[]; skillTag?: string }
-interface ListeningDiversityCandidate extends QuestionSetCandidate { theme?: string; themeEn?: string; transcript?: string; audioSrc?: string; questions?: DiversityQuestionCandidate[] }
+interface ListeningDiversityCandidate extends QuestionSetCandidate { theme?: string; themeEn?: string; transcript?: string; audioSrc?: string; segments?: Array<{ text?: string; speaker?: string }>; questions?: DiversityQuestionCandidate[] }
 interface ReadingDiversityCandidate extends QuestionSetCandidate { theme?: string; passage?: string; questions?: DiversityQuestionCandidate[] }
-interface SubjectiveDiversityCandidate { id?: string; theme?: string; topic?: string; prompt?: string }
+interface SubjectiveDiversityCandidate { id?: string; theme?: string; topic?: string; prompt?: string; referenceAnswer?: string }
 interface DiversityInventory {
   listeningSets: ListeningDiversityCandidate[];
   readingSets: ReadingDiversityCandidate[];
@@ -161,9 +161,21 @@ export function auditContentDiversity(inventory: DiversityInventory): string[] {
   errors.push(...auditQuestionGroup('readingSets', inventory.readingSets));
   errors.push(...auditQuestionTemplateDiversity(inventory.listeningSets, 'listening'));
   errors.push(...auditQuestionTemplateDiversity(inventory.readingSets, 'reading'));
-  for (const set of inventory.listeningSets) if (!set.audioSrc?.trim()) errors.push(`listeningSets:${set.id ?? 'unknown'}: missing audio reference`);
+  for (const set of inventory.listeningSets) {
+    if (!set.audioSrc?.trim()) errors.push(`listeningSets:${set.id ?? 'unknown'}: missing audio reference`);
+    if (set.type === 'conversation') {
+      const speakers = (set.segments ?? []).map((segment) => segment.speaker).filter(Boolean);
+      if (new Set(speakers).size < 2) errors.push(`listeningSets:${set.id ?? 'unknown'}: conversation requires at least two speakers`);
+      if (speakers.some((speaker, index) => index > 0 && speaker === speakers[index - 1])) errors.push(`listeningSets:${set.id ?? 'unknown'}: conversation speakers must alternate`);
+    }
+  }
   if (inventory.translations.length > 1 && repeatedShapes(inventory.translations.map((item) => ({ text: item.prompt ?? '', removable: [item.theme] })))) errors.push('translations: repeated normalized prompt');
   if (inventory.writingPrompts.length > 1 && repeatedShapes(inventory.writingPrompts.map((item) => ({ text: item.prompt ?? '', removable: [item.topic] })))) errors.push('writingPrompts: repeated normalized prompt');
+  for (const item of inventory.translations) if ((item.prompt ?? '').replace(/\s/g, '').length < 80) errors.push(`translations:${item.id ?? 'unknown'}: prompt shorter than 80 characters`);
+  for (const item of inventory.writingPrompts) {
+    const words = (item.referenceAnswer ?? '').trim().split(/\s+/).filter(Boolean).length;
+    if (words < 120 || words > 180) errors.push(`writingPrompts:${item.id ?? 'unknown'}: reference answer must contain 120-180 words, received ${words}`);
+  }
   return errors;
 }
 import { auditQuestionTemplateDiversity } from './questionDiversity';

@@ -41,6 +41,18 @@ describe('ListeningPage', () => {
     expect(screen.getByText(/合成语音训练材料/)).toBeInTheDocument();
   });
 
+  it('presents listening as a structured premium training workspace', () => {
+    render(<ListeningPage />);
+    expect(screen.getByText('LISTENING LAB · 听力训练舱')).toBeVisible();
+    expect(screen.getByRole('region', { name: '本组训练进度' })).toHaveTextContent('题组 1 / 24');
+    expect(screen.getByRole('region', { name: '本组训练进度' })).toHaveTextContent('题目 1 / 10');
+    expect(screen.getByRole('region', { name: '音频训练进度' })).toBeVisible();
+    expect(screen.getByText('01 精听定位')).toBeVisible();
+    expect(screen.getByText('02 翻译解锁')).toBeVisible();
+    expect(screen.getByText('03 选择答案')).toBeVisible();
+    expect(screen.getByText('04 听写复盘')).toBeVisible();
+  });
+
   it('moves through all 24 listening sets', async () => {
     vi.spyOn(HTMLMediaElement.prototype, 'pause').mockImplementation(() => undefined);
     const user = userEvent.setup();
