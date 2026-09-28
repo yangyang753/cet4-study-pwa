@@ -213,7 +213,7 @@ const writingInstructions = [
   'Your class will hold an international cultural exchange event. Write an essay proposing an activity and explaining how it promotes understanding.',
 ];
 const writingPrompts = writingTopics.map((topic, index) => ({ id: `write-${String(index + 1).padStart(2, '0')}`, topic, prompt: `${writingInstructions[index]} Write 120–180 words.`, outline: ['State a clear position', 'Develop it with reasons or an example', 'End with a practical conclusion'], referenceOpening: `In my view, ${topic} deserves thoughtful attention because it can make a meaningful difference in college life.` }));
-const mockExams = Array.from({ length: 6 }, (_, index) => ({ id: `mock-${index + 1}`, title: `阶段模拟卷 ${index + 1}`, listeningSetIds: listeningSets.slice(index * 4, index * 4 + 4).map((item) => item.id), readingSetIds: readingSets.slice(index * 5, index * 5 + 5).map((item) => item.id), translationId: translations[index * 2].id, writingId: writingPrompts[index * 2].id, timingMinutes: 125 }));
+const mockExams = Array.from({ length: 6 }, (_, index) => ({ id: `mock-${index + 1}`, title: `阶段模拟卷 ${index + 1}`, listeningSetIds: listeningSets.slice(index * 4, index * 4 + 4).map((item) => item.id), readingSetIds: readingSets.slice(index * 5, index * 5 + 5).map((item) => item.id), translationId: translations[index * 2].id, writingId: writingPrompts[index * 2].id, timingMinutes: 125, listeningDistribution: { news: 7, conversation: 8, passage: 10 }, readingDistribution: { cloze: 10, matching: 10, reading: 10 } }));
 
 await mkdir(outputDir, { recursive: true });
 const outputs = { vocabulary, collocations: phraseText, grammarTopics, listeningSets, readingSets, translations, writingPrompts, mockExams };

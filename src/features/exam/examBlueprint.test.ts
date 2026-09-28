@@ -11,6 +11,19 @@ describe('resolveExam', () => {
       expect(exam.sections.map((section) => section.minutes)).toEqual([30, 25, 40, 30]);
       expect(exam.sections.map((section) => section.questions.length)).toEqual([1, 25, 30, 1]);
       expect(exam.sections.flatMap((section) => section.questions)).toHaveLength(57);
+      const listening = exam.sections.find((section) => section.kind === 'listening')!.questions;
+      const reading = exam.sections.find((section) => section.kind === 'reading')!.questions;
+      expect({
+        news: listening.filter((question) => question.type === 'news').length,
+        conversation: listening.filter((question) => question.type === 'conversation').length,
+        passage: listening.filter((question) => question.type === 'passage').length,
+      }).toEqual({ news: 7, conversation: 8, passage: 10 });
+      expect({
+        cloze: reading.filter((question) => question.type === 'cloze').length,
+        matching: reading.filter((question) => question.type === 'matching').length,
+        reading: reading.filter((question) => question.type === 'reading').length,
+      }).toEqual({ cloze: 10, matching: 10, reading: 10 });
+      expect(new Set(exam.sections.flatMap((section) => section.questions.map((question) => question.id))).size).toBe(57);
     }
   });
 

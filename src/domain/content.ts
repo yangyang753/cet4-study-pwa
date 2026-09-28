@@ -81,4 +81,6 @@ export interface CatalogMockExam {
   translationId: string;
   writingId: string;
   timingMinutes: number;
+  listeningDistribution?: { news: number; conversation: number; passage: number };
+  readingDistribution?: { cloze: number; matching: number; reading: number };
 }

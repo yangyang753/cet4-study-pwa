@@ -17,15 +17,31 @@ export interface ResolvedExam {
   sections: ExamSection[];
 }
 
-const byGroup = (questions: CatalogQuestion[], ids: string[]) => ids.flatMap((id) => questions.filter((question) => question.groupId === id));
+function subtypeSlice(questions: CatalogQuestion[], type: CatalogQuestion['type'], count: number, mockIndex: number) {
+  const pool = questions.filter((question) => question.type === type);
+  if (pool.length < count) throw new Error(`Insufficient ${type} questions: expected ${count}, received ${pool.length}`);
+  const offset = (mockIndex * count) % pool.length;
+  return Array.from({ length: count }, (_, index) => pool[(offset + index) % pool.length]);
+}
 
 export function resolveExam(mockId: string): ResolvedExam {
   const mock = contentCatalog.mocks.find((candidate) => candidate.id === mockId);
   if (!mock) throw new Error(`Unknown mock exam: ${mockId}`);
+  const mockIndex = contentCatalog.mocks.indexOf(mock);
 
   const writing = getPracticeItems('writing').filter((question) => question.id === mock.writingId);
-  const listening = byGroup(getPracticeItems('listening'), mock.listeningSetIds);
-  const reading = byGroup(getPracticeItems('reading'), mock.readingSetIds);
+  const listeningPool = getPracticeItems('listening');
+  const listening = [
+    ...subtypeSlice(listeningPool, 'news', 7, mockIndex),
+    ...subtypeSlice(listeningPool, 'conversation', 8, mockIndex),
+    ...subtypeSlice(listeningPool, 'passage', 10, mockIndex),
+  ];
+  const readingPool = getPracticeItems('reading');
+  const reading = [
+    ...subtypeSlice(readingPool, 'cloze', 10, mockIndex),
+    ...subtypeSlice(readingPool, 'matching', 10, mockIndex),
+    ...subtypeSlice(readingPool, 'reading', 10, mockIndex),
+  ];
   const translation = getPracticeItems('translation').filter((question) => question.id === mock.translationId);
   const counts = [writing.length, listening.length, reading.length, translation.length];
   if (counts.join(',') !== '1,25,30,1') throw new Error(`${mock.id}: invalid section question counts ${counts.join('/')}`);

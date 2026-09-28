@@ -16,9 +16,11 @@ interface MockCandidate {
   translationId?: string;
   writingId?: string;
   timingMinutes?: number;
+  listeningDistribution?: { news?: number; conversation?: number; passage?: number };
+  readingDistribution?: { cloze?: number; matching?: number; reading?: number };
 }
 
-interface QuestionSetCandidate { id?: string; questions?: unknown[] }
+interface QuestionSetCandidate { id?: string; type?: string; questions?: unknown[] }
 
 interface DiversityQuestionCandidate { prompt?: string; answer?: number; options?: string[]; skillTag?: string }
 interface ListeningDiversityCandidate extends QuestionSetCandidate { theme?: string; themeEn?: string; transcript?: string; audioSrc?: string; questions?: DiversityQuestionCandidate[] }
@@ -44,6 +46,8 @@ export function auditContentInventory(inventory: ContentInventory): string[] {
 
   const listeningCounts = new Map((inventory.listeningSets as QuestionSetCandidate[]).map((set) => [set.id, set.questions?.length ?? 0]));
   const readingCounts = new Map((inventory.readingSets as QuestionSetCandidate[]).map((set) => [set.id, set.questions?.length ?? 0]));
+  const listeningSets = new Map((inventory.listeningSets as QuestionSetCandidate[]).map((set) => [set.id, set]));
+  const readingSets = new Map((inventory.readingSets as QuestionSetCandidate[]).map((set) => [set.id, set]));
   for (const mock of inventory.mockExams as MockCandidate[]) {
     if (!mock.id || !mock.listeningSetIds || !mock.readingSetIds) continue;
     const listeningCount = mock.listeningSetIds.reduce((total, id) => total + (listeningCounts.get(id) ?? 0), 0);
@@ -55,6 +59,22 @@ export function auditContentInventory(inventory: ContentInventory): string[] {
     if (mock.timingMinutes !== 125) errors.push(`${mock.id}: expected 125 minutes, received ${mock.timingMinutes}`);
     if (!mock.translationId) errors.push(`${mock.id}: missing translation reference`);
     if (!mock.writingId) errors.push(`${mock.id}: missing writing reference`);
+    const listeningDistribution = mock.listeningDistribution ?? mock.listeningSetIds.reduce((counts, id) => {
+      const set = listeningSets.get(id); const count = set?.questions?.length ?? 0;
+      if (set?.type === 'news' || set?.type === 'conversation' || set?.type === 'passage') counts[set.type] += count;
+      return counts;
+    }, { news: 0, conversation: 0, passage: 0 });
+    if (listeningDistribution.news !== 7 || listeningDistribution.conversation !== 8 || listeningDistribution.passage !== 10) {
+      errors.push(`${mock.id}: expected listening distribution news 7 / conversation 8 / passage 10, received ${listeningDistribution.news ?? 0} / ${listeningDistribution.conversation ?? 0} / ${listeningDistribution.passage ?? 0}`);
+    }
+    const readingDistribution = mock.readingDistribution ?? mock.readingSetIds.reduce((counts, id) => {
+      const set = readingSets.get(id); const count = set?.questions?.length ?? 0;
+      if (set?.type === 'cloze' || set?.type === 'matching' || set?.type === 'reading') counts[set.type] += count;
+      return counts;
+    }, { cloze: 0, matching: 0, reading: 0 });
+    if (readingDistribution.cloze !== 10 || readingDistribution.matching !== 10 || readingDistribution.reading !== 10) {
+      errors.push(`${mock.id}: expected reading distribution cloze 10 / matching 10 / reading 10, received ${readingDistribution.cloze ?? 0} / ${readingDistribution.matching ?? 0} / ${readingDistribution.reading ?? 0}`);
+    }
   }
   return errors;
 }

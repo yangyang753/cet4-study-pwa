@@ -17,7 +17,9 @@
     ],
     "translationId": "trans-01",
     "writingId": "write-01",
-    "timingMinutes": 125
+    "timingMinutes": 125,
+    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
+    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
   },
   {
     "id": "mock-2",
@@ -37,7 +39,9 @@
     ],
     "translationId": "trans-03",
     "writingId": "write-03",
-    "timingMinutes": 125
+    "timingMinutes": 125,
+    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
+    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
   },
   {
     "id": "mock-3",
@@ -57,7 +61,9 @@
     ],
     "translationId": "trans-05",
     "writingId": "write-05",
-    "timingMinutes": 125
+    "timingMinutes": 125,
+    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
+    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
   },
   {
     "id": "mock-4",
@@ -77,7 +83,9 @@
     ],
     "translationId": "trans-07",
     "writingId": "write-07",
-    "timingMinutes": 125
+    "timingMinutes": 125,
+    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
+    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
   },
   {
     "id": "mock-5",
@@ -97,7 +105,9 @@
     ],
     "translationId": "trans-09",
     "writingId": "write-09",
-    "timingMinutes": 125
+    "timingMinutes": 125,
+    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
+    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
   },
   {
     "id": "mock-6",
@@ -117,6 +127,8 @@
     ],
     "translationId": "trans-11",
     "writingId": "write-11",
-    "timingMinutes": 125
+    "timingMinutes": 125,
+    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
+    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
   }
 ]

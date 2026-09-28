@@ -21,6 +21,26 @@ describe('auditContentInventory', () => {
     expect(auditContentInventory(inventory)).toEqual([]);
   });
 
+  it('rejects a total-correct mock whose official subtype distribution is wrong', () => {
+    const make = (count: number) => Array.from({ length: count }, (_, index) => ({ id: `id-${index}` }));
+    const listeningSets = [
+      { id: 'news', type: 'news', questions: make(13) },
+      { id: 'conversation', type: 'conversation', questions: make(6) },
+      { id: 'passage', type: 'passage', questions: make(6) },
+    ];
+    const readingSets = [
+      { id: 'cloze', type: 'cloze', questions: make(12) },
+      { id: 'matching', type: 'matching', questions: make(12) },
+      { id: 'reading', type: 'reading', questions: make(6) },
+    ];
+    const mock = { id: 'wrong-shape', listeningSetIds: ['news', 'conversation', 'passage'], readingSetIds: ['cloze', 'matching', 'reading'], translationId: 't', writingId: 'w', timingMinutes: 125 };
+    const errors = auditContentInventory({ vocabulary: make(800), collocations: make(120), grammarTopics: make(15), listeningSets, readingSets, translations: make(12), writingPrompts: make(12), mockExams: [mock, ...make(5)] });
+    expect(errors).toEqual(expect.arrayContaining([
+      'wrong-shape: expected listening distribution news 7 / conversation 8 / passage 10, received 13 / 6 / 6',
+      'wrong-shape: expected reading distribution cloze 10 / matching 10 / reading 10, received 12 / 12 / 6',
+    ]));
+  });
+
   it('accepts generated questions with unique options and balanced answer positions', () => {
     expect(auditGeneratedQuestions({ vocabulary: getPracticeItems('vocabulary'), grammar: getPracticeItems('grammar') })).toEqual([]);
   });
