@@ -87,4 +87,3 @@
 - Legacy IndexedDB and active exam records must remain recoverable.
 - Offline/cloud copy must remain truthful.
 - The visual redesign must remain usable at 360 px and 200% text.
-

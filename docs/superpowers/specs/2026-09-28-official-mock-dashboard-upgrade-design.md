@@ -47,4 +47,3 @@ The page is decomposed into small presentational sections: mission header, readi
 - Component tests cover cloze bank and matching interactions plus the redesigned dashboard hierarchy.
 - Browser tests cover 360 px mobile, desktop, 200% text, offline restoration, active-exam migration, audio URLs, and all primary routes.
 - Release verification, dependency audit, GitHub Pages deployment, and a live 390 px smoke test must pass before completion.
-
