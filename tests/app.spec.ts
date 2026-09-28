@@ -12,7 +12,8 @@ test('preserves legacy deep-link queries when migrating to Hash routing', async 
 test('supports the daily learning journey on desktop', async ({ page }) => {
   await page.goto('#/today');
   await expect(page.getByRole('heading', { name: /向目标 425 分前进/ })).toBeVisible();
-  await expect(page.getByText('今日 60 分钟计划')).toBeVisible();
+  await expect(page.getByRole('heading', { name: '今日学习路线' })).toBeVisible();
+  await expect(page.getByText('60 分钟 · 按顺序完成效果更稳')).toBeVisible();
   await page.getByRole('link', { name: '高频知识', exact: true }).click();
   await expect(page.getByRole('heading', { name: '四级高频知识库' })).toBeVisible();
   await page.getByRole('searchbox', { name: '搜索高频词' }).fill('environment');
