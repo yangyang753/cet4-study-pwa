@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { CatalogQuestion } from '../../domain/content';
 import type { ExamSessionRecord } from '../../domain/exam';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
