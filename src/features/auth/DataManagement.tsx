@@ -1,18 +1,12 @@
 import { useState, type ChangeEvent } from 'react';
 import { clearLocalLearningData, exportLearningData, importLearningData } from '../../data/backup/learningBackup';
 import { studyDate } from '../../lib/studyDate';
+import { backupFreshness, backupStorageKey } from './backupHealth';
+
+export { backupFreshness } from './backupHealth';
 
 export interface DataManagementActions { exportData(): Promise<unknown> | unknown; importData(input: unknown): Promise<void> | void; clearData(): Promise<void> | void }
 const defaultActions: DataManagementActions = { exportData: exportLearningData, importData: (input) => importLearningData(undefined, input), clearData: clearLocalLearningData };
-const backupStorageKey = 'cet4:last-backup-at';
-
-export function backupFreshness(lastBackupAt: string, now: Date) {
-  const parsed = Date.parse(lastBackupAt);
-  if (!lastBackupAt || Number.isNaN(parsed)) return { status: 'never' as const, ageDays: null };
-  const ageDays = Math.max(0, Math.floor((now.getTime() - parsed) / 86_400_000));
-  return { status: ageDays > 7 ? 'stale' as const : 'fresh' as const, ageDays };
-}
-
 export function DataManagement({ actions = defaultActions, now = () => new Date() }: { actions?: DataManagementActions; now?: () => Date }) {
   const [confirmation, setConfirmation] = useState('');
   const [message, setMessage] = useState('');

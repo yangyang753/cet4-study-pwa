@@ -19,6 +19,8 @@ import { appHref } from '../../lib/appHref';
 import { buildWeeklyLearningReport } from './weeklyLearningReport';
 import { WeeklyLearningReport } from './WeeklyLearningReportPanel';
 import { ExamDateConfirmation } from '../settings/ExamDateConfirmation';
+import { localBackupFreshness } from '../auth/backupHealth';
+import { supabaseClient } from '../../lib/runtime';
 
 const defaultRepository = new DexieLearningRepository();
 export function greetingForHour(hour: number) {
@@ -38,7 +40,7 @@ const taskCopy: Record<StudyKind, { icon: string; title: string; detail: string;
 };
 const priorityLabels = { vocabulary: '词汇', grammar: '语法', listening: '听力', reading: '阅读', writing: '写作', translation: '翻译' } as const;
 
-export function TodayPage({ today = studyDate(), examDate, repository = defaultRepository }: { today?: string; examDate?: string; repository?: LearningRepository }) {
+export function TodayPage({ today = studyDate(), examDate, repository = defaultRepository, cloudConfigured = Boolean(supabaseClient) }: { today?: string; examDate?: string; repository?: LearningRepository; cloudConfigured?: boolean }) {
   const [snapshot, setSnapshot] = useState<DashboardSnapshot | null>(null);
   const [previousPlan, setPreviousPlan] = useState<CachedPlan | null | undefined>(undefined);
   useEffect(() => {
@@ -70,6 +72,7 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
   const plannedMinutes = plan.tasks.reduce((sum, task) => sum + task.minutes, 0);
   const completedToday = plan.tasks.filter((task) => metrics.completedTaskIds.has(task.id)).length;
   const completionPercent = plan.tasks.length ? Math.round((completedToday / plan.tasks.length) * 100) : 0;
+  const backupHealth = localBackupFreshness(new Date(`${today}T23:59:59`));
   useEffect(() => {
     if (!snapshot || previousPlan === undefined) return;
     void repository.savePlan({ id: `plan:${today}`, date: today, tasks: plan.tasks, updatedAt: new Date().toISOString() });
@@ -83,6 +86,7 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
       <div><span>今日进度</span><strong>{completedToday}/{plan.tasks.length}</strong><i aria-hidden="true"><b style={{ width: `${completionPercent}%` }} /></i></div>
       <div><span>目标分数</span><strong>425+</strong><small>建议安全目标 450</small></div>
     </section>
+    {!cloudConfigured && backupHealth.status !== 'fresh' && <aside className="backup-alert" role="alert" aria-label="本机备份提醒"><div><strong>保护你的学习记录</strong><p>学习记录只保存在当前浏览器。{backupHealth.status === 'stale' ? `上次备份已是 ${backupHealth.ageDays} 天前，` : '你还没有导出过备份，'}手机清理浏览器数据后可能无法恢复。</p></div><a href={appHref('account')}>现在备份</a></aside>}
     {snapshot && !snapshot.settings.diagnosticCompletedAt && <aside className="cloud-notice"><strong>先做 10～15 分钟基础诊断</strong><p>系统会据此安排第一周学习重点；也可以稍后再做。</p><a href={appHref('diagnostic')}>开始基础诊断</a></aside>}
     {snapshot?.settings.diagnosticProfile && <aside className="diagnostic-summary" aria-labelledby="diagnostic-summary-title"><div><span id="diagnostic-summary-title">基础诊断参考估分</span><strong>预计 {snapshot.settings.diagnosticProfile.estimatedScore} 分</strong><small>参考区间 {snapshot.settings.diagnosticProfile.scoreRange.low}～{snapshot.settings.diagnosticProfile.scoreRange.high}</small></div><div><b>{snapshot.settings.diagnosticProfile.estimatedScore >= 425 ? '已达到 425 分参考线' : `距离 425 分还差 ${425 - snapshot.settings.diagnosticProfile.estimatedScore} 分`}</b><span>当前优先补强：{priorities.length ? priorities.map((item) => priorityLabels[item.kind]).join('、') : snapshot.settings.diagnosticProfile.weakSkills.map((kind) => priorityLabels[kind]).join('、')}</span><small>估分用于学习规划，不是官方成绩。</small></div><a href={appHref('diagnostic')}>重新诊断</a></aside>}
     {diagnosticRetestDue && <aside className="cloud-notice"><strong>建议重新做一次基础诊断</strong><p>{diagnosticAgeDays >= 21 ? '诊断结果已超过 21 天，' : `诊断后已完成 ${attemptsSinceDiagnostic} 次练习，`}重新测试能让今日弱项安排更准确。</p><a href={appHref('diagnostic')}>开始重新诊断</a></aside>}

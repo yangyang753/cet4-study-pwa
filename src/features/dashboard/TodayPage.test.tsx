@@ -62,6 +62,13 @@ describe('TodayPage', () => {
     expect(screen.getByText('原创仿真训练')).toBeVisible();
   });
 
+  it('warns local-only learners when no portable backup exists', async () => {
+    localStorage.removeItem('cet4:last-backup-at');
+    render(<TodayPage today="2026-09-22" repository={repository()} cloudConfigured={false} />);
+    expect(await screen.findByRole('alert', { name: '本机备份提醒' })).toHaveTextContent('学习记录只保存在当前浏览器');
+    expect(screen.getByRole('link', { name: '现在备份' })).toHaveAttribute('href', expect.stringContaining('account'));
+  });
+
   it('shows an expandable seven-day learning report from saved progress', async () => {
     render(<TodayPage today="2026-09-27" repository={repository({
       attempts: [{ id: 'weekly-1', userId: 'local', questionId: 'q1', response: 'A', correct: false, score: 0, durationSeconds: 10, kind: 'listening', mode: 'practice', createdAt: '2026-09-27T01:00:00.000Z' }],
