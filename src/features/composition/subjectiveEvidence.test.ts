@@ -41,4 +41,10 @@ describe('analyzeSubjectiveEvidence', () => {
     expect(result.passed).toBe(true);
     expect(result.stableEligible).toBe(false);
   });
+
+  it('rejects a long structured essay that only name-checks two topic words', () => {
+    const unrelated = `Daily reading appears in the title, but this response discusses cooking at home. First, a simple meal can save money and give a student more control over ingredients. Fresh vegetables, rice, and eggs are easy to prepare after class, and a clear shopping list prevents waste.\n\nMoreover, learning several basic recipes can make an evening routine calmer. Roommates may share equipment, compare prices, and prepare food together. This habit creates useful conversations and helps everyone plan the week with less pressure. It can also reduce unnecessary takeaway packaging and make a small kitchen easier to organize.\n\nIn conclusion, regular cooking is a practical skill for young adults. A person who starts with one easy dish can gradually become more confident, healthier, and more independent while studying away from home.`;
+    const result = analyzeSubjectiveEvidence('writing', unrelated, writingQuestion);
+    expect(result.errorCodes).toContain('task-coverage');
+  });
 });

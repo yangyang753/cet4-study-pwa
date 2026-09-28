@@ -42,7 +42,7 @@ export function analyzeSubjectiveEvidence(kind: 'writing' | 'translation', body:
   const tokenCount = words(text).filter((word) => !/^\d/.test(word)).length;
   const targets = contentWords(`${question.prompt} ${question.referenceAnswer}`).slice(0, kind === 'writing' ? 8 : 12);
   const coveredTargets = targets.filter((word) => text.toLowerCase().includes(word)).length;
-  const coverageRequired = Math.min(kind === 'writing' ? 2 : 4, targets.length);
+  const coverageRequired = Math.min(kind === 'writing' ? 3 : 4, targets.length);
   const details = namedDetails(question);
   const paragraphCount = text.split(/\n\s*\n/).filter(Boolean).length;
   const filler = hasFiller(text);

@@ -82,4 +82,13 @@ describe('evaluateTranslation', () => {
     expect(result.complete).toBe(true);
     expect(result.missedWords).toEqual([]);
   });
+
+  it('rejects fluent-looking Chinese that ignores the English question intent', () => {
+    const result = evaluateTranslation([
+      { id: 'stem', text: 'When is the activity available?', translation: '今天天气很好。' },
+      { id: 'A', text: 'Sunday afternoon', translation: '大家一起学习。' },
+    ], vocabulary);
+    expect(result.complete).toBe(false);
+    expect(result.qualityIssues.map((issue) => issue.segmentId)).toContain('stem');
+  });
 });

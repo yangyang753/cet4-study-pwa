@@ -16,6 +16,7 @@ export interface TranslationEvaluation {
   auditableWords: AuditedWord[];
   coveredWords: AuditedWord[];
   missedWords: AuditedWord[];
+  qualityIssues: Array<{ segmentId: string; reason: string }>;
 }
 
 const partOfSpeech = /(?:^|(?<=[^a-z]))(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./gi;
@@ -82,6 +83,7 @@ export function evaluateTranslation(segments: TranslationSegment[], vocabulary: 
   const coveredWords: AuditedWord[] = [];
   const missedWords: AuditedWord[] = [];
   const seen = new Set<string>();
+  const qualityIssues: Array<{ segmentId: string; reason: string }> = [];
 
   for (const segment of segments) {
     for (const token of englishTokens(segment.text)) {
@@ -107,14 +109,32 @@ export function evaluateTranslation(segments: TranslationSegment[], vocabulary: 
     }
   }
 
+  for (const segment of segments) {
+    const chinese = segment.translation.match(/[\u3400-\u9fff]/g)?.join('') ?? '';
+    const tokenCount = englishTokens(segment.text).length;
+    const minimumLength = Math.max(2, Math.min(6, Math.ceil(tokenCount * 0.75)));
+    const cues: Array<[RegExp, RegExp, string]> = [
+      [/\bwhen\b/i, /什么时候|何时|哪天|时间/, '时间疑问信息'],
+      [/\bwhy\b/i, /为什么|为何|原因/, '原因疑问信息'],
+      [/\bhow\b/i, /如何|怎么|怎样/, '方式疑问信息'],
+      [/\bwhat\b/i, /什么|哪一|哪种/, '内容疑问信息'],
+      [/\bsunday\b/i, /星期日|星期天|周日|礼拜日/, '星期日'],
+      [/\bmonday\b/i, /星期一|周一|礼拜一/, '星期一'],
+      [/\bafternoon\b/i, /下午/, '下午'],
+      [/\bmorning\b/i, /早上|上午|清晨/, '上午'],
+      [/\bevening\b/i, /晚上|傍晚/, '晚上'],
+    ];
+    const missingCue = cues.find(([english, chineseCue]) => english.test(segment.text) && !chineseCue.test(segment.translation));
+    if (chinese.length < minimumLength) qualityIssues.push({ segmentId: segment.id, reason: `中文信息过短，至少需要约 ${minimumLength} 个有效汉字` });
+    else if (/^([\u3400-\u9fff]{1,4})\1{2,}$/.test(chinese)) qualityIssues.push({ segmentId: segment.id, reason: '存在重复占位内容' });
+    else if (missingCue) qualityIssues.push({ segmentId: segment.id, reason: `缺少${missingCue[2]}` });
+  }
+
   return {
-    complete: segments.every((segment) => {
-      const chinese = segment.translation.match(/[\u3400-\u9fff]/g)?.join('') ?? '';
-      if (chinese.length < 2) return false;
-      return !/^([\u3400-\u9fff]{1,4})\1{2,}$/.test(chinese);
-    }),
+    complete: qualityIssues.length === 0,
     auditableWords,
     coveredWords,
     missedWords,
+    qualityIssues,
   };
 }
