@@ -1,5 +1,6 @@
 import { contentCatalog, getPracticeItems } from '../../content/catalog';
 import type { CatalogQuestion } from '../../domain/content';
+import { formatOfficialReadingQuestions } from './examQuestionFormat';
 
 export type ExamSectionKind = 'writing' | 'listening' | 'reading' | 'translation';
 
@@ -24,6 +25,15 @@ function subtypeSlice(questions: CatalogQuestion[], type: CatalogQuestion['type'
   return Array.from({ length: count }, (_, index) => pool[(offset + index) % pool.length]);
 }
 
+function matchingSlice(questions: CatalogQuestion[], mockIndex: number) {
+  const groups = [...new Set(questions.filter((question) => question.type === 'matching').map((question) => question.groupId))].slice(0, 10);
+  if (groups.length < 10) throw new Error(`Insufficient matching passages: expected 10, received ${groups.length}`);
+  return groups.map((groupId) => {
+    const group = questions.filter((question) => question.type === 'matching' && question.groupId === groupId);
+    return group[mockIndex % group.length];
+  });
+}
+
 export function resolveExam(mockId: string): ResolvedExam {
   const mock = contentCatalog.mocks.find((candidate) => candidate.id === mockId);
   if (!mock) throw new Error(`Unknown mock exam: ${mockId}`);
@@ -37,11 +47,11 @@ export function resolveExam(mockId: string): ResolvedExam {
     ...subtypeSlice(listeningPool, 'passage', 10, mockIndex),
   ];
   const readingPool = getPracticeItems('reading');
-  const reading = [
+  const reading = formatOfficialReadingQuestions([
     ...subtypeSlice(readingPool, 'cloze', 10, mockIndex),
-    ...subtypeSlice(readingPool, 'matching', 10, mockIndex),
+    ...matchingSlice(readingPool, mockIndex),
     ...subtypeSlice(readingPool, 'reading', 10, mockIndex),
-  ];
+  ]);
   const translation = getPracticeItems('translation').filter((question) => question.id === mock.translationId);
   const counts = [writing.length, listening.length, reading.length, translation.length];
   if (counts.join(',') !== '1,25,30,1') throw new Error(`${mock.id}: invalid section question counts ${counts.join('/')}`);

@@ -71,6 +71,9 @@ export type CatalogQuestion = Question & {
   groupId: string;
   passage?: string;
   audioSrc?: string;
+  examFormat?: 'cloze-bank' | 'paragraph-matching';
+  examContext?: string;
+  examNumber?: number;
 };
 
 export interface CatalogMockExam {

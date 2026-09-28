@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { CatalogQuestion, ObjectiveQuestion } from '../../domain/content';
+import type { CatalogQuestion } from '../../domain/content';
 import type { ExamSessionRecord } from '../../domain/exam';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
-import { ObjectiveQuestion as ObjectiveQuestionView } from '../practice/ObjectiveQuestion';
 import { resolveExam } from './examBlueprint';
 import { createExamSession, reduceExamSession, remainingSeconds, restoreExamSession } from './examSessionReducer';
 import { ExamResult } from './ExamResult';
@@ -12,6 +11,7 @@ import { completeDailyTask } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
 import { studyDate } from '../../lib/studyDate';
 import { publicAssetUrl } from '../../lib/publicAssetUrl';
+import { ExamQuestionView } from './ExamQuestionView';
 
 const defaultRepository = new DexieLearningRepository();
 const defaultNow = () => new Date().toISOString();
@@ -48,16 +48,6 @@ function ExamListeningPlayer({ src, played, onPlayed }: { src: string; played: b
     <button type="button" disabled={started} onClick={() => void play()}>{played ? '本组听力已播放' : ended ? '本组播放完毕' : started ? '正在播放本组听力' : '播放本组听力（仅一次）'}</button>
     {error && <p role="alert">{error} <button type="button" onClick={() => { setError(''); audioRef.current?.load(); }}>重新加载音频</button></p>}
   </section>;
-}
-
-function QuestionView({ question, response, onChange }: { question: CatalogQuestion; response: string; onChange: (response: string) => void }) {
-  if ('options' in question) {
-    return <>
-      {question.passage && <article className="exam-passage">{question.passage}</article>}
-      <ObjectiveQuestionView question={question as ObjectiveQuestion} value={response} disabled={false} onChange={onChange} />
-    </>;
-  }
-  return <label className="exam-subjective"><strong>{question.prompt}</strong><textarea aria-label={question.type === 'writing' ? '写作答题区' : '翻译答题区'} value={response} onChange={(event) => onChange(event.target.value)} placeholder="答案会自动保存在本机" /></label>;
 }
 
 export function ExamSession({ mockId = 'mock-1', repository = defaultRepository, now = defaultNow }: { mockId?: string; repository?: LearningRepository; now?: () => string }) {
@@ -184,7 +174,7 @@ export function ExamSession({ mockId = 'mock-1', repository = defaultRepository,
     <nav className="exam-sections" aria-label="考试分区">{exam.sections.map((item, index) => <span key={item.kind} className={index === session.currentSectionIndex ? 'active' : ''} aria-current={index === session.currentSectionIndex ? 'step' : undefined}>{sectionNames[item.kind]} · {item.kind === 'reading' || item.kind === 'translation' ? '共用 70' : item.minutes} 分钟{session.lockedSectionIndexes.includes(index) ? ' · 已锁定' : ''}</span>)}</nav>
     <div className="exam-progress"><span>当前分区：{sectionNames[section.kind]}（{sharedTime ? '阅读与翻译共用 70' : section.minutes} 分钟）</span><span>本区 {questionIndex + 1}/{section.questions.length} · 全卷已答 {answered}/57</span></div>
     {section.kind === 'listening' && question.audioSrc && <ExamListeningPlayer key={question.groupId ?? question.audioSrc} src={question.audioSrc} played={session.playedListeningGroupIds?.includes(question.groupId ?? question.audioSrc) ?? false} onPlayed={() => updateSession(reduceExamSession(session, { type: 'mark-listening-played', groupId: question.groupId ?? question.audioSrc!, now: now() }), true)} />}
-    <main className="exam-question"><QuestionView question={question} response={response} onChange={saveAnswer} /></main>
+    <main className="exam-question"><ExamQuestionView question={question} response={response} onChange={saveAnswer} /></main>
     <footer className="exam-actions"><button disabled={questionIndex === 0} onClick={() => void moveQuestion(questionIndex - 1)}>上一题</button><button disabled={questionIndex === section.questions.length - 1} onClick={() => void moveQuestion(questionIndex + 1)}>下一题</button>{returnToReading && <button className="section-action" onClick={() => updateSession(reduceExamSession(session, { type: 'go-to-section', sectionIndex: 2, now: now() }), true)}>返回阅读</button>}{nextSection && <button className="section-action" onClick={advanceSection}>{section.kind === 'reading' ? '切换到翻译（可返回）' : `完成${sectionNames[section.kind]}并进入${sectionNames[nextSection.kind]}`}</button>}<button className="danger-action" onClick={() => void submit()}>交卷</button></footer>
     {saveState === 'error' ? <p className="exam-save-note" role="alert">保存失败，答案仍保留在当前页面。<button onClick={() => sessionRef.current && void persistSession(sessionRef.current)}>重新保存</button></p> : <p className="exam-save-note" role="status">{saveState === 'saving' ? '正在保存…' : '已保存'}；每次作答、切题及每 30 秒自动保存到本机。考试中不显示答案和解析。</p>}
   </section>;
