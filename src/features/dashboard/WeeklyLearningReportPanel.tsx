@@ -17,6 +17,7 @@ export function WeeklyLearningReport({ report }: { report: WeeklyReport }) {
         {report.accuracyByKind.length ? <ul className="weekly-accuracy-list">{report.accuracyByKind.map((item) => <li key={item.kind}><span>{kindLabels[item.kind]} · {item.attempts} 次</span><b>{Math.round(item.accuracy * 100)}%</b><i aria-hidden="true"><span style={{ width: `${Math.round(item.accuracy * 100)}%` }} /></i></li>)}</ul> : <p>本周还没有可评分练习，完成一次训练后这里会自动更新。</p>}
       </section>
       <p className="weekly-priority"><b>下周优先：</b>{report.priorities.length ? report.priorities.map((kind) => kindLabels[kind]).join('、') : '先完成今日计划，积累可分析数据。'}</p>
+      {report.recentMockScores.length > 0 && <p className="weekly-priority"><b>模考估分轨迹：</b>{[...report.recentMockScores].reverse().join(' → ')}{report.mockTrend && ` · ${report.mockTrend === 'improving' ? '明显上升' : report.mockTrend === 'declining' ? '近期下降，需优先补弱项' : '基本稳定'}`}</p>}
       {report.mockSampleCount < 3 && <small className="weekly-note">再完成 {3 - report.mockSampleCount} 次整套模考后，才显示近 3 次最低估分；备考估分不是官方成绩。</small>}
     </div>
   </details>;

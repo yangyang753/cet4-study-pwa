@@ -50,8 +50,12 @@ export function auditContentInventory(inventory: ContentInventory): string[] {
   const readingSets = new Map((inventory.readingSets as QuestionSetCandidate[]).map((set) => [set.id, set]));
   for (const mock of inventory.mockExams as MockCandidate[]) {
     if (!mock.id || !mock.listeningSetIds || !mock.readingSetIds) continue;
-    const listeningCount = mock.listeningSetIds.reduce((total, id) => total + (listeningCounts.get(id) ?? 0), 0);
-    const readingCount = mock.readingSetIds.reduce((total, id) => total + (readingCounts.get(id) ?? 0), 0);
+    const listeningCount = mock.listeningDistribution
+      ? (mock.listeningDistribution.news ?? 0) + (mock.listeningDistribution.conversation ?? 0) + (mock.listeningDistribution.passage ?? 0)
+      : mock.listeningSetIds.reduce((total, id) => total + (listeningCounts.get(id) ?? 0), 0);
+    const readingCount = mock.readingDistribution
+      ? (mock.readingDistribution.cloze ?? 0) + (mock.readingDistribution.matching ?? 0) + (mock.readingDistribution.reading ?? 0)
+      : mock.readingSetIds.reduce((total, id) => total + (readingCounts.get(id) ?? 0), 0);
     const total = 2 + listeningCount + readingCount;
     if (listeningCount !== 25) errors.push(`${mock.id}: expected 25 listening questions, received ${listeningCount}`);
     if (readingCount !== 30) errors.push(`${mock.id}: expected 30 reading questions, received ${readingCount}`);

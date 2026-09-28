@@ -11,8 +11,18 @@ export interface WeeklyLearningReport {
   masteredCount: number;
   lapseCount: number;
   recentMockMinimum: number | null;
+  recentMockScores: number[];
+  mockTrend: 'improving' | 'declining' | 'steady' | null;
   mockSampleCount: number;
   priorities: CoreStudyKind[];
+}
+
+export function deriveMockTrend(scoresNewestFirst: number[]): WeeklyLearningReport['mockTrend'] {
+  if (scoresNewestFirst.length < 3) return null;
+  const change = scoresNewestFirst[0] - scoresNewestFirst[2];
+  if (change >= 15) return 'improving';
+  if (change <= -15) return 'declining';
+  return 'steady';
 }
 
 const modeWeight = { practice: 1, exam: 1, review: 0.75, mastery: 0.5, diagnostic: 0 } as const;
@@ -56,6 +66,8 @@ export function buildWeeklyLearningReport(snapshot: DashboardSnapshot, today: st
     masteredCount: snapshot.knowledgeStates.filter((state) => state.status === 'mastered').length,
     lapseCount: snapshot.knowledgeStates.reduce((sum, state) => sum + (state.lapseCount ?? 0), 0),
     recentMockMinimum: scores.length >= 3 ? Math.min(...scores) : null,
+    recentMockScores: scores,
+    mockTrend: deriveMockTrend(scores),
     mockSampleCount: scores.length,
     priorities: accuracyByKind.slice(0, 2).map((item) => item.kind),
   };

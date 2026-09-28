@@ -18,11 +18,30 @@ export interface ResolvedExam {
   sections: ExamSection[];
 }
 
-function subtypeSlice(questions: CatalogQuestion[], type: CatalogQuestion['type'], count: number, mockIndex: number) {
-  const pool = questions.filter((question) => question.type === type);
-  if (pool.length < count) throw new Error(`Insufficient ${type} questions: expected ${count}, received ${pool.length}`);
-  const offset = (mockIndex * count) % pool.length;
-  return Array.from({ length: count }, (_, index) => pool[(offset + index) % pool.length]);
+function groupedSlice(questions: CatalogQuestion[], type: CatalogQuestion['type'], perGroup: number[], mockIndex: number) {
+  const groupIds = [...new Set(questions.filter((question) => question.type === type).map((question) => question.groupId))];
+  if (groupIds.length < perGroup.length) throw new Error(`Insufficient ${type} groups: expected ${perGroup.length}, received ${groupIds.length}`);
+  const groupStart = (index: number) => {
+    if (groupIds.length === 8 && perGroup.length === 3) return [0, 3, 6, 1, 4, 2][index] ?? (index * 3) % groupIds.length;
+    if (groupIds.length === 8 && perGroup.length === 2) return [0, 2, 4, 6, 1, 3][index] ?? (index * 2) % groupIds.length;
+    if (groupIds.length === 10 && perGroup.length === 2) return [0, 2, 4, 6, 8, 1][index] ?? (index * 2) % groupIds.length;
+    return (index * perGroup.length) % groupIds.length;
+  };
+  const groupOffset = groupStart(mockIndex);
+  return perGroup.flatMap((count, groupIndex) => {
+    const groupId = groupIds[(groupOffset + groupIndex) % groupIds.length];
+    const group = questions.filter((question) => question.type === type && question.groupId === groupId);
+    if (group.length < count) throw new Error(`Insufficient ${type} questions in ${groupId}: expected ${count}, received ${group.length}`);
+    let priorUse = 0;
+    for (let priorMock = 0; priorMock < mockIndex; priorMock += 1) {
+      const priorGroupOffset = groupStart(priorMock);
+      perGroup.forEach((priorCount, priorGroupIndex) => {
+        if (groupIds[(priorGroupOffset + priorGroupIndex) % groupIds.length] === groupId) priorUse += priorCount;
+      });
+    }
+    const questionOffset = priorUse % group.length;
+    return Array.from({ length: count }, (_, index) => group[(questionOffset + index) % group.length]);
+  });
 }
 
 function matchingSlice(questions: CatalogQuestion[], mockIndex: number) {
@@ -42,15 +61,15 @@ export function resolveExam(mockId: string): ResolvedExam {
   const writing = getPracticeItems('writing').filter((question) => question.id === mock.writingId);
   const listeningPool = getPracticeItems('listening');
   const listening = [
-    ...subtypeSlice(listeningPool, 'news', 7, mockIndex),
-    ...subtypeSlice(listeningPool, 'conversation', 8, mockIndex),
-    ...subtypeSlice(listeningPool, 'passage', 10, mockIndex),
+    ...groupedSlice(listeningPool, 'news', [3, 2, 2], mockIndex),
+    ...groupedSlice(listeningPool, 'conversation', [4, 4], mockIndex),
+    ...groupedSlice(listeningPool, 'passage', [4, 3, 3], mockIndex),
   ];
   const readingPool = getPracticeItems('reading');
   const reading = formatOfficialReadingQuestions([
-    ...subtypeSlice(readingPool, 'cloze', 10, mockIndex),
+    ...groupedSlice(readingPool, 'cloze', [10], mockIndex),
     ...matchingSlice(readingPool, mockIndex),
-    ...subtypeSlice(readingPool, 'reading', 10, mockIndex),
+    ...groupedSlice(readingPool, 'reading', [5, 5], mockIndex),
   ]);
   const translation = getPracticeItems('translation').filter((question) => question.id === mock.translationId);
   const counts = [writing.length, listening.length, reading.length, translation.length];

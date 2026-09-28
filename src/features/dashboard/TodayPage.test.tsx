@@ -62,11 +62,12 @@ describe('TodayPage', () => {
     expect(screen.getByText('原创仿真训练')).toBeVisible();
   });
 
-  it('warns local-only learners when no portable backup exists', async () => {
+  it('keeps backup and exam-preparation utilities out of the daily learning page', async () => {
     localStorage.removeItem('cet4:last-backup-at');
-    render(<TodayPage today="2026-09-22" repository={repository()} cloudConfigured={false} />);
-    expect(await screen.findByRole('alert', { name: '本机备份提醒' })).toHaveTextContent('学习记录只保存在当前浏览器');
-    expect(screen.getByRole('link', { name: '现在备份' })).toHaveAttribute('href', expect.stringContaining('account'));
+    render(<TodayPage today="2026-09-22" repository={repository()} />);
+    expect(await screen.findByRole('heading', { name: '今日学习路线' })).toBeVisible();
+    expect(screen.queryByRole('alert', { name: '本机备份提醒' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '考试准备' })).not.toBeInTheDocument();
   });
 
   it('shows an expandable seven-day learning report from saved progress', async () => {

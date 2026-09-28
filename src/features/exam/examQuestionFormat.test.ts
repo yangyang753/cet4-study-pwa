@@ -12,6 +12,8 @@ describe('official reading question formats', () => {
     expect(new Set(cloze[0].options.map((option) => option.text)).size).toBe(15);
     expect(cloze[0].examContext).toContain('[1]');
     expect(cloze[0].examContext).toContain('[10]');
+    expect(cloze[0].examContext?.match(/\[\d+\]/g)).toHaveLength(10);
+    expect(cloze.every((question) => question.groupId === cloze[0].groupId)).toBe(true);
   });
 
   it('builds A-J paragraph matching with one statement per paragraph', () => {

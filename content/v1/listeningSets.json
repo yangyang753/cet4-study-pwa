@@ -9,26 +9,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 6.26,
+        "end": 6.166,
         "text": "The student volunteer office is organizing reading visits to a nearby primary school."
       },
       {
-        "start": 6.26,
-        "end": 13.49,
+        "start": 6.166,
+        "end": 12.332,
         "text": "A Saturday team reached its maximum size. The new group will meet on Sunday afternoon."
       },
       {
-        "start": 13.49,
-        "end": 20.71,
+        "start": 12.332,
+        "end": 18.498,
         "text": "Applications close before Thursday noon. Volunteers should bring a student card and one picture book."
       },
       {
-        "start": 20.71,
-        "end": 26.49,
+        "start": 18.498,
+        "end": 24.664,
         "text": "No teaching experience is needed because mentors will give a short orientation."
       },
       {
-        "start": 26.49,
+        "start": 24.664,
         "end": 30.83,
         "text": "Students who miss orientation can watch the recorded briefing."
       }
@@ -107,6 +107,18 @@
         "explanationZh": "原文依据：No teaching experience is needed because mentors will give a short orientation."
       },
       {
+        "prompt": "What alternative is available if the main arrangement for campus volunteering cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "A librarian will answer remaining questions by email.",
+          "Rain will move the activity into the student center.",
+          "Students who miss orientation can watch the recorded briefing.",
+          "The fee will be refunded if severe weather cancels the trip."
+        ],
+        "answer": 2,
+        "explanationZh": "原文给出的替代安排是：Students who miss orientation can watch the recorded briefing."
+      },
+      {
         "prompt": "By offering “Students who miss orientation can watch the recorded briefing.”, what attitude do the organizers show toward possible difficulties?",
         "skillTag": "attitude",
         "options": [
@@ -117,6 +129,30 @@
         ],
         "answer": 2,
         "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Students who miss orientation can watch the recorded briefing."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the campus volunteering arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Bookings must be made by Friday at six. Visitors need a library card and a draft search question.",
+          "Volunteers should register by Thursday. They need comfortable shoes and a refillable bottle.",
+          "Payment and registration are due by Tuesday. Travelers need an identity card and packed lunch.",
+          "Applications close before Thursday noon. Volunteers should bring a student card and one picture book."
+        ],
+        "answer": 3,
+        "explanationZh": "应同时注意截止时间和准备事项：Applications close before Thursday noon. Volunteers should bring a student card and one picture book."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in campus volunteering?",
+        "skillTag": "inference",
+        "options": [
+          "They can participate because guidance or support is available.",
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 0,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：No teaching experience is needed because mentors will give a short orientation."
       }
     ],
     "audioSrc": "/audio/v1/listen-01.wav"
@@ -131,26 +167,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 4.54,
+        "end": 6.156,
         "text": "The library has launched appointments for its research-support desk."
       },
       {
-        "start": 4.54,
-        "end": 12.62,
+        "start": 6.156,
+        "end": 12.312,
         "text": "Many students requested help after the daytime desks closed. Individual consultations are available on Monday evening."
       },
       {
-        "start": 12.62,
-        "end": 21.7,
+        "start": 12.312,
+        "end": 18.468,
         "text": "Bookings must be made by Friday at six. Visitors need a library card and a draft search question."
       },
       {
-        "start": 21.7,
-        "end": 26.75,
+        "start": 18.468,
+        "end": 24.624,
         "text": "First-year students are welcome and do not need database experience."
       },
       {
-        "start": 26.75,
+        "start": 24.624,
         "end": 30.78,
         "text": "A librarian will answer remaining questions by email."
       }
@@ -227,6 +263,54 @@
         ],
         "answer": 2,
         "explanationZh": "原文依据：First-year students are welcome and do not need database experience."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for library services cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Slides will be posted for anyone with a class conflict.",
+          "The recipes will be published after the class.",
+          "Unselected applicants can still help at information desks.",
+          "A librarian will answer remaining questions by email."
+        ],
+        "answer": 3,
+        "explanationZh": "原文给出的替代安排是：A librarian will answer remaining questions by email."
+      },
+      {
+        "prompt": "By offering “A librarian will answer remaining questions by email.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about library services.",
+          "They insist that no plan connected with library services can change.",
+          "They blame participants before the library services activity begins.",
+          "They are flexible and willing to help participants."
+        ],
+        "answer": 3,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：A librarian will answer remaining questions by email."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the library services arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Bookings must be made by Friday at six. Visitors need a library card and a draft search question.",
+          "Students should reserve a seat before Tuesday morning. They should bring their timetable and degree checklist.",
+          "Free places can be booked until Friday afternoon. Participants should bring a food container and a pen.",
+          "Applications close at noon on Wednesday. Candidates should prepare a thirty-second welcome."
+        ],
+        "answer": 0,
+        "explanationZh": "应同时注意截止时间和准备事项：Bookings must be made by Friday at six. Visitors need a library card and a draft search question."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in library services?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They can participate because guidance or support is available.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 1,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：First-year students are welcome and do not need database experience."
       }
     ],
     "audioSrc": "/audio/v1/listen-02.wav"
@@ -241,26 +325,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.42,
+        "end": 6.11,
         "text": "The academic office is offering a seminar on choosing optional courses."
       },
       {
-        "start": 5.42,
-        "end": 12.81,
+        "start": 6.11,
+        "end": 12.22,
         "text": "Several popular modules changed their entry requirements. The seminar takes place at noon on Wednesday."
       },
       {
-        "start": 12.81,
-        "end": 20.7,
+        "start": 12.22,
+        "end": 18.33,
         "text": "Students should reserve a seat before Tuesday morning. They should bring their timetable and degree checklist."
       },
       {
-        "start": 20.7,
-        "end": 25.62,
+        "start": 18.33,
+        "end": 24.44,
         "text": "Advisers will explain the system, so prior planning is unnecessary."
       },
       {
-        "start": 25.62,
+        "start": 24.44,
         "end": 30.55,
         "text": "Slides will be posted for anyone with a class conflict."
       }
@@ -337,6 +421,54 @@
         ],
         "answer": 3,
         "explanationZh": "原文依据：Advisers will explain the system, so prior planning is unnecessary."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for course selection cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Slides will be posted for anyone with a class conflict.",
+          "Anonymous comments will also be accepted after the meeting.",
+          "Recorded stretching routines are available during bad weather.",
+          "A virtual tour is available for students studying off campus."
+        ],
+        "answer": 0,
+        "explanationZh": "原文给出的替代安排是：Slides will be posted for anyone with a class conflict."
+      },
+      {
+        "prompt": "By offering “Slides will be posted for anyone with a class conflict.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They are flexible and willing to help participants.",
+          "They dismiss every concern raised about course selection.",
+          "They insist that no plan connected with course selection can change.",
+          "They blame participants before the course selection activity begins."
+        ],
+        "answer": 0,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Slides will be posted for anyone with a class conflict."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the course selection arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Suggestions can be submitted online until Wednesday. Participants are asked to bring one practical proposal.",
+          "Students should reserve a seat before Tuesday morning. They should bring their timetable and degree checklist.",
+          "Students can join the list until the previous evening. Comfortable clothing is recommended, but equipment is provided.",
+          "Tour reservations close one day in advance. Students must wear closed shoes and carry their university card."
+        ],
+        "answer": 1,
+        "explanationZh": "应同时注意截止时间和准备事项：Students should reserve a seat before Tuesday morning. They should bring their timetable and degree checklist."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in course selection?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They can participate because guidance or support is available.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 2,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：Advisers will explain the system, so prior planning is unnecessary."
       }
     ],
     "audioSrc": "/audio/v1/listen-03.wav"
@@ -351,26 +483,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.66,
+        "end": 6.13,
         "text": "Residence staff have arranged a meeting about reducing noise in shared halls."
       },
       {
-        "start": 5.66,
-        "end": 13.68,
+        "start": 6.13,
+        "end": 12.26,
         "text": "Recent complaints increased during the examination period. Residents will gather on Friday evening in the common room."
       },
       {
-        "start": 13.68,
-        "end": 20.75,
+        "start": 12.26,
+        "end": 18.39,
         "text": "Suggestions can be submitted online until Wednesday. Participants are asked to bring one practical proposal."
       },
       {
-        "start": 20.75,
-        "end": 26.41,
+        "start": 18.39,
+        "end": 24.52,
         "text": "Everyone may speak, even if they have never joined a hall meeting."
       },
       {
-        "start": 26.41,
+        "start": 24.52,
         "end": 30.65,
         "text": "Anonymous comments will also be accepted after the meeting."
       }
@@ -447,6 +579,54 @@
         ],
         "answer": 0,
         "explanationZh": "原文依据：Everyone may speak, even if they have never joined a hall meeting."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for dormitory life cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Late groups can submit a digital introduction for the union website.",
+          "Anonymous comments will also be accepted after the meeting.",
+          "A telephone help session is offered the following morning.",
+          "Anyone without a booking may attend a group feedback session."
+        ],
+        "answer": 1,
+        "explanationZh": "原文给出的替代安排是：Anonymous comments will also be accepted after the meeting."
+      },
+      {
+        "prompt": "By offering “Anonymous comments will also be accepted after the meeting.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about dormitory life.",
+          "They are flexible and willing to help participants.",
+          "They insist that no plan connected with dormitory life can change.",
+          "They blame participants before the dormitory life activity begins."
+        ],
+        "answer": 1,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Anonymous comments will also be accepted after the meeting."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the dormitory life arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Clubs must confirm their tables by Sunday night. Each group should bring a sign and a short activity.",
+          "Volunteers must install the application before Monday night. They need a charged laptop and one set of lecture notes.",
+          "Suggestions can be submitted online until Wednesday. Participants are asked to bring one practical proposal.",
+          "A résumé must be submitted by Thursday. Candidates should bring the job description they selected."
+        ],
+        "answer": 2,
+        "explanationZh": "应同时注意截止时间和准备事项：Suggestions can be submitted online until Wednesday. Participants are asked to bring one practical proposal."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in dormitory life?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree.",
+          "They can participate because guidance or support is available."
+        ],
+        "answer": 3,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：Everyone may speak, even if they have never joined a hall meeting."
       }
     ],
     "audioSrc": "/audio/v1/listen-04.wav"
@@ -461,26 +641,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.38,
+        "end": 6.002,
         "text": "The student union is holding a fair for clubs seeking new members."
       },
       {
-        "start": 5.38,
-        "end": 13.44,
+        "start": 6.002,
+        "end": 12.004,
         "text": "More organizations registered than the original room could hold. The fair opens Tuesday afternoon in the sports hall."
       },
       {
-        "start": 13.44,
-        "end": 21.5,
+        "start": 12.004,
+        "end": 18.006,
         "text": "Clubs must confirm their tables by Sunday night. Each group should bring a sign and a short activity."
       },
       {
-        "start": 21.5,
-        "end": 25.09,
+        "start": 18.006,
+        "end": 24.008,
         "text": "New clubs receive setup guidance from union volunteers."
       },
       {
-        "start": 25.09,
+        "start": 24.008,
         "end": 30.01,
         "text": "Late groups can submit a digital introduction for the union website."
       }
@@ -559,6 +739,18 @@
         "explanationZh": "原文依据：New clubs receive setup guidance from union volunteers."
       },
       {
+        "prompt": "What alternative is available if the main arrangement for student clubs cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "A résumé checklist will be sent to students who cannot attend.",
+          "Those absent receive a blank planning sheet and instructions.",
+          "Late groups can submit a digital introduction for the union website.",
+          "Solo applicants will be matched with a team on Friday."
+        ],
+        "answer": 2,
+        "explanationZh": "原文给出的替代安排是：Late groups can submit a digital introduction for the union website."
+      },
+      {
         "prompt": "By offering “Late groups can submit a digital introduction for the union website.”, what attitude do the organizers show toward possible difficulties?",
         "skillTag": "attitude",
         "options": [
@@ -569,6 +761,30 @@
         ],
         "answer": 2,
         "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Late groups can submit a digital introduction for the union website."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the student clubs arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Students must upload a résumé before Wednesday. They should also bring a printed vacancy description.",
+          "A short time-use survey is due on Tuesday. Students should bring their current calendar.",
+          "Teams of four must register before Wednesday. Each team needs one phone capable of taking photographs.",
+          "Clubs must confirm their tables by Sunday night. Each group should bring a sign and a short activity."
+        ],
+        "answer": 3,
+        "explanationZh": "应同时注意截止时间和准备事项：Clubs must confirm their tables by Sunday night. Each group should bring a sign and a short activity."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in student clubs?",
+        "skillTag": "inference",
+        "options": [
+          "They can participate because guidance or support is available.",
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 0,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：New clubs receive setup guidance from union volunteers."
       }
     ],
     "audioSrc": "/audio/v1/listen-05.wav"
@@ -583,26 +799,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.09,
+        "end": 5.65,
         "text": "The careers center has added a workshop on preparing for internships."
       },
       {
-        "start": 5.09,
-        "end": 11.58,
+        "start": 5.65,
+        "end": 11.3,
         "text": "The first session filled within one day. The added workshop begins Thursday at four."
       },
       {
-        "start": 11.58,
-        "end": 18.52,
+        "start": 11.3,
+        "end": 16.95,
         "text": "Students must upload a résumé before Wednesday. They should also bring a printed vacancy description."
       },
       {
-        "start": 18.52,
-        "end": 23.15,
+        "start": 16.95,
+        "end": 22.6,
         "text": "The workshop is designed for applicants with no previous internship."
       },
       {
-        "start": 23.15,
+        "start": 22.6,
         "end": 28.25,
         "text": "A résumé checklist will be sent to students who cannot attend."
       }
@@ -679,6 +895,54 @@
         ],
         "answer": 2,
         "explanationZh": "原文依据：The workshop is designed for applicants with no previous internship."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for internship arrangements cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "If the bus is full, an extra vehicle will arrive within fifteen minutes.",
+          "Students who cannot travel may answer questions through a supervised video call.",
+          "Rain will postpone the service until the following Tuesday.",
+          "A résumé checklist will be sent to students who cannot attend."
+        ],
+        "answer": 3,
+        "explanationZh": "原文给出的替代安排是：A résumé checklist will be sent to students who cannot attend."
+      },
+      {
+        "prompt": "By offering “A résumé checklist will be sent to students who cannot attend.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about internship arrangements.",
+          "They insist that no plan connected with internship arrangements can change.",
+          "They blame participants before the internship arrangements activity begins.",
+          "They are flexible and willing to help participants."
+        ],
+        "answer": 3,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：A résumé checklist will be sent to students who cannot attend."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the internship arrangements arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Students must upload a résumé before Wednesday. They should also bring a printed vacancy description.",
+          "Feedback is requested by the end of the month. Passengers only need their campus travel card.",
+          "Volunteer names are needed by Wednesday. Helpers should bring a charged phone but no personal documents.",
+          "Owners may reserve a slot until Wednesday evening. They should bring the bicycle key and student identification."
+        ],
+        "answer": 0,
+        "explanationZh": "应同时注意截止时间和准备事项：Students must upload a résumé before Wednesday. They should also bring a printed vacancy description."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in internship arrangements?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They can participate because guidance or support is available.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 1,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：The workshop is designed for applicants with no previous internship."
       }
     ],
     "audioSrc": "/audio/v1/listen-06.wav"
@@ -693,26 +957,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 4.29,
+        "end": 5.92,
         "text": "The city transport office is testing a later campus bus."
       },
       {
-        "start": 4.29,
-        "end": 13.73,
+        "start": 5.92,
+        "end": 11.84,
         "text": "A survey showed that evening students lacked a safe connection. The trial bus leaves the main gate at ten thirty each night."
       },
       {
-        "start": 13.73,
-        "end": 20.59,
+        "start": 11.84,
+        "end": 17.76,
         "text": "Feedback is requested by the end of the month. Passengers only need their campus travel card."
       },
       {
-        "start": 20.59,
-        "end": 24.03,
+        "start": 17.76,
+        "end": 23.68,
         "text": "No advance booking is required during the trial."
       },
       {
-        "start": 24.03,
+        "start": 23.68,
         "end": 29.6,
         "text": "If the bus is full, an extra vehicle will arrive within fifteen minutes."
       }
@@ -789,6 +1053,54 @@
         ],
         "answer": 3,
         "explanationZh": "原文依据：No advance booking is required during the trial."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for urban transport cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "If the bus is full, an extra vehicle will arrive within fifteen minutes.",
+          "Rain will move the activity into the student center.",
+          "The fee will be refunded if severe weather cancels the trip.",
+          "Receipts can be analyzed online by students unable to visit."
+        ],
+        "answer": 0,
+        "explanationZh": "原文给出的替代安排是：If the bus is full, an extra vehicle will arrive within fifteen minutes."
+      },
+      {
+        "prompt": "By offering “If the bus is full, an extra vehicle will arrive within fifteen minutes.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They are flexible and willing to help participants.",
+          "They dismiss every concern raised about urban transport.",
+          "They insist that no plan connected with urban transport can change.",
+          "They blame participants before the urban transport activity begins."
+        ],
+        "answer": 0,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：If the bus is full, an extra vehicle will arrive within fifteen minutes."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the urban transport arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Volunteers should register by Thursday. They need comfortable shoes and a refillable bottle.",
+          "Feedback is requested by the end of the month. Passengers only need their campus travel card.",
+          "Payment and registration are due by Tuesday. Travelers need an identity card and packed lunch.",
+          "Participants must join the shared list by Friday. They need a calculator and two reusable bags."
+        ],
+        "answer": 1,
+        "explanationZh": "应同时注意截止时间和准备事项：Feedback is requested by the end of the month. Passengers only need their campus travel card."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in urban transport?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They can participate because guidance or support is available.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 2,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：No advance booking is required during the trial."
       }
     ],
     "audioSrc": "/audio/v1/listen-07.wav"
@@ -803,26 +1115,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.33,
+        "end": 5.62,
         "text": "An environmental group is starting a reusable-cup campaign in campus cafés."
       },
       {
-        "start": 5.33,
-        "end": 13.57,
+        "start": 5.62,
+        "end": 11.24,
         "text": "Disposable cup waste rose sharply last semester. The launch event is Saturday morning beside the central café."
       },
       {
-        "start": 13.57,
-        "end": 19.87,
+        "start": 11.24,
+        "end": 16.86,
         "text": "Volunteers should register by Thursday. They need comfortable shoes and a refillable bottle."
       },
       {
-        "start": 19.87,
-        "end": 23.74,
+        "start": 16.86,
+        "end": 22.48,
         "text": "Campaign training will be provided at the start."
       },
       {
-        "start": 23.74,
+        "start": 22.48,
         "end": 28.1,
         "text": "Rain will move the activity into the student center."
       }
@@ -899,6 +1211,54 @@
         ],
         "answer": 0,
         "explanationZh": "原文依据：Campaign training will be provided at the start."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for environmental protection cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "The recipes will be published after the class.",
+          "Rain will move the activity into the student center.",
+          "Unselected applicants can still help at information desks.",
+          "Indoor data analysis is planned if a storm prevents fieldwork."
+        ],
+        "answer": 1,
+        "explanationZh": "原文给出的替代安排是：Rain will move the activity into the student center."
+      },
+      {
+        "prompt": "By offering “Rain will move the activity into the student center.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about environmental protection.",
+          "They are flexible and willing to help participants.",
+          "They insist that no plan connected with environmental protection can change.",
+          "They blame participants before the environmental protection activity begins."
+        ],
+        "answer": 1,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Rain will move the activity into the student center."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the environmental protection arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Free places can be booked until Friday afternoon. Participants should bring a food container and a pen.",
+          "Applications close at noon on Wednesday. Candidates should prepare a thirty-second welcome.",
+          "Volunteers should register by Thursday. They need comfortable shoes and a refillable bottle.",
+          "Students should select a location before Monday. Each team needs a notebook; all instruments are supplied."
+        ],
+        "answer": 2,
+        "explanationZh": "应同时注意截止时间和准备事项：Volunteers should register by Thursday. They need comfortable shoes and a refillable bottle."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in environmental protection?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree.",
+          "They can participate because guidance or support is available."
+        ],
+        "answer": 3,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：Campaign training will be provided at the start."
       }
     ],
     "audioSrc": "/audio/v1/listen-08.wav"
@@ -913,26 +1273,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.2,
+        "end": 5.578,
         "text": "The health center is offering a class on planning affordable meals."
       },
       {
-        "start": 5.2,
-        "end": 12.76,
+        "start": 5.578,
+        "end": 11.156,
         "text": "Students reported relying too often on takeaway food. The demonstration is scheduled for Sunday at eleven."
       },
       {
-        "start": 12.76,
-        "end": 20.8,
+        "start": 11.156,
+        "end": 16.734,
         "text": "Free places can be booked until Friday afternoon. Participants should bring a food container and a pen."
       },
       {
-        "start": 20.8,
-        "end": 24.11,
+        "start": 16.734,
+        "end": 22.312,
         "text": "Basic ingredients and instructions will be supplied."
       },
       {
-        "start": 24.11,
+        "start": 22.312,
         "end": 27.89,
         "text": "The recipes will be published after the class."
       }
@@ -1011,6 +1371,18 @@
         "explanationZh": "原文依据：Basic ingredients and instructions will be supplied."
       },
       {
+        "prompt": "What alternative is available if the main arrangement for healthy eating cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Recorded stretching routines are available during bad weather.",
+          "A virtual tour is available for students studying off campus.",
+          "The recipes will be published after the class.",
+          "Remote volunteers may review the guide transcript instead."
+        ],
+        "answer": 2,
+        "explanationZh": "原文给出的替代安排是：The recipes will be published after the class."
+      },
+      {
         "prompt": "By offering “The recipes will be published after the class.”, what attitude do the organizers show toward possible difficulties?",
         "skillTag": "attitude",
         "options": [
@@ -1021,6 +1393,30 @@
         ],
         "answer": 2,
         "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：The recipes will be published after the class."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the healthy eating arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Students can join the list until the previous evening. Comfortable clothing is recommended, but equipment is provided.",
+          "Tour reservations close one day in advance. Students must wear closed shoes and carry their university card.",
+          "Volunteers must complete a language survey by Thursday. They should bring wired headphones if possible.",
+          "Free places can be booked until Friday afternoon. Participants should bring a food container and a pen."
+        ],
+        "answer": 3,
+        "explanationZh": "应同时注意截止时间和准备事项：Free places can be booked until Friday afternoon. Participants should bring a food container and a pen."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in healthy eating?",
+        "skillTag": "inference",
+        "options": [
+          "They can participate because guidance or support is available.",
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 0,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：Basic ingredients and instructions will be supplied."
       }
     ],
     "audioSrc": "/audio/v1/listen-09.wav"
@@ -1035,26 +1431,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.22,
+        "end": 6.16,
         "text": "The sports department has introduced short exercise sessions between lectures."
       },
       {
-        "start": 5.22,
-        "end": 14.62,
+        "start": 6.16,
+        "end": 12.32,
         "text": "A pilot found that brief movement improved afternoon concentration. Sessions run at one o’clock on Mondays and Thursdays."
       },
       {
-        "start": 14.62,
-        "end": 23.49,
+        "start": 12.32,
+        "end": 18.48,
         "text": "Students can join the list until the previous evening. Comfortable clothing is recommended, but equipment is provided."
       },
       {
-        "start": 23.49,
-        "end": 26.62,
+        "start": 18.48,
+        "end": 24.64,
         "text": "Every activity has a beginner version."
       },
       {
-        "start": 26.62,
+        "start": 24.64,
         "end": 30.8,
         "text": "Recorded stretching routines are available during bad weather."
       }
@@ -1131,6 +1527,54 @@
         ],
         "answer": 2,
         "explanationZh": "原文依据：Every activity has a beginner version."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for exercise habits cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "A telephone help session is offered the following morning.",
+          "Anyone without a booking may attend a group feedback session.",
+          "Questions can be submitted online and the lecture will be streamed.",
+          "Recorded stretching routines are available during bad weather."
+        ],
+        "answer": 3,
+        "explanationZh": "原文给出的替代安排是：Recorded stretching routines are available during bad weather."
+      },
+      {
+        "prompt": "By offering “Recorded stretching routines are available during bad weather.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about exercise habits.",
+          "They insist that no plan connected with exercise habits can change.",
+          "They blame participants before the exercise habits activity begins.",
+          "They are flexible and willing to help participants."
+        ],
+        "answer": 3,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Recorded stretching routines are available during bad weather."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the exercise habits arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Students can join the list until the previous evening. Comfortable clothing is recommended, but equipment is provided.",
+          "Volunteers must install the application before Monday night. They need a charged laptop and one set of lecture notes.",
+          "A résumé must be submitted by Thursday. Candidates should bring the job description they selected.",
+          "Students should claim free tickets before Tuesday noon. Attendees may bring one example of a doubtful online claim."
+        ],
+        "answer": 0,
+        "explanationZh": "应同时注意截止时间和准备事项：Students can join the list until the previous evening. Comfortable clothing is recommended, but equipment is provided."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in exercise habits?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They can participate because guidance or support is available.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 1,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：Every activity has a beginner version."
       }
     ],
     "audioSrc": "/audio/v1/listen-10.wav"
@@ -1145,26 +1589,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 4.84,
+        "end": 6.296,
         "text": "The learning center is testing a note-taking application with volunteers."
       },
       {
-        "start": 4.84,
-        "end": 13.56,
+        "start": 6.296,
+        "end": 12.592,
         "text": "Teachers want evidence about which digital tools reduce revision time. Training starts online at seven on Tuesday evening."
       },
       {
-        "start": 13.56,
-        "end": 22.76,
+        "start": 12.592,
+        "end": 18.888,
         "text": "Volunteers must install the application before Monday night. They need a charged laptop and one set of lecture notes."
       },
       {
-        "start": 22.76,
-        "end": 27.12,
+        "start": 18.888,
+        "end": 25.184,
         "text": "Technical support will guide anyone unfamiliar with the software."
       },
       {
-        "start": 27.12,
+        "start": 25.184,
         "end": 31.48,
         "text": "A telephone help session is offered the following morning."
       }
@@ -1241,6 +1685,54 @@
         ],
         "answer": 3,
         "explanationZh": "原文依据：Technical support will guide anyone unfamiliar with the software."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for digital learning cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "A telephone help session is offered the following morning.",
+          "Those absent receive a blank planning sheet and instructions.",
+          "Solo applicants will be matched with a team on Friday.",
+          "A checklist and captioning guide will be emailed afterward."
+        ],
+        "answer": 0,
+        "explanationZh": "原文给出的替代安排是：A telephone help session is offered the following morning."
+      },
+      {
+        "prompt": "By offering “A telephone help session is offered the following morning.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They are flexible and willing to help participants.",
+          "They dismiss every concern raised about digital learning.",
+          "They insist that no plan connected with digital learning can change.",
+          "They blame participants before the digital learning activity begins."
+        ],
+        "answer": 0,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：A telephone help session is offered the following morning."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the digital learning arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "A short time-use survey is due on Tuesday. Students should bring their current calendar.",
+          "Volunteers must install the application before Monday night. They need a charged laptop and one set of lecture notes.",
+          "Teams of four must register before Wednesday. Each team needs one phone capable of taking photographs.",
+          "Group leaders need to register by Wednesday. Participants should bring their usual meeting invitation."
+        ],
+        "answer": 1,
+        "explanationZh": "应同时注意截止时间和准备事项：Volunteers must install the application before Monday night. They need a charged laptop and one set of lecture notes."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in digital learning?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They can participate because guidance or support is available.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 2,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：Technical support will guide anyone unfamiliar with the software."
       }
     ],
     "audioSrc": "/audio/v1/listen-11.wav"
@@ -1255,26 +1747,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 4.69,
+        "end": 5.812,
         "text": "A study-skills tutor is running a clinic on weekly planning."
       },
       {
-        "start": 4.69,
-        "end": 13.59,
+        "start": 5.812,
+        "end": 11.624,
         "text": "Many students said long task lists made them postpone important work. Small groups meet Wednesday afternoon for forty minutes."
       },
       {
-        "start": 13.59,
-        "end": 20.15,
+        "start": 11.624,
+        "end": 17.436,
         "text": "A short time-use survey is due on Tuesday. Students should bring their current calendar."
       },
       {
-        "start": 20.15,
-        "end": 24.84,
+        "start": 17.436,
+        "end": 23.248,
         "text": "The clinic begins with a simple method suitable for beginners."
       },
       {
-        "start": 24.84,
+        "start": 23.248,
         "end": 29.06,
         "text": "Those absent receive a blank planning sheet and instructions."
       }
@@ -1351,6 +1843,54 @@
         ],
         "answer": 0,
         "explanationZh": "原文依据：The clinic begins with a simple method suitable for beginners."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for time management cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Students who cannot travel may answer questions through a supervised video call.",
+          "Those absent receive a blank planning sheet and instructions.",
+          "Rain will postpone the service until the following Tuesday.",
+          "Students who miss orientation can watch the recorded briefing."
+        ],
+        "answer": 1,
+        "explanationZh": "原文给出的替代安排是：Those absent receive a blank planning sheet and instructions."
+      },
+      {
+        "prompt": "By offering “Those absent receive a blank planning sheet and instructions.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about time management.",
+          "They are flexible and willing to help participants.",
+          "They insist that no plan connected with time management can change.",
+          "They blame participants before the time management activity begins."
+        ],
+        "answer": 1,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Those absent receive a blank planning sheet and instructions."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the time management arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Volunteer names are needed by Wednesday. Helpers should bring a charged phone but no personal documents.",
+          "Owners may reserve a slot until Wednesday evening. They should bring the bicycle key and student identification.",
+          "A short time-use survey is due on Tuesday. Students should bring their current calendar.",
+          "Applications close before Thursday noon. Volunteers should bring a student card and one picture book."
+        ],
+        "answer": 2,
+        "explanationZh": "应同时注意截止时间和准备事项：A short time-use survey is due on Tuesday. Students should bring their current calendar."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in time management?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree.",
+          "They can participate because guidance or support is available."
+        ],
+        "answer": 3,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：The clinic begins with a simple method suitable for beginners."
       }
     ],
     "audioSrc": "/audio/v1/listen-12.wav"
@@ -1365,26 +1905,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.59,
+        "end": 6.52,
         "text": "The community office needs students to help older residents use mobile services."
       },
       {
-        "start": 5.59,
-        "end": 14.44,
+        "start": 6.52,
+        "end": 13.04,
         "text": "Residents asked for support with hospital and transport applications. The first visit is next Saturday at the neighborhood center."
       },
       {
-        "start": 14.44,
-        "end": 21.89,
+        "start": 13.04,
+        "end": 19.56,
         "text": "Volunteer names are needed by Wednesday. Helpers should bring a charged phone but no personal documents."
       },
       {
-        "start": 21.89,
-        "end": 27.01,
+        "start": 19.56,
+        "end": 26.08,
         "text": "Privacy training is compulsory and will be given before the visit."
       },
       {
-        "start": 27.01,
+        "start": 26.08,
         "end": 32.6,
         "text": "Students who cannot travel may answer questions through a supervised video call."
       }
@@ -1463,6 +2003,18 @@
         "explanationZh": "原文依据：Privacy training is compulsory and will be given before the visit."
       },
       {
+        "prompt": "What alternative is available if the main arrangement for community service cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "The fee will be refunded if severe weather cancels the trip.",
+          "Receipts can be analyzed online by students unable to visit.",
+          "Students who cannot travel may answer questions through a supervised video call.",
+          "A librarian will answer remaining questions by email."
+        ],
+        "answer": 2,
+        "explanationZh": "原文给出的替代安排是：Students who cannot travel may answer questions through a supervised video call."
+      },
+      {
         "prompt": "By offering “Students who cannot travel may answer questions through a supervised video call.”, what attitude do the organizers show toward possible difficulties?",
         "skillTag": "attitude",
         "options": [
@@ -1473,6 +2025,30 @@
         ],
         "answer": 2,
         "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Students who cannot travel may answer questions through a supervised video call."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the community service arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Payment and registration are due by Tuesday. Travelers need an identity card and packed lunch.",
+          "Participants must join the shared list by Friday. They need a calculator and two reusable bags.",
+          "Bookings must be made by Friday at six. Visitors need a library card and a draft search question.",
+          "Volunteer names are needed by Wednesday. Helpers should bring a charged phone but no personal documents."
+        ],
+        "answer": 3,
+        "explanationZh": "应同时注意截止时间和准备事项：Volunteer names are needed by Wednesday. Helpers should bring a charged phone but no personal documents."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in community service?",
+        "skillTag": "inference",
+        "options": [
+          "They can participate because guidance or support is available.",
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 0,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：Privacy training is compulsory and will be given before the visit."
       }
     ],
     "audioSrc": "/audio/v1/listen-13.wav"
@@ -1487,26 +2063,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.74,
+        "end": 5.918,
         "text": "The international office is arranging a low-cost weekend trip to a historic town."
       },
       {
-        "start": 5.74,
-        "end": 13.25,
+        "start": 5.918,
+        "end": 11.836,
         "text": "Saturday was avoided because several departments hold tests then. The coach departs at eight on Sunday morning."
       },
       {
-        "start": 13.25,
-        "end": 19.88,
+        "start": 11.836,
+        "end": 17.754,
         "text": "Payment and registration are due by Tuesday. Travelers need an identity card and packed lunch."
       },
       {
-        "start": 19.88,
-        "end": 24.73,
+        "start": 17.754,
+        "end": 23.672,
         "text": "A guide will explain the sites in both Chinese and English."
       },
       {
-        "start": 24.73,
+        "start": 23.672,
         "end": 29.59,
         "text": "The fee will be refunded if severe weather cancels the trip."
       }
@@ -1583,6 +2159,54 @@
         ],
         "answer": 2,
         "explanationZh": "原文依据：A guide will explain the sites in both Chinese and English."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for travel planning cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Unselected applicants can still help at information desks.",
+          "Indoor data analysis is planned if a storm prevents fieldwork.",
+          "Slides will be posted for anyone with a class conflict.",
+          "The fee will be refunded if severe weather cancels the trip."
+        ],
+        "answer": 3,
+        "explanationZh": "原文给出的替代安排是：The fee will be refunded if severe weather cancels the trip."
+      },
+      {
+        "prompt": "By offering “The fee will be refunded if severe weather cancels the trip.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about travel planning.",
+          "They insist that no plan connected with travel planning can change.",
+          "They blame participants before the travel planning activity begins.",
+          "They are flexible and willing to help participants."
+        ],
+        "answer": 3,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：The fee will be refunded if severe weather cancels the trip."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the travel planning arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Payment and registration are due by Tuesday. Travelers need an identity card and packed lunch.",
+          "Applications close at noon on Wednesday. Candidates should prepare a thirty-second welcome.",
+          "Students should select a location before Monday. Each team needs a notebook; all instruments are supplied.",
+          "Students should reserve a seat before Tuesday morning. They should bring their timetable and degree checklist."
+        ],
+        "answer": 0,
+        "explanationZh": "应同时注意截止时间和准备事项：Payment and registration are due by Tuesday. Travelers need an identity card and packed lunch."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in travel planning?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They can participate because guidance or support is available.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 1,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：A guide will explain the sites in both Chinese and English."
       }
     ],
     "audioSrc": "/audio/v1/listen-14.wav"
@@ -1597,26 +2221,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.86,
+        "end": 5.856,
         "text": "The language club is recruiting hosts for a campus cultural festival."
       },
       {
-        "start": 5.86,
-        "end": 14.91,
+        "start": 5.856,
+        "end": 11.712,
         "text": "This year the festival includes twice as many visiting groups. Host practice takes place Friday after classes."
       },
       {
-        "start": 14.91,
-        "end": 21.3,
+        "start": 11.712,
+        "end": 17.568,
         "text": "Applications close at noon on Wednesday. Candidates should prepare a thirty-second welcome."
       },
       {
-        "start": 21.3,
-        "end": 25.02,
+        "start": 17.568,
+        "end": 23.424,
         "text": "Clear communication matters more than stage experience."
       },
       {
-        "start": 25.02,
+        "start": 23.424,
         "end": 29.28,
         "text": "Unselected applicants can still help at information desks."
       }
@@ -1693,6 +2317,54 @@
         ],
         "answer": 3,
         "explanationZh": "原文依据：Clear communication matters more than stage experience."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for cultural festivals cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Unselected applicants can still help at information desks.",
+          "A virtual tour is available for students studying off campus.",
+          "Remote volunteers may review the guide transcript instead.",
+          "Anonymous comments will also be accepted after the meeting."
+        ],
+        "answer": 0,
+        "explanationZh": "原文给出的替代安排是：Unselected applicants can still help at information desks."
+      },
+      {
+        "prompt": "By offering “Unselected applicants can still help at information desks.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They are flexible and willing to help participants.",
+          "They dismiss every concern raised about cultural festivals.",
+          "They insist that no plan connected with cultural festivals can change.",
+          "They blame participants before the cultural festivals activity begins."
+        ],
+        "answer": 0,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Unselected applicants can still help at information desks."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the cultural festivals arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Tour reservations close one day in advance. Students must wear closed shoes and carry their university card.",
+          "Applications close at noon on Wednesday. Candidates should prepare a thirty-second welcome.",
+          "Volunteers must complete a language survey by Thursday. They should bring wired headphones if possible.",
+          "Suggestions can be submitted online until Wednesday. Participants are asked to bring one practical proposal."
+        ],
+        "answer": 1,
+        "explanationZh": "应同时注意截止时间和准备事项：Applications close at noon on Wednesday. Candidates should prepare a thirty-second welcome."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in cultural festivals?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They can participate because guidance or support is available.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 2,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：Clear communication matters more than stage experience."
       }
     ],
     "audioSrc": "/audio/v1/listen-15.wav"
@@ -1707,26 +2379,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 4.56,
+        "end": 6.076,
         "text": "The engineering school is opening a student innovation laboratory."
       },
       {
-        "start": 4.56,
-        "end": 13.67,
+        "start": 6.076,
+        "end": 12.152,
         "text": "New equipment cannot be used before students complete an introduction. Safety tours are offered Tuesday and Thursday mornings."
       },
       {
-        "start": 13.67,
-        "end": 22.28,
+        "start": 12.152,
+        "end": 18.228,
         "text": "Tour reservations close one day in advance. Students must wear closed shoes and carry their university card."
       },
       {
-        "start": 22.28,
-        "end": 25.32,
+        "start": 18.228,
+        "end": 24.304,
         "text": "The tour assumes no laboratory background."
       },
       {
-        "start": 25.32,
+        "start": 24.304,
         "end": 30.38,
         "text": "A virtual tour is available for students studying off campus."
       }
@@ -1803,6 +2475,54 @@
         ],
         "answer": 0,
         "explanationZh": "原文依据：The tour assumes no laboratory background."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for technological innovation cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Anyone without a booking may attend a group feedback session.",
+          "A virtual tour is available for students studying off campus.",
+          "Questions can be submitted online and the lecture will be streamed.",
+          "Late groups can submit a digital introduction for the union website."
+        ],
+        "answer": 1,
+        "explanationZh": "原文给出的替代安排是：A virtual tour is available for students studying off campus."
+      },
+      {
+        "prompt": "By offering “A virtual tour is available for students studying off campus.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about technological innovation.",
+          "They are flexible and willing to help participants.",
+          "They insist that no plan connected with technological innovation can change.",
+          "They blame participants before the technological innovation activity begins."
+        ],
+        "answer": 1,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：A virtual tour is available for students studying off campus."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the technological innovation arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "A résumé must be submitted by Thursday. Candidates should bring the job description they selected.",
+          "Students should claim free tickets before Tuesday noon. Attendees may bring one example of a doubtful online claim.",
+          "Tour reservations close one day in advance. Students must wear closed shoes and carry their university card.",
+          "Clubs must confirm their tables by Sunday night. Each group should bring a sign and a short activity."
+        ],
+        "answer": 2,
+        "explanationZh": "应同时注意截止时间和准备事项：Tour reservations close one day in advance. Students must wear closed shoes and carry their university card."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in technological innovation?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree.",
+          "They can participate because guidance or support is available."
+        ],
+        "answer": 3,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：The tour assumes no laboratory background."
       }
     ],
     "audioSrc": "/audio/v1/listen-16.wav"
@@ -1817,26 +2537,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.07,
+        "end": 5.782,
         "text": "The careers team is organizing practice interviews with local employers."
       },
       {
-        "start": 5.07,
-        "end": 13.19,
+        "start": 5.782,
+        "end": 11.564,
         "text": "Graduating students requested feedback before the autumn recruitment fair. Interviews will be held on Monday evening."
       },
       {
-        "start": 13.19,
-        "end": 20.8,
+        "start": 11.564,
+        "end": 17.346,
         "text": "A résumé must be submitted by Thursday. Candidates should bring the job description they selected."
       },
       {
-        "start": 20.8,
-        "end": 23.84,
+        "start": 17.346,
+        "end": 23.128,
         "text": "Advisers will provide sample questions beforehand."
       },
       {
-        "start": 23.84,
+        "start": 23.128,
         "end": 28.91,
         "text": "Anyone without a booking may attend a group feedback session."
       }
@@ -1915,6 +2635,18 @@
         "explanationZh": "原文依据：Advisers will provide sample questions beforehand."
       },
       {
+        "prompt": "What alternative is available if the main arrangement for career preparation cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Solo applicants will be matched with a team on Friday.",
+          "A checklist and captioning guide will be emailed afterward.",
+          "Anyone without a booking may attend a group feedback session.",
+          "A résumé checklist will be sent to students who cannot attend."
+        ],
+        "answer": 2,
+        "explanationZh": "原文给出的替代安排是：Anyone without a booking may attend a group feedback session."
+      },
+      {
         "prompt": "By offering “Anyone without a booking may attend a group feedback session.”, what attitude do the organizers show toward possible difficulties?",
         "skillTag": "attitude",
         "options": [
@@ -1925,6 +2657,30 @@
         ],
         "answer": 2,
         "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Anyone without a booking may attend a group feedback session."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the career preparation arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Teams of four must register before Wednesday. Each team needs one phone capable of taking photographs.",
+          "Group leaders need to register by Wednesday. Participants should bring their usual meeting invitation.",
+          "Students must upload a résumé before Wednesday. They should also bring a printed vacancy description.",
+          "A résumé must be submitted by Thursday. Candidates should bring the job description they selected."
+        ],
+        "answer": 3,
+        "explanationZh": "应同时注意截止时间和准备事项：A résumé must be submitted by Thursday. Candidates should bring the job description they selected."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in career preparation?",
+        "skillTag": "inference",
+        "options": [
+          "They can participate because guidance or support is available.",
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 0,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：Advisers will provide sample questions beforehand."
       }
     ],
     "audioSrc": "/audio/v1/listen-17.wav"
@@ -1939,26 +2695,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 6.22,
+        "end": 5.836,
         "text": "A leadership course is looking for teams to solve a campus navigation problem."
       },
       {
-        "start": 6.22,
-        "end": 13.4,
+        "start": 5.836,
+        "end": 11.672,
         "text": "Construction has made several common routes confusing for visitors. The challenge begins Saturday at nine."
       },
       {
-        "start": 13.4,
-        "end": 21.05,
+        "start": 11.672,
+        "end": 17.508,
         "text": "Teams of four must register before Wednesday. Each team needs one phone capable of taking photographs."
       },
       {
-        "start": 21.05,
-        "end": 24.4,
+        "start": 17.508,
+        "end": 23.344,
         "text": "Design experience is helpful but not required."
       },
       {
-        "start": 24.4,
+        "start": 23.344,
         "end": 29.18,
         "text": "Solo applicants will be matched with a team on Friday."
       }
@@ -2035,6 +2791,54 @@
         ],
         "answer": 2,
         "explanationZh": "原文依据：Design experience is helpful but not required."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for teamwork cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Rain will postpone the service until the following Tuesday.",
+          "Students who miss orientation can watch the recorded briefing.",
+          "If the bus is full, an extra vehicle will arrive within fifteen minutes.",
+          "Solo applicants will be matched with a team on Friday."
+        ],
+        "answer": 3,
+        "explanationZh": "原文给出的替代安排是：Solo applicants will be matched with a team on Friday."
+      },
+      {
+        "prompt": "By offering “Solo applicants will be matched with a team on Friday.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about teamwork.",
+          "They insist that no plan connected with teamwork can change.",
+          "They blame participants before the teamwork activity begins.",
+          "They are flexible and willing to help participants."
+        ],
+        "answer": 3,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Solo applicants will be matched with a team on Friday."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the teamwork arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Teams of four must register before Wednesday. Each team needs one phone capable of taking photographs.",
+          "Owners may reserve a slot until Wednesday evening. They should bring the bicycle key and student identification.",
+          "Applications close before Thursday noon. Volunteers should bring a student card and one picture book.",
+          "Feedback is requested by the end of the month. Passengers only need their campus travel card."
+        ],
+        "answer": 0,
+        "explanationZh": "应同时注意截止时间和准备事项：Teams of four must register before Wednesday. Each team needs one phone capable of taking photographs."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in teamwork?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They can participate because guidance or support is available.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 1,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：Design experience is helpful but not required."
       }
     ],
     "audioSrc": "/audio/v1/listen-18.wav"
@@ -2049,26 +2853,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 3.94,
+        "end": 6.008,
         "text": "Campus security is offering bicycle-safety checks before winter."
       },
       {
-        "start": 3.94,
-        "end": 13.3,
+        "start": 6.008,
+        "end": 12.016,
         "text": "Several bicycles were found with weak lights and brakes. Checks take place outside the north gate on Thursday afternoon."
       },
       {
-        "start": 13.3,
-        "end": 21.67,
+        "start": 12.016,
+        "end": 18.024,
         "text": "Owners may reserve a slot until Wednesday evening. They should bring the bicycle key and student identification."
       },
       {
-        "start": 21.67,
-        "end": 25.61,
+        "start": 18.024,
+        "end": 24.032,
         "text": "Mechanics will explain simple maintenance during the check."
       },
       {
-        "start": 25.61,
+        "start": 24.032,
         "end": 30.04,
         "text": "Rain will postpone the service until the following Tuesday."
       }
@@ -2145,6 +2949,54 @@
         ],
         "answer": 3,
         "explanationZh": "原文依据：Mechanics will explain simple maintenance during the check."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for public safety cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Rain will postpone the service until the following Tuesday.",
+          "Receipts can be analyzed online by students unable to visit.",
+          "A librarian will answer remaining questions by email.",
+          "Rain will move the activity into the student center."
+        ],
+        "answer": 0,
+        "explanationZh": "原文给出的替代安排是：Rain will postpone the service until the following Tuesday."
+      },
+      {
+        "prompt": "By offering “Rain will postpone the service until the following Tuesday.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They are flexible and willing to help participants.",
+          "They dismiss every concern raised about public safety.",
+          "They insist that no plan connected with public safety can change.",
+          "They blame participants before the public safety activity begins."
+        ],
+        "answer": 0,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Rain will postpone the service until the following Tuesday."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the public safety arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Participants must join the shared list by Friday. They need a calculator and two reusable bags.",
+          "Owners may reserve a slot until Wednesday evening. They should bring the bicycle key and student identification.",
+          "Bookings must be made by Friday at six. Visitors need a library card and a draft search question.",
+          "Volunteers should register by Thursday. They need comfortable shoes and a refillable bottle."
+        ],
+        "answer": 1,
+        "explanationZh": "应同时注意截止时间和准备事项：Owners may reserve a slot until Wednesday evening. They should bring the bicycle key and student identification."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in public safety?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They can participate because guidance or support is available.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 2,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：Mechanics will explain simple maintenance during the check."
       }
     ],
     "audioSrc": "/audio/v1/listen-19.wav"
@@ -2159,26 +3011,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 4.96,
+        "end": 6.156,
         "text": "The consumer club is comparing refill shops with ordinary supermarkets."
       },
       {
-        "start": 4.96,
-        "end": 13.9,
+        "start": 6.156,
+        "end": 12.312,
         "text": "The club wants to test whether packaging-free shopping really costs less. Volunteers visit both stores on Sunday morning."
       },
       {
-        "start": 13.9,
-        "end": 21.84,
+        "start": 12.312,
+        "end": 18.468,
         "text": "Participants must join the shared list by Friday. They need a calculator and two reusable bags."
       },
       {
-        "start": 21.84,
-        "end": 25.81,
+        "start": 18.468,
+        "end": 24.624,
         "text": "A price-comparison form will be explained before departure."
       },
       {
-        "start": 25.81,
+        "start": 24.624,
         "end": 30.78,
         "text": "Receipts can be analyzed online by students unable to visit."
       }
@@ -2255,6 +3107,54 @@
         ],
         "answer": 0,
         "explanationZh": "原文依据：A price-comparison form will be explained before departure."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for consumer choices cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Indoor data analysis is planned if a storm prevents fieldwork.",
+          "Receipts can be analyzed online by students unable to visit.",
+          "Slides will be posted for anyone with a class conflict.",
+          "The recipes will be published after the class."
+        ],
+        "answer": 1,
+        "explanationZh": "原文给出的替代安排是：Receipts can be analyzed online by students unable to visit."
+      },
+      {
+        "prompt": "By offering “Receipts can be analyzed online by students unable to visit.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about consumer choices.",
+          "They are flexible and willing to help participants.",
+          "They insist that no plan connected with consumer choices can change.",
+          "They blame participants before the consumer choices activity begins."
+        ],
+        "answer": 1,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Receipts can be analyzed online by students unable to visit."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the consumer choices arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Students should select a location before Monday. Each team needs a notebook; all instruments are supplied.",
+          "Students should reserve a seat before Tuesday morning. They should bring their timetable and degree checklist.",
+          "Participants must join the shared list by Friday. They need a calculator and two reusable bags.",
+          "Free places can be booked until Friday afternoon. Participants should bring a food container and a pen."
+        ],
+        "answer": 2,
+        "explanationZh": "应同时注意截止时间和准备事项：Participants must join the shared list by Friday. They need a calculator and two reusable bags."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in consumer choices?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree.",
+          "They can participate because guidance or support is available."
+        ],
+        "answer": 3,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：A price-comparison form will be explained before departure."
       }
     ],
     "audioSrc": "/audio/v1/listen-20.wav"
@@ -2269,26 +3169,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.15,
+        "end": 6.082,
         "text": "The geography department is installing small weather sensors around campus."
       },
       {
-        "start": 5.15,
-        "end": 14.43,
+        "start": 6.082,
+        "end": 12.164,
         "text": "Local temperature records are needed for a climate study. Sensor teams meet at the laboratory on Tuesday afternoon."
       },
       {
-        "start": 14.43,
-        "end": 22.68,
+        "start": 12.164,
+        "end": 18.246,
         "text": "Students should select a location before Monday. Each team needs a notebook; all instruments are supplied."
       },
       {
-        "start": 22.68,
-        "end": 25.25,
+        "start": 18.246,
+        "end": 24.328,
         "text": "A technician will demonstrate calibration."
       },
       {
-        "start": 25.25,
+        "start": 24.328,
         "end": 30.41,
         "text": "Indoor data analysis is planned if a storm prevents fieldwork."
       }
@@ -2367,6 +3267,18 @@
         "explanationZh": "原文依据：A technician will demonstrate calibration."
       },
       {
+        "prompt": "What alternative is available if the main arrangement for climate change cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Remote volunteers may review the guide transcript instead.",
+          "Anonymous comments will also be accepted after the meeting.",
+          "Indoor data analysis is planned if a storm prevents fieldwork.",
+          "Recorded stretching routines are available during bad weather."
+        ],
+        "answer": 2,
+        "explanationZh": "原文给出的替代安排是：Indoor data analysis is planned if a storm prevents fieldwork."
+      },
+      {
         "prompt": "By offering “Indoor data analysis is planned if a storm prevents fieldwork.”, what attitude do the organizers show toward possible difficulties?",
         "skillTag": "attitude",
         "options": [
@@ -2377,6 +3289,30 @@
         ],
         "answer": 2,
         "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Indoor data analysis is planned if a storm prevents fieldwork."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the climate change arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Volunteers must complete a language survey by Thursday. They should bring wired headphones if possible.",
+          "Suggestions can be submitted online until Wednesday. Participants are asked to bring one practical proposal.",
+          "Students can join the list until the previous evening. Comfortable clothing is recommended, but equipment is provided.",
+          "Students should select a location before Monday. Each team needs a notebook; all instruments are supplied."
+        ],
+        "answer": 3,
+        "explanationZh": "应同时注意截止时间和准备事项：Students should select a location before Monday. Each team needs a notebook; all instruments are supplied."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in climate change?",
+        "skillTag": "inference",
+        "options": [
+          "They can participate because guidance or support is available.",
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 0,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：A technician will demonstrate calibration."
       }
     ],
     "audioSrc": "/audio/v1/listen-21.wav"
@@ -2391,26 +3327,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.63,
+        "end": 5.634,
         "text": "The city museum has invited students to test a new audio guide."
       },
       {
-        "start": 5.63,
-        "end": 14.08,
+        "start": 5.634,
+        "end": 11.268,
         "text": "The museum wants clearer directions before the guide is released publicly. Testing begins at ten on Saturday morning."
       },
       {
-        "start": 14.08,
-        "end": 21.13,
+        "start": 11.268,
+        "end": 16.902,
         "text": "Volunteers must complete a language survey by Thursday. They should bring wired headphones if possible."
       },
       {
-        "start": 21.13,
-        "end": 24.41,
+        "start": 16.902,
+        "end": 22.536,
         "text": "No knowledge of art history is expected."
       },
       {
-        "start": 24.41,
+        "start": 22.536,
         "end": 28.17,
         "text": "Remote volunteers may review the guide transcript instead."
       }
@@ -2487,6 +3423,54 @@
         ],
         "answer": 2,
         "explanationZh": "原文依据：No knowledge of art history is expected."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for museum activities cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Questions can be submitted online and the lecture will be streamed.",
+          "Late groups can submit a digital introduction for the union website.",
+          "A telephone help session is offered the following morning.",
+          "Remote volunteers may review the guide transcript instead."
+        ],
+        "answer": 3,
+        "explanationZh": "原文给出的替代安排是：Remote volunteers may review the guide transcript instead."
+      },
+      {
+        "prompt": "By offering “Remote volunteers may review the guide transcript instead.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about museum activities.",
+          "They insist that no plan connected with museum activities can change.",
+          "They blame participants before the museum activities activity begins.",
+          "They are flexible and willing to help participants."
+        ],
+        "answer": 3,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Remote volunteers may review the guide transcript instead."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the museum activities arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Volunteers must complete a language survey by Thursday. They should bring wired headphones if possible.",
+          "Students should claim free tickets before Tuesday noon. Attendees may bring one example of a doubtful online claim.",
+          "Clubs must confirm their tables by Sunday night. Each group should bring a sign and a short activity.",
+          "Volunteers must install the application before Monday night. They need a charged laptop and one set of lecture notes."
+        ],
+        "answer": 0,
+        "explanationZh": "应同时注意截止时间和准备事项：Volunteers must complete a language survey by Thursday. They should bring wired headphones if possible."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in museum activities?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They can participate because guidance or support is available.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 1,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：No knowledge of art history is expected."
       }
     ],
     "audioSrc": "/audio/v1/listen-22.wav"
@@ -2501,26 +3485,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.1,
+        "end": 6.12,
         "text": "A visiting scientist will speak about reliable information on social media."
       },
       {
-        "start": 5.1,
-        "end": 13.45,
+        "start": 6.12,
+        "end": 12.24,
         "text": "A larger hall was booked after registrations passed two hundred. The lecture starts Wednesday at half past six."
       },
       {
-        "start": 13.45,
-        "end": 21.79,
+        "start": 12.24,
+        "end": 18.36,
         "text": "Students should claim free tickets before Tuesday noon. Attendees may bring one example of a doubtful online claim."
       },
       {
-        "start": 21.79,
-        "end": 25.5,
+        "start": 18.36,
+        "end": 24.48,
         "text": "The talk is intended for a general audience."
       },
       {
-        "start": 25.5,
+        "start": 24.48,
         "end": 30.6,
         "text": "Questions can be submitted online and the lecture will be streamed."
       }
@@ -2597,6 +3581,54 @@
         ],
         "answer": 3,
         "explanationZh": "原文依据：The talk is intended for a general audience."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for academic lectures cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Questions can be submitted online and the lecture will be streamed.",
+          "A checklist and captioning guide will be emailed afterward.",
+          "A résumé checklist will be sent to students who cannot attend.",
+          "Those absent receive a blank planning sheet and instructions."
+        ],
+        "answer": 0,
+        "explanationZh": "原文给出的替代安排是：Questions can be submitted online and the lecture will be streamed."
+      },
+      {
+        "prompt": "By offering “Questions can be submitted online and the lecture will be streamed.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They are flexible and willing to help participants.",
+          "They dismiss every concern raised about academic lectures.",
+          "They insist that no plan connected with academic lectures can change.",
+          "They blame participants before the academic lectures activity begins."
+        ],
+        "answer": 0,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：Questions can be submitted online and the lecture will be streamed."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the academic lectures arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Group leaders need to register by Wednesday. Participants should bring their usual meeting invitation.",
+          "Students should claim free tickets before Tuesday noon. Attendees may bring one example of a doubtful online claim.",
+          "Students must upload a résumé before Wednesday. They should also bring a printed vacancy description.",
+          "A short time-use survey is due on Tuesday. Students should bring their current calendar."
+        ],
+        "answer": 1,
+        "explanationZh": "应同时注意截止时间和准备事项：Students should claim free tickets before Tuesday noon. Attendees may bring one example of a doubtful online claim."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in academic lectures?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They can participate because guidance or support is available.",
+          "They may join only after completing a university degree."
+        ],
+        "answer": 2,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：The talk is intended for a general audience."
       }
     ],
     "audioSrc": "/audio/v1/listen-23.wav"
@@ -2611,26 +3643,26 @@
     "segments": [
       {
         "start": 0,
-        "end": 5.44,
+        "end": 6.036,
         "text": "The computing center is teaching students to run accessible online meetings."
       },
       {
-        "start": 5.44,
-        "end": 15.34,
+        "start": 6.036,
+        "end": 12.072,
         "text": "Several student groups reported problems with captions and turn-taking. The workshop is held Friday at three in a computer room."
       },
       {
-        "start": 15.34,
-        "end": 22.26,
+        "start": 12.072,
+        "end": 18.108,
         "text": "Group leaders need to register by Wednesday. Participants should bring their usual meeting invitation."
       },
       {
-        "start": 22.26,
-        "end": 25.72,
+        "start": 18.108,
+        "end": 24.144,
         "text": "The trainer starts with basic platform controls."
       },
       {
-        "start": 25.72,
+        "start": 24.144,
         "end": 30.18,
         "text": "A checklist and captioning guide will be emailed afterward."
       }
@@ -2707,6 +3739,54 @@
         ],
         "answer": 0,
         "explanationZh": "原文依据：The trainer starts with basic platform controls."
+      },
+      {
+        "prompt": "What alternative is available if the main arrangement for online meetings cannot be followed?",
+        "skillTag": "action",
+        "options": [
+          "Students who miss orientation can watch the recorded briefing.",
+          "A checklist and captioning guide will be emailed afterward.",
+          "If the bus is full, an extra vehicle will arrive within fifteen minutes.",
+          "Students who cannot travel may answer questions through a supervised video call."
+        ],
+        "answer": 1,
+        "explanationZh": "原文给出的替代安排是：A checklist and captioning guide will be emailed afterward."
+      },
+      {
+        "prompt": "By offering “A checklist and captioning guide will be emailed afterward.”, what attitude do the organizers show toward possible difficulties?",
+        "skillTag": "attitude",
+        "options": [
+          "They dismiss every concern raised about online meetings.",
+          "They are flexible and willing to help participants.",
+          "They insist that no plan connected with online meetings can change.",
+          "They blame participants before the online meetings activity begins."
+        ],
+        "answer": 1,
+        "explanationZh": "原文提供替代安排，体现组织者愿意灵活解决困难：A checklist and captioning guide will be emailed afterward."
+      },
+      {
+        "prompt": "Which pair of actions would best prepare a student for the online meetings arrangement?",
+        "skillTag": "detail",
+        "options": [
+          "Applications close before Thursday noon. Volunteers should bring a student card and one picture book.",
+          "Feedback is requested by the end of the month. Passengers only need their campus travel card.",
+          "Group leaders need to register by Wednesday. Participants should bring their usual meeting invitation.",
+          "Volunteer names are needed by Wednesday. Helpers should bring a charged phone but no personal documents."
+        ],
+        "answer": 2,
+        "explanationZh": "应同时注意截止时间和准备事项：Group leaders need to register by Wednesday. Participants should bring their usual meeting invitation."
+      },
+      {
+        "prompt": "What does the message imply about students with little previous experience in online meetings?",
+        "skillTag": "inference",
+        "options": [
+          "They are automatically refused a place.",
+          "They must organize the entire activity alone.",
+          "They may join only after completing a university degree.",
+          "They can participate because guidance or support is available."
+        ],
+        "answer": 3,
+        "explanationZh": "原文说明会提供支持，因此缺少经验并不会阻止参加：The trainer starts with basic platform controls."
       }
     ],
     "audioSrc": "/audio/v1/listen-24.wav"

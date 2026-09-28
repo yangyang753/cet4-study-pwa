@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import listeningSets from '../../content/v1/listeningSets.json';
 import readingSets from '../../content/v1/readingSets.json';
+import writingPrompts from '../../content/v1/writingPrompts.json';
 import { auditQuestionTemplateDiversity } from './questionDiversity';
 
 describe('auditQuestionTemplateDiversity', () => {
@@ -18,5 +19,15 @@ describe('auditQuestionTemplateDiversity', () => {
   it('accepts the shipped listening and reading banks', () => {
     expect(auditQuestionTemplateDiversity(listeningSets, 'listening')).toEqual([]);
     expect(auditQuestionTemplateDiversity(readingSets, 'reading')).toEqual([]);
+  });
+
+  it('keeps Chinese topic labels out of English reading passages', () => {
+    expect(readingSets.filter((set) => /[\u3400-\u9fff]/u.test(set.passage))).toEqual([]);
+  });
+
+  it('uses varied, grammatical writing guidance instead of one repeated template', () => {
+    expect(new Set(writingPrompts.map((item) => item.referenceOpening)).size).toBe(writingPrompts.length);
+    expect(new Set(writingPrompts.map((item) => item.outline.join('|'))).size).toBeGreaterThanOrEqual(6);
+    expect(writingPrompts.filter((item) => /\b(?:habits|activities|tools) deserves\b/i.test(item.referenceOpening))).toEqual([]);
   });
 });

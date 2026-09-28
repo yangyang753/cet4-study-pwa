@@ -6,7 +6,8 @@ const readJson = async <T>(name: string): Promise<T> => JSON.parse(await readFil
 const writeJson = async (name: string, value: unknown) => writeFile(path.join(contentDir, name), `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 
 type QuestionSkillTag = 'detail' | 'reason' | 'purpose' | 'action' | 'attitude' | 'inference' | 'main-idea' | 'vocabulary-in-context' | 'reference' | 'paragraph-role' | 'structure';
-type SetItem = { id: string; theme: string; themeEn?: string; type: string; difficulty: string; audioSrc?: string };
+type SetItem = { id: string; theme: string; themeEn?: string; type: string; difficulty: string; audioSrc?: string; segments?: Array<{ start: number; end: number; text: string }> };
+type WritingItem = { id: string; topic: string; prompt: string; outline: string[]; referenceOpening: string };
 type ListeningScenario = { intro: string; schedule: string; reason: string; deadline: string; bring: string; experience: string; fallback: string };
 
 const listeningScenarios: ListeningScenario[] = [
@@ -46,6 +47,8 @@ const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set
   if (!scenario) throw new Error(`Missing listening scenario ${index + 1}`);
   const themeEn = set.themeEn ?? set.theme;
   const segments = [scenario.intro, `${scenario.reason} ${scenario.schedule}`, `${scenario.deadline} ${scenario.bring}`, scenario.experience, scenario.fallback];
+  const audioDuration = set.segments?.at(-1)?.end ?? 50;
+  const segmentDuration = audioDuration / segments.length;
   const summarySkill: QuestionSkillTag = index % 2 === 0 ? 'main-idea' : 'purpose';
   const values = [scenario.schedule, scenario.reason, scenario.intro, scenario.deadline, scenario.bring, scenario.experience];
   const prompts = [
@@ -61,13 +64,30 @@ const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set
   const skillTags: QuestionSkillTag[] = ['detail', 'reason', summarySkill, 'action', 'action', 'inference'];
   const scenarioRows = listeningScenarios.map((item) => [item.schedule, item.reason, item.intro, item.deadline, item.bring, item.experience] as const);
   const questions = prompts.map((prompt, questionIndex) => ({ prompt, skillTag: skillTags[questionIndex], ...choices(values[questionIndex], alternateFacts(scenarioRows, index, questionIndex), (index + questionIndex) % 4), explanationZh: `原文依据：${values[questionIndex]}` }));
-  if (index % 4 === 0) questions.push({
+  const fallbackFacts = listeningScenarios.map((item) => item.fallback);
+  const preparationFacts = listeningScenarios.map((item) => `${item.deadline} ${item.bring}`);
+  questions.push({
+    prompt: `What alternative is available if the main arrangement for ${themeEn} cannot be followed?`,
+    skillTag: 'action',
+    ...choices(scenario.fallback, [1, 7, 13].map((offset) => fallbackFacts[(index + offset) % fallbackFacts.length]), (index + 2) % 4),
+    explanationZh: `原文给出的替代安排是：${scenario.fallback}`,
+  }, {
     prompt: `By offering “${scenario.fallback}”, what attitude do the organizers show toward possible difficulties?`,
     skillTag: 'attitude',
     ...choices('They are flexible and willing to help participants.', [`They dismiss every concern raised about ${themeEn}.`, `They insist that no plan connected with ${themeEn} can change.`, `They blame participants before the ${themeEn} activity begins.`], (index + 2) % 4),
     explanationZh: `原文提供替代安排，体现组织者愿意灵活解决困难：${scenario.fallback}`,
+  }, {
+    prompt: `Which pair of actions would best prepare a student for the ${themeEn} arrangement?`,
+    skillTag: 'detail',
+    ...choices(`${scenario.deadline} ${scenario.bring}`, [1, 7, 13].map((offset) => preparationFacts[(index + offset) % preparationFacts.length]), (index + 3) % 4),
+    explanationZh: `应同时注意截止时间和准备事项：${scenario.deadline} ${scenario.bring}`,
+  }, {
+    prompt: `What does the message imply about students with little previous experience in ${themeEn}?`,
+    skillTag: 'inference',
+    ...choices('They can participate because guidance or support is available.', ['They are automatically refused a place.', 'They must organize the entire activity alone.', 'They may join only after completing a university degree.'], index % 4),
+    explanationZh: `原文说明会提供支持，因此缺少经验并不会阻止参加：${scenario.experience}`,
   });
-  return { ...set, transcript: segments.join(' '), segments: segments.map((text, segmentIndex) => ({ start: segmentIndex * 10, end: (segmentIndex + 1) * 10, text })), questions };
+  return { ...set, transcript: segments.join(' '), segments: segments.map((text, segmentIndex) => ({ start: Number((segmentIndex * segmentDuration).toFixed(3)), end: Number(((segmentIndex + 1) * segmentDuration).toFixed(3)), text })), questions };
 });
 
 const readingFacts = [
@@ -91,9 +111,33 @@ const readingFacts = [
 const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, index) => {
   const [project, duration, participants, aid, challenge, response] = readingFacts[index];
   const endings = ['Most participants wanted the project to continue, and the organizers will measure longer-term results next term.', 'The final survey showed stronger satisfaction, although the team says more evidence is still needed.', 'After the change, participation became steadier and the revised method will be used in a larger trial.'];
-  const sentences = [`${set.theme} was examined through ${project} lasting ${duration}.`, `The project involved ${participants} and collected both activity records and short interviews.`, `Participants said ${aid} helped them make consistent progress.`, `The main difficulty was ${challenge}, which reduced the benefit for some people.`, `Organizers responded by introducing ${response} instead of abandoning the project.`, endings[index % endings.length]];
+  const sentences = [`Researchers examined the issue through ${project} lasting ${duration}.`, `The project involved ${participants} and collected both activity records and short interviews.`, `Participants said ${aid} helped them make consistent progress.`, `The main difficulty was ${challenge}, which reduced the benefit for some people.`, `Organizers responded by introducing ${response} instead of abandoning the project.`, endings[index % endings.length]];
+  if (set.type === 'cloze') {
+    const clozeWords = ['researchers', 'project', 'involved', 'records', 'interviews', 'participants', 'consistent', 'difficulty', 'responded', 'evidence'];
+    const clozePassage = `Researchers began a campus project that involved ${participants}. They compared activity records with short interviews. Participants reported more consistent progress when ${aid} was available. The main difficulty was ${challenge}, so organizers responded with ${response}. The team will collect further evidence before expanding the program.`;
+    const distractorPool = ['although', 'briefly', 'declined', 'external', 'frequent', 'gradually', 'however', 'independent', 'limited', 'normally', 'previous', 'rarely', 'separate', 'temporary', 'widely'];
+    const clozePromptStems = [
+      `At the opening of the report on ${project}, choose the word for the people conducting the study.`,
+      `In the introduction to ${project}, choose the noun naming the organized study.`,
+      `In the participant sentence about ${project}, choose the verb that links the study to its members.`,
+      `In the method description for ${project}, choose the noun for stored activity information.`,
+      `In the same method description, choose the noun for the short conversations used by the team.`,
+      `When the report turns to the people in ${project}, choose the correct plural noun.`,
+      `In the progress sentence about ${aid}, choose the adjective meaning steady over time.`,
+      `When the report introduces ${challenge}, choose the noun that signals a problem.`,
+      `After that problem, choose the verb describing how the organizers reacted.`,
+      `In the conclusion to ${project}, choose the noun for information supporting a decision.`,
+    ];
+    const questions = clozeWords.map((word, questionIndex) => ({
+      prompt: clozePromptStems[questionIndex],
+      skillTag: questionIndex % 2 === 0 ? 'vocabulary-in-context' : 'structure',
+      ...choices(word, [distractorPool[questionIndex], distractorPool[(questionIndex + 5) % distractorPool.length], distractorPool[(questionIndex + 10) % distractorPool.length]], (index + questionIndex) % 4),
+      explanationZh: `结合上下文与词性，空格 ${questionIndex + 1} 应填 ${word}。`,
+    }));
+    return { ...set, passage: clozePassage, questions };
+  }
   const finalSkill: QuestionSkillTag = index % 2 === 0 ? 'paragraph-role' : 'structure';
-  const answers = [`The results of ${project}`, duration, participants, 'steady improvement over time', 'The difficulty prevented some participants from receiving the same benefit.', `It presents the practical solution: ${response}.`];
+  const answers = [`The results of ${project}`, duration, participants, 'steady improvement over time', 'The difficulty prevented some participants from receiving the same benefit.', `It presents the practical solution: ${response}.`, response, `It was intended to address ${challenge}.`, 'The organizers see promise in the revised method but still want stronger evidence.', 'Cautiously positive.'];
   const prompts = [
     `Which title best captures the findings from ${project} rather than merely naming the topic?`,
     `What duration is reported for ${project}, the study involving ${participants}?`,
@@ -101,8 +145,12 @@ const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, in
     `In the account where ${aid} helped, what does “consistent progress” most nearly mean?`,
     `What can be inferred about the effect of ${challenge} on the people studied?`,
     finalSkill === 'paragraph-role' ? `What role does the sentence about ${response} play after the problem of ${challenge}?` : `How does the passage move from the problem of ${challenge} to its conclusion?`,
+    `Which change did the organizers introduce after identifying ${challenge}?`,
+    `Why was ${response} added to the project?`,
+    `What does the final sentence suggest about the future of ${project}?`,
+    `Which description best matches the writer's attitude toward the outcome of ${project}?`,
   ];
-  const skillTags: QuestionSkillTag[] = ['main-idea', 'detail', 'reference', 'vocabulary-in-context', 'inference', finalSkill];
+  const skillTags: QuestionSkillTag[] = ['main-idea', 'detail', 'reference', 'vocabulary-in-context', 'inference', finalSkill, 'detail', 'reason', 'inference', 'attitude'];
   const genericDistractors = [
     alternateFacts(readingFacts, index, 0).map((item) => `The results of ${item}`),
     alternateFacts(readingFacts, index, 1),
@@ -110,16 +158,57 @@ const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, in
     ['rapid change without a clear direction', 'a single success that cannot be repeated', 'less effort with no measurable result'],
     ['Every participant benefited equally from the project.', 'The challenge caused the entire project to end immediately.', 'The difficulty was unrelated to the project results.'],
     alternateFacts(readingFacts, index, 5).map((item) => `It introduces an unrelated detail about ${item}.`),
+    alternateFacts(readingFacts, index, 5),
+    ['It was intended to shorten the reported duration.', 'It was intended to replace every participant.', 'It was added before any difficulty was observed.'],
+    ['The project will certainly expand without further review.', 'The organizers have decided to end the project immediately.', 'The results are considered completely unreliable.'],
+    ['Entirely negative.', 'Uncritically enthusiastic.', 'Indifferent to the results.'],
   ];
-  const evidence = [sentences[0], sentences[0], sentences[1], sentences[2], sentences[3], `${sentences[3]} ${sentences[4]}`];
-  const questions = prompts.map((prompt, questionIndex) => ({ prompt, skillTag: skillTags[questionIndex], ...choices(answers[questionIndex], genericDistractors[questionIndex], (index * 2 + questionIndex) % 4), explanationZh: `原文依据：${evidence[questionIndex]}` }));
+  const evidence = [sentences[0], sentences[0], sentences[1], sentences[2], sentences[3], `${sentences[3]} ${sentences[4]}`, sentences[4], `${sentences[3]} ${sentences[4]}`, sentences[5], sentences[5]];
+  const questionLimit = set.type === 'reading' ? 10 : 6;
+  const questions = prompts.slice(0, questionLimit).map((prompt, questionIndex) => ({ prompt, skillTag: skillTags[questionIndex], ...choices(answers[questionIndex], genericDistractors[questionIndex], (index * 2 + questionIndex) % 4), explanationZh: `原文依据：${evidence[questionIndex]}` }));
   return { ...set, passage: sentences.join(' '), questions };
 });
 
+const writingOpenings = [
+  'A daily reading habit gives students a reliable way to widen their knowledge and sharpen their thinking.',
+  'Volunteer work teaches lessons that are difficult to learn from textbooks alone.',
+  'Managing time well does not mean filling every minute; it means protecting time for both study and rest.',
+  'Among the habits college students overlook, regular sleep is one of the most important.',
+  'Online learning is most useful when flexibility is balanced with self-discipline.',
+  'Effective teamwork begins when members understand both their shared goal and their individual responsibility.',
+  'A greener campus can begin with one realistic action repeated by many students.',
+  'Campus activities deserve support when they help students build skills and genuine connections.',
+  'Career planning should start before graduation because useful experience takes time to develop.',
+  'Digital tools improve learning only when students control how and when they use them.',
+  'Reliable public transport around a university benefits students, staff, and nearby residents alike.',
+  'A well-designed cultural exchange activity allows participants to learn with one another rather than simply watch a performance.',
+];
+const writingOutlines = [
+  ['Explain the value of daily reading', 'Describe one realistic campus reading activity', 'Show how students could maintain the habit'],
+  ['State what volunteer work can teach', 'Use one specific example', 'Connect the lesson to future study or work'],
+  ['Identify the study-rest conflict', 'Explain one scheduling method', 'Describe the result of using it consistently'],
+  ['Name one overlooked healthy habit', 'Explain why students neglect it', 'Suggest one university-level improvement'],
+  ['Acknowledge the main advantage', 'Explain a common difficulty', 'Set out rules for responsible use'],
+  ['Identify a common team problem', 'Explain its effect on the group', 'Propose a practical solution'],
+  ['Choose one achievable environmental action', 'Explain its direct impact', 'Show how participation could grow'],
+  ['Name the activity that deserves support', 'Explain the skills or connections it develops', 'Recommend how the university should organize it'],
+  ['Explain why early planning matters', 'Identify a useful first step', 'Describe how that step supports a later decision'],
+  ['Describe how digital tools help', 'Identify one source of distraction', 'Propose clear limits for responsible use'],
+  ['Identify one transport problem', 'Describe the proposed improvement', 'Explain who benefits and how'],
+  ['Propose one interactive cultural activity', 'Explain how participants would take part', 'Show how it could deepen mutual understanding'],
+];
+const writingPrompts = (await readJson<WritingItem[]>('writingPrompts.json')).map((item, index) => ({
+  ...item,
+  outline: writingOutlines[index],
+  referenceOpening: writingOpenings[index],
+}));
+
 await writeJson('listeningSets.json', listeningSets);
 await writeJson('readingSets.json', readingSets);
+await writeJson('writingPrompts.json', writingPrompts);
 const inventory = await readJson<Record<string, unknown>>('inventory.json');
 inventory.listeningSets = listeningSets;
 inventory.readingSets = readingSets;
+inventory.writingPrompts = writingPrompts;
 await writeJson('inventory.json', inventory);
 console.log({ listeningQuestions: listeningSets.reduce((sum, set) => sum + set.questions.length, 0), readingQuestions: readingSets.reduce((sum, set) => sum + set.questions.length, 0) });

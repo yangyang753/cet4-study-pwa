@@ -4,131 +4,131 @@
     "topic": "daily reading",
     "prompt": "Your university is collecting suggestions for encouraging daily reading. Write an essay explaining why the habit matters and propose one workable activity. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "Explain the value of daily reading",
+      "Describe one realistic campus reading activity",
+      "Show how students could maintain the habit"
     ],
-    "referenceOpening": "In my view, daily reading deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "A daily reading habit gives students a reliable way to widen their knowledge and sharpen their thinking."
   },
   {
     "id": "write-02",
     "topic": "volunteer work",
     "prompt": "Write an essay for the campus newspaper describing what students can learn from volunteer work. Support your view with an example. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "State what volunteer work can teach",
+      "Use one specific example",
+      "Connect the lesson to future study or work"
     ],
-    "referenceOpening": "In my view, volunteer work deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "Volunteer work teaches lessons that are difficult to learn from textbooks alone."
   },
   {
     "id": "write-03",
     "topic": "time management",
     "prompt": "Many students struggle to balance study and rest. Write an essay explaining how effective time management can help and recommend a practical method. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "Identify the study-rest conflict",
+      "Explain one scheduling method",
+      "Describe the result of using it consistently"
     ],
-    "referenceOpening": "In my view, time management deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "Managing time well does not mean filling every minute; it means protecting time for both study and rest."
   },
   {
     "id": "write-04",
     "topic": "healthy habits",
     "prompt": "Write an essay discussing one healthy habit that college students often overlook and explain how the university could encourage it. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "Name one overlooked healthy habit",
+      "Explain why students neglect it",
+      "Suggest one university-level improvement"
     ],
-    "referenceOpening": "In my view, healthy habits deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "Among the habits college students overlook, regular sleep is one of the most important."
   },
   {
     "id": "write-05",
     "topic": "online learning",
     "prompt": "Online learning offers flexibility but also creates difficulties. Write an essay evaluating both sides and state how students should use it. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "Acknowledge the main advantage",
+      "Explain a common difficulty",
+      "Set out rules for responsible use"
     ],
-    "referenceOpening": "In my view, online learning deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "Online learning is most useful when flexibility is balanced with self-discipline."
   },
   {
     "id": "write-06",
     "topic": "teamwork",
     "prompt": "A student club wants to improve teamwork. Write an essay identifying a common team problem and suggesting how members can solve it. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "Identify a common team problem",
+      "Explain its effect on the group",
+      "Propose a practical solution"
     ],
-    "referenceOpening": "In my view, teamwork deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "Effective teamwork begins when members understand both their shared goal and their individual responsibility."
   },
   {
     "id": "write-07",
     "topic": "environmental action",
     "prompt": "Write an essay persuading students to take one realistic environmental action on campus and explain its possible impact. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "Choose one achievable environmental action",
+      "Explain its direct impact",
+      "Show how participation could grow"
     ],
-    "referenceOpening": "In my view, environmental action deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "A greener campus can begin with one realistic action repeated by many students."
   },
   {
     "id": "write-08",
     "topic": "campus activities",
     "prompt": "Your university plans to redesign campus activities. Write an essay describing which kind of activity deserves more support and why. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "Name the activity that deserves support",
+      "Explain the skills or connections it develops",
+      "Recommend how the university should organize it"
     ],
-    "referenceOpening": "In my view, campus activities deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "Campus activities deserve support when they help students build skills and genuine connections."
   },
   {
     "id": "write-09",
     "topic": "career planning",
     "prompt": "Write an essay explaining why career planning should begin before graduation and identify the first step a student can take. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "Explain why early planning matters",
+      "Identify a useful first step",
+      "Describe how that step supports a later decision"
     ],
-    "referenceOpening": "In my view, career planning deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "Career planning should start before graduation because useful experience takes time to develop."
   },
   {
     "id": "write-10",
     "topic": "digital tools",
     "prompt": "Digital tools can either support or interrupt study. Write an essay explaining how students can use them more responsibly. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "Describe how digital tools help",
+      "Identify one source of distraction",
+      "Propose clear limits for responsible use"
     ],
-    "referenceOpening": "In my view, digital tools deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "Digital tools improve learning only when students control how and when they use them."
   },
   {
     "id": "write-11",
     "topic": "public transport",
     "prompt": "Write an essay about one improvement you would make to public transport around your university and explain who would benefit. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "Identify one transport problem",
+      "Describe the proposed improvement",
+      "Explain who benefits and how"
     ],
-    "referenceOpening": "In my view, public transport deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "Reliable public transport around a university benefits students, staff, and nearby residents alike."
   },
   {
     "id": "write-12",
     "topic": "cultural exchange",
     "prompt": "Your class will hold an international cultural exchange event. Write an essay proposing an activity and explaining how it promotes understanding. Write 120–180 words.",
     "outline": [
-      "State a clear position",
-      "Develop it with reasons or an example",
-      "End with a practical conclusion"
+      "Propose one interactive cultural activity",
+      "Explain how participants would take part",
+      "Show how it could deepen mutual understanding"
     ],
-    "referenceOpening": "In my view, cultural exchange deserves thoughtful attention because it can make a meaningful difference in college life."
+    "referenceOpening": "A well-designed cultural exchange activity allows participants to learn with one another rather than simply watch a performance."
   }
 ]

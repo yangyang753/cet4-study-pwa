@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { DashboardSnapshot } from '../../domain/learning';
-import { buildWeeklyLearningReport } from './weeklyLearningReport';
+import { buildWeeklyLearningReport, deriveMockTrend } from './weeklyLearningReport';
 
 const settings = { id: 'current' as const, examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-27T00:00:00.000Z' };
 const base = (overrides: Partial<DashboardSnapshot> = {}): DashboardSnapshot => ({ attempts: [], dueReviews: [], completions: [], knowledgeStates: [], settings, examSessions: [], ...overrides });
@@ -9,8 +9,15 @@ describe('buildWeeklyLearningReport', () => {
   it('returns an honest empty report', () => {
     expect(buildWeeklyLearningReport(base(), '2026-09-27')).toMatchObject({
       activeDays: 0, attemptCount: 0, accuracyByKind: [], masteredCount: 0, lapseCount: 0,
-      recentMockMinimum: null, mockSampleCount: 0, priorities: [],
+      recentMockMinimum: null, recentMockScores: [], mockTrend: null, mockSampleCount: 0, priorities: [],
     });
+  });
+
+  it('labels a meaningful three-mock change without overstating small fluctuations', () => {
+    expect(deriveMockTrend([455, 430, 410])).toBe('improving');
+    expect(deriveMockTrend([390, 415, 440])).toBe('declining');
+    expect(deriveMockTrend([432, 426, 430])).toBe('steady');
+    expect(deriveMockTrend([430, 420])).toBeNull();
   });
 
   it('includes the seven-day boundary and excludes older activity', () => {

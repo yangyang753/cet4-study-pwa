@@ -9,7 +9,6 @@ import type { CachedPlan } from '../../data/localDb';
 import { previousStudyDate, studyDate } from '../../lib/studyDate';
 import { selectDiagnosticWeakSkill } from '../diagnostic/diagnostic';
 import { deriveAdaptivePriorities } from '../diagnostic/adaptivePriorities';
-import { ExamReadiness } from './ExamReadiness';
 import './dashboard.css';
 import { learningVocabulary } from '../../content/vocabularyLearning';
 import { buildVocabularyWorkload } from '../vocabulary/vocabularySchedule';
@@ -19,8 +18,6 @@ import { appHref } from '../../lib/appHref';
 import { buildWeeklyLearningReport } from './weeklyLearningReport';
 import { WeeklyLearningReport } from './WeeklyLearningReportPanel';
 import { ExamDateConfirmation } from '../settings/ExamDateConfirmation';
-import { localBackupFreshness } from '../auth/backupHealth';
-import { supabaseClient } from '../../lib/runtime';
 
 const defaultRepository = new DexieLearningRepository();
 export function greetingForHour(hour: number) {
@@ -40,7 +37,7 @@ const taskCopy: Record<StudyKind, { icon: string; title: string; detail: string;
 };
 const priorityLabels = { vocabulary: '词汇', grammar: '语法', listening: '听力', reading: '阅读', writing: '写作', translation: '翻译' } as const;
 
-export function TodayPage({ today = studyDate(), examDate, repository = defaultRepository, cloudConfigured = Boolean(supabaseClient) }: { today?: string; examDate?: string; repository?: LearningRepository; cloudConfigured?: boolean }) {
+export function TodayPage({ today = studyDate(), examDate, repository = defaultRepository }: { today?: string; examDate?: string; repository?: LearningRepository }) {
   const [snapshot, setSnapshot] = useState<DashboardSnapshot | null>(null);
   const [previousPlan, setPreviousPlan] = useState<CachedPlan | null | undefined>(undefined);
   useEffect(() => {
@@ -72,7 +69,6 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
   const plannedMinutes = plan.tasks.reduce((sum, task) => sum + task.minutes, 0);
   const completedToday = plan.tasks.filter((task) => metrics.completedTaskIds.has(task.id)).length;
   const completionPercent = plan.tasks.length ? Math.round((completedToday / plan.tasks.length) * 100) : 0;
-  const backupHealth = localBackupFreshness(new Date(`${today}T23:59:59`));
   useEffect(() => {
     if (!snapshot || previousPlan === undefined) return;
     void repository.savePlan({ id: `plan:${today}`, date: today, tasks: plan.tasks, updatedAt: new Date().toISOString() });
@@ -86,12 +82,10 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
       <div><span>今日进度</span><strong>{completedToday}/{plan.tasks.length}</strong><i aria-hidden="true"><b style={{ width: `${completionPercent}%` }} /></i></div>
       <div><span>目标分数</span><strong>425+</strong><small>建议安全目标 450</small></div>
     </section>
-    {!cloudConfigured && backupHealth.status !== 'fresh' && <aside className="backup-alert" role="alert" aria-label="本机备份提醒"><div><strong>保护你的学习记录</strong><p>学习记录只保存在当前浏览器。{backupHealth.status === 'stale' ? `上次备份已是 ${backupHealth.ageDays} 天前，` : '你还没有导出过备份，'}手机清理浏览器数据后可能无法恢复。</p></div><a href={appHref('account')}>现在备份</a></aside>}
     {snapshot && !snapshot.settings.diagnosticCompletedAt && <aside className="cloud-notice"><strong>先做 10～15 分钟基础诊断</strong><p>系统会据此安排第一周学习重点；也可以稍后再做。</p><a href={appHref('diagnostic')}>开始基础诊断</a></aside>}
     {snapshot?.settings.diagnosticProfile && <aside className="diagnostic-summary" aria-labelledby="diagnostic-summary-title"><div><span id="diagnostic-summary-title">基础诊断参考估分</span><strong>预计 {snapshot.settings.diagnosticProfile.estimatedScore} 分</strong><small>参考区间 {snapshot.settings.diagnosticProfile.scoreRange.low}～{snapshot.settings.diagnosticProfile.scoreRange.high}</small></div><div><b>{snapshot.settings.diagnosticProfile.estimatedScore >= 425 ? '已达到 425 分参考线' : `距离 425 分还差 ${425 - snapshot.settings.diagnosticProfile.estimatedScore} 分`}</b><span>当前优先补强：{priorities.length ? priorities.map((item) => priorityLabels[item.kind]).join('、') : snapshot.settings.diagnosticProfile.weakSkills.map((kind) => priorityLabels[kind]).join('、')}</span><small>估分用于学习规划，不是官方成绩。</small></div><a href={appHref('diagnostic')}>重新诊断</a></aside>}
     {diagnosticRetestDue && <aside className="cloud-notice"><strong>建议重新做一次基础诊断</strong><p>{diagnosticAgeDays >= 21 ? '诊断结果已超过 21 天，' : `诊断后已完成 ${attemptsSinceDiagnostic} 次练习，`}重新测试能让今日弱项安排更准确。</p><a href={appHref('diagnostic')}>开始重新诊断</a></aside>}
     <section className="dashboard-hero"><div className="focus-card"><span className="focus-kicker">TODAY'S PRIORITY · 今日重点</span><h2>{focusKind ? `优先加强${taskCopy[focusKind].title}` : '先建立学习记录，再定位薄弱项'}</h2><p>先复习旧词，再学新词并检测翻译强化词，随后完成“{dailyCulturePrompt.theme}”中国文化中译英；漏用的目标词会自动加入错题复习。</p>{vocabularyWorkload && <div className="vocabulary-workload" aria-label="今日词汇安排"><b>今日复习 {vocabularyWorkload.dueWords.length}/{vocabularyWorkload.dueWordCount} 个</b><b>今日新词 {vocabularyWorkload.newWords.length} 个</b>{vocabularyWorkload.cultureWords.length > 0 && <b>翻译强化词 {vocabularyWorkload.cultureWords.length} 个</b>}{vocabularyWorkload.reviewBacklog > 0 && <span className="pace-warning" role="alert">仍有 {vocabularyWorkload.reviewBacklog} 个到期旧词排队，新词已暂停，先清复习积压。</span>}<span>{vocabularyWorkload.remainingWords === 0 ? `${learningVocabulary.length} 个高频词已进入巩固复习` : `还剩 ${vocabularyWorkload.remainingWords} 个高频词`}</span>{vocabularyWorkload.remainingWords > 0 && vocabularyWorkload.newWordQuota > 0 && <span>目标 {vocabularyWorkload.firstPassTargetDate} 前完成首轮，预留 {vocabularyWorkload.consolidationDays} 天复习巩固</span>}{vocabularyWorkload.remainingWords > 0 && vocabularyWorkload.newWordQuota > 0 && vocabularyWorkload.projectedCompletionDate !== vocabularyWorkload.firstPassTargetDate && <span>按今日进度预计 {vocabularyWorkload.projectedCompletionDate} 完成首轮接触</span>}{vocabularyWorkload.remainingWords > 0 && vocabularyWorkload.newWordQuota === 0 && vocabularyWorkload.reviewBacklog === 0 && <span>新词首轮已完成，继续按计划复习直到稳定掌握。</span>}<span>预计 {vocabularyWorkload.projectedMasteryDate} 前完成稳定掌握</span><span>仍需完成 {vocabularyWorkload.remainingReviewStages} 次巩固检测（建议每日 {vocabularyWorkload.requiredDailyMasteryChecks} 次）</span><small>425 参考线 · 450 安全目标</small>{vocabularyWorkload.atRisk && <p className="pace-warning" role="alert">按当前上限无法在目标首轮截止日前完成：每天至少 {vocabularyWorkload.requiredDailyWords} 个。请延长每日学习时间，并优先完成词汇。</p>}{vocabularyWorkload.masteryAtRisk && <p className="pace-warning" role="alert">按当前学习时长无法在考试前完成稳定掌握。建议增加每日学习时间，并优先清理到期复习。</p>}</div>}<div className="focus-actions"><a className="focus-action" href={appHref('practice/vocabulary')}>先学高频词 →</a><a className="knowledge-action" href={appHref('knowledge')}>查看高频知识</a></div></div><aside className="countdown-card"><span className="countdown-label">备考状态</span><div className="countdown-ring" style={{ '--countdown-progress': `${Math.max(10, Math.min(100, 100 - daysUntil(today, targetDate)))}%` } as CSSProperties}><strong>{daysUntil(today, targetDate)}</strong><b>天</b></div><h2>备考状态</h2><h3>{plan.phase === 'foundation' ? '基础补强期' : plan.phase === 'breakthrough' ? '题型突破期' : '冲刺模拟期'}</h3><p>今日完成 {completionPercent}%</p><div className="countdown-meter"><i style={{ width: `${completionPercent}%` }} /></div></aside></section>
-    {snapshot && <ExamReadiness settings={snapshot.settings} today={today} repository={repository} />}
     {snapshot && <ExamDateConfirmation settings={snapshot.settings} repository={repository} onConfirmed={(settings) => setSnapshot((current) => current ? { ...current, settings } : current)} />}
     {weeklyReport && <WeeklyLearningReport report={weeklyReport} />}
     <section className="dashboard-grid"><div className="task-panel"><header className="task-panel-heading"><div><span>PERSONAL ROUTE</span><h2>今日学习路线</h2><p>{plannedMinutes > dailyMinutes ? `整套模考 · ${plannedMinutes} 分钟` : `${dailyMinutes} 分钟 · 按顺序完成效果更稳`}</p></div><b>{completedToday}/{plan.tasks.length}</b></header><div className="learning-route">{plan.tasks.map((task, index) => {

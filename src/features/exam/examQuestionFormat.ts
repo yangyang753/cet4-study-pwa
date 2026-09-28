@@ -7,6 +7,16 @@ const correctText = (question: CatalogQuestion) => {
 };
 
 function clozeContext(questions: CatalogQuestion[]) {
+  const onePassage = questions[0]?.passage?.trim();
+  if (onePassage && questions.every((question) => question.passage?.trim() === onePassage)) {
+    let context = onePassage;
+    questions.forEach((question, index) => {
+      const answer = correctText(question);
+      const pattern = new RegExp(`\\b${answer.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+      context = pattern.test(context) ? context.replace(pattern, `[${index + 1}]`) : `${context} [${index + 1}]`;
+    });
+    return context;
+  }
   return questions.map((question, index) => {
     const answer = correctText(question);
     const source = question.passage?.trim() || question.prompt;

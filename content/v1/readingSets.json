@@ -4,79 +4,127 @@
     "type": "cloze",
     "theme": "校园志愿活动",
     "difficulty": "foundation",
-    "passage": "校园志愿活动 was examined through a peer tutoring trial lasting ten weeks. The project involved 86 first-year students and collected both activity records and short interviews. Participants said weekly goal cards helped them make consistent progress. The main difficulty was irregular attendance, which reduced the benefit for some people. Organizers responded by introducing shorter evening sessions instead of abandoning the project. Most participants wanted the project to continue, and the organizers will measure longer-term results next term.",
+    "passage": "Researchers began a campus project that involved 86 first-year students. They compared activity records with short interviews. Participants reported more consistent progress when weekly goal cards was available. The main difficulty was irregular attendance, so organizers responded with shorter evening sessions. The team will collect further evidence before expanding the program.",
     "questions": [
       {
-        "prompt": "Which title best captures the findings from a peer tutoring trial rather than merely naming the topic?",
-        "skillTag": "main-idea",
-        "options": [
-          "The results of a peer tutoring trial",
-          "The results of a library seat-booking study",
-          "The results of a reusable-container campaign",
-          "The results of a regional travel survey"
-        ],
-        "answer": 0,
-        "explanationZh": "原文依据：校园志愿活动 was examined through a peer tutoring trial lasting ten weeks."
-      },
-      {
-        "prompt": "What duration is reported for a peer tutoring trial, the study involving 86 first-year students?",
-        "skillTag": "detail",
-        "options": [
-          "six weeks",
-          "ten weeks",
-          "seven weeks",
-          "six weekends"
-        ],
-        "answer": 1,
-        "explanationZh": "原文依据：校园志愿活动 was examined through a peer tutoring trial lasting ten weeks."
-      },
-      {
-        "prompt": "In the sentence following “The project involved 86 first-year students”, who does “Participants” refer to?",
-        "skillTag": "reference",
-        "options": [
-          "240 library users",
-          "14 campus cafés",
-          "86 first-year students",
-          "310 visitors"
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：The project involved 86 first-year students and collected both activity records and short interviews."
-      },
-      {
-        "prompt": "In the account where weekly goal cards helped, what does “consistent progress” most nearly mean?",
+        "prompt": "At the opening of the report on a peer tutoring trial, choose the word for the people conducting the study.",
         "skillTag": "vocabulary-in-context",
         "options": [
-          "rapid change without a clear direction",
-          "a single success that cannot be repeated",
-          "less effort with no measurable result",
-          "steady improvement over time"
-        ],
-        "answer": 3,
-        "explanationZh": "原文依据：Participants said weekly goal cards helped them make consistent progress."
-      },
-      {
-        "prompt": "What can be inferred about the effect of irregular attendance on the people studied?",
-        "skillTag": "inference",
-        "options": [
-          "The difficulty prevented some participants from receiving the same benefit.",
-          "Every participant benefited equally from the project.",
-          "The challenge caused the entire project to end immediately.",
-          "The difficulty was unrelated to the project results."
+          "researchers",
+          "although",
+          "gradually",
+          "previous"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：The main difficulty was irregular attendance, which reduced the benefit for some people."
+        "explanationZh": "结合上下文与词性，空格 1 应填 researchers。"
       },
       {
-        "prompt": "What role does the sentence about shorter evening sessions play after the problem of irregular attendance?",
-        "skillTag": "paragraph-role",
+        "prompt": "In the introduction to a peer tutoring trial, choose the noun naming the organized study.",
+        "skillTag": "structure",
         "options": [
-          "It introduces an unrelated detail about automatic cancellation after fifteen minutes.",
-          "It presents the practical solution: shorter evening sessions.",
-          "It introduces an unrelated detail about return boxes near dormitories.",
-          "It introduces an unrelated detail about alternative walking routes."
+          "briefly",
+          "project",
+          "however",
+          "rarely"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：The main difficulty was irregular attendance, which reduced the benefit for some people. Organizers responded by introducing shorter evening sessions instead of abandoning the project."
+        "explanationZh": "结合上下文与词性，空格 2 应填 project。"
+      },
+      {
+        "prompt": "In the participant sentence about a peer tutoring trial, choose the verb that links the study to its members.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "declined",
+          "independent",
+          "involved",
+          "separate"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 3 应填 involved。"
+      },
+      {
+        "prompt": "In the method description for a peer tutoring trial, choose the noun for stored activity information.",
+        "skillTag": "structure",
+        "options": [
+          "external",
+          "limited",
+          "temporary",
+          "records"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 4 应填 records。"
+      },
+      {
+        "prompt": "In the same method description, choose the noun for the short conversations used by the team.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "interviews",
+          "frequent",
+          "normally",
+          "widely"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 5 应填 interviews。"
+      },
+      {
+        "prompt": "When the report turns to the people in a peer tutoring trial, choose the correct plural noun.",
+        "skillTag": "structure",
+        "options": [
+          "gradually",
+          "participants",
+          "previous",
+          "although"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 6 应填 participants。"
+      },
+      {
+        "prompt": "In the progress sentence about weekly goal cards, choose the adjective meaning steady over time.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "however",
+          "rarely",
+          "consistent",
+          "briefly"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 7 应填 consistent。"
+      },
+      {
+        "prompt": "When the report introduces irregular attendance, choose the noun that signals a problem.",
+        "skillTag": "structure",
+        "options": [
+          "independent",
+          "separate",
+          "declined",
+          "difficulty"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 8 应填 difficulty。"
+      },
+      {
+        "prompt": "After that problem, choose the verb describing how the organizers reacted.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "responded",
+          "limited",
+          "temporary",
+          "external"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 9 应填 responded。"
+      },
+      {
+        "prompt": "In the conclusion to a peer tutoring trial, choose the noun for information supporting a decision.",
+        "skillTag": "structure",
+        "options": [
+          "normally",
+          "evidence",
+          "widely",
+          "frequent"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 10 应填 evidence。"
       }
     ]
   },
@@ -85,7 +133,7 @@
     "type": "matching",
     "theme": "图书馆服务",
     "difficulty": "foundation",
-    "passage": "图书馆服务 was examined through a library seat-booking study lasting six weeks. The project involved 240 library users and collected both activity records and short interviews. Participants said live occupancy updates helped them make consistent progress. The main difficulty was unused reservations, which reduced the benefit for some people. Organizers responded by introducing automatic cancellation after fifteen minutes instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
+    "passage": "Researchers examined the issue through a library seat-booking study lasting six weeks. The project involved 240 library users and collected both activity records and short interviews. Participants said live occupancy updates helped them make consistent progress. The main difficulty was unused reservations, which reduced the benefit for some people. Organizers responded by introducing automatic cancellation after fifteen minutes instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a library seat-booking study rather than merely naming the topic?",
@@ -97,7 +145,7 @@
           "The results of a student cultural festival"
         ],
         "answer": 2,
-        "explanationZh": "原文依据：图书馆服务 was examined through a library seat-booking study lasting six weeks."
+        "explanationZh": "原文依据：Researchers examined the issue through a library seat-booking study lasting six weeks."
       },
       {
         "prompt": "What duration is reported for a library seat-booking study, the study involving 240 library users?",
@@ -109,7 +157,7 @@
           "six weeks"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：图书馆服务 was examined through a library seat-booking study lasting six weeks."
+        "explanationZh": "原文依据：Researchers examined the issue through a library seat-booking study lasting six weeks."
       },
       {
         "prompt": "In the sentence following “The project involved 240 library users”, who does “Participants” refer to?",
@@ -166,7 +214,7 @@
     "type": "reading",
     "theme": "课程选择",
     "difficulty": "foundation",
-    "passage": "课程选择 was examined through an elective-course guide lasting one semester. The project involved 150 students and collected both activity records and short interviews. Participants said examples from senior students helped them make consistent progress. The main difficulty was too many technical terms, which reduced the benefit for some people. Organizers responded by introducing plain-language summaries instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
+    "passage": "Researchers examined the issue through an elective-course guide lasting one semester. The project involved 150 students and collected both activity records and short interviews. Participants said examples from senior students helped them make consistent progress. The main difficulty was too many technical terms, which reduced the benefit for some people. Organizers responded by introducing plain-language summaries instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from an elective-course guide rather than merely naming the topic?",
@@ -178,7 +226,7 @@
           "The results of an open laboratory scheme"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：课程选择 was examined through an elective-course guide lasting one semester."
+        "explanationZh": "原文依据：Researchers examined the issue through an elective-course guide lasting one semester."
       },
       {
         "prompt": "What duration is reported for an elective-course guide, the study involving 150 students?",
@@ -189,7 +237,7 @@
           "nine weeks"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：课程选择 was examined through an elective-course guide lasting one semester."
+        "explanationZh": "原文依据：Researchers examined the issue through an elective-course guide lasting one semester."
       },
       {
         "prompt": "In the sentence following “The project involved 150 students”, who does “Participants” refer to?",
@@ -238,6 +286,54 @@
         ],
         "answer": 1,
         "explanationZh": "原文依据：The main difficulty was too many technical terms, which reduced the benefit for some people. Organizers responded by introducing plain-language summaries instead of abandoning the project."
+      },
+      {
+        "prompt": "Which change did the organizers introduce after identifying too many technical terms?",
+        "skillTag": "detail",
+        "options": [
+          "separate quiet zones",
+          "automatic classroom reminders",
+          "plain-language summaries",
+          "shared preparation periods"
+        ],
+        "answer": 2,
+        "explanationZh": "原文依据：Organizers responded by introducing plain-language summaries instead of abandoning the project."
+      },
+      {
+        "prompt": "Why was plain-language summaries added to the project?",
+        "skillTag": "reason",
+        "options": [
+          "It was intended to shorten the reported duration.",
+          "It was intended to replace every participant.",
+          "It was added before any difficulty was observed.",
+          "It was intended to address too many technical terms."
+        ],
+        "answer": 3,
+        "explanationZh": "原文依据：The main difficulty was too many technical terms, which reduced the benefit for some people. Organizers responded by introducing plain-language summaries instead of abandoning the project."
+      },
+      {
+        "prompt": "What does the final sentence suggest about the future of an elective-course guide?",
+        "skillTag": "inference",
+        "options": [
+          "The organizers see promise in the revised method but still want stronger evidence.",
+          "The project will certainly expand without further review.",
+          "The organizers have decided to end the project immediately.",
+          "The results are considered completely unreliable."
+        ],
+        "answer": 0,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
+      },
+      {
+        "prompt": "Which description best matches the writer's attitude toward the outcome of an elective-course guide?",
+        "skillTag": "attitude",
+        "options": [
+          "Entirely negative.",
+          "Cautiously positive.",
+          "Uncritically enthusiastic.",
+          "Indifferent to the results."
+        ],
+        "answer": 1,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
       }
     ]
   },
@@ -246,79 +342,127 @@
     "type": "cloze",
     "theme": "宿舍生活",
     "difficulty": "foundation",
-    "passage": "宿舍生活 was examined through a quiet-hours agreement lasting eight weeks. The project involved nine residence halls and collected both activity records and short interviews. Participants said resident-led discussions helped them make consistent progress. The main difficulty was different sleep schedules, which reduced the benefit for some people. Organizers responded by introducing separate quiet zones instead of abandoning the project. Most participants wanted the project to continue, and the organizers will measure longer-term results next term.",
+    "passage": "Researchers began a campus project that involved nine residence halls. They compared activity records with short interviews. Participants reported more consistent progress when resident-led discussions was available. The main difficulty was different sleep schedules, so organizers responded with separate quiet zones. The team will collect further evidence before expanding the program.",
     "questions": [
       {
-        "prompt": "Which title best captures the findings from a quiet-hours agreement rather than merely naming the topic?",
-        "skillTag": "main-idea",
-        "options": [
-          "The results of a club discovery platform",
-          "The results of a digital note comparison",
-          "The results of a quiet-hours agreement",
-          "The results of a graduate interview program"
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：宿舍生活 was examined through a quiet-hours agreement lasting eight weeks."
-      },
-      {
-        "prompt": "What duration is reported for a quiet-hours agreement, the study involving nine residence halls?",
-        "skillTag": "detail",
-        "options": [
-          "three months",
-          "one term",
-          "five Saturdays",
-          "eight weeks"
-        ],
-        "answer": 3,
-        "explanationZh": "原文依据：宿舍生活 was examined through a quiet-hours agreement lasting eight weeks."
-      },
-      {
-        "prompt": "In the sentence following “The project involved nine residence halls”, who does “Participants” refer to?",
-        "skillTag": "reference",
-        "options": [
-          "nine residence halls",
-          "48 student societies",
-          "132 volunteers",
-          "120 candidates"
-        ],
-        "answer": 0,
-        "explanationZh": "原文依据：The project involved nine residence halls and collected both activity records and short interviews."
-      },
-      {
-        "prompt": "In the account where resident-led discussions helped, what does “consistent progress” most nearly mean?",
+        "prompt": "At the opening of the report on a quiet-hours agreement, choose the word for the people conducting the study.",
         "skillTag": "vocabulary-in-context",
         "options": [
-          "rapid change without a clear direction",
-          "steady improvement over time",
-          "a single success that cannot be repeated",
-          "less effort with no measurable result"
-        ],
-        "answer": 1,
-        "explanationZh": "原文依据：Participants said resident-led discussions helped them make consistent progress."
-      },
-      {
-        "prompt": "What can be inferred about the effect of different sleep schedules on the people studied?",
-        "skillTag": "inference",
-        "options": [
-          "Every participant benefited equally from the project.",
-          "The challenge caused the entire project to end immediately.",
-          "The difficulty prevented some participants from receiving the same benefit.",
-          "The difficulty was unrelated to the project results."
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：The main difficulty was different sleep schedules, which reduced the benefit for some people."
-      },
-      {
-        "prompt": "How does the passage move from the problem of different sleep schedules to its conclusion?",
-        "skillTag": "structure",
-        "options": [
-          "It introduces an unrelated detail about monthly information checks.",
-          "It introduces an unrelated detail about a distraction-free mode.",
-          "It introduces an unrelated detail about follow-up reflection questions.",
-          "It presents the practical solution: separate quiet zones."
+          "although",
+          "gradually",
+          "previous",
+          "researchers"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：The main difficulty was different sleep schedules, which reduced the benefit for some people. Organizers responded by introducing separate quiet zones instead of abandoning the project."
+        "explanationZh": "结合上下文与词性，空格 1 应填 researchers。"
+      },
+      {
+        "prompt": "In the introduction to a quiet-hours agreement, choose the noun naming the organized study.",
+        "skillTag": "structure",
+        "options": [
+          "project",
+          "briefly",
+          "however",
+          "rarely"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 2 应填 project。"
+      },
+      {
+        "prompt": "In the participant sentence about a quiet-hours agreement, choose the verb that links the study to its members.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "declined",
+          "involved",
+          "independent",
+          "separate"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 3 应填 involved。"
+      },
+      {
+        "prompt": "In the method description for a quiet-hours agreement, choose the noun for stored activity information.",
+        "skillTag": "structure",
+        "options": [
+          "external",
+          "limited",
+          "records",
+          "temporary"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 4 应填 records。"
+      },
+      {
+        "prompt": "In the same method description, choose the noun for the short conversations used by the team.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "frequent",
+          "normally",
+          "widely",
+          "interviews"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 5 应填 interviews。"
+      },
+      {
+        "prompt": "When the report turns to the people in a quiet-hours agreement, choose the correct plural noun.",
+        "skillTag": "structure",
+        "options": [
+          "participants",
+          "gradually",
+          "previous",
+          "although"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 6 应填 participants。"
+      },
+      {
+        "prompt": "In the progress sentence about resident-led discussions, choose the adjective meaning steady over time.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "however",
+          "consistent",
+          "rarely",
+          "briefly"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 7 应填 consistent。"
+      },
+      {
+        "prompt": "When the report introduces different sleep schedules, choose the noun that signals a problem.",
+        "skillTag": "structure",
+        "options": [
+          "independent",
+          "separate",
+          "difficulty",
+          "declined"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 8 应填 difficulty。"
+      },
+      {
+        "prompt": "After that problem, choose the verb describing how the organizers reacted.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "limited",
+          "temporary",
+          "external",
+          "responded"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 9 应填 responded。"
+      },
+      {
+        "prompt": "In the conclusion to a quiet-hours agreement, choose the noun for information supporting a decision.",
+        "skillTag": "structure",
+        "options": [
+          "evidence",
+          "normally",
+          "widely",
+          "frequent"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 10 应填 evidence。"
       }
     ]
   },
@@ -327,7 +471,7 @@
     "type": "matching",
     "theme": "学生社团",
     "difficulty": "foundation",
-    "passage": "学生社团 was examined through a club discovery platform lasting three months. The project involved 48 student societies and collected both activity records and short interviews. Participants said short demonstration videos helped them make consistent progress. The main difficulty was outdated contact details, which reduced the benefit for some people. Organizers responded by introducing monthly information checks instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
+    "passage": "Researchers examined the issue through a club discovery platform lasting three months. The project involved 48 student societies and collected both activity records and short interviews. Participants said short demonstration videos helped them make consistent progress. The main difficulty was outdated contact details, which reduced the benefit for some people. Organizers responded by introducing monthly information checks instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a club discovery platform rather than merely naming the topic?",
@@ -339,7 +483,7 @@
           "The results of a team navigation challenge"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：学生社团 was examined through a club discovery platform lasting three months."
+        "explanationZh": "原文依据：Researchers examined the issue through a club discovery platform lasting three months."
       },
       {
         "prompt": "What duration is reported for a club discovery platform, the study involving 48 student societies?",
@@ -351,7 +495,7 @@
           "thirty days"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：学生社团 was examined through a club discovery platform lasting three months."
+        "explanationZh": "原文依据：Researchers examined the issue through a club discovery platform lasting three months."
       },
       {
         "prompt": "In the sentence following “The project involved 48 student societies”, who does “Participants” refer to?",
@@ -408,7 +552,7 @@
     "type": "reading",
     "theme": "实习安排",
     "difficulty": "foundation",
-    "passage": "实习安排 was examined through an internship reflection project lasting twelve weeks. The project involved 72 interns and collected both activity records and short interviews. Participants said brief weekly journals helped them make consistent progress. The main difficulty was fear of criticizing workplaces, which reduced the benefit for some people. Organizers responded by introducing anonymous theme reports instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
+    "passage": "Researchers examined the issue through an internship reflection project lasting twelve weeks. The project involved 72 interns and collected both activity records and short interviews. Participants said brief weekly journals helped them make consistent progress. The main difficulty was fear of criticizing workplaces, which reduced the benefit for some people. Organizers responded by introducing anonymous theme reports instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from an internship reflection project rather than merely naming the topic?",
@@ -420,7 +564,7 @@
           "The results of a bicycle-light campaign"
         ],
         "answer": 2,
-        "explanationZh": "原文依据：实习安排 was examined through an internship reflection project lasting twelve weeks."
+        "explanationZh": "原文依据：Researchers examined the issue through an internship reflection project lasting twelve weeks."
       },
       {
         "prompt": "What duration is reported for an internship reflection project, the study involving 72 interns?",
@@ -432,7 +576,7 @@
           "twelve weeks"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：实习安排 was examined through an internship reflection project lasting twelve weeks."
+        "explanationZh": "原文依据：Researchers examined the issue through an internship reflection project lasting twelve weeks."
       },
       {
         "prompt": "In the sentence following “The project involved 72 interns”, who does “Participants” refer to?",
@@ -481,6 +625,54 @@
         ],
         "answer": 3,
         "explanationZh": "原文依据：The main difficulty was fear of criticizing workplaces, which reduced the benefit for some people. Organizers responded by introducing anonymous theme reports instead of abandoning the project."
+      },
+      {
+        "prompt": "Which change did the organizers introduce after identifying fear of criticizing workplaces?",
+        "skillTag": "detail",
+        "options": [
+          "anonymous theme reports",
+          "a revised evening route",
+          "practice accounts with invented data",
+          "advance stock reservations"
+        ],
+        "answer": 0,
+        "explanationZh": "原文依据：Organizers responded by introducing anonymous theme reports instead of abandoning the project."
+      },
+      {
+        "prompt": "Why was anonymous theme reports added to the project?",
+        "skillTag": "reason",
+        "options": [
+          "It was intended to shorten the reported duration.",
+          "It was intended to address fear of criticizing workplaces.",
+          "It was intended to replace every participant.",
+          "It was added before any difficulty was observed."
+        ],
+        "answer": 1,
+        "explanationZh": "原文依据：The main difficulty was fear of criticizing workplaces, which reduced the benefit for some people. Organizers responded by introducing anonymous theme reports instead of abandoning the project."
+      },
+      {
+        "prompt": "What does the final sentence suggest about the future of an internship reflection project?",
+        "skillTag": "inference",
+        "options": [
+          "The project will certainly expand without further review.",
+          "The organizers have decided to end the project immediately.",
+          "The organizers see promise in the revised method but still want stronger evidence.",
+          "The results are considered completely unreliable."
+        ],
+        "answer": 2,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
+      },
+      {
+        "prompt": "Which description best matches the writer's attitude toward the outcome of an internship reflection project?",
+        "skillTag": "attitude",
+        "options": [
+          "Entirely negative.",
+          "Uncritically enthusiastic.",
+          "Indifferent to the results.",
+          "Cautiously positive."
+        ],
+        "answer": 3,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
       }
     ]
   },
@@ -489,79 +681,127 @@
     "type": "cloze",
     "theme": "城市交通",
     "difficulty": "foundation",
-    "passage": "城市交通 was examined through a late-bus pilot lasting five weeks. The project involved 1,100 passenger trips and collected both activity records and short interviews. Participants said a predictable timetable helped them make consistent progress. The main difficulty was delays near the city center, which reduced the benefit for some people. Organizers responded by introducing a revised evening route instead of abandoning the project. Most participants wanted the project to continue, and the organizers will measure longer-term results next term.",
+    "passage": "Researchers began a campus project that involved 1,100 passenger trips. They compared activity records with short interviews. Participants reported more consistent progress when a predictable timetable was available. The main difficulty was delays near the city center, so organizers responded with a revised evening route. The team will collect further evidence before expanding the program.",
     "questions": [
       {
-        "prompt": "Which title best captures the findings from a late-bus pilot rather than merely naming the topic?",
-        "skillTag": "main-idea",
-        "options": [
-          "The results of a late-bus pilot",
-          "The results of a reusable-container campaign",
-          "The results of a regional travel survey",
-          "The results of a packaging-price comparison"
-        ],
-        "answer": 0,
-        "explanationZh": "原文依据：城市交通 was examined through a late-bus pilot lasting five weeks."
-      },
-      {
-        "prompt": "What duration is reported for a late-bus pilot, the study involving 1,100 passenger trips?",
-        "skillTag": "detail",
-        "options": [
-          "seven weeks",
-          "five weeks",
-          "six weekends",
-          "eight shopping trips"
-        ],
-        "answer": 1,
-        "explanationZh": "原文依据：城市交通 was examined through a late-bus pilot lasting five weeks."
-      },
-      {
-        "prompt": "In the sentence following “The project involved 1,100 passenger trips”, who does “Participants” refer to?",
-        "skillTag": "reference",
-        "options": [
-          "14 campus cafés",
-          "310 visitors",
-          "1,100 passenger trips",
-          "55 households"
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：The project involved 1,100 passenger trips and collected both activity records and short interviews."
-      },
-      {
-        "prompt": "In the account where a predictable timetable helped, what does “consistent progress” most nearly mean?",
+        "prompt": "At the opening of the report on a late-bus pilot, choose the word for the people conducting the study.",
         "skillTag": "vocabulary-in-context",
         "options": [
-          "rapid change without a clear direction",
-          "a single success that cannot be repeated",
-          "less effort with no measurable result",
-          "steady improvement over time"
+          "although",
+          "gradually",
+          "researchers",
+          "previous"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 1 应填 researchers。"
+      },
+      {
+        "prompt": "In the introduction to a late-bus pilot, choose the noun naming the organized study.",
+        "skillTag": "structure",
+        "options": [
+          "briefly",
+          "however",
+          "rarely",
+          "project"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：Participants said a predictable timetable helped them make consistent progress."
+        "explanationZh": "结合上下文与词性，空格 2 应填 project。"
       },
       {
-        "prompt": "What can be inferred about the effect of delays near the city center on the people studied?",
-        "skillTag": "inference",
+        "prompt": "In the participant sentence about a late-bus pilot, choose the verb that links the study to its members.",
+        "skillTag": "vocabulary-in-context",
         "options": [
-          "The difficulty prevented some participants from receiving the same benefit.",
-          "Every participant benefited equally from the project.",
-          "The challenge caused the entire project to end immediately.",
-          "The difficulty was unrelated to the project results."
+          "involved",
+          "declined",
+          "independent",
+          "separate"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：The main difficulty was delays near the city center, which reduced the benefit for some people."
+        "explanationZh": "结合上下文与词性，空格 3 应填 involved。"
       },
       {
-        "prompt": "What role does the sentence about a revised evening route play after the problem of delays near the city center?",
-        "skillTag": "paragraph-role",
+        "prompt": "In the method description for a late-bus pilot, choose the noun for stored activity information.",
+        "skillTag": "structure",
         "options": [
-          "It introduces an unrelated detail about return boxes near dormitories.",
-          "It presents the practical solution: a revised evening route.",
-          "It introduces an unrelated detail about alternative walking routes.",
-          "It introduces an unrelated detail about a standard price-per-kilogram measure."
+          "external",
+          "records",
+          "limited",
+          "temporary"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：The main difficulty was delays near the city center, which reduced the benefit for some people. Organizers responded by introducing a revised evening route instead of abandoning the project."
+        "explanationZh": "结合上下文与词性，空格 4 应填 records。"
+      },
+      {
+        "prompt": "In the same method description, choose the noun for the short conversations used by the team.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "frequent",
+          "normally",
+          "interviews",
+          "widely"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 5 应填 interviews。"
+      },
+      {
+        "prompt": "When the report turns to the people in a late-bus pilot, choose the correct plural noun.",
+        "skillTag": "structure",
+        "options": [
+          "gradually",
+          "previous",
+          "although",
+          "participants"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 6 应填 participants。"
+      },
+      {
+        "prompt": "In the progress sentence about a predictable timetable, choose the adjective meaning steady over time.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "consistent",
+          "however",
+          "rarely",
+          "briefly"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 7 应填 consistent。"
+      },
+      {
+        "prompt": "When the report introduces delays near the city center, choose the noun that signals a problem.",
+        "skillTag": "structure",
+        "options": [
+          "independent",
+          "difficulty",
+          "separate",
+          "declined"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 8 应填 difficulty。"
+      },
+      {
+        "prompt": "After that problem, choose the verb describing how the organizers reacted.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "limited",
+          "temporary",
+          "responded",
+          "external"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 9 应填 responded。"
+      },
+      {
+        "prompt": "In the conclusion to a late-bus pilot, choose the noun for information supporting a decision.",
+        "skillTag": "structure",
+        "options": [
+          "normally",
+          "widely",
+          "frequent",
+          "evidence"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 10 应填 evidence。"
       }
     ]
   },
@@ -570,7 +810,7 @@
     "type": "matching",
     "theme": "环境保护",
     "difficulty": "foundation",
-    "passage": "环境保护 was examined through a reusable-container campaign lasting seven weeks. The project involved 14 campus cafés and collected both activity records and short interviews. Participants said small reward points helped them make consistent progress. The main difficulty was containers being forgotten, which reduced the benefit for some people. Organizers responded by introducing return boxes near dormitories instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
+    "passage": "Researchers examined the issue through a reusable-container campaign lasting seven weeks. The project involved 14 campus cafés and collected both activity records and short interviews. Participants said small reward points helped them make consistent progress. The main difficulty was containers being forgotten, which reduced the benefit for some people. Organizers responded by introducing return boxes near dormitories instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a reusable-container campaign rather than merely naming the topic?",
@@ -582,7 +822,7 @@
           "The results of a campus temperature study"
         ],
         "answer": 2,
-        "explanationZh": "原文依据：环境保护 was examined through a reusable-container campaign lasting seven weeks."
+        "explanationZh": "原文依据：Researchers examined the issue through a reusable-container campaign lasting seven weeks."
       },
       {
         "prompt": "What duration is reported for a reusable-container campaign, the study involving 14 campus cafés?",
@@ -594,7 +834,7 @@
           "seven weeks"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：环境保护 was examined through a reusable-container campaign lasting seven weeks."
+        "explanationZh": "原文依据：Researchers examined the issue through a reusable-container campaign lasting seven weeks."
       },
       {
         "prompt": "In the sentence following “The project involved 14 campus cafés”, who does “Participants” refer to?",
@@ -651,7 +891,7 @@
     "type": "reading",
     "theme": "健康饮食",
     "difficulty": "foundation",
-    "passage": "健康饮食 was examined through a low-cost meal program lasting four weeks. The project involved 96 participants and collected both activity records and short interviews. Participants said shopping lists with prices helped them make consistent progress. The main difficulty was limited cooking equipment, which reduced the benefit for some people. Organizers responded by introducing recipes requiring one pan instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
+    "passage": "Researchers examined the issue through a low-cost meal program lasting four weeks. The project involved 96 participants and collected both activity records and short interviews. Participants said shopping lists with prices helped them make consistent progress. The main difficulty was limited cooking equipment, which reduced the benefit for some people. Organizers responded by introducing recipes requiring one pan instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a low-cost meal program rather than merely naming the topic?",
@@ -663,7 +903,7 @@
           "The results of a museum audio-guide test"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：健康饮食 was examined through a low-cost meal program lasting four weeks."
+        "explanationZh": "原文依据：Researchers examined the issue through a low-cost meal program lasting four weeks."
       },
       {
         "prompt": "What duration is reported for a low-cost meal program, the study involving 96 participants?",
@@ -675,7 +915,7 @@
           "two weekends"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：健康饮食 was examined through a low-cost meal program lasting four weeks."
+        "explanationZh": "原文依据：Researchers examined the issue through a low-cost meal program lasting four weeks."
       },
       {
         "prompt": "In the sentence following “The project involved 96 participants”, who does “Participants” refer to?",
@@ -724,6 +964,54 @@
         ],
         "answer": 1,
         "explanationZh": "原文依据：The main difficulty was limited cooking equipment, which reduced the benefit for some people. Organizers responded by introducing recipes requiring one pan instead of abandoning the project."
+      },
+      {
+        "prompt": "Which change did the organizers introduce after identifying limited cooking equipment?",
+        "skillTag": "detail",
+        "options": [
+          "automatic classroom reminders",
+          "shared preparation periods",
+          "recipes requiring one pan",
+          "a simple sound check"
+        ],
+        "answer": 2,
+        "explanationZh": "原文依据：Organizers responded by introducing recipes requiring one pan instead of abandoning the project."
+      },
+      {
+        "prompt": "Why was recipes requiring one pan added to the project?",
+        "skillTag": "reason",
+        "options": [
+          "It was intended to shorten the reported duration.",
+          "It was intended to replace every participant.",
+          "It was added before any difficulty was observed.",
+          "It was intended to address limited cooking equipment."
+        ],
+        "answer": 3,
+        "explanationZh": "原文依据：The main difficulty was limited cooking equipment, which reduced the benefit for some people. Organizers responded by introducing recipes requiring one pan instead of abandoning the project."
+      },
+      {
+        "prompt": "What does the final sentence suggest about the future of a low-cost meal program?",
+        "skillTag": "inference",
+        "options": [
+          "The organizers see promise in the revised method but still want stronger evidence.",
+          "The project will certainly expand without further review.",
+          "The organizers have decided to end the project immediately.",
+          "The results are considered completely unreliable."
+        ],
+        "answer": 0,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
+      },
+      {
+        "prompt": "Which description best matches the writer's attitude toward the outcome of a low-cost meal program?",
+        "skillTag": "attitude",
+        "options": [
+          "Entirely negative.",
+          "Cautiously positive.",
+          "Uncritically enthusiastic.",
+          "Indifferent to the results."
+        ],
+        "answer": 1,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
       }
     ]
   },
@@ -732,79 +1020,127 @@
     "type": "cloze",
     "theme": "运动习惯",
     "difficulty": "foundation",
-    "passage": "运动习惯 was examined through a movement-break experiment lasting nine weeks. The project involved 11 lecture groups and collected both activity records and short interviews. Participants said two-minute guided routines helped them make consistent progress. The main difficulty was teachers losing track of time, which reduced the benefit for some people. Organizers responded by introducing automatic classroom reminders instead of abandoning the project. Most participants wanted the project to continue, and the organizers will measure longer-term results next term.",
+    "passage": "Researchers began a campus project that involved 11 lecture groups. They compared activity records with short interviews. Participants reported more consistent progress when two-minute guided routines was available. The main difficulty was teachers losing track of time, so organizers responded with automatic classroom reminders. The team will collect further evidence before expanding the program.",
     "questions": [
       {
-        "prompt": "Which title best captures the findings from a movement-break experiment rather than merely naming the topic?",
-        "skillTag": "main-idea",
-        "options": [
-          "The results of a digital note comparison",
-          "The results of a graduate interview program",
-          "The results of a movement-break experiment",
-          "The results of a science-information workshop"
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：运动习惯 was examined through a movement-break experiment lasting nine weeks."
-      },
-      {
-        "prompt": "What duration is reported for a movement-break experiment, the study involving 11 lecture groups?",
-        "skillTag": "detail",
-        "options": [
-          "one term",
-          "five Saturdays",
-          "six sessions",
-          "nine weeks"
-        ],
-        "answer": 3,
-        "explanationZh": "原文依据：运动习惯 was examined through a movement-break experiment lasting nine weeks."
-      },
-      {
-        "prompt": "In the sentence following “The project involved 11 lecture groups”, who does “Participants” refer to?",
-        "skillTag": "reference",
-        "options": [
-          "11 lecture groups",
-          "132 volunteers",
-          "120 candidates",
-          "210 students"
-        ],
-        "answer": 0,
-        "explanationZh": "原文依据：The project involved 11 lecture groups and collected both activity records and short interviews."
-      },
-      {
-        "prompt": "In the account where two-minute guided routines helped, what does “consistent progress” most nearly mean?",
+        "prompt": "At the opening of the report on a movement-break experiment, choose the word for the people conducting the study.",
         "skillTag": "vocabulary-in-context",
         "options": [
-          "rapid change without a clear direction",
-          "steady improvement over time",
-          "a single success that cannot be repeated",
-          "less effort with no measurable result"
+          "although",
+          "researchers",
+          "gradually",
+          "previous"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：Participants said two-minute guided routines helped them make consistent progress."
+        "explanationZh": "结合上下文与词性，空格 1 应填 researchers。"
       },
       {
-        "prompt": "What can be inferred about the effect of teachers losing track of time on the people studied?",
-        "skillTag": "inference",
-        "options": [
-          "Every participant benefited equally from the project.",
-          "The challenge caused the entire project to end immediately.",
-          "The difficulty prevented some participants from receiving the same benefit.",
-          "The difficulty was unrelated to the project results."
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：The main difficulty was teachers losing track of time, which reduced the benefit for some people."
-      },
-      {
-        "prompt": "How does the passage move from the problem of teachers losing track of time to its conclusion?",
+        "prompt": "In the introduction to a movement-break experiment, choose the noun naming the organized study.",
         "skillTag": "structure",
         "options": [
-          "It introduces an unrelated detail about a distraction-free mode.",
-          "It introduces an unrelated detail about follow-up reflection questions.",
-          "It introduces an unrelated detail about anonymous prediction exercises.",
-          "It presents the practical solution: automatic classroom reminders."
+          "briefly",
+          "however",
+          "project",
+          "rarely"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 2 应填 project。"
+      },
+      {
+        "prompt": "In the participant sentence about a movement-break experiment, choose the verb that links the study to its members.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "declined",
+          "independent",
+          "separate",
+          "involved"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：The main difficulty was teachers losing track of time, which reduced the benefit for some people. Organizers responded by introducing automatic classroom reminders instead of abandoning the project."
+        "explanationZh": "结合上下文与词性，空格 3 应填 involved。"
+      },
+      {
+        "prompt": "In the method description for a movement-break experiment, choose the noun for stored activity information.",
+        "skillTag": "structure",
+        "options": [
+          "records",
+          "external",
+          "limited",
+          "temporary"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 4 应填 records。"
+      },
+      {
+        "prompt": "In the same method description, choose the noun for the short conversations used by the team.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "frequent",
+          "interviews",
+          "normally",
+          "widely"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 5 应填 interviews。"
+      },
+      {
+        "prompt": "When the report turns to the people in a movement-break experiment, choose the correct plural noun.",
+        "skillTag": "structure",
+        "options": [
+          "gradually",
+          "previous",
+          "participants",
+          "although"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 6 应填 participants。"
+      },
+      {
+        "prompt": "In the progress sentence about two-minute guided routines, choose the adjective meaning steady over time.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "however",
+          "rarely",
+          "briefly",
+          "consistent"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 7 应填 consistent。"
+      },
+      {
+        "prompt": "When the report introduces teachers losing track of time, choose the noun that signals a problem.",
+        "skillTag": "structure",
+        "options": [
+          "difficulty",
+          "independent",
+          "separate",
+          "declined"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 8 应填 difficulty。"
+      },
+      {
+        "prompt": "After that problem, choose the verb describing how the organizers reacted.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "limited",
+          "responded",
+          "temporary",
+          "external"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 9 应填 responded。"
+      },
+      {
+        "prompt": "In the conclusion to a movement-break experiment, choose the noun for information supporting a decision.",
+        "skillTag": "structure",
+        "options": [
+          "normally",
+          "widely",
+          "evidence",
+          "frequent"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 10 应填 evidence。"
       }
     ]
   },
@@ -813,7 +1149,7 @@
     "type": "matching",
     "theme": "数字学习",
     "difficulty": "standard",
-    "passage": "数字学习 was examined through a digital note comparison lasting one term. The project involved 132 volunteers and collected both activity records and short interviews. Participants said searchable labels helped them make consistent progress. The main difficulty was too many notifications, which reduced the benefit for some people. Organizers responded by introducing a distraction-free mode instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
+    "passage": "Researchers examined the issue through a digital note comparison lasting one term. The project involved 132 volunteers and collected both activity records and short interviews. Participants said searchable labels helped them make consistent progress. The main difficulty was too many notifications, which reduced the benefit for some people. Organizers responded by introducing a distraction-free mode instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a digital note comparison rather than merely naming the topic?",
@@ -825,7 +1161,7 @@
           "The results of an accessible-meeting review"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：数字学习 was examined through a digital note comparison lasting one term."
+        "explanationZh": "原文依据：Researchers examined the issue through a digital note comparison lasting one term."
       },
       {
         "prompt": "What duration is reported for a digital note comparison, the study involving 132 volunteers?",
@@ -837,7 +1173,7 @@
           "one month"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：数字学习 was examined through a digital note comparison lasting one term."
+        "explanationZh": "原文依据：Researchers examined the issue through a digital note comparison lasting one term."
       },
       {
         "prompt": "In the sentence following “The project involved 132 volunteers”, who does “Participants” refer to?",
@@ -894,7 +1230,7 @@
     "type": "reading",
     "theme": "时间管理",
     "difficulty": "standard",
-    "passage": "时间管理 was examined through a planning-habit challenge lasting twenty-one days. The project involved 180 students and collected both activity records and short interviews. Participants said one priority chosen each morning helped them make consistent progress. The main difficulty was overly ambitious schedules, which reduced the benefit for some people. Organizers responded by introducing a three-task daily limit instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
+    "passage": "Researchers examined the issue through a planning-habit challenge lasting twenty-one days. The project involved 180 students and collected both activity records and short interviews. Participants said one priority chosen each morning helped them make consistent progress. The main difficulty was overly ambitious schedules, which reduced the benefit for some people. Organizers responded by introducing a three-task daily limit instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a planning-habit challenge rather than merely naming the topic?",
@@ -906,7 +1242,7 @@
           "The results of an artificial-intelligence literacy course"
         ],
         "answer": 2,
-        "explanationZh": "原文依据：时间管理 was examined through a planning-habit challenge lasting twenty-one days."
+        "explanationZh": "原文依据：Researchers examined the issue through a planning-habit challenge lasting twenty-one days."
       },
       {
         "prompt": "What duration is reported for a planning-habit challenge, the study involving 180 students?",
@@ -918,7 +1254,7 @@
           "twenty-one days"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：时间管理 was examined through a planning-habit challenge lasting twenty-one days."
+        "explanationZh": "原文依据：Researchers examined the issue through a planning-habit challenge lasting twenty-one days."
       },
       {
         "prompt": "In the sentence following “The project involved 180 students”, who does “Participants” refer to?",
@@ -967,6 +1303,54 @@
         ],
         "answer": 3,
         "explanationZh": "原文依据：The main difficulty was overly ambitious schedules, which reduced the benefit for some people. Organizers responded by introducing a three-task daily limit instead of abandoning the project."
+      },
+      {
+        "prompt": "Which change did the organizers introduce after identifying overly ambitious schedules?",
+        "skillTag": "detail",
+        "options": [
+          "a three-task daily limit",
+          "practice accounts with invented data",
+          "advance stock reservations",
+          "mandatory source checks"
+        ],
+        "answer": 0,
+        "explanationZh": "原文依据：Organizers responded by introducing a three-task daily limit instead of abandoning the project."
+      },
+      {
+        "prompt": "Why was a three-task daily limit added to the project?",
+        "skillTag": "reason",
+        "options": [
+          "It was intended to shorten the reported duration.",
+          "It was intended to address overly ambitious schedules.",
+          "It was intended to replace every participant.",
+          "It was added before any difficulty was observed."
+        ],
+        "answer": 1,
+        "explanationZh": "原文依据：The main difficulty was overly ambitious schedules, which reduced the benefit for some people. Organizers responded by introducing a three-task daily limit instead of abandoning the project."
+      },
+      {
+        "prompt": "What does the final sentence suggest about the future of a planning-habit challenge?",
+        "skillTag": "inference",
+        "options": [
+          "The project will certainly expand without further review.",
+          "The organizers have decided to end the project immediately.",
+          "The organizers see promise in the revised method but still want stronger evidence.",
+          "The results are considered completely unreliable."
+        ],
+        "answer": 2,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
+      },
+      {
+        "prompt": "Which description best matches the writer's attitude toward the outcome of a planning-habit challenge?",
+        "skillTag": "attitude",
+        "options": [
+          "Entirely negative.",
+          "Uncritically enthusiastic.",
+          "Indifferent to the results.",
+          "Cautiously positive."
+        ],
+        "answer": 3,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
       }
     ]
   },
@@ -975,79 +1359,127 @@
     "type": "cloze",
     "theme": "社区服务",
     "difficulty": "standard",
-    "passage": "社区服务 was examined through a neighborhood technology clinic lasting two months. The project involved 64 older residents and collected both activity records and short interviews. Participants said patient one-to-one guidance helped them make consistent progress. The main difficulty was privacy concerns, which reduced the benefit for some people. Organizers responded by introducing practice accounts with invented data instead of abandoning the project. Most participants wanted the project to continue, and the organizers will measure longer-term results next term.",
+    "passage": "Researchers began a campus project that involved 64 older residents. They compared activity records with short interviews. Participants reported more consistent progress when patient one-to-one guidance was available. The main difficulty was privacy concerns, so organizers responded with practice accounts with invented data. The team will collect further evidence before expanding the program.",
     "questions": [
       {
-        "prompt": "Which title best captures the findings from a neighborhood technology clinic rather than merely naming the topic?",
-        "skillTag": "main-idea",
-        "options": [
-          "The results of a neighborhood technology clinic",
-          "The results of a regional travel survey",
-          "The results of a packaging-price comparison",
-          "The results of a lifelong-learning survey"
-        ],
-        "answer": 0,
-        "explanationZh": "原文依据：社区服务 was examined through a neighborhood technology clinic lasting two months."
-      },
-      {
-        "prompt": "What duration is reported for a neighborhood technology clinic, the study involving 64 older residents?",
-        "skillTag": "detail",
-        "options": [
-          "six weekends",
-          "two months",
-          "eight shopping trips",
-          "five months"
-        ],
-        "answer": 1,
-        "explanationZh": "原文依据：社区服务 was examined through a neighborhood technology clinic lasting two months."
-      },
-      {
-        "prompt": "In the sentence following “The project involved 64 older residents”, who does “Participants” refer to?",
-        "skillTag": "reference",
-        "options": [
-          "310 visitors",
-          "55 households",
-          "64 older residents",
-          "600 adults"
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：The project involved 64 older residents and collected both activity records and short interviews."
-      },
-      {
-        "prompt": "In the account where patient one-to-one guidance helped, what does “consistent progress” most nearly mean?",
+        "prompt": "At the opening of the report on a neighborhood technology clinic, choose the word for the people conducting the study.",
         "skillTag": "vocabulary-in-context",
         "options": [
-          "rapid change without a clear direction",
-          "a single success that cannot be repeated",
-          "less effort with no measurable result",
-          "steady improvement over time"
-        ],
-        "answer": 3,
-        "explanationZh": "原文依据：Participants said patient one-to-one guidance helped them make consistent progress."
-      },
-      {
-        "prompt": "What can be inferred about the effect of privacy concerns on the people studied?",
-        "skillTag": "inference",
-        "options": [
-          "The difficulty prevented some participants from receiving the same benefit.",
-          "Every participant benefited equally from the project.",
-          "The challenge caused the entire project to end immediately.",
-          "The difficulty was unrelated to the project results."
+          "researchers",
+          "although",
+          "gradually",
+          "previous"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：The main difficulty was privacy concerns, which reduced the benefit for some people."
+        "explanationZh": "结合上下文与词性，空格 1 应填 researchers。"
       },
       {
-        "prompt": "What role does the sentence about practice accounts with invented data play after the problem of privacy concerns?",
-        "skillTag": "paragraph-role",
+        "prompt": "In the introduction to a neighborhood technology clinic, choose the noun naming the organized study.",
+        "skillTag": "structure",
         "options": [
-          "It introduces an unrelated detail about alternative walking routes.",
-          "It presents the practical solution: practice accounts with invented data.",
-          "It introduces an unrelated detail about a standard price-per-kilogram measure.",
-          "It introduces an unrelated detail about short self-paced units."
+          "briefly",
+          "project",
+          "however",
+          "rarely"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：The main difficulty was privacy concerns, which reduced the benefit for some people. Organizers responded by introducing practice accounts with invented data instead of abandoning the project."
+        "explanationZh": "结合上下文与词性，空格 2 应填 project。"
+      },
+      {
+        "prompt": "In the participant sentence about a neighborhood technology clinic, choose the verb that links the study to its members.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "declined",
+          "independent",
+          "involved",
+          "separate"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 3 应填 involved。"
+      },
+      {
+        "prompt": "In the method description for a neighborhood technology clinic, choose the noun for stored activity information.",
+        "skillTag": "structure",
+        "options": [
+          "external",
+          "limited",
+          "temporary",
+          "records"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 4 应填 records。"
+      },
+      {
+        "prompt": "In the same method description, choose the noun for the short conversations used by the team.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "interviews",
+          "frequent",
+          "normally",
+          "widely"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 5 应填 interviews。"
+      },
+      {
+        "prompt": "When the report turns to the people in a neighborhood technology clinic, choose the correct plural noun.",
+        "skillTag": "structure",
+        "options": [
+          "gradually",
+          "participants",
+          "previous",
+          "although"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 6 应填 participants。"
+      },
+      {
+        "prompt": "In the progress sentence about patient one-to-one guidance, choose the adjective meaning steady over time.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "however",
+          "rarely",
+          "consistent",
+          "briefly"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 7 应填 consistent。"
+      },
+      {
+        "prompt": "When the report introduces privacy concerns, choose the noun that signals a problem.",
+        "skillTag": "structure",
+        "options": [
+          "independent",
+          "separate",
+          "declined",
+          "difficulty"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 8 应填 difficulty。"
+      },
+      {
+        "prompt": "After that problem, choose the verb describing how the organizers reacted.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "responded",
+          "limited",
+          "temporary",
+          "external"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 9 应填 responded。"
+      },
+      {
+        "prompt": "In the conclusion to a neighborhood technology clinic, choose the noun for information supporting a decision.",
+        "skillTag": "structure",
+        "options": [
+          "normally",
+          "evidence",
+          "widely",
+          "frequent"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 10 应填 evidence。"
       }
     ]
   },
@@ -1056,7 +1488,7 @@
     "type": "matching",
     "theme": "旅游计划",
     "difficulty": "standard",
-    "passage": "旅游计划 was examined through a regional travel survey lasting six weekends. The project involved 310 visitors and collected both activity records and short interviews. Participants said clear transport maps helped them make consistent progress. The main difficulty was crowding at famous sites, which reduced the benefit for some people. Organizers responded by introducing alternative walking routes instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
+    "passage": "Researchers examined the issue through a regional travel survey lasting six weekends. The project involved 310 visitors and collected both activity records and short interviews. Participants said clear transport maps helped them make consistent progress. The main difficulty was crowding at famous sites, which reduced the benefit for some people. Organizers responded by introducing alternative walking routes instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a regional travel survey rather than merely naming the topic?",
@@ -1068,7 +1500,7 @@
           "The results of a traditional craft apprenticeship"
         ],
         "answer": 2,
-        "explanationZh": "原文依据：旅游计划 was examined through a regional travel survey lasting six weekends."
+        "explanationZh": "原文依据：Researchers examined the issue through a regional travel survey lasting six weekends."
       },
       {
         "prompt": "What duration is reported for a regional travel survey, the study involving 310 visitors?",
@@ -1080,7 +1512,7 @@
           "six weekends"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：旅游计划 was examined through a regional travel survey lasting six weekends."
+        "explanationZh": "原文依据：Researchers examined the issue through a regional travel survey lasting six weekends."
       },
       {
         "prompt": "In the sentence following “The project involved 310 visitors”, who does “Participants” refer to?",
@@ -1137,7 +1569,7 @@
     "type": "reading",
     "theme": "文化节日",
     "difficulty": "standard",
-    "passage": "文化节日 was examined through a student cultural festival lasting four days. The project involved 26 international groups and collected both activity records and short interviews. Participants said bilingual volunteer hosts helped them make consistent progress. The main difficulty was long queues at popular booths, which reduced the benefit for some people. Organizers responded by introducing timed entry cards instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
+    "passage": "Researchers examined the issue through a student cultural festival lasting four days. The project involved 26 international groups and collected both activity records and short interviews. Participants said bilingual volunteer hosts helped them make consistent progress. The main difficulty was long queues at popular booths, which reduced the benefit for some people. Organizers responded by introducing timed entry cards instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a student cultural festival rather than merely naming the topic?",
@@ -1149,7 +1581,7 @@
           "The results of a food-waste measurement project"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：文化节日 was examined through a student cultural festival lasting four days."
+        "explanationZh": "原文依据：Researchers examined the issue through a student cultural festival lasting four days."
       },
       {
         "prompt": "What duration is reported for a student cultural festival, the study involving 26 international groups?",
@@ -1161,7 +1593,7 @@
           "fourteen days"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：文化节日 was examined through a student cultural festival lasting four days."
+        "explanationZh": "原文依据：Researchers examined the issue through a student cultural festival lasting four days."
       },
       {
         "prompt": "In the sentence following “The project involved 26 international groups”, who does “Participants” refer to?",
@@ -1210,6 +1642,54 @@
         ],
         "answer": 1,
         "explanationZh": "原文依据：The main difficulty was long queues at popular booths, which reduced the benefit for some people. Organizers responded by introducing timed entry cards instead of abandoning the project."
+      },
+      {
+        "prompt": "Which change did the organizers introduce after identifying long queues at popular booths?",
+        "skillTag": "detail",
+        "options": [
+          "shared preparation periods",
+          "a simple sound check",
+          "timed entry cards",
+          "smaller sample portions"
+        ],
+        "answer": 2,
+        "explanationZh": "原文依据：Organizers responded by introducing timed entry cards instead of abandoning the project."
+      },
+      {
+        "prompt": "Why was timed entry cards added to the project?",
+        "skillTag": "reason",
+        "options": [
+          "It was intended to shorten the reported duration.",
+          "It was intended to replace every participant.",
+          "It was added before any difficulty was observed.",
+          "It was intended to address long queues at popular booths."
+        ],
+        "answer": 3,
+        "explanationZh": "原文依据：The main difficulty was long queues at popular booths, which reduced the benefit for some people. Organizers responded by introducing timed entry cards instead of abandoning the project."
+      },
+      {
+        "prompt": "What does the final sentence suggest about the future of a student cultural festival?",
+        "skillTag": "inference",
+        "options": [
+          "The organizers see promise in the revised method but still want stronger evidence.",
+          "The project will certainly expand without further review.",
+          "The organizers have decided to end the project immediately.",
+          "The results are considered completely unreliable."
+        ],
+        "answer": 0,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
+      },
+      {
+        "prompt": "Which description best matches the writer's attitude toward the outcome of a student cultural festival?",
+        "skillTag": "attitude",
+        "options": [
+          "Entirely negative.",
+          "Cautiously positive.",
+          "Uncritically enthusiastic.",
+          "Indifferent to the results."
+        ],
+        "answer": 1,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
       }
     ]
   },
@@ -1218,79 +1698,127 @@
     "type": "cloze",
     "theme": "科技创新",
     "difficulty": "standard",
-    "passage": "科技创新 was examined through an open laboratory scheme lasting one semester. The project involved 93 student projects and collected both activity records and short interviews. Participants said rapid safety feedback helped them make consistent progress. The main difficulty was equipment booking conflicts, which reduced the benefit for some people. Organizers responded by introducing shared preparation periods instead of abandoning the project. Most participants wanted the project to continue, and the organizers will measure longer-term results next term.",
+    "passage": "Researchers began a campus project that involved 93 student projects. They compared activity records with short interviews. Participants reported more consistent progress when rapid safety feedback was available. The main difficulty was equipment booking conflicts, so organizers responded with shared preparation periods. The team will collect further evidence before expanding the program.",
     "questions": [
       {
-        "prompt": "Which title best captures the findings from an open laboratory scheme rather than merely naming the topic?",
-        "skillTag": "main-idea",
-        "options": [
-          "The results of a graduate interview program",
-          "The results of a science-information workshop",
-          "The results of an open laboratory scheme",
-          "The results of a student well-being program"
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：科技创新 was examined through an open laboratory scheme lasting one semester."
-      },
-      {
-        "prompt": "What duration is reported for an open laboratory scheme, the study involving 93 student projects?",
-        "skillTag": "detail",
-        "options": [
-          "five Saturdays",
-          "six sessions",
-          "eight weeks",
-          "one semester"
-        ],
-        "answer": 3,
-        "explanationZh": "原文依据：科技创新 was examined through an open laboratory scheme lasting one semester."
-      },
-      {
-        "prompt": "In the sentence following “The project involved 93 student projects”, who does “Participants” refer to?",
-        "skillTag": "reference",
-        "options": [
-          "93 student projects",
-          "120 candidates",
-          "210 students",
-          "140 volunteers"
-        ],
-        "answer": 0,
-        "explanationZh": "原文依据：The project involved 93 student projects and collected both activity records and short interviews."
-      },
-      {
-        "prompt": "In the account where rapid safety feedback helped, what does “consistent progress” most nearly mean?",
+        "prompt": "At the opening of the report on an open laboratory scheme, choose the word for the people conducting the study.",
         "skillTag": "vocabulary-in-context",
         "options": [
-          "rapid change without a clear direction",
-          "steady improvement over time",
-          "a single success that cannot be repeated",
-          "less effort with no measurable result"
-        ],
-        "answer": 1,
-        "explanationZh": "原文依据：Participants said rapid safety feedback helped them make consistent progress."
-      },
-      {
-        "prompt": "What can be inferred about the effect of equipment booking conflicts on the people studied?",
-        "skillTag": "inference",
-        "options": [
-          "Every participant benefited equally from the project.",
-          "The challenge caused the entire project to end immediately.",
-          "The difficulty prevented some participants from receiving the same benefit.",
-          "The difficulty was unrelated to the project results."
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：The main difficulty was equipment booking conflicts, which reduced the benefit for some people."
-      },
-      {
-        "prompt": "How does the passage move from the problem of equipment booking conflicts to its conclusion?",
-        "skillTag": "structure",
-        "options": [
-          "It introduces an unrelated detail about follow-up reflection questions.",
-          "It introduces an unrelated detail about anonymous prediction exercises.",
-          "It introduces an unrelated detail about private booking channels.",
-          "It presents the practical solution: shared preparation periods."
+          "although",
+          "gradually",
+          "previous",
+          "researchers"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：The main difficulty was equipment booking conflicts, which reduced the benefit for some people. Organizers responded by introducing shared preparation periods instead of abandoning the project."
+        "explanationZh": "结合上下文与词性，空格 1 应填 researchers。"
+      },
+      {
+        "prompt": "In the introduction to an open laboratory scheme, choose the noun naming the organized study.",
+        "skillTag": "structure",
+        "options": [
+          "project",
+          "briefly",
+          "however",
+          "rarely"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 2 应填 project。"
+      },
+      {
+        "prompt": "In the participant sentence about an open laboratory scheme, choose the verb that links the study to its members.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "declined",
+          "involved",
+          "independent",
+          "separate"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 3 应填 involved。"
+      },
+      {
+        "prompt": "In the method description for an open laboratory scheme, choose the noun for stored activity information.",
+        "skillTag": "structure",
+        "options": [
+          "external",
+          "limited",
+          "records",
+          "temporary"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 4 应填 records。"
+      },
+      {
+        "prompt": "In the same method description, choose the noun for the short conversations used by the team.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "frequent",
+          "normally",
+          "widely",
+          "interviews"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 5 应填 interviews。"
+      },
+      {
+        "prompt": "When the report turns to the people in an open laboratory scheme, choose the correct plural noun.",
+        "skillTag": "structure",
+        "options": [
+          "participants",
+          "gradually",
+          "previous",
+          "although"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 6 应填 participants。"
+      },
+      {
+        "prompt": "In the progress sentence about rapid safety feedback, choose the adjective meaning steady over time.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "however",
+          "consistent",
+          "rarely",
+          "briefly"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 7 应填 consistent。"
+      },
+      {
+        "prompt": "When the report introduces equipment booking conflicts, choose the noun that signals a problem.",
+        "skillTag": "structure",
+        "options": [
+          "independent",
+          "separate",
+          "difficulty",
+          "declined"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 8 应填 difficulty。"
+      },
+      {
+        "prompt": "After that problem, choose the verb describing how the organizers reacted.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "limited",
+          "temporary",
+          "external",
+          "responded"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 9 应填 responded。"
+      },
+      {
+        "prompt": "In the conclusion to an open laboratory scheme, choose the noun for information supporting a decision.",
+        "skillTag": "structure",
+        "options": [
+          "evidence",
+          "normally",
+          "widely",
+          "frequent"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 10 应填 evidence。"
       }
     ]
   },
@@ -1299,7 +1827,7 @@
     "type": "matching",
     "theme": "就业准备",
     "difficulty": "standard",
-    "passage": "就业准备 was examined through a graduate interview program lasting five Saturdays. The project involved 120 candidates and collected both activity records and short interviews. Participants said specific employer comments helped them make consistent progress. The main difficulty was answers sounding memorized, which reduced the benefit for some people. Organizers responded by introducing follow-up reflection questions instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
+    "passage": "Researchers examined the issue through a graduate interview program lasting five Saturdays. The project involved 120 candidates and collected both activity records and short interviews. Participants said specific employer comments helped them make consistent progress. The main difficulty was answers sounding memorized, which reduced the benefit for some people. Organizers responded by introducing follow-up reflection questions instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a graduate interview program rather than merely naming the topic?",
@@ -1311,7 +1839,7 @@
           "The results of a recreational reading circle"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：就业准备 was examined through a graduate interview program lasting five Saturdays."
+        "explanationZh": "原文依据：Researchers examined the issue through a graduate interview program lasting five Saturdays."
       },
       {
         "prompt": "What duration is reported for a graduate interview program, the study involving 120 candidates?",
@@ -1323,7 +1851,7 @@
           "six months"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：就业准备 was examined through a graduate interview program lasting five Saturdays."
+        "explanationZh": "原文依据：Researchers examined the issue through a graduate interview program lasting five Saturdays."
       },
       {
         "prompt": "In the sentence following “The project involved 120 candidates”, who does “Participants” refer to?",
@@ -1380,7 +1908,7 @@
     "type": "reading",
     "theme": "团队合作",
     "difficulty": "standard",
-    "passage": "团队合作 was examined through a team navigation challenge lasting thirty days. The project involved 18 mixed-discipline teams and collected both activity records and short interviews. Participants said testing routes with visitors helped them make consistent progress. The main difficulty was maps becoming outdated, which reduced the benefit for some people. Organizers responded by introducing editable digital signs instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
+    "passage": "Researchers examined the issue through a team navigation challenge lasting thirty days. The project involved 18 mixed-discipline teams and collected both activity records and short interviews. Participants said testing routes with visitors helped them make consistent progress. The main difficulty was maps becoming outdated, which reduced the benefit for some people. Organizers responded by introducing editable digital signs instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a team navigation challenge rather than merely naming the topic?",
@@ -1392,7 +1920,7 @@
           "The results of a peer tutoring trial"
         ],
         "answer": 2,
-        "explanationZh": "原文依据：团队合作 was examined through a team navigation challenge lasting thirty days."
+        "explanationZh": "原文依据：Researchers examined the issue through a team navigation challenge lasting thirty days."
       },
       {
         "prompt": "What duration is reported for a team navigation challenge, the study involving 18 mixed-discipline teams?",
@@ -1404,7 +1932,7 @@
           "thirty days"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：团队合作 was examined through a team navigation challenge lasting thirty days."
+        "explanationZh": "原文依据：Researchers examined the issue through a team navigation challenge lasting thirty days."
       },
       {
         "prompt": "In the sentence following “The project involved 18 mixed-discipline teams”, who does “Participants” refer to?",
@@ -1453,6 +1981,54 @@
         ],
         "answer": 3,
         "explanationZh": "原文依据：The main difficulty was maps becoming outdated, which reduced the benefit for some people. Organizers responded by introducing editable digital signs instead of abandoning the project."
+      },
+      {
+        "prompt": "Which change did the organizers introduce after identifying maps becoming outdated?",
+        "skillTag": "detail",
+        "options": [
+          "editable digital signs",
+          "advance stock reservations",
+          "mandatory source checks",
+          "shorter evening sessions"
+        ],
+        "answer": 0,
+        "explanationZh": "原文依据：Organizers responded by introducing editable digital signs instead of abandoning the project."
+      },
+      {
+        "prompt": "Why was editable digital signs added to the project?",
+        "skillTag": "reason",
+        "options": [
+          "It was intended to shorten the reported duration.",
+          "It was intended to address maps becoming outdated.",
+          "It was intended to replace every participant.",
+          "It was added before any difficulty was observed."
+        ],
+        "answer": 1,
+        "explanationZh": "原文依据：The main difficulty was maps becoming outdated, which reduced the benefit for some people. Organizers responded by introducing editable digital signs instead of abandoning the project."
+      },
+      {
+        "prompt": "What does the final sentence suggest about the future of a team navigation challenge?",
+        "skillTag": "inference",
+        "options": [
+          "The project will certainly expand without further review.",
+          "The organizers have decided to end the project immediately.",
+          "The organizers see promise in the revised method but still want stronger evidence.",
+          "The results are considered completely unreliable."
+        ],
+        "answer": 2,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
+      },
+      {
+        "prompt": "Which description best matches the writer's attitude toward the outcome of a team navigation challenge?",
+        "skillTag": "attitude",
+        "options": [
+          "Entirely negative.",
+          "Uncritically enthusiastic.",
+          "Indifferent to the results.",
+          "Cautiously positive."
+        ],
+        "answer": 3,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
       }
     ]
   },
@@ -1461,79 +2037,127 @@
     "type": "cloze",
     "theme": "公共安全",
     "difficulty": "standard",
-    "passage": "公共安全 was examined through a bicycle-light campaign lasting three weeks. The project involved 420 bicycles and collected both activity records and short interviews. Participants said free evening inspections helped them make consistent progress. The main difficulty was replacement parts running out, which reduced the benefit for some people. Organizers responded by introducing advance stock reservations instead of abandoning the project. Most participants wanted the project to continue, and the organizers will measure longer-term results next term.",
+    "passage": "Researchers began a campus project that involved 420 bicycles. They compared activity records with short interviews. Participants reported more consistent progress when free evening inspections was available. The main difficulty was replacement parts running out, so organizers responded with advance stock reservations. The team will collect further evidence before expanding the program.",
     "questions": [
       {
-        "prompt": "Which title best captures the findings from a bicycle-light campaign rather than merely naming the topic?",
-        "skillTag": "main-idea",
-        "options": [
-          "The results of a bicycle-light campaign",
-          "The results of a packaging-price comparison",
-          "The results of a lifelong-learning survey",
-          "The results of a library seat-booking study"
-        ],
-        "answer": 0,
-        "explanationZh": "原文依据：公共安全 was examined through a bicycle-light campaign lasting three weeks."
-      },
-      {
-        "prompt": "What duration is reported for a bicycle-light campaign, the study involving 420 bicycles?",
-        "skillTag": "detail",
-        "options": [
-          "eight shopping trips",
-          "three weeks",
-          "five months",
-          "six weeks"
-        ],
-        "answer": 1,
-        "explanationZh": "原文依据：公共安全 was examined through a bicycle-light campaign lasting three weeks."
-      },
-      {
-        "prompt": "In the sentence following “The project involved 420 bicycles”, who does “Participants” refer to?",
-        "skillTag": "reference",
-        "options": [
-          "55 households",
-          "600 adults",
-          "420 bicycles",
-          "240 library users"
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：The project involved 420 bicycles and collected both activity records and short interviews."
-      },
-      {
-        "prompt": "In the account where free evening inspections helped, what does “consistent progress” most nearly mean?",
+        "prompt": "At the opening of the report on a bicycle-light campaign, choose the word for the people conducting the study.",
         "skillTag": "vocabulary-in-context",
         "options": [
-          "rapid change without a clear direction",
-          "a single success that cannot be repeated",
-          "less effort with no measurable result",
-          "steady improvement over time"
+          "although",
+          "gradually",
+          "researchers",
+          "previous"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 1 应填 researchers。"
+      },
+      {
+        "prompt": "In the introduction to a bicycle-light campaign, choose the noun naming the organized study.",
+        "skillTag": "structure",
+        "options": [
+          "briefly",
+          "however",
+          "rarely",
+          "project"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：Participants said free evening inspections helped them make consistent progress."
+        "explanationZh": "结合上下文与词性，空格 2 应填 project。"
       },
       {
-        "prompt": "What can be inferred about the effect of replacement parts running out on the people studied?",
-        "skillTag": "inference",
+        "prompt": "In the participant sentence about a bicycle-light campaign, choose the verb that links the study to its members.",
+        "skillTag": "vocabulary-in-context",
         "options": [
-          "The difficulty prevented some participants from receiving the same benefit.",
-          "Every participant benefited equally from the project.",
-          "The challenge caused the entire project to end immediately.",
-          "The difficulty was unrelated to the project results."
+          "involved",
+          "declined",
+          "independent",
+          "separate"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：The main difficulty was replacement parts running out, which reduced the benefit for some people."
+        "explanationZh": "结合上下文与词性，空格 3 应填 involved。"
       },
       {
-        "prompt": "What role does the sentence about advance stock reservations play after the problem of replacement parts running out?",
-        "skillTag": "paragraph-role",
+        "prompt": "In the method description for a bicycle-light campaign, choose the noun for stored activity information.",
+        "skillTag": "structure",
         "options": [
-          "It introduces an unrelated detail about a standard price-per-kilogram measure.",
-          "It presents the practical solution: advance stock reservations.",
-          "It introduces an unrelated detail about short self-paced units.",
-          "It introduces an unrelated detail about automatic cancellation after fifteen minutes."
+          "external",
+          "records",
+          "limited",
+          "temporary"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：The main difficulty was replacement parts running out, which reduced the benefit for some people. Organizers responded by introducing advance stock reservations instead of abandoning the project."
+        "explanationZh": "结合上下文与词性，空格 4 应填 records。"
+      },
+      {
+        "prompt": "In the same method description, choose the noun for the short conversations used by the team.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "frequent",
+          "normally",
+          "interviews",
+          "widely"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 5 应填 interviews。"
+      },
+      {
+        "prompt": "When the report turns to the people in a bicycle-light campaign, choose the correct plural noun.",
+        "skillTag": "structure",
+        "options": [
+          "gradually",
+          "previous",
+          "although",
+          "participants"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 6 应填 participants。"
+      },
+      {
+        "prompt": "In the progress sentence about free evening inspections, choose the adjective meaning steady over time.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "consistent",
+          "however",
+          "rarely",
+          "briefly"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 7 应填 consistent。"
+      },
+      {
+        "prompt": "When the report introduces replacement parts running out, choose the noun that signals a problem.",
+        "skillTag": "structure",
+        "options": [
+          "independent",
+          "difficulty",
+          "separate",
+          "declined"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 8 应填 difficulty。"
+      },
+      {
+        "prompt": "After that problem, choose the verb describing how the organizers reacted.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "limited",
+          "temporary",
+          "responded",
+          "external"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 9 应填 responded。"
+      },
+      {
+        "prompt": "In the conclusion to a bicycle-light campaign, choose the noun for information supporting a decision.",
+        "skillTag": "structure",
+        "options": [
+          "normally",
+          "widely",
+          "frequent",
+          "evidence"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 10 应填 evidence。"
       }
     ]
   },
@@ -1542,7 +2166,7 @@
     "type": "matching",
     "theme": "消费选择",
     "difficulty": "standard",
-    "passage": "消费选择 was examined through a packaging-price comparison lasting eight shopping trips. The project involved 55 households and collected both activity records and short interviews. Participants said recording unit prices helped them make consistent progress. The main difficulty was different product sizes, which reduced the benefit for some people. Organizers responded by introducing a standard price-per-kilogram measure instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
+    "passage": "Researchers examined the issue through a packaging-price comparison lasting eight shopping trips. The project involved 55 households and collected both activity records and short interviews. Participants said recording unit prices helped them make consistent progress. The main difficulty was different product sizes, which reduced the benefit for some people. Organizers responded by introducing a standard price-per-kilogram measure instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a packaging-price comparison rather than merely naming the topic?",
@@ -1554,7 +2178,7 @@
           "The results of an elective-course guide"
         ],
         "answer": 2,
-        "explanationZh": "原文依据：消费选择 was examined through a packaging-price comparison lasting eight shopping trips."
+        "explanationZh": "原文依据：Researchers examined the issue through a packaging-price comparison lasting eight shopping trips."
       },
       {
         "prompt": "What duration is reported for a packaging-price comparison, the study involving 55 households?",
@@ -1566,7 +2190,7 @@
           "eight shopping trips"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：消费选择 was examined through a packaging-price comparison lasting eight shopping trips."
+        "explanationZh": "原文依据：Researchers examined the issue through a packaging-price comparison lasting eight shopping trips."
       },
       {
         "prompt": "In the sentence following “The project involved 55 households”, who does “Participants” refer to?",
@@ -1623,7 +2247,7 @@
     "type": "reading",
     "theme": "气候变化",
     "difficulty": "standard",
-    "passage": "气候变化 was examined through a campus temperature study lasting one year. The project involved 36 sensors and collected both activity records and short interviews. Participants said hourly automatic readings helped them make consistent progress. The main difficulty was missing data after storms, which reduced the benefit for some people. Organizers responded by introducing backup sensors in sheltered locations instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
+    "passage": "Researchers examined the issue through a campus temperature study lasting one year. The project involved 36 sensors and collected both activity records and short interviews. Participants said hourly automatic readings helped them make consistent progress. The main difficulty was missing data after storms, which reduced the benefit for some people. Organizers responded by introducing backup sensors in sheltered locations instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a campus temperature study rather than merely naming the topic?",
@@ -1635,7 +2259,7 @@
           "The results of a quiet-hours agreement"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：气候变化 was examined through a campus temperature study lasting one year."
+        "explanationZh": "原文依据：Researchers examined the issue through a campus temperature study lasting one year."
       },
       {
         "prompt": "What duration is reported for a campus temperature study, the study involving 36 sensors?",
@@ -1647,7 +2271,7 @@
           "eight weeks"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：气候变化 was examined through a campus temperature study lasting one year."
+        "explanationZh": "原文依据：Researchers examined the issue through a campus temperature study lasting one year."
       },
       {
         "prompt": "In the sentence following “The project involved 36 sensors”, who does “Participants” refer to?",
@@ -1696,6 +2320,54 @@
         ],
         "answer": 1,
         "explanationZh": "原文依据：The main difficulty was missing data after storms, which reduced the benefit for some people. Organizers responded by introducing backup sensors in sheltered locations instead of abandoning the project."
+      },
+      {
+        "prompt": "Which change did the organizers introduce after identifying missing data after storms?",
+        "skillTag": "detail",
+        "options": [
+          "a simple sound check",
+          "smaller sample portions",
+          "backup sensors in sheltered locations",
+          "separate quiet zones"
+        ],
+        "answer": 2,
+        "explanationZh": "原文依据：Organizers responded by introducing backup sensors in sheltered locations instead of abandoning the project."
+      },
+      {
+        "prompt": "Why was backup sensors in sheltered locations added to the project?",
+        "skillTag": "reason",
+        "options": [
+          "It was intended to shorten the reported duration.",
+          "It was intended to replace every participant.",
+          "It was added before any difficulty was observed.",
+          "It was intended to address missing data after storms."
+        ],
+        "answer": 3,
+        "explanationZh": "原文依据：The main difficulty was missing data after storms, which reduced the benefit for some people. Organizers responded by introducing backup sensors in sheltered locations instead of abandoning the project."
+      },
+      {
+        "prompt": "What does the final sentence suggest about the future of a campus temperature study?",
+        "skillTag": "inference",
+        "options": [
+          "The organizers see promise in the revised method but still want stronger evidence.",
+          "The project will certainly expand without further review.",
+          "The organizers have decided to end the project immediately.",
+          "The results are considered completely unreliable."
+        ],
+        "answer": 0,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
+      },
+      {
+        "prompt": "Which description best matches the writer's attitude toward the outcome of a campus temperature study?",
+        "skillTag": "attitude",
+        "options": [
+          "Entirely negative.",
+          "Cautiously positive.",
+          "Uncritically enthusiastic.",
+          "Indifferent to the results."
+        ],
+        "answer": 1,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
       }
     ]
   },
@@ -1704,79 +2376,127 @@
     "type": "cloze",
     "theme": "博物馆活动",
     "difficulty": "standard",
-    "passage": "博物馆活动 was examined through a museum audio-guide test lasting two weekends. The project involved 175 visitors and collected both activity records and short interviews. Participants said route instructions before each object helped them make consistent progress. The main difficulty was headphone volume differences, which reduced the benefit for some people. Organizers responded by introducing a simple sound check instead of abandoning the project. Most participants wanted the project to continue, and the organizers will measure longer-term results next term.",
+    "passage": "Researchers began a campus project that involved 175 visitors. They compared activity records with short interviews. Participants reported more consistent progress when route instructions before each object was available. The main difficulty was headphone volume differences, so organizers responded with a simple sound check. The team will collect further evidence before expanding the program.",
     "questions": [
       {
-        "prompt": "Which title best captures the findings from a museum audio-guide test rather than merely naming the topic?",
-        "skillTag": "main-idea",
-        "options": [
-          "The results of a science-information workshop",
-          "The results of a student well-being program",
-          "The results of a museum audio-guide test",
-          "The results of a club discovery platform"
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：博物馆活动 was examined through a museum audio-guide test lasting two weekends."
-      },
-      {
-        "prompt": "What duration is reported for a museum audio-guide test, the study involving 175 visitors?",
-        "skillTag": "detail",
-        "options": [
-          "six sessions",
-          "eight weeks",
-          "three months",
-          "two weekends"
-        ],
-        "answer": 3,
-        "explanationZh": "原文依据：博物馆活动 was examined through a museum audio-guide test lasting two weekends."
-      },
-      {
-        "prompt": "In the sentence following “The project involved 175 visitors”, who does “Participants” refer to?",
-        "skillTag": "reference",
-        "options": [
-          "175 visitors",
-          "210 students",
-          "140 volunteers",
-          "48 student societies"
-        ],
-        "answer": 0,
-        "explanationZh": "原文依据：The project involved 175 visitors and collected both activity records and short interviews."
-      },
-      {
-        "prompt": "In the account where route instructions before each object helped, what does “consistent progress” most nearly mean?",
+        "prompt": "At the opening of the report on a museum audio-guide test, choose the word for the people conducting the study.",
         "skillTag": "vocabulary-in-context",
         "options": [
-          "rapid change without a clear direction",
-          "steady improvement over time",
-          "a single success that cannot be repeated",
-          "less effort with no measurable result"
+          "although",
+          "researchers",
+          "gradually",
+          "previous"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：Participants said route instructions before each object helped them make consistent progress."
+        "explanationZh": "结合上下文与词性，空格 1 应填 researchers。"
       },
       {
-        "prompt": "What can be inferred about the effect of headphone volume differences on the people studied?",
-        "skillTag": "inference",
-        "options": [
-          "Every participant benefited equally from the project.",
-          "The challenge caused the entire project to end immediately.",
-          "The difficulty prevented some participants from receiving the same benefit.",
-          "The difficulty was unrelated to the project results."
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：The main difficulty was headphone volume differences, which reduced the benefit for some people."
-      },
-      {
-        "prompt": "How does the passage move from the problem of headphone volume differences to its conclusion?",
+        "prompt": "In the introduction to a museum audio-guide test, choose the noun naming the organized study.",
         "skillTag": "structure",
         "options": [
-          "It introduces an unrelated detail about anonymous prediction exercises.",
-          "It introduces an unrelated detail about private booking channels.",
-          "It introduces an unrelated detail about monthly information checks.",
-          "It presents the practical solution: a simple sound check."
+          "briefly",
+          "however",
+          "project",
+          "rarely"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 2 应填 project。"
+      },
+      {
+        "prompt": "In the participant sentence about a museum audio-guide test, choose the verb that links the study to its members.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "declined",
+          "independent",
+          "separate",
+          "involved"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：The main difficulty was headphone volume differences, which reduced the benefit for some people. Organizers responded by introducing a simple sound check instead of abandoning the project."
+        "explanationZh": "结合上下文与词性，空格 3 应填 involved。"
+      },
+      {
+        "prompt": "In the method description for a museum audio-guide test, choose the noun for stored activity information.",
+        "skillTag": "structure",
+        "options": [
+          "records",
+          "external",
+          "limited",
+          "temporary"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 4 应填 records。"
+      },
+      {
+        "prompt": "In the same method description, choose the noun for the short conversations used by the team.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "frequent",
+          "interviews",
+          "normally",
+          "widely"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 5 应填 interviews。"
+      },
+      {
+        "prompt": "When the report turns to the people in a museum audio-guide test, choose the correct plural noun.",
+        "skillTag": "structure",
+        "options": [
+          "gradually",
+          "previous",
+          "participants",
+          "although"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 6 应填 participants。"
+      },
+      {
+        "prompt": "In the progress sentence about route instructions before each object, choose the adjective meaning steady over time.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "however",
+          "rarely",
+          "briefly",
+          "consistent"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 7 应填 consistent。"
+      },
+      {
+        "prompt": "When the report introduces headphone volume differences, choose the noun that signals a problem.",
+        "skillTag": "structure",
+        "options": [
+          "difficulty",
+          "independent",
+          "separate",
+          "declined"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 8 应填 difficulty。"
+      },
+      {
+        "prompt": "After that problem, choose the verb describing how the organizers reacted.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "limited",
+          "responded",
+          "temporary",
+          "external"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 9 应填 responded。"
+      },
+      {
+        "prompt": "In the conclusion to a museum audio-guide test, choose the noun for information supporting a decision.",
+        "skillTag": "structure",
+        "options": [
+          "normally",
+          "widely",
+          "evidence",
+          "frequent"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 10 应填 evidence。"
       }
     ]
   },
@@ -1785,7 +2505,7 @@
     "type": "matching",
     "theme": "学术讲座",
     "difficulty": "challenge",
-    "passage": "学术讲座 was examined through a science-information workshop lasting six sessions. The project involved 210 students and collected both activity records and short interviews. Participants said checking the original source helped them make consistent progress. The main difficulty was confidence in familiar headlines, which reduced the benefit for some people. Organizers responded by introducing anonymous prediction exercises instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
+    "passage": "Researchers examined the issue through a science-information workshop lasting six sessions. The project involved 210 students and collected both activity records and short interviews. Participants said checking the original source helped them make consistent progress. The main difficulty was confidence in familiar headlines, which reduced the benefit for some people. Organizers responded by introducing anonymous prediction exercises instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a science-information workshop rather than merely naming the topic?",
@@ -1797,7 +2517,7 @@
           "The results of an internship reflection project"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：学术讲座 was examined through a science-information workshop lasting six sessions."
+        "explanationZh": "原文依据：Researchers examined the issue through a science-information workshop lasting six sessions."
       },
       {
         "prompt": "What duration is reported for a science-information workshop, the study involving 210 students?",
@@ -1809,7 +2529,7 @@
           "twelve weeks"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：学术讲座 was examined through a science-information workshop lasting six sessions."
+        "explanationZh": "原文依据：Researchers examined the issue through a science-information workshop lasting six sessions."
       },
       {
         "prompt": "In the sentence following “The project involved 210 students”, who does “Participants” refer to?",
@@ -1866,7 +2586,7 @@
     "type": "reading",
     "theme": "在线会议",
     "difficulty": "challenge",
-    "passage": "在线会议 was examined through an accessible-meeting review lasting one month. The project involved 34 student groups and collected both activity records and short interviews. Participants said captions and written agendas helped them make consistent progress. The main difficulty was speakers talking over one another, which reduced the benefit for some people. Organizers responded by introducing a visible turn-taking queue instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
+    "passage": "Researchers examined the issue through an accessible-meeting review lasting one month. The project involved 34 student groups and collected both activity records and short interviews. Participants said captions and written agendas helped them make consistent progress. The main difficulty was speakers talking over one another, which reduced the benefit for some people. Organizers responded by introducing a visible turn-taking queue instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from an accessible-meeting review rather than merely naming the topic?",
@@ -1878,7 +2598,7 @@
           "The results of a late-bus pilot"
         ],
         "answer": 2,
-        "explanationZh": "原文依据：在线会议 was examined through an accessible-meeting review lasting one month."
+        "explanationZh": "原文依据：Researchers examined the issue through an accessible-meeting review lasting one month."
       },
       {
         "prompt": "What duration is reported for an accessible-meeting review, the study involving 34 student groups?",
@@ -1890,7 +2610,7 @@
           "one month"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：在线会议 was examined through an accessible-meeting review lasting one month."
+        "explanationZh": "原文依据：Researchers examined the issue through an accessible-meeting review lasting one month."
       },
       {
         "prompt": "In the sentence following “The project involved 34 student groups”, who does “Participants” refer to?",
@@ -1939,6 +2659,54 @@
         ],
         "answer": 3,
         "explanationZh": "原文依据：The main difficulty was speakers talking over one another, which reduced the benefit for some people. Organizers responded by introducing a visible turn-taking queue instead of abandoning the project."
+      },
+      {
+        "prompt": "Which change did the organizers introduce after identifying speakers talking over one another?",
+        "skillTag": "detail",
+        "options": [
+          "a visible turn-taking queue",
+          "mandatory source checks",
+          "shorter evening sessions",
+          "a revised evening route"
+        ],
+        "answer": 0,
+        "explanationZh": "原文依据：Organizers responded by introducing a visible turn-taking queue instead of abandoning the project."
+      },
+      {
+        "prompt": "Why was a visible turn-taking queue added to the project?",
+        "skillTag": "reason",
+        "options": [
+          "It was intended to shorten the reported duration.",
+          "It was intended to address speakers talking over one another.",
+          "It was intended to replace every participant.",
+          "It was added before any difficulty was observed."
+        ],
+        "answer": 1,
+        "explanationZh": "原文依据：The main difficulty was speakers talking over one another, which reduced the benefit for some people. Organizers responded by introducing a visible turn-taking queue instead of abandoning the project."
+      },
+      {
+        "prompt": "What does the final sentence suggest about the future of an accessible-meeting review?",
+        "skillTag": "inference",
+        "options": [
+          "The project will certainly expand without further review.",
+          "The organizers have decided to end the project immediately.",
+          "The organizers see promise in the revised method but still want stronger evidence.",
+          "The results are considered completely unreliable."
+        ],
+        "answer": 2,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
+      },
+      {
+        "prompt": "Which description best matches the writer's attitude toward the outcome of an accessible-meeting review?",
+        "skillTag": "attitude",
+        "options": [
+          "Entirely negative.",
+          "Uncritically enthusiastic.",
+          "Indifferent to the results.",
+          "Cautiously positive."
+        ],
+        "answer": 3,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
       }
     ]
   },
@@ -1947,78 +2715,127 @@
     "type": "cloze",
     "theme": "人工智能",
     "difficulty": "challenge",
-    "passage": "人工智能 was examined through an artificial-intelligence literacy course lasting seven weeks. The project involved 260 learners and collected both activity records and short interviews. Participants said comparing model answers with evidence helped them make consistent progress. The main difficulty was trusting fluent wording, which reduced the benefit for some people. Organizers responded by introducing mandatory source checks instead of abandoning the project. Most participants wanted the project to continue, and the organizers will measure longer-term results next term.",
+    "passage": "Researchers began a campus project that involved 260 learners. They compared activity records with short interviews. Participants reported more consistent progress when comparing model answers with evidence was available. The main difficulty was trusting fluent wording, so organizers responded with mandatory source checks. The team will collect further evidence before expanding the program.",
     "questions": [
       {
-        "prompt": "Which title best captures the findings from an artificial-intelligence literacy course rather than merely naming the topic?",
-        "skillTag": "main-idea",
-        "options": [
-          "The results of an artificial-intelligence literacy course",
-          "The results of a lifelong-learning survey",
-          "The results of a library seat-booking study",
-          "The results of a reusable-container campaign"
-        ],
-        "answer": 0,
-        "explanationZh": "原文依据：人工智能 was examined through an artificial-intelligence literacy course lasting seven weeks."
-      },
-      {
-        "prompt": "What duration is reported for an artificial-intelligence literacy course, the study involving 260 learners?",
-        "skillTag": "detail",
-        "options": [
-          "five months",
-          "seven weeks",
-          "six weeks"
-        ],
-        "answer": 1,
-        "explanationZh": "原文依据：人工智能 was examined through an artificial-intelligence literacy course lasting seven weeks."
-      },
-      {
-        "prompt": "In the sentence following “The project involved 260 learners”, who does “Participants” refer to?",
-        "skillTag": "reference",
-        "options": [
-          "600 adults",
-          "240 library users",
-          "260 learners",
-          "14 campus cafés"
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：The project involved 260 learners and collected both activity records and short interviews."
-      },
-      {
-        "prompt": "In the account where comparing model answers with evidence helped, what does “consistent progress” most nearly mean?",
+        "prompt": "At the opening of the report on an artificial-intelligence literacy course, choose the word for the people conducting the study.",
         "skillTag": "vocabulary-in-context",
         "options": [
-          "rapid change without a clear direction",
-          "a single success that cannot be repeated",
-          "less effort with no measurable result",
-          "steady improvement over time"
-        ],
-        "answer": 3,
-        "explanationZh": "原文依据：Participants said comparing model answers with evidence helped them make consistent progress."
-      },
-      {
-        "prompt": "What can be inferred about the effect of trusting fluent wording on the people studied?",
-        "skillTag": "inference",
-        "options": [
-          "The difficulty prevented some participants from receiving the same benefit.",
-          "Every participant benefited equally from the project.",
-          "The challenge caused the entire project to end immediately.",
-          "The difficulty was unrelated to the project results."
+          "researchers",
+          "although",
+          "gradually",
+          "previous"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：The main difficulty was trusting fluent wording, which reduced the benefit for some people."
+        "explanationZh": "结合上下文与词性，空格 1 应填 researchers。"
       },
       {
-        "prompt": "What role does the sentence about mandatory source checks play after the problem of trusting fluent wording?",
-        "skillTag": "paragraph-role",
+        "prompt": "In the introduction to an artificial-intelligence literacy course, choose the noun naming the organized study.",
+        "skillTag": "structure",
         "options": [
-          "It introduces an unrelated detail about short self-paced units.",
-          "It presents the practical solution: mandatory source checks.",
-          "It introduces an unrelated detail about automatic cancellation after fifteen minutes.",
-          "It introduces an unrelated detail about return boxes near dormitories."
+          "briefly",
+          "project",
+          "however",
+          "rarely"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：The main difficulty was trusting fluent wording, which reduced the benefit for some people. Organizers responded by introducing mandatory source checks instead of abandoning the project."
+        "explanationZh": "结合上下文与词性，空格 2 应填 project。"
+      },
+      {
+        "prompt": "In the participant sentence about an artificial-intelligence literacy course, choose the verb that links the study to its members.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "declined",
+          "independent",
+          "involved",
+          "separate"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 3 应填 involved。"
+      },
+      {
+        "prompt": "In the method description for an artificial-intelligence literacy course, choose the noun for stored activity information.",
+        "skillTag": "structure",
+        "options": [
+          "external",
+          "limited",
+          "temporary",
+          "records"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 4 应填 records。"
+      },
+      {
+        "prompt": "In the same method description, choose the noun for the short conversations used by the team.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "interviews",
+          "frequent",
+          "normally",
+          "widely"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 5 应填 interviews。"
+      },
+      {
+        "prompt": "When the report turns to the people in an artificial-intelligence literacy course, choose the correct plural noun.",
+        "skillTag": "structure",
+        "options": [
+          "gradually",
+          "participants",
+          "previous",
+          "although"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 6 应填 participants。"
+      },
+      {
+        "prompt": "In the progress sentence about comparing model answers with evidence, choose the adjective meaning steady over time.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "however",
+          "rarely",
+          "consistent",
+          "briefly"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 7 应填 consistent。"
+      },
+      {
+        "prompt": "When the report introduces trusting fluent wording, choose the noun that signals a problem.",
+        "skillTag": "structure",
+        "options": [
+          "independent",
+          "separate",
+          "declined",
+          "difficulty"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 8 应填 difficulty。"
+      },
+      {
+        "prompt": "After that problem, choose the verb describing how the organizers reacted.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "responded",
+          "limited",
+          "temporary",
+          "external"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 9 应填 responded。"
+      },
+      {
+        "prompt": "In the conclusion to an artificial-intelligence literacy course, choose the noun for information supporting a decision.",
+        "skillTag": "structure",
+        "options": [
+          "normally",
+          "evidence",
+          "widely",
+          "frequent"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 10 应填 evidence。"
       }
     ]
   },
@@ -2027,7 +2844,7 @@
     "type": "matching",
     "theme": "终身学习",
     "difficulty": "challenge",
-    "passage": "终身学习 was examined through a lifelong-learning survey lasting five months. The project involved 600 adults and collected both activity records and short interviews. Participants said courses linked to personal goals helped them make consistent progress. The main difficulty was work and family pressure, which reduced the benefit for some people. Organizers responded by introducing short self-paced units instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
+    "passage": "Researchers examined the issue through a lifelong-learning survey lasting five months. The project involved 600 adults and collected both activity records and short interviews. Participants said courses linked to personal goals helped them make consistent progress. The main difficulty was work and family pressure, which reduced the benefit for some people. Organizers responded by introducing short self-paced units instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a lifelong-learning survey rather than merely naming the topic?",
@@ -2039,7 +2856,7 @@
           "The results of a low-cost meal program"
         ],
         "answer": 2,
-        "explanationZh": "原文依据：终身学习 was examined through a lifelong-learning survey lasting five months."
+        "explanationZh": "原文依据：Researchers examined the issue through a lifelong-learning survey lasting five months."
       },
       {
         "prompt": "What duration is reported for a lifelong-learning survey, the study involving 600 adults?",
@@ -2051,7 +2868,7 @@
           "five months"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：终身学习 was examined through a lifelong-learning survey lasting five months."
+        "explanationZh": "原文依据：Researchers examined the issue through a lifelong-learning survey lasting five months."
       },
       {
         "prompt": "In the sentence following “The project involved 600 adults”, who does “Participants” refer to?",
@@ -2108,7 +2925,7 @@
     "type": "reading",
     "theme": "传统手工艺",
     "difficulty": "challenge",
-    "passage": "传统手工艺 was examined through a traditional craft apprenticeship lasting one summer. The project involved 42 young participants and collected both activity records and short interviews. Participants said learning directly from artisans helped them make consistent progress. The main difficulty was materials being expensive, which reduced the benefit for some people. Organizers responded by introducing shared community tool kits instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
+    "passage": "Researchers examined the issue through a traditional craft apprenticeship lasting one summer. The project involved 42 young participants and collected both activity records and short interviews. Participants said learning directly from artisans helped them make consistent progress. The main difficulty was materials being expensive, which reduced the benefit for some people. Organizers responded by introducing shared community tool kits instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a traditional craft apprenticeship rather than merely naming the topic?",
@@ -2120,7 +2937,7 @@
           "The results of a movement-break experiment"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：传统手工艺 was examined through a traditional craft apprenticeship lasting one summer."
+        "explanationZh": "原文依据：Researchers examined the issue through a traditional craft apprenticeship lasting one summer."
       },
       {
         "prompt": "What duration is reported for a traditional craft apprenticeship, the study involving 42 young participants?",
@@ -2132,7 +2949,7 @@
           "nine weeks"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：传统手工艺 was examined through a traditional craft apprenticeship lasting one summer."
+        "explanationZh": "原文依据：Researchers examined the issue through a traditional craft apprenticeship lasting one summer."
       },
       {
         "prompt": "In the sentence following “The project involved 42 young participants”, who does “Participants” refer to?",
@@ -2181,6 +2998,54 @@
         ],
         "answer": 1,
         "explanationZh": "原文依据：The main difficulty was materials being expensive, which reduced the benefit for some people. Organizers responded by introducing shared community tool kits instead of abandoning the project."
+      },
+      {
+        "prompt": "Which change did the organizers introduce after identifying materials being expensive?",
+        "skillTag": "detail",
+        "options": [
+          "smaller sample portions",
+          "separate quiet zones",
+          "shared community tool kits",
+          "automatic classroom reminders"
+        ],
+        "answer": 2,
+        "explanationZh": "原文依据：Organizers responded by introducing shared community tool kits instead of abandoning the project."
+      },
+      {
+        "prompt": "Why was shared community tool kits added to the project?",
+        "skillTag": "reason",
+        "options": [
+          "It was intended to shorten the reported duration.",
+          "It was intended to replace every participant.",
+          "It was added before any difficulty was observed.",
+          "It was intended to address materials being expensive."
+        ],
+        "answer": 3,
+        "explanationZh": "原文依据：The main difficulty was materials being expensive, which reduced the benefit for some people. Organizers responded by introducing shared community tool kits instead of abandoning the project."
+      },
+      {
+        "prompt": "What does the final sentence suggest about the future of a traditional craft apprenticeship?",
+        "skillTag": "inference",
+        "options": [
+          "The organizers see promise in the revised method but still want stronger evidence.",
+          "The project will certainly expand without further review.",
+          "The organizers have decided to end the project immediately.",
+          "The results are considered completely unreliable."
+        ],
+        "answer": 0,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
+      },
+      {
+        "prompt": "Which description best matches the writer's attitude toward the outcome of a traditional craft apprenticeship?",
+        "skillTag": "attitude",
+        "options": [
+          "Entirely negative.",
+          "Cautiously positive.",
+          "Uncritically enthusiastic.",
+          "Indifferent to the results."
+        ],
+        "answer": 1,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
       }
     ]
   },
@@ -2189,79 +3054,127 @@
     "type": "cloze",
     "theme": "食品浪费",
     "difficulty": "challenge",
-    "passage": "食品浪费 was examined through a food-waste measurement project lasting fourteen days. The project involved 12 dining halls and collected both activity records and short interviews. Participants said weighing leftovers by dish helped them make consistent progress. The main difficulty was students misunderstanding labels, which reduced the benefit for some people. Organizers responded by introducing smaller sample portions instead of abandoning the project. Most participants wanted the project to continue, and the organizers will measure longer-term results next term.",
+    "passage": "Researchers began a campus project that involved 12 dining halls. They compared activity records with short interviews. Participants reported more consistent progress when weighing leftovers by dish was available. The main difficulty was students misunderstanding labels, so organizers responded with smaller sample portions. The team will collect further evidence before expanding the program.",
     "questions": [
       {
-        "prompt": "Which title best captures the findings from a food-waste measurement project rather than merely naming the topic?",
-        "skillTag": "main-idea",
-        "options": [
-          "The results of a student well-being program",
-          "The results of a club discovery platform",
-          "The results of a food-waste measurement project",
-          "The results of a digital note comparison"
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：食品浪费 was examined through a food-waste measurement project lasting fourteen days."
-      },
-      {
-        "prompt": "What duration is reported for a food-waste measurement project, the study involving 12 dining halls?",
-        "skillTag": "detail",
-        "options": [
-          "eight weeks",
-          "three months",
-          "one term",
-          "fourteen days"
-        ],
-        "answer": 3,
-        "explanationZh": "原文依据：食品浪费 was examined through a food-waste measurement project lasting fourteen days."
-      },
-      {
-        "prompt": "In the sentence following “The project involved 12 dining halls”, who does “Participants” refer to?",
-        "skillTag": "reference",
-        "options": [
-          "12 dining halls",
-          "140 volunteers",
-          "48 student societies",
-          "132 volunteers"
-        ],
-        "answer": 0,
-        "explanationZh": "原文依据：The project involved 12 dining halls and collected both activity records and short interviews."
-      },
-      {
-        "prompt": "In the account where weighing leftovers by dish helped, what does “consistent progress” most nearly mean?",
+        "prompt": "At the opening of the report on a food-waste measurement project, choose the word for the people conducting the study.",
         "skillTag": "vocabulary-in-context",
         "options": [
-          "rapid change without a clear direction",
-          "steady improvement over time",
-          "a single success that cannot be repeated",
-          "less effort with no measurable result"
-        ],
-        "answer": 1,
-        "explanationZh": "原文依据：Participants said weighing leftovers by dish helped them make consistent progress."
-      },
-      {
-        "prompt": "What can be inferred about the effect of students misunderstanding labels on the people studied?",
-        "skillTag": "inference",
-        "options": [
-          "Every participant benefited equally from the project.",
-          "The challenge caused the entire project to end immediately.",
-          "The difficulty prevented some participants from receiving the same benefit.",
-          "The difficulty was unrelated to the project results."
-        ],
-        "answer": 2,
-        "explanationZh": "原文依据：The main difficulty was students misunderstanding labels, which reduced the benefit for some people."
-      },
-      {
-        "prompt": "How does the passage move from the problem of students misunderstanding labels to its conclusion?",
-        "skillTag": "structure",
-        "options": [
-          "It introduces an unrelated detail about private booking channels.",
-          "It introduces an unrelated detail about monthly information checks.",
-          "It introduces an unrelated detail about a distraction-free mode.",
-          "It presents the practical solution: smaller sample portions."
+          "although",
+          "gradually",
+          "previous",
+          "researchers"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：The main difficulty was students misunderstanding labels, which reduced the benefit for some people. Organizers responded by introducing smaller sample portions instead of abandoning the project."
+        "explanationZh": "结合上下文与词性，空格 1 应填 researchers。"
+      },
+      {
+        "prompt": "In the introduction to a food-waste measurement project, choose the noun naming the organized study.",
+        "skillTag": "structure",
+        "options": [
+          "project",
+          "briefly",
+          "however",
+          "rarely"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 2 应填 project。"
+      },
+      {
+        "prompt": "In the participant sentence about a food-waste measurement project, choose the verb that links the study to its members.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "declined",
+          "involved",
+          "independent",
+          "separate"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 3 应填 involved。"
+      },
+      {
+        "prompt": "In the method description for a food-waste measurement project, choose the noun for stored activity information.",
+        "skillTag": "structure",
+        "options": [
+          "external",
+          "limited",
+          "records",
+          "temporary"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 4 应填 records。"
+      },
+      {
+        "prompt": "In the same method description, choose the noun for the short conversations used by the team.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "frequent",
+          "normally",
+          "widely",
+          "interviews"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 5 应填 interviews。"
+      },
+      {
+        "prompt": "When the report turns to the people in a food-waste measurement project, choose the correct plural noun.",
+        "skillTag": "structure",
+        "options": [
+          "participants",
+          "gradually",
+          "previous",
+          "although"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 6 应填 participants。"
+      },
+      {
+        "prompt": "In the progress sentence about weighing leftovers by dish, choose the adjective meaning steady over time.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "however",
+          "consistent",
+          "rarely",
+          "briefly"
+        ],
+        "answer": 1,
+        "explanationZh": "结合上下文与词性，空格 7 应填 consistent。"
+      },
+      {
+        "prompt": "When the report introduces students misunderstanding labels, choose the noun that signals a problem.",
+        "skillTag": "structure",
+        "options": [
+          "independent",
+          "separate",
+          "difficulty",
+          "declined"
+        ],
+        "answer": 2,
+        "explanationZh": "结合上下文与词性，空格 8 应填 difficulty。"
+      },
+      {
+        "prompt": "After that problem, choose the verb describing how the organizers reacted.",
+        "skillTag": "vocabulary-in-context",
+        "options": [
+          "limited",
+          "temporary",
+          "external",
+          "responded"
+        ],
+        "answer": 3,
+        "explanationZh": "结合上下文与词性，空格 9 应填 responded。"
+      },
+      {
+        "prompt": "In the conclusion to a food-waste measurement project, choose the noun for information supporting a decision.",
+        "skillTag": "structure",
+        "options": [
+          "evidence",
+          "normally",
+          "widely",
+          "frequent"
+        ],
+        "answer": 0,
+        "explanationZh": "结合上下文与词性，空格 10 应填 evidence。"
       }
     ]
   },
@@ -2270,7 +3183,7 @@
     "type": "matching",
     "theme": "心理健康",
     "difficulty": "challenge",
-    "passage": "心理健康 was examined through a student well-being program lasting eight weeks. The project involved 140 volunteers and collected both activity records and short interviews. Participants said regular peer check-ins helped them make consistent progress. The main difficulty was reluctance to ask for help, which reduced the benefit for some people. Organizers responded by introducing private booking channels instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
+    "passage": "Researchers examined the issue through a student well-being program lasting eight weeks. The project involved 140 volunteers and collected both activity records and short interviews. Participants said regular peer check-ins helped them make consistent progress. The main difficulty was reluctance to ask for help, which reduced the benefit for some people. Organizers responded by introducing private booking channels instead of abandoning the project. The final survey showed stronger satisfaction, although the team says more evidence is still needed.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a student well-being program rather than merely naming the topic?",
@@ -2282,7 +3195,7 @@
           "The results of a planning-habit challenge"
         ],
         "answer": 0,
-        "explanationZh": "原文依据：心理健康 was examined through a student well-being program lasting eight weeks."
+        "explanationZh": "原文依据：Researchers examined the issue through a student well-being program lasting eight weeks."
       },
       {
         "prompt": "What duration is reported for a student well-being program, the study involving 140 volunteers?",
@@ -2294,7 +3207,7 @@
           "twenty-one days"
         ],
         "answer": 1,
-        "explanationZh": "原文依据：心理健康 was examined through a student well-being program lasting eight weeks."
+        "explanationZh": "原文依据：Researchers examined the issue through a student well-being program lasting eight weeks."
       },
       {
         "prompt": "In the sentence following “The project involved 140 volunteers”, who does “Participants” refer to?",
@@ -2351,7 +3264,7 @@
     "type": "reading",
     "theme": "阅读习惯",
     "difficulty": "challenge",
-    "passage": "阅读习惯 was examined through a recreational reading circle lasting six months. The project involved 95 members and collected both activity records and short interviews. Participants said freedom to choose short books helped them make consistent progress. The main difficulty was uneven discussion participation, which reduced the benefit for some people. Organizers responded by introducing rotating small-group leaders instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
+    "passage": "Researchers examined the issue through a recreational reading circle lasting six months. The project involved 95 members and collected both activity records and short interviews. Participants said freedom to choose short books helped them make consistent progress. The main difficulty was uneven discussion participation, which reduced the benefit for some people. Organizers responded by introducing rotating small-group leaders instead of abandoning the project. After the change, participation became steadier and the revised method will be used in a larger trial.",
     "questions": [
       {
         "prompt": "Which title best captures the findings from a recreational reading circle rather than merely naming the topic?",
@@ -2363,7 +3276,7 @@
           "The results of a neighborhood technology clinic"
         ],
         "answer": 2,
-        "explanationZh": "原文依据：阅读习惯 was examined through a recreational reading circle lasting six months."
+        "explanationZh": "原文依据：Researchers examined the issue through a recreational reading circle lasting six months."
       },
       {
         "prompt": "What duration is reported for a recreational reading circle, the study involving 95 members?",
@@ -2375,7 +3288,7 @@
           "six months"
         ],
         "answer": 3,
-        "explanationZh": "原文依据：阅读习惯 was examined through a recreational reading circle lasting six months."
+        "explanationZh": "原文依据：Researchers examined the issue through a recreational reading circle lasting six months."
       },
       {
         "prompt": "In the sentence following “The project involved 95 members”, who does “Participants” refer to?",
@@ -2424,6 +3337,54 @@
         ],
         "answer": 3,
         "explanationZh": "原文依据：The main difficulty was uneven discussion participation, which reduced the benefit for some people. Organizers responded by introducing rotating small-group leaders instead of abandoning the project."
+      },
+      {
+        "prompt": "Which change did the organizers introduce after identifying uneven discussion participation?",
+        "skillTag": "detail",
+        "options": [
+          "rotating small-group leaders",
+          "shorter evening sessions",
+          "a revised evening route",
+          "practice accounts with invented data"
+        ],
+        "answer": 0,
+        "explanationZh": "原文依据：Organizers responded by introducing rotating small-group leaders instead of abandoning the project."
+      },
+      {
+        "prompt": "Why was rotating small-group leaders added to the project?",
+        "skillTag": "reason",
+        "options": [
+          "It was intended to shorten the reported duration.",
+          "It was intended to address uneven discussion participation.",
+          "It was intended to replace every participant.",
+          "It was added before any difficulty was observed."
+        ],
+        "answer": 1,
+        "explanationZh": "原文依据：The main difficulty was uneven discussion participation, which reduced the benefit for some people. Organizers responded by introducing rotating small-group leaders instead of abandoning the project."
+      },
+      {
+        "prompt": "What does the final sentence suggest about the future of a recreational reading circle?",
+        "skillTag": "inference",
+        "options": [
+          "The project will certainly expand without further review.",
+          "The organizers have decided to end the project immediately.",
+          "The organizers see promise in the revised method but still want stronger evidence.",
+          "The results are considered completely unreliable."
+        ],
+        "answer": 2,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
+      },
+      {
+        "prompt": "Which description best matches the writer's attitude toward the outcome of a recreational reading circle?",
+        "skillTag": "attitude",
+        "options": [
+          "Entirely negative.",
+          "Uncritically enthusiastic.",
+          "Indifferent to the results.",
+          "Cautiously positive."
+        ],
+        "answer": 3,
+        "explanationZh": "原文依据：After the change, participation became steadier and the revised method will be used in a larger trial."
       }
     ]
   }
