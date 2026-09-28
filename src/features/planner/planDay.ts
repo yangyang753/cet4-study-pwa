@@ -24,7 +24,9 @@ export function planDay(input: PlannerInput): DailyPlan {
   const evidenceWeakSkill = input.hasRecentEvidence ? input.weakSkill : input.diagnosticWeakSkill;
   const priorityOrdinal = Math.floor(Date.parse(`${input.date}T00:00:00Z`) / 86_400_000);
   const priorityRotating = nonCorePriorities.length ? nonCorePriorities[((priorityOrdinal % nonCorePriorities.length) + nonCorePriorities.length) % nonCorePriorities.length] : undefined;
-  const requestedRotating: StudyKind = phase === 'sprint' ? 'mock' : priorityRotating ?? evidenceWeakSkill ?? rotatingFoundationKind(input.date);
+  const fullMockDay = phase === 'sprint' && new Date(`${input.date}T00:00:00Z`).getUTCDay() === 0;
+  if (fullMockDay) return { date: input.date, phase, tasks: [{ id: `${input.date}:mock`, kind: 'mock', minutes: 125, priority: 6 }] };
+  const requestedRotating: StudyKind = priorityRotating ?? evidenceWeakSkill ?? rotatingFoundationKind(input.date);
   const rotating: StudyKind = ['vocabulary', 'listening', 'review'].includes(requestedRotating) ? 'reading' : requestedRotating;
   const minutes = input.dailyMinutes;
   const reviewMinutes = Math.min(5, minutes);
@@ -55,7 +57,7 @@ export function planDay(input: PlannerInput): DailyPlan {
 
 export function carryoverFromPlan(previousTasks: StudyTask[], completedTaskIds: Set<string>): StudyTask[] {
   return previousTasks.filter((task) =>
-    !completedTaskIds.has(task.id) && !['vocabulary', 'listening', 'review'].includes(task.kind));
+    !completedTaskIds.has(task.id) && !['vocabulary', 'listening', 'review', 'mock'].includes(task.kind));
 }
 
 export function daysUntil(date: string, examDate: string) { return Math.max(0, daysBetween(date, examDate)); }

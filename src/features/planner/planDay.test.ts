@@ -43,6 +43,24 @@ describe('planDay', () => {
     expect(planDay({ ...base, date: '2026-11-20' }).phase).toBe('sprint');
   });
 
+  it('keeps sprint weekdays inside the configured 60-minute budget without a full mock', () => {
+    const plan = planDay({ ...base, date: '2026-11-20', dailyMinutes: 60, weakSkill: 'reading', hasRecentEvidence: true });
+    expect(plan.phase).toBe('sprint');
+    expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBe(60);
+    expect(plan.tasks.some((task) => task.kind === 'mock')).toBe(false);
+    expect(plan.tasks.some((task) => task.kind === 'reading')).toBe(true);
+  });
+
+  it('reserves Sunday in sprint phase for one explicit 125-minute full mock', () => {
+    const plan = planDay({ ...base, date: '2026-11-22', dailyMinutes: 60 });
+    expect(plan.phase).toBe('sprint');
+    expect(plan.tasks).toEqual([{ id: '2026-11-22:mock', kind: 'mock', minutes: 125, priority: 6 }]);
+  });
+
+  it('does not carry a missed full mock into the next 60-minute day', () => {
+    expect(carryoverFromPlan([{ id: 'sunday:mock', kind: 'mock', minutes: 125, priority: 6 }], new Set())).toEqual([]);
+  });
+
   it('uses a diagnostic weakness during foundation week', () => {
     const plan = planDay({ ...base, diagnosticWeakSkill: 'grammar', hasRecentEvidence: false });
     expect(plan.tasks.some((task) => task.kind === 'grammar')).toBe(true);

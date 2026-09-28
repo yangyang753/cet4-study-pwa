@@ -67,13 +67,14 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
   const attemptsSinceDiagnostic = snapshot?.settings.diagnosticCompletedAt ? (snapshot.attempts ?? []).filter((attempt) => Date.parse(attempt.createdAt) > Date.parse(snapshot.settings.diagnosticCompletedAt!)).length : 0;
   const diagnosticRetestDue = diagnosticAgeDays >= 21 || attemptsSinceDiagnostic >= 30;
   const plan = planDay({ date: today, examDate: targetDate, dailyMinutes, weakSkill: weakKind ?? 'listening', diagnosticWeakSkill: diagnosticWeakKind, hasRecentEvidence: metrics.hasEnoughData, unfinished, vocabularyMinutes: vocabularyWorkload?.estimatedMinutes, priorities });
+  const plannedMinutes = plan.tasks.reduce((sum, task) => sum + task.minutes, 0);
   useEffect(() => {
     if (!snapshot || previousPlan === undefined) return;
     void repository.savePlan({ id: `plan:${today}`, date: today, tasks: plan.tasks, updatedAt: new Date().toISOString() });
   }, [plan.tasks, previousPlan, repository, snapshot, today]);
 
   return <div className="today-page">
-    <header className="page-heading"><div><h1>{greetingForHour(new Date().getHours())}，向目标 425 分前进</h1><p>今天只需要专注 {dailyMinutes} 分钟。</p></div><a className="avatar" href={appHref('account')} aria-label="账户与同步">L</a></header>
+    <header className="page-heading"><div><h1>{greetingForHour(new Date().getHours())}，向目标 425 分前进</h1><p>{plannedMinutes > dailyMinutes ? `今天是每周整套模考日，请预留 ${plannedMinutes} 分钟。` : `今天只需要专注 ${dailyMinutes} 分钟。`}</p></div><a className="avatar" href={appHref('account')} aria-label="账户与同步">L</a></header>
     {snapshot && !snapshot.settings.diagnosticCompletedAt && <aside className="cloud-notice"><strong>先做 10～15 分钟基础诊断</strong><p>系统会据此安排第一周学习重点；也可以稍后再做。</p><a href={appHref('diagnostic')}>开始基础诊断</a></aside>}
     {snapshot?.settings.diagnosticProfile && <aside className="diagnostic-summary" aria-labelledby="diagnostic-summary-title"><div><span id="diagnostic-summary-title">基础诊断参考估分</span><strong>预计 {snapshot.settings.diagnosticProfile.estimatedScore} 分</strong><small>参考区间 {snapshot.settings.diagnosticProfile.scoreRange.low}～{snapshot.settings.diagnosticProfile.scoreRange.high}</small></div><div><b>{snapshot.settings.diagnosticProfile.estimatedScore >= 425 ? '已达到 425 分参考线' : `距离 425 分还差 ${425 - snapshot.settings.diagnosticProfile.estimatedScore} 分`}</b><span>当前优先补强：{priorities.length ? priorities.map((item) => priorityLabels[item.kind]).join('、') : snapshot.settings.diagnosticProfile.weakSkills.map((kind) => priorityLabels[kind]).join('、')}</span><small>估分用于学习规划，不是官方成绩。</small></div><a href={appHref('diagnostic')}>重新诊断</a></aside>}
     {diagnosticRetestDue && <aside className="cloud-notice"><strong>建议重新做一次基础诊断</strong><p>{diagnosticAgeDays >= 21 ? '诊断结果已超过 21 天，' : `诊断后已完成 ${attemptsSinceDiagnostic} 次练习，`}重新测试能让今日弱项安排更准确。</p><a href={appHref('diagnostic')}>开始重新诊断</a></aside>}
@@ -81,7 +82,7 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
     {snapshot && <ExamReadiness settings={snapshot.settings} today={today} repository={repository} />}
     {snapshot && <ExamDateConfirmation settings={snapshot.settings} repository={repository} onConfirmed={(settings) => setSnapshot((current) => current ? { ...current, settings } : current)} />}
     {weeklyReport && <WeeklyLearningReport report={weeklyReport} />}
-    <section className="dashboard-grid"><div className="task-panel"><h2>今日 {dailyMinutes} 分钟计划</h2>{plan.tasks.map((task) => {
+    <section className="dashboard-grid"><div className="task-panel"><h2>{plannedMinutes > dailyMinutes ? `今日整套模考 · ${plannedMinutes} 分钟` : `今日 ${dailyMinutes} 分钟计划`}</h2>{plan.tasks.map((task) => {
       const copy = taskCopy[task.kind];
       const detail = task.kind === 'vocabulary' && vocabularyWorkload ? `${vocabularyWorkload.newWords.length} 个新词 + ${vocabularyWorkload.dueWords.length} 个旧词复习` : copy.detail;
       const priority = priorities.find((item) => item.kind === task.kind);
