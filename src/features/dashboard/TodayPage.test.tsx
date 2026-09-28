@@ -53,6 +53,15 @@ describe('TodayPage', () => {
     expect(screen.getByText(/先复习旧词，再学新词并检测翻译强化词/)).toBeVisible();
   });
 
+  it('presents the day as a structured premium learning cockpit', async () => {
+    render(<TodayPage today="2026-09-22" repository={repository()} />);
+    expect(await screen.findByRole('region', { name: '今日备考概览' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: '今日学习路线' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: '备考状态' })).toBeVisible();
+    expect(screen.getByText('学习证据自动记录')).toBeVisible();
+    expect(screen.getByText('原创仿真训练')).toBeVisible();
+  });
+
   it('shows an expandable seven-day learning report from saved progress', async () => {
     render(<TodayPage today="2026-09-27" repository={repository({
       attempts: [{ id: 'weekly-1', userId: 'local', questionId: 'q1', response: 'A', correct: false, score: 0, durationSeconds: 10, kind: 'listening', mode: 'practice', createdAt: '2026-09-27T01:00:00.000Z' }],
@@ -78,7 +87,8 @@ describe('TodayPage', () => {
   it('shows the countdown and the four-part 60-minute plan', () => {
     render(<TodayPage today="2026-09-22" examDate="2026-12-12" />);
     expect(screen.getByText('81')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /今日 60 分钟计划/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '今日学习路线' })).toBeInTheDocument();
+    expect(screen.getByText('60 分钟 · 按顺序完成效果更稳')).toBeVisible();
     expect(screen.getAllByRole('article')).toHaveLength(4);
     expect(screen.getByText('正在积累数据')).toBeVisible();
   });
