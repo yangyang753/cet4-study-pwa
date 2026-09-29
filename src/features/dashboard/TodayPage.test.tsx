@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { greetingForHour, TodayPage } from './TodayPage';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { learningVocabulary } from '../../content/vocabularyLearning';
@@ -68,6 +68,20 @@ describe('TodayPage', () => {
     expect(await screen.findByRole('heading', { name: '今日学习路线' })).toBeVisible();
     expect(screen.queryByRole('alert', { name: '本机备份提醒' })).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: '考试准备' })).not.toBeInTheDocument();
+  });
+
+  it('preserves the saved vocabulary cohort when refreshing the daily plan', async () => {
+    const learningRepository = repository();
+    const savePlan = vi.fn().mockResolvedValue(undefined);
+    Object.assign(learningRepository, {
+      getPlan: vi.fn().mockImplementation(async (date: string) => date === '2026-09-22' ? { id: 'plan:2026-09-22', date, tasks: [], vocabularySession: { wordIds: ['v0001'], learnedWordIds: ['v0001'], phase: 'testing' }, updatedAt: '2026-09-22T08:00:00.000Z' } : null),
+      savePlan,
+    });
+    render(<TodayPage today="2026-09-22" repository={learningRepository} />);
+    await waitFor(() => expect(savePlan).toHaveBeenCalled());
+    expect(savePlan).toHaveBeenLastCalledWith(expect.objectContaining({ vocabularySession: expect.objectContaining({ wordIds: ['v0001'], phase: 'testing' }) }));
+    expect(screen.getByRole('link', { name: '继续严格检测 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
+    expect(screen.getByText('1 个今日新词（已学 1 个）+ 0 个旧词复习')).toBeVisible();
   });
 
   it('shows an expandable seven-day learning report from saved progress', async () => {

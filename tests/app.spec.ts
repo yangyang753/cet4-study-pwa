@@ -120,16 +120,44 @@ test('exposes installable PWA metadata', async ({ page, request }) => {
   await expect(page.getByRole('heading', { name: '安装到手机桌面' })).toBeVisible();
 });
 
-test('starts vocabulary practice with word study and unlocks questions after translation', async ({ page }) => {
+test('keeps one vocabulary cohort through study, strict testing, translation, and completion', async ({ page }) => {
+  test.setTimeout(60_000);
   await page.goto('#/practice/vocabulary');
   await expect(page.getByRole('heading', { level: 1, name: '先学单词，再开始做题' })).toBeVisible();
   await expect(page.getByRole('radio')).toHaveCount(0);
   const progress = await page.locator('.vocabulary-warmup header span').textContent();
   const total = Number(progress?.match(/\/(\d+)/)?.[1]);
   expect(total).toBeGreaterThan(0);
+  const learnedWords: Array<{ word: string; meaning: string }> = [];
   for (let index = 0; index < total; index += 1) {
+    const word = (await page.locator('.warmup-card > h2').textContent()) ?? '';
     await page.getByRole('button', { name: '显示释义' }).click();
-    await page.getByRole('button', { name: '基本认识' }).click();
+    const meaning = (await page.locator('.warmup-answer > strong').textContent()) ?? '';
+    learnedWords.push({ word, meaning });
+    await page.getByRole('button', { name: index === total - 1 ? '完成单词学习' : '下一个单词' }).click();
+    if (index < total - 1) await expect(page.locator('.vocabulary-warmup > header span')).toContainText(`${index + 2}/${total}`);
+  }
+  await expect(page.getByRole('heading', { level: 1, name: '严格检测今日新词' })).toBeVisible();
+  for (let index = 0; index < learnedWords.length; index += 1) {
+    const kind = (await page.locator('.check-type').textContent()) ?? '';
+    const prompt = (await page.locator('.strict-check-card > h2').textContent()) ?? '';
+    const current = kind.includes('看中文')
+      ? learnedWords.find((item) => item.meaning === prompt)
+      : kind.includes('看英文')
+        ? learnedWords.find((item) => item.word === prompt)
+        : learnedWords.find((item) => item.word.length === prompt.length && [...prompt].every((letter, position) => letter === '_' || letter === item.word[position]));
+    expect(current, `strict question must reuse a word from today's cohort: ${prompt}`).toBeTruthy();
+    if (kind !== '看英文，写全中文词义') await page.getByRole('textbox', { name: '英文拼写' }).fill(current!.word);
+    if (kind !== '看中文，默写英文') await page.getByRole('textbox', { name: '完整中文词义' }).fill(current!.meaning);
+    await page.getByRole('button', { name: index === learnedWords.length - 1 ? '提交并完成检测' : '提交严格检测' }).click();
+    const strictFeedback = page.getByRole('alert');
+    if (index < learnedWords.length - 1) {
+      await Promise.race([
+        expect(page.locator('.strict-vocabulary-check > header span')).toContainText(`${index + 2} / ${learnedWords.length}`),
+        strictFeedback.waitFor({ state: 'visible' }),
+      ]);
+      if (await strictFeedback.isVisible()) throw new Error(`strict answer unexpectedly failed: ${await strictFeedback.textContent()}`);
+    }
   }
   await expect(page.getByRole('heading', { level: 1, name: '中国文化翻译' })).toBeVisible();
   await page.getByRole('textbox', { name: '我的英文翻译' }).fill('Chinese culture has a long history and remains important in modern society.');
@@ -143,13 +171,7 @@ test('starts vocabulary practice with word study and unlocks questions after tra
     await page.getByRole('button', { name: '提交搭配答案' }).click();
     await page.getByRole('button', { name: index === 2 ? '完成重点搭配' : '下一个重点搭配' }).click();
   }
-  await expect(page.getByRole('heading', { level: 1, name: '专项练习' })).toBeVisible();
-  await expect(page.getByRole('group', { name: /^请选择 .+ 的正确含义。$/ })).toBeVisible();
-  const firstChoice = page.getByRole('radio').first();
-  await expect(firstChoice).toBeDisabled();
-  await page.getByRole('textbox', { name: '题干中文翻译' }).fill('这道题询问单词的正确含义。');
-  await page.getByRole('button', { name: '检查翻译并解锁选项' }).click();
-  await expect(firstChoice).toBeEnabled();
+  await expect(page.getByRole('heading', { level: 1, name: '今日词汇训练已完成' })).toBeVisible();
 });
 
 test('reopens the visited study dashboard while offline', async ({ page, context }) => {

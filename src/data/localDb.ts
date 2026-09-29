@@ -5,7 +5,19 @@ import type { KnowledgeState, ReviewCard, StudyTaskCompletion, UserSettings } fr
 import type { ExamSessionRecord } from '../domain/exam';
 import type { StudyTask } from '../features/planner/planDay';
 
-export interface CachedPlan { id: string; date: string; tasks: StudyTask[]; updatedAt: string }
+export type VocabularySessionPhase = 'learning' | 'testing' | 'culture-review' | 'culture-translation' | 'collocations' | 'complete';
+export interface VocabularySessionProgress {
+  wordIds: string[];
+  learnedWordIds: string[];
+  phase: VocabularySessionPhase;
+}
+export interface CachedPlan {
+  id: string;
+  date: string;
+  tasks: StudyTask[];
+  vocabularySession?: VocabularySessionProgress;
+  updatedAt: string;
+}
 export interface SyncCursorRecord { id: string; cursor: string; updatedAt: string }
 
 export class LearningDatabase extends Dexie {

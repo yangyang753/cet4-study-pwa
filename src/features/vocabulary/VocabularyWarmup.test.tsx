@@ -27,20 +27,24 @@ describe('VocabularyWarmup', () => {
     expect(screen.getByText('词义1')).toBeVisible();
   });
 
-  it('saves unknown and recognized words without claiming mastery and preserves favorite', async () => {
+  it('offers one neutral next-word action after revealing the meaning', async () => {
     const learningRepository = repository({
       getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
         { id: 'knowledge:v1', itemId: 'v1', status: 'review', favorite: true, updatedAt: '2026-09-24T00:00:00.000Z' },
       ] }),
     });
-    render(<VocabularyWarmup repository={learningRepository} entries={entries.slice(0, 2)} onComplete={() => undefined} />);
+    const onWordLearned = vi.fn();
+    render(<VocabularyWarmup repository={learningRepository} entries={entries.slice(0, 2)} onWordLearned={onWordLearned} onComplete={() => undefined} />);
 
     await userEvent.click(await screen.findByRole('button', { name: '显示释义' }));
-    await userEvent.click(screen.getByRole('button', { name: '还不会' }));
-    expect(learningRepository.upsertKnowledgeState).toHaveBeenNthCalledWith(1, expect.objectContaining({ itemId: 'v1', status: 'review', favorite: true }));
+    expect(screen.queryByRole('button', { name: '还不会' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '基本认识' })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: '下一个单词' }));
+    expect(learningRepository.upsertKnowledgeState).toHaveBeenNthCalledWith(1, expect.objectContaining({ itemId: 'v1', status: 'learning', favorite: true }));
+    expect(onWordLearned).toHaveBeenCalledWith('v1');
 
     await userEvent.click(screen.getByRole('button', { name: '显示释义' }));
-    await userEvent.click(screen.getByRole('button', { name: '基本认识' }));
+    await userEvent.click(screen.getByRole('button', { name: '完成单词学习' }));
     expect(learningRepository.upsertKnowledgeState).toHaveBeenNthCalledWith(2, expect.objectContaining({ itemId: 'v2', status: 'learning', favorite: false }));
   });
 
@@ -50,7 +54,7 @@ describe('VocabularyWarmup', () => {
     render(<VocabularyWarmup repository={learningRepository} entries={entries.slice(0, 1)} onComplete={() => undefined} />);
 
     await userEvent.click(await screen.findByRole('button', { name: '显示释义' }));
-    await userEvent.click(screen.getByRole('button', { name: '还不会' }));
+    await userEvent.click(screen.getByRole('button', { name: '完成单词学习' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('保存失败');
     expect(screen.getByRole('heading', { name: 'word1' })).toBeVisible();
     await userEvent.click(screen.getByRole('button', { name: '重新保存' }));
@@ -63,7 +67,7 @@ describe('VocabularyWarmup', () => {
     render(<VocabularyWarmup repository={repository()} entries={entries} onComplete={onComplete} />);
     for (let index = 0; index < 10; index += 1) {
       await userEvent.click(await screen.findByRole('button', { name: '显示释义' }));
-      await userEvent.click(screen.getByRole('button', { name: '基本认识' }));
+      await userEvent.click(screen.getByRole('button', { name: index === 9 ? '完成单词学习' : '下一个单词' }));
     }
     expect(onComplete).toHaveBeenCalledOnce();
     expect(onComplete).toHaveBeenCalledWith(entries);

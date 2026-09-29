@@ -219,31 +219,24 @@ describe('ExerciseRunner', () => {
       completeTask: vi.fn().mockResolvedValue(undefined),
       getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
       upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      getPlan: vi.fn().mockResolvedValue({ id: 'plan:2026-09-22', date: '2026-09-22', tasks: [], vocabularySession: { wordIds: ['v0001'], learnedWordIds: [], phase: 'learning' }, updatedAt: '2026-09-22T00:00:00.000Z' }),
+      savePlan: vi.fn().mockResolvedValue(undefined),
     } as unknown as LearningRepository;
     render(<ExerciseRunner kind="vocabulary" limit={1} repository={repository} today="2026-09-22" />);
-    for (let index = 0; index < 45 && !screen.queryByLabelText('我的英文翻译'); index += 1) {
-      await user.click(await screen.findByRole('button', { name: '显示释义' }));
-      await user.click(screen.getByRole('button', { name: '基本认识' }));
-    }
+    await user.click(await screen.findByRole('button', { name: '显示释义' }));
+    await user.click(screen.getByRole('button', { name: '完成单词学习' }));
+    await user.type(await screen.findByLabelText('英文拼写'), 'passage');
+    await user.click(screen.getByRole('button', { name: '提交并完成检测' }));
     await user.type(await screen.findByLabelText('我的英文翻译'), 'Ancient trade helped language and culture develop, and it remains important in the world today.');
     await user.click(screen.getByRole('button', { name: '提交文化翻译' }));
     await user.click(await screen.findByRole('button', { name: '继续学习重点搭配' }));
     await completeDailyCollocations();
-    expect((await screen.findAllByText(/^请选择 .+ 的正确含义。$/))[0]).toBeVisible();
-    for (let index = 0; index < 45; index += 1) {
-      await unlockCurrentQuestion();
-      await user.click((await screen.findAllByRole('radio'))[0]);
-      await user.click(screen.getByRole('button', { name: '提交答案' }));
-      const resultButton = screen.queryByRole('button', { name: '查看结果' });
-      if (resultButton) { await user.click(resultButton); break; }
-      await user.click(await screen.findByRole('button', { name: '下一题' }));
-    }
-    expect(await screen.findByText('掌握度检测')).toBeVisible();
+    expect(await screen.findByRole('heading', { name: '今日词汇训练已完成' })).toBeVisible();
     expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({
       id: '2026-09-22:vocabulary', taskId: '2026-09-22:vocabulary', kind: 'vocabulary',
     }));
     expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v0001', status: 'review', reviewStage: 1 }));
-    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ status: 'review' }));
+    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: '2026-09-22:vocabulary', status: 'mastered' }));
   }, 20_000);
 
   it('automatically completes grammar and opens its mastery check', async () => {

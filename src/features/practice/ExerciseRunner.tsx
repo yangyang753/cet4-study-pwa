@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabaseClient } from '../../lib/runtime';
 import rawContent from '../../content/starter/content.json';
@@ -17,8 +17,6 @@ import { MasteryCheck } from '../mastery/MasteryCheck';
 import type { Attempt, MistakeReason } from '../../domain/attempt';
 import { selectPracticeQuestions } from './selectPracticeQuestions';
 import { DailyVocabularySession } from '../vocabulary/DailyVocabularySession';
-import { buildWarmupQuestions } from '../vocabulary/buildWarmupQuestions';
-import { learningVocabulary } from '../../content/vocabularyLearning';
 import { QuestionTranslationGate, questionNeedsTranslation } from '../translation/QuestionTranslationGate';
 import { recordMeaningResult } from '../vocabulary/wordMastery';
 
@@ -46,6 +44,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
   const [currentAttempt, setCurrentAttempt] = useState<Attempt | null>(null);
   const [selectedReason, setSelectedReason] = useState<MistakeReason | undefined>();
   const [warmupComplete, setWarmupComplete] = useState(kind !== 'vocabulary' || mode !== 'practice');
+  const handleVocabularyComplete = useCallback(() => setWarmupComplete(true), []);
   const [translationUnlocked, setTranslationUnlocked] = useState(mode === 'exam' || !kind);
   const question = questions?.[index];
   const plannedKind = kind;
@@ -65,10 +64,8 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
     return () => { active = false; };
   }, [initialQuestions, kind, limit, repository, today]);
 
-  if (!warmupComplete) return <DailyVocabularySession repository={repository} today={today} onComplete={(entries) => {
-    setQuestions(entries.length ? buildWarmupQuestions(entries, learningVocabulary) : initialQuestions);
-    setWarmupComplete(true);
-  }} />;
+  if (!warmupComplete) return <DailyVocabularySession repository={repository} today={today} onComplete={handleVocabularyComplete} />;
+  if (kind === 'vocabulary' && mode === 'practice') return <section className="practice-summary"><h1>今日词汇训练已完成</h1><p>今日新词、严格检测、中国文化翻译与重点搭配已经完成。</p><p>答错或漏译的内容已自动加入错题复习。</p></section>;
   if (questions === null) return <p role="status">正在根据学习记录选题…</p>;
   if (!question) return <p>未找到这组练习。</p>;
   const questionCount = questions.length;
