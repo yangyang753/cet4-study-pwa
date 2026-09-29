@@ -27,6 +27,9 @@ foreach ($set in $sets) {
       $voice = $voices[0]
     }
     $speaker.SelectVoice($voice)
+    if ($speakerName -eq 'Woman') { $speaker.Rate = -1 }
+    elseif ($speakerName -eq 'Man') { $speaker.Rate = 1 }
+    else { $speaker.Rate = -1 }
     [void]$usedVoices.Add($voice)
     $speaker.Speak([string]$segments[$index].text)
   }

@@ -48,5 +48,11 @@ describe('StudyReminder', () => {
     } as unknown as LearningRepository;
     render(<StudyReminder repository={catchUpRepository} now={() => new Date(2026, 8, 24, 10, 0)} />);
     expect(await screen.findByText(/昨天没有学习记录/)).toBeVisible();
+    expect(screen.getByRole('link', { name: '开始复习' })).toHaveAttribute('href', expect.stringContaining('#/review'));
+  });
+
+  it('sends a regular reminder to the first vocabulary task', async () => {
+    render(<StudyReminder repository={repository} now={() => new Date(2026, 8, 24, 20, 5)} />);
+    expect(await screen.findByRole('link', { name: '开始学习' })).toHaveAttribute('href', expect.stringContaining('#/practice/vocabulary'));
   });
 });

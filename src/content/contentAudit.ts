@@ -176,6 +176,10 @@ export function auditContentDiversity(inventory: DiversityInventory): string[] {
     const words = (item.referenceAnswer ?? '').trim().split(/\s+/).filter(Boolean).length;
     if (words < 120 || words > 180) errors.push(`writingPrompts:${item.id ?? 'unknown'}: reference answer must contain 120-180 words, received ${words}`);
   }
+  if (inventory.writingPrompts.length > 3) {
+    const bodies = inventory.writingPrompts.map((item) => (item.referenceAnswer ?? '').split(/(?<=[.!?])\s+/).slice(1).join(' ').toLocaleLowerCase().replace(/\s+/g, ' ').trim());
+    if (new Set(bodies).size / bodies.length < 0.8) errors.push('writingPrompts: reference answer bodies must be meaningfully distinct');
+  }
   return errors;
 }
 import { auditQuestionTemplateDiversity } from './questionDiversity';

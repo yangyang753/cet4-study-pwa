@@ -4,10 +4,11 @@ import type { VocabularyEntry } from '../../domain/content';
 import { resolveExam } from '../exam/examBlueprint';
 import type { CultureTranslationPrompt } from '../translation/cultureTranslation';
 import { buildWordCloze } from '../vocabulary/vocabularySchedule';
+import { publicAssetUrl } from '../../lib/publicAssetUrl';
 
 export type PrintPacketKind = 'daily' | 'practice' | 'mock';
 export interface PrintPacketOptions { kind: PrintPacketKind; sourceId?: string; questions?: CatalogQuestion[]; includeKnowledge?: boolean; pageCapacity?: number; dailyVocabulary?: VocabularyEntry[]; dailyCulturePrompt?: CultureTranslationPrompt }
-export interface PrintBlock { kind: 'question' | 'writing-space' | 'answer' | 'knowledge'; questionId: string; title?: string; text: string; options?: string[]; answer?: string; explanation?: string; weight: number }
+export interface PrintBlock { kind: 'context' | 'question' | 'writing-space' | 'answer' | 'knowledge'; questionId: string; title?: string; text: string; href?: string; options?: string[]; answer?: string; explanation?: string; weight: number }
 export interface PrintPage { title: string; blocks: PrintBlock[]; pageNumber: number; totalPages: number }
 export interface PrintPacket { pages: PrintPage[]; questionPages: PrintPage[]; answerPages: PrintPage[]; questionCount: number }
 
@@ -77,8 +78,15 @@ export function buildPrintPacket(options: PrintPacketOptions): PrintPacket {
   const questions = resolveQuestions(options);
   const questionBlocks: PrintBlock[] = options.includeKnowledge ? knowledgeBlocks() : [];
   const answerBlocks: PrintBlock[] = [];
+  const printedContexts = new Set<string>();
   questions.forEach((question, index) => {
     const number = `${index + 1}.`;
+    if (!printedContexts.has(question.groupId) && (question.examContext || question.passage || question.audioSrc)) {
+      const audioHref = question.audioSrc ? publicAssetUrl(question.audioSrc) : undefined;
+      const context = question.examContext || question.passage || `听力音频入口：${audioHref}`;
+      questionBlocks.push({ kind: 'context', questionId: `context:${question.groupId}`, title: question.audioSrc ? '听力材料' : '共用材料', text: context, href: audioHref, weight: Math.min(capacity, Math.max(2, Math.ceil(context.length / 350))) });
+      printedContexts.add(question.groupId);
+    }
     questionBlocks.push({ kind: 'question', questionId: question.id, title: number, text: question.prompt, options: 'options' in question ? question.options.map((option) => `${option.id}. ${option.text}`) : undefined, weight: Math.min(capacity, 'options' in question ? 2 : 1) });
     if (!('options' in question)) questionBlocks.push({ kind: 'writing-space', questionId: question.id, text: '', weight: Math.min(capacity, question.id.startsWith('daily-word:') ? 1 : question.type === 'writing' ? 5 : 4) });
     const answer = 'correctAnswer' in question ? (Array.isArray(question.correctAnswer) ? question.correctAnswer.join(', ') : question.correctAnswer) : question.referenceAnswer;

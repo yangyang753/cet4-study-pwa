@@ -45,8 +45,8 @@ export default defineConfig({
       navigateFallback: `${base}index.html`,
       runtimeCaching: [{
         urlPattern: ({ url }) => url.pathname.startsWith(`${base}audio/`),
-        handler: 'CacheFirst',
-        options: { cacheName: 'cet4-audio-v1', expiration: { maxEntries: 24, maxAgeSeconds: 60 * 60 * 24 * 90 } },
+        handler: 'NetworkFirst',
+        options: { cacheName: 'cet4-audio-v2', networkTimeoutSeconds: 5, expiration: { maxEntries: 24, maxAgeSeconds: 60 * 60 * 24 * 90 } },
       }],
     },
     devOptions: { enabled: true, navigateFallback: 'index.html' },

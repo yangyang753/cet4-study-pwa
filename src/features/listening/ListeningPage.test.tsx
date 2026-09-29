@@ -51,6 +51,15 @@ describe('ListeningPage', () => {
     expect(screen.getByText('02 翻译解锁')).toBeVisible();
     expect(screen.getByText('03 选择答案')).toBeVisible();
     expect(screen.getByText('04 听写复盘')).toBeVisible();
+    expect(screen.getByRole('region', { name: '基础听力提升' })).toHaveTextContent('先辨关键词，再做整题');
+  });
+
+  it('shows conversation speaker labels in the transcript', async () => {
+    const user = userEvent.setup();
+    render(<ListeningPage />);
+    await user.click(screen.getByRole('button', { name: '下一套' }));
+    await user.click(screen.getByRole('button', { name: '显示原文' }));
+    expect(screen.getAllByText(/Woman ·|Man ·/).length).toBeGreaterThan(1);
   });
 
   it('moves through all 24 listening sets', async () => {

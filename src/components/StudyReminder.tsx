@@ -27,6 +27,7 @@ const defaultRepository = new DexieLearningRepository();
 
 export function StudyReminder({ repository = defaultRepository, now = () => new Date() }: { repository?: LearningRepository; now?: () => Date }) {
   const [message, setMessage] = useState('');
+  const [destination, setDestination] = useState<'review' | 'practice/vocabulary'>('practice/vocabulary');
 
   useEffect(() => {
     let active = true;
@@ -45,6 +46,7 @@ export function StudyReminder({ repository = defaultRepository, now = () => new 
         const copy = missedYesterday
           ? '昨天没有学习记录。今天先清旧词和错题，再继续新内容。'
           : `今天的 ${snapshot.settings.dailyMinutes} 分钟训练还没有开始。`;
+        setDestination(missedYesterday ? 'review' : 'practice/vocabulary');
         setMessage(copy);
         if ('Notification' in window && Notification.permission === 'granted') new Notification('四级向前', { body: copy });
       } catch {
@@ -57,5 +59,5 @@ export function StudyReminder({ repository = defaultRepository, now = () => new 
   }, [now, repository]);
 
   if (!message) return null;
-  return <aside className="study-reminder" role="status"><span>{message}</span><a href={appHref('today')}>开始学习</a><button aria-label="关闭学习提醒" onClick={() => setMessage('')}>×</button></aside>;
+  return <aside className="study-reminder" role="status"><span>{message}</span><a href={appHref(destination)} onClick={() => setMessage('')}>{destination === 'review' ? '开始复习' : '开始学习'}</a><button aria-label="关闭学习提醒" onClick={() => setMessage('')}>×</button></aside>;
 }

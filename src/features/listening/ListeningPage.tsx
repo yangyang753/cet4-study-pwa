@@ -3,6 +3,7 @@ import listeningSets from '../../../content/v1/listeningSets.json';
 import type { AudioAsset, ObjectiveQuestion } from '../../domain/content';
 import { publicAssetUrl } from '../../lib/publicAssetUrl';
 import { DictationEditor } from './DictationEditor';
+import { ListeningFoundationDrill } from './ListeningFoundationDrill';
 import { useSegmentPlayer } from './useSegmentPlayer';
 import './listening.css';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
@@ -83,6 +84,12 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
     player.mediaRef.current?.load();
   };
 
+  const playSegment = (index: number) => {
+    player.selectSegment(index);
+    player.setRate(0.75);
+    void play();
+  };
+
   const submit = async () => {
     if (!selected) { setAnswerError('请选择一个答案'); return; }
     if (submissionLock.current) return;
@@ -145,7 +152,8 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
       <div><span>训练模式</span><strong>逐句精听</strong></div>
       <span className="progress-track" aria-hidden="true"><i style={{ width: `${completionPercent}%` }} /></span>
     </section>
-    <nav className="listening-stages" aria-label="听力训练步骤">
+    <details className="listening-basis"><summary>训练依据与使用方法</summary><p>题型结构依据教育部教育考试院公布的 CET4 考核内容：听力由短篇新闻、长对话和听力篇章组成。本应用材料均为原创仿真，不是历年官方真题；训练重点覆盖时间、转折、因果、主旨、态度与后续行动定位。</p><a href="https://cet.neea.edu.cn/html1/folder/16113/1586-1.htm" target="_blank" rel="noreferrer">查看 CET 官方笔试结构</a></details>
+    <nav className="listening-stages" aria-label="听力训练步骤" tabIndex={0}>
       {['01 精听定位', '02 翻译解锁', '03 选择答案', '04 听写复盘'].map((stage, index) => <span key={stage} className={currentStage >= index + 1 ? 'active' : ''}>{stage}</span>)}
     </nav>
     <div className="listening-grid">
@@ -189,7 +197,8 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
       {result && <div className={`answer-result ${result}`} role="status"><strong>{result === 'correct' ? '回答正确' : '回答错误'}</strong><p>正确答案：{String.fromCharCode(65 + question.answer)}</p><p>解析：{question.explanationZh}</p>{questionIndex < listeningSet.questions.length - 1 ? <button onClick={nextQuestion}>下一题</button> : <><p>本套完成，今日听力任务已自动记录。</p><MasteryCheck kind="listening" taskId={`${today}:listening`} repository={repository} sourceQuestionIds={listeningSet.questions.map((_, index) => `${listeningSet.id}:q${index + 1}`)} /></>}</div>}
       {submissionState === 'error' && <p role="alert">保存失败，答案仍保留，请再次提交。</p>}
       </aside>
-      <section className="transcript"><header><div><span>TRANSCRIPT</span><h2>逐句精听原文</h2></div><button onClick={() => setShowTranscript((value) => !value)}>{showTranscript ? '隐藏原文' : '显示原文'}</button></header>{showTranscript ? <div className="transcript-lines">{audio.segments.map((segment, index) => <p key={segment.id} className={player.segmentIndex === index ? 'active' : ''} onClick={() => player.selectSegment(index)}><b>{String(index + 1).padStart(2, '0')}</b><span>{segment.text}</span></p>)}</div> : <p className="transcript-placeholder">先完成盲听；需要核对关键词时再展开原文。</p>}</section>
+      <ListeningFoundationDrill segments={audio.segments} repository={repository} onPlaySegment={playSegment} />
+      <section className="transcript"><header><div><span>TRANSCRIPT</span><h2>逐句精听原文</h2></div><button onClick={() => setShowTranscript((value) => !value)}>{showTranscript ? '隐藏原文' : '显示原文'}</button></header>{showTranscript ? <div className="transcript-lines">{audio.segments.map((segment, index) => <p key={segment.id} className={player.segmentIndex === index ? 'active' : ''} onClick={() => player.selectSegment(index)}><b>{segment.speaker ? `${segment.speaker} · ${String(index + 1).padStart(2, '0')}` : String(index + 1).padStart(2, '0')}</b><span>{segment.text}</span></p>)}</div> : <p className="transcript-placeholder">先完成盲听；需要核对关键词时再展开原文。</p>}</section>
       <DictationEditor transcript={audio.transcript} storageKey={`dictation:${listeningSet.id}`} />
     </div>
   </section>;

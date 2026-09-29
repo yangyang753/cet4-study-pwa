@@ -19,9 +19,10 @@ function Sheet({ page, answers = false }: { page: PacketPage; answers?: boolean 
   return <section className={`print-sheet ${answers ? 'answer-sheet' : ''}`} data-page={page.pageNumber}>
     <h1>{page.title}</h1>
     {!answers && <div className="print-meta"><span>姓名：____________</span><span>日期：____________</span><span>原创仿真练习</span></div>}
-    {page.blocks.map((block) => {
-      if (block.kind === 'writing-space') return <div key={`${block.questionId}:space`} className="writing-space" aria-label={`${block.questionId} 答题区`} />;
-      if (block.kind === 'knowledge') return <div key={block.questionId} className="knowledge-block"><b>{block.title}</b><span>{block.text}</span></div>;
+      {page.blocks.map((block) => {
+        if (block.kind === 'writing-space') return <div key={`${block.questionId}:space`} className="writing-space" aria-label={`${block.questionId} 答题区`} />;
+        if (block.kind === 'knowledge') return <div key={block.questionId} className="knowledge-block"><b>{block.title}</b><span>{block.text}</span></div>;
+        if (block.kind === 'context') return <div key={block.questionId} className="print-context"><b>{block.title}</b><p>{block.text}</p>{block.href && <a href={block.href} target="_blank" rel="noreferrer">打开听力音频</a>}</div>;
       return <div key={`${block.questionId}:${block.kind}`} className="print-block"><h2>{block.title} {block.text}</h2>{block.options?.map((option) => <p key={option}>{option}</p>)}{answers && <><p className="print-answer"><strong>答案：</strong>{block.answer ?? '见上一段'}</p><p className="print-explanation"><strong>解析：</strong>{block.explanation}</p></>}</div>;
     })}
     <footer>第 {page.pageNumber} 页 / 共 {page.totalPages} 页</footer>

@@ -47,4 +47,21 @@ describe('buildPrintPacket', () => {
     expect(packet.questionCount).toBe(57);
     expect(packet.questionPages.flatMap((page) => page.blocks).filter((block) => block.kind === 'question')).toHaveLength(57);
   });
+
+  it('prints shared reading context once before grouped questions', () => {
+    const questions = getPracticeItems('reading').filter((question) => question.passage).slice(0, 2);
+    const packet = buildPrintPacket({ kind: 'practice', questions, pageCapacity: 20 });
+    const contexts = packet.questionPages.flatMap((page) => page.blocks).filter((block) => block.kind === 'context');
+    expect(contexts).toHaveLength(1);
+    expect(contexts[0].text).toContain(questions[0].passage!);
+  });
+
+  it('prints an audio entry once for a listening group', () => {
+    const questions = getPracticeItems('listening').slice(0, 2);
+    const packet = buildPrintPacket({ kind: 'practice', questions, pageCapacity: 20 });
+    const contexts = packet.questionPages.flatMap((page) => page.blocks).filter((block) => block.kind === 'context');
+    expect(contexts).toHaveLength(1);
+    expect(contexts[0].text).toContain(questions[0].audioSrc!);
+    expect(contexts[0].href).toBe(questions[0].audioSrc);
+  });
 });

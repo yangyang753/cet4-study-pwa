@@ -53,7 +53,7 @@ export interface SubjectiveQuestion extends QuestionBase {
 
 export type Question = ObjectiveQuestion | SubjectiveQuestion;
 
-export interface TranscriptSegment { id: string; start: number; end: number; text: string }
+export interface TranscriptSegment { id: string; start: number; end: number; text: string; speaker?: string }
 export interface AudioAsset { id: string; src: string; durationSeconds: number; transcript: string; segments: TranscriptSegment[] }
 export interface PracticeSet { id: string; title: string; questionIds: string[] }
 
