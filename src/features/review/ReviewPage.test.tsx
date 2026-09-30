@@ -135,6 +135,17 @@ describe('ReviewPage', () => {
     expect(screen.getByText(/漏译/)).toBeVisible();
   });
 
+  it('migrates an old objective meaning card to complete free recall', async () => {
+    const repository = await setupRepository();
+    await repository.upsertReviewCard({
+      id: 'review:v0001:meaning', questionId: 'v0001:meaning', wordId: 'v0001', format: 'objective',
+      stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
+    await userEvent.click(await screen.findByRole('button', { name: '复习完整释义 passage' }));
+    expect(screen.getByRole('textbox', { name: '写出全部中文释义' })).toBeVisible();
+  });
+
   it('shows a retry action when the review queue cannot be loaded', async () => {
     const repository = {
       listDueReviews: vi.fn().mockRejectedValueOnce(new Error('storage')).mockResolvedValueOnce([]),

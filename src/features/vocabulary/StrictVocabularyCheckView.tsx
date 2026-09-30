@@ -5,12 +5,14 @@ import type { KnowledgeState } from '../../domain/learning';
 import { applyVocabularyReviewResult } from './vocabularySchedule';
 import { vocabularyReviewCard } from './wordMastery';
 import { buildStrictVocabularyQuestions, gradeStrictVocabularyAnswer } from './strictVocabularyCheck';
+import { studyDate } from '../../lib/studyDate';
 
-export function StrictVocabularyCheck({ repository, words, states, passedWordIds = [], onWordPassed, onComplete }: {
+export function StrictVocabularyCheck({ repository, words, states, passedWordIds = [], now: fixedNow, onWordPassed, onComplete }: {
   repository: LearningRepository;
   words: VocabularyEntry[];
   states: KnowledgeState[];
   passedWordIds?: string[];
+  now?: string;
   onWordPassed?: (wordId: string) => void | Promise<void>;
   onComplete: () => void | Promise<void>;
 }) {
@@ -30,11 +32,11 @@ export function StrictVocabularyCheck({ repository, words, states, passedWordIds
   async function submit() {
     if (!question || saving) return;
     const grade = gradeStrictVocabularyAnswer(question, { english, chinese });
-    const now = new Date().toISOString();
+    const now = fixedNow ?? new Date().toISOString();
     const current = stateById.get(question.word.id);
     setSaving(true);
     try {
-      const passedDate = now.slice(0, 10);
+      const passedDate = studyDate(new Date(now));
       const alreadyPassedToday = grade.correct && current?.lastStrictPassedDate === passedDate;
       const gradedState = alreadyPassedToday ? current : applyVocabularyReviewResult(current ?? {
         id: `knowledge:${question.word.id}`, itemId: question.word.id, status: 'learning', favorite: false, updatedAt: now,

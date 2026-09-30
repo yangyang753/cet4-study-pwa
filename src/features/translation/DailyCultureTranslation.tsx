@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import type { VocabularyEntry } from '../../domain/content';
 import type { KnowledgeState } from '../../domain/learning';
 import { recordTranslationResult, vocabularyReviewCard } from '../vocabulary/wordMastery';
 import { evaluateCultureTranslation, type CultureTranslationEvaluation, type CultureTranslationPrompt } from './cultureTranslation';
 
-export function DailyCultureTranslation({ repository, prompt, vocabulary, states, date, now = new Date().toISOString(), initialAnswer = '', onDraftChange, onComplete }: {
+export function DailyCultureTranslation({ repository, prompt, vocabulary, states, date, now = new Date().toISOString(), initialAnswer = '', onDraftChange, onPassed, onComplete }: {
   repository: LearningRepository;
   prompt: CultureTranslationPrompt;
   vocabulary: VocabularyEntry[];
@@ -14,6 +14,7 @@ export function DailyCultureTranslation({ repository, prompt, vocabulary, states
   now?: string;
   initialAnswer?: string;
   onDraftChange?: (answer: string) => void | Promise<void>;
+  onPassed?: (answer: string) => void | Promise<void>;
   onComplete: () => void;
 }) {
   const stateById = useMemo(() => new Map(states.map((item) => [item.itemId, item])), [states]);
@@ -23,6 +24,16 @@ export function DailyCultureTranslation({ repository, prompt, vocabulary, states
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [attemptNumber, setAttemptNumber] = useState(1);
+  const draftCallback = useRef(onDraftChange);
+  const initialDraft = useRef(initialAnswer);
+  useEffect(() => { draftCallback.current = onDraftChange; }, [onDraftChange]);
+  useEffect(() => {
+    if (answer === initialDraft.current) return;
+    const timeout = window.setTimeout(() => {
+      void Promise.resolve(draftCallback.current?.(answer)).catch(() => setError('翻译草稿自动保存失败，请继续作答后重试。'));
+    }, 600);
+    return () => window.clearTimeout(timeout);
+  }, [answer]);
 
   async function submit() {
     if (!answer.trim() || saving) return;
@@ -50,6 +61,7 @@ export function DailyCultureTranslation({ repository, prompt, vocabulary, states
         await repository.upsertKnowledgeState(recordTranslationResult(stateById.get(wordId), wordId, correct, now));
         if (!correct) await repository.upsertReviewCard(vocabularyReviewCard(wordId, 'cloze', now));
       }));
+      if (evaluation.passed) await onPassed?.(answer);
       setResult(evaluation);
     } catch {
       setError('文化翻译结果保存失败，答案已保留，请重新保存。');

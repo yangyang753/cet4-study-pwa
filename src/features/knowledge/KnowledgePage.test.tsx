@@ -11,7 +11,36 @@ describe('KnowledgePage', () => {
     expect(screen.getByText('126')).toBeInTheDocument();
     expect(screen.getByText('15')).toBeInTheDocument();
     expect(screen.getByText(/原创仿真内容，不是历年官方真题/)).toBeInTheDocument();
-    expect(screen.getByText('Read the passage carefully before answering the questions.')).toBeVisible();
+    expect(screen.queryByText('文章，段落；通道，通路')).not.toBeInTheDocument();
+  });
+
+  it('hides each meaning until that word is explicitly revealed', async () => {
+    render(<KnowledgePage />);
+    expect(screen.queryByText('文章，段落；通道，通路')).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: '显示 passage 的释义' }));
+    expect(screen.getByText('文章，段落；通道，通路')).toBeVisible();
+    expect(screen.queryByText('一个人')).not.toBeInTheDocument();
+  });
+
+  it('opens a reinforcement exercise for an individual word', async () => {
+    render(<KnowledgePage random={() => 0.4} />);
+    await userEvent.click(screen.getByRole('button', { name: '巩固练习 passage' }));
+    expect(screen.getByRole('heading', { name: 'passage · 随机巩固' })).toBeVisible();
+    expect(screen.getByLabelText('英文答案')).toBeVisible();
+  });
+
+  it('sends an incorrect individual reinforcement to mistake review', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} random={() => 0.4} />);
+    await userEvent.click(await screen.findByRole('button', { name: '巩固练习 passage' }));
+    await userEvent.type(screen.getByLabelText('英文答案'), 'pasage');
+    await userEvent.click(screen.getByRole('button', { name: '提交巩固结果' }));
+    expect(await screen.findByText(/已加入错题复习/)).toBeVisible();
+    expect(repository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ wordId: 'v0001', format: 'word-cloze' }));
   });
 
   it('filters vocabulary by the learner query', async () => {

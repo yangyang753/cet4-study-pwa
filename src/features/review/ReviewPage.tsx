@@ -21,6 +21,10 @@ import { gradeStrictVocabularyAnswer } from '../vocabulary/strictVocabularyCheck
 import './review.css';
 
 const defaultRepository = new DexieLearningRepository();
+const normalizeLegacyVocabularyCard = (card: ReviewCard): ReviewCard =>
+  card.wordId && card.format === 'objective' && card.questionId.endsWith(':meaning')
+    ? { ...card, format: 'word-meaning' }
+    : card;
 const reviewQuestion = (card: ReviewCard) => {
   const stored = getQuestion(card.questionId);
   if (stored) return stored;
@@ -73,7 +77,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
     void Promise.all([
       typeof repository.listAllReviews === 'function' ? repository.listAllReviews() : repository.listDueReviews(now),
       examDate ? Promise.resolve(examDate) : repository.getDashboardSnapshot(now).then((snapshot) => snapshot.settings.examDate),
-    ]).then(([items, savedExamDate]) => { if (current) { setCards(items); setEffectiveExamDate(savedExamDate); setLoading(false); } }).catch(() => {
+    ]).then(([items, savedExamDate]) => { if (current) { setCards(items.map(normalizeLegacyVocabularyCard)); setEffectiveExamDate(savedExamDate); setLoading(false); } }).catch(() => {
       if (current) { setLoadError('复习安排读取失败，请重试。'); setLoading(false); }
     });
     return () => { current = false; };

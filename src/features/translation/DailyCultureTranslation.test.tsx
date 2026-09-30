@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
@@ -65,5 +65,15 @@ describe('DailyCultureTranslation', () => {
     expect(onComplete).not.toHaveBeenCalled();
     await userEvent.click(screen.getByRole('button', { name: '修改后重新提交' }));
     expect(screen.getByLabelText('我的英文翻译')).toBeEnabled();
+  });
+
+  it('autosaves the draft while the learner is typing', async () => {
+    vi.useFakeTimers();
+    const onDraftChange = vi.fn().mockResolvedValue(undefined);
+    render(<DailyCultureTranslation repository={repository()} prompt={prompt} vocabulary={words} states={[]} date="2026-09-27" onDraftChange={onDraftChange} onComplete={() => undefined} />);
+    fireEvent.change(screen.getByLabelText('我的英文翻译'), { target: { value: 'Chinese' } });
+    await vi.advanceTimersByTimeAsync(700);
+    expect(onDraftChange).toHaveBeenLastCalledWith('Chinese');
+    vi.useRealTimers();
   });
 });

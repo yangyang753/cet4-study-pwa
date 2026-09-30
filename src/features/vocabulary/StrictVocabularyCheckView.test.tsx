@@ -59,4 +59,18 @@ describe('StrictVocabularyCheck', () => {
     await userEvent.click(screen.getByRole('button', { name: '提交并完成检测' }));
     expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ reviewStage: 1 }));
   });
+
+  it('uses the Shanghai study date instead of the UTC date at midnight', async () => {
+    const repository = {
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<StrictVocabularyCheck repository={repository} words={words} states={[{
+      id: 'knowledge:v1', itemId: 'v1', status: 'review', favorite: false, reviewStage: 2,
+      lastStrictPassedDate: '2026-10-01', updatedAt: '2026-09-30T16:30:00.000Z',
+    }]} now="2026-09-30T16:30:00.000Z" onComplete={() => undefined} />);
+    await userEvent.type(screen.getByLabelText('英文拼写'), 'passage');
+    await userEvent.click(screen.getByRole('button', { name: '提交并完成检测' }));
+    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ reviewStage: 2, lastStrictPassedDate: '2026-10-01' }));
+  });
 });

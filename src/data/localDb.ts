@@ -10,7 +10,10 @@ export interface VocabularySessionProgress {
   wordIds: string[];
   learnedWordIds: string[];
   strictPassedWordIds?: string[];
+  passedCultureReviewWordIds?: string[];
+  reviewedCultureWordIds?: string[];
   cultureDraft?: string;
+  culturePassed?: boolean;
   passedCollocationIds?: string[];
   phase: VocabularySessionPhase;
 }
