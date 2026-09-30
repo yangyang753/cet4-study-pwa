@@ -87,8 +87,8 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
   const reviewWords = useMemo(() => vocabulary.filter((item) => {
     const state = states.get(item.id);
     if (!state) return false;
-    if (state.status !== 'mastered') return true;
-    return Boolean(state.nextReviewAt) && Date.parse(state.nextReviewAt!) <= Date.parse(reviewReferenceTime);
+    if (!state.nextReviewAt) return state.status !== 'mastered';
+    return Date.parse(state.nextReviewAt) <= Date.parse(reviewReferenceTime);
   }).sort((left, right) => {
     const leftState = states.get(left.id)!;
     const rightState = states.get(right.id)!;
