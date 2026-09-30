@@ -32,7 +32,10 @@ describe('KnowledgePage', () => {
     expect(await screen.findByRole('button', { name: /开始待复习词总巩固/ })).toBeVisible();
     expect(screen.queryByRole('button', { name: /巩固练习 passage/ })).not.toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: /开始待复习词总巩固/ }));
-    expect(screen.getByRole('heading', { name: /待复习单词总巩固/ })).toBeVisible();
+    const session = screen.getByRole('heading', { name: /待复习单词总巩固/ }).closest('section');
+    const stateTabs = screen.getByRole('group', { name: '单词掌握状态' });
+    expect(session).toBeVisible();
+    expect(session!.compareDocumentPosition(stateTabs) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(screen.queryByText(/passage · 随机巩固/)).not.toBeInTheDocument();
     expect(screen.getByLabelText('英文答案')).toBeVisible();
   });

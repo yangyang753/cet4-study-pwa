@@ -147,6 +147,19 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
         <div><span>RECALL WITHOUT HINTS</span><h2 id="aggregate-review-title">无提示待复习总巩固</h2><p>从已经学过的单词中随机抽题，不显示目标词名。答错会自动降为待复习并进入错题复习。</p></div>
         <div className="aggregate-review-stats"><strong>{reviewWords.length}</strong><span>个已学单词可检测</span><button disabled={!reviewWords.length} aria-label={`开始待复习词总巩固，共 ${reviewWords.length} 个`} onClick={startAggregateReview}>{reviewWords.length ? '开始随机总巩固 →' : '先完成今日新词'}</button></div>
       </section>
+      {exercise && <section className="reinforcement-panel aggregate-session" aria-labelledby="reinforcement-title">
+        <button className="reinforcement-close" aria-label="关闭巩固练习" onClick={() => setExercise(null)}>×</button>
+        <span>NO-HINT REVIEW · 第 {sessionNumber} 题</span><h2 id="reinforcement-title">待复习单词总巩固</h2>
+        {exercise.kind === 'meaning' && <p className="reinforcement-prompt">看英文，写出全部中文释义：<strong>{exercise.word.word}</strong></p>}
+        {exercise.kind === 'spelling' && <p className="reinforcement-prompt">根据中文写出完整英文：<strong>{exercise.word.meaningZh}</strong></p>}
+        {exercise.kind === 'cloze' && <p className="reinforcement-prompt">补全随机缺失的字母：<strong>{exercise.cloze}</strong><small>{exercise.word.meaningZh}</small></p>}
+        {exercise.kind === 'dual' && <p className="reinforcement-prompt">双重检测：补全 <strong>{exercise.cloze}</strong>，并写出全部中文释义。</p>}
+        {exercise.kind !== 'meaning' && <label>英文答案<input aria-label="英文答案" autoComplete="off" value={englishAnswer} onChange={(event) => setEnglishAnswer(event.target.value)} /></label>}
+        {(exercise.kind === 'meaning' || exercise.kind === 'dual') && <label>中文释义<textarea aria-label="中文释义答案" value={chineseAnswer} onChange={(event) => setChineseAnswer(event.target.value)} rows={3} /></label>}
+        {exerciseResult && <p className={exerciseResult.startsWith('回答完全正确') ? 'reinforcement-success' : 'reinforcement-error'} role="status">{exerciseResult}</p>}
+        {!exerciseResult && <button className="reinforcement-submit" disabled={exerciseSaving || (exercise.kind !== 'meaning' && !englishAnswer.trim()) || ((exercise.kind === 'meaning' || exercise.kind === 'dual') && !chineseAnswer.trim())} onClick={() => void submitExercise()}>{exerciseSaving ? '正在保存…' : '提交巩固结果'}</button>}
+        {exerciseResult && <button className="reinforcement-again" onClick={startAggregateReview}>下一道随机巩固</button>}
+      </section>}
       <div className="vocabulary-state-tabs" role="group" aria-label="单词掌握状态"><button aria-pressed={stateView === 'unlearned'} onClick={() => { setStateView('unlearned'); setVisibleCount(18); }}>待学习（{counts.unlearned}）</button><button aria-pressed={stateView === 'active'} onClick={() => { setStateView('active'); setVisibleCount(18); }}>学习中与待复习（{counts.active}）</button><button aria-pressed={stateView === 'mastered'} onClick={() => { setStateView('mastered'); setVisibleCount(18); }}>已掌握（{counts.mastered}）</button></div>
       <div className="knowledge-tools"><label className="knowledge-search">搜索高频词<input type="search" aria-label="搜索高频词" value={query} onChange={(event) => { setQuery(event.target.value); setVisibleCount(18); }} placeholder="输入英文或中文释义" /></label></div>
       <p className="automatic-mastery-note">释义默认隐藏，先主动回想再点击查看；统一巩固会随机切换题型，答错自动进入错题复习。</p>
@@ -155,18 +168,5 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
     </>}
     {tab === 'collocations' && <><div className="vocabulary-state-tabs" role="group" aria-label="重点搭配掌握状态"><button aria-pressed={stateView === 'unlearned'} onClick={() => setStateView('unlearned')}>待学习（{collocationCounts.unlearned}）</button><button aria-pressed={stateView === 'active'} onClick={() => setStateView('active')}>学习中与待复习（{collocationCounts.active}）</button><button aria-pressed={stateView === 'mastered'} onClick={() => setStateView('mastered')}>已掌握（{collocationCounts.mastered}）</button></div><p className="automatic-mastery-note">重点搭配只会通过测试和间隔复习自动掌握；后续答错会自动降回待复习。</p><div className="phrase-list">{filteredCollocations.map((item) => <article key={item.id} className={states.get(item.id)?.status ?? ''}><StatusBadge state={states.get(item.id)} /><h2>{item.phrase}</h2><p>{item.meaningZh}</p><small>{item.example}</small><small>{item.exampleZh}</small></article>)}</div>{filteredCollocations.length === 0 && <p className="empty-result">当前分区没有重点搭配。</p>}</>}
     {tab === 'grammar' && <><p className="automatic-mastery-note">语法掌握状态由专项练习和掌握检测自动更新，不能手动标记。</p><a className="focus-action" href={appHref('practice/grammar')}>开始语法检测 →</a><div className="grammar-grid">{grammarTopics.map((item, index) => <article key={item.id}><span>{String(index + 1).padStart(2, '0')}</span><StatusBadge state={states.get(item.id)} /><h2>{item.title}</h2><p>{item.summary}</p><ul>{item.checklist.map((line) => <li key={line}>{line}</li>)}</ul></article>)}</div></>}
-    {exercise && <section className="reinforcement-panel aggregate-session" aria-labelledby="reinforcement-title">
-      <button className="reinforcement-close" aria-label="关闭巩固练习" onClick={() => setExercise(null)}>×</button>
-      <span>NO-HINT REVIEW · 第 {sessionNumber} 题</span><h2 id="reinforcement-title">待复习单词总巩固</h2>
-      {exercise.kind === 'meaning' && <p className="reinforcement-prompt">看英文，写出全部中文释义：<strong>{exercise.word.word}</strong></p>}
-      {exercise.kind === 'spelling' && <p className="reinforcement-prompt">根据中文写出完整英文：<strong>{exercise.word.meaningZh}</strong></p>}
-      {exercise.kind === 'cloze' && <p className="reinforcement-prompt">补全随机缺失的字母：<strong>{exercise.cloze}</strong><small>{exercise.word.meaningZh}</small></p>}
-      {exercise.kind === 'dual' && <p className="reinforcement-prompt">双重检测：补全 <strong>{exercise.cloze}</strong>，并写出全部中文释义。</p>}
-      {exercise.kind !== 'meaning' && <label>英文答案<input aria-label="英文答案" autoComplete="off" value={englishAnswer} onChange={(event) => setEnglishAnswer(event.target.value)} /></label>}
-      {(exercise.kind === 'meaning' || exercise.kind === 'dual') && <label>中文释义<textarea aria-label="中文释义答案" value={chineseAnswer} onChange={(event) => setChineseAnswer(event.target.value)} rows={3} /></label>}
-      {exerciseResult && <p className={exerciseResult.startsWith('回答完全正确') ? 'reinforcement-success' : 'reinforcement-error'} role="status">{exerciseResult}</p>}
-      {!exerciseResult && <button className="reinforcement-submit" disabled={exerciseSaving || (exercise.kind !== 'meaning' && !englishAnswer.trim()) || ((exercise.kind === 'meaning' || exercise.kind === 'dual') && !chineseAnswer.trim())} onClick={() => void submitExercise()}>{exerciseSaving ? '正在保存…' : '提交巩固结果'}</button>}
-      {exerciseResult && <button className="reinforcement-again" onClick={startAggregateReview}>下一道随机巩固</button>}
-    </section>}
   </section>;
 }
