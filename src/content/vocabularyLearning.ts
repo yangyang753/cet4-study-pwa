@@ -18,6 +18,18 @@ const reviewedCorrections: Record<string, Partial<VocabularyEntry>> = {
 
 const isSyntheticMetaExample = (example: string) => /\bis presented as\b/i.test(example);
 
+function normalizeMeaning(value: string) {
+  return value
+    .replace(/(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./gi, '；')
+    .replace(/[;；]+/g, '；')
+    .replace(/^；|；$/g, '')
+    .trim();
+}
+
+function normalizePhonetic(value: string) {
+  return value.replace(/[‘’]/g, "'").replace(/Λ/g, 'ʌ');
+}
+
 function contextualExample(entry: VocabularyEntry): Pick<VocabularyEntry, 'example' | 'exampleZh'> {
   const part = entry.partOfSpeech.toLowerCase();
   const meaning = entry.meaningZh.replace(/^(?:n|v|vt|vi|a|ad|adj|adv|prep|pron|num|conj|aux)\.?/i, '').replace(/[;；].*$/, '').trim();
@@ -67,7 +79,8 @@ function contextualExample(entry: VocabularyEntry): Pick<VocabularyEntry, 'examp
 }
 
 export function qualityVocabularyEntry(entry: VocabularyEntry): VocabularyEntry {
-  const corrected = { ...entry, ...reviewedCorrections[entry.id] };
+  const source = { ...entry, ...reviewedCorrections[entry.id] };
+  const corrected = { ...source, meaningZh: normalizeMeaning(source.meaningZh), phonetic: normalizePhonetic(source.phonetic) };
   if (!isSyntheticMetaExample(corrected.example) && corrected.example.trim()) return corrected;
   return { ...corrected, ...contextualExample(corrected) };
 }
@@ -80,6 +93,8 @@ export function auditLearningVocabulary(entries: VocabularyEntry[]): string[] {
     if (isSyntheticMetaExample(entry.example)) errors.push(`${entry.id}: synthetic meta example is visible`);
     if (!entry.example.trim()) errors.push(`${entry.id}: example is missing`);
     if (!entry.example.toLowerCase().includes(entry.word.toLowerCase())) errors.push(`${entry.id}: example does not contain target word`);
+    if (/(?:^|[\u3400-\u9fff])(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./i.test(entry.meaningZh)) errors.push(`${entry.id}: meaning contains a part-of-speech label`);
+    if (/[‘’Λ]/.test(entry.phonetic)) errors.push(`${entry.id}: phonetic contains a nonstandard symbol`);
   }
   const passage = entries.find((entry) => entry.id === 'v0001');
   if (!passage?.meaningZh.includes('文章')) errors.push('v0001: missing common reading sense');

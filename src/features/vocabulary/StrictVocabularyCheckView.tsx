@@ -47,9 +47,9 @@ export function StrictVocabularyCheck({ repository, words, states, passedWordIds
       await repository.upsertKnowledgeState(nextState);
       setStateById((currentStates) => new Map(currentStates).set(question.word.id, nextState));
       if (!grade.spellingCorrect) await repository.upsertReviewCard(vocabularyReviewCard(question.word.id, 'cloze', now));
-      if (grade.missingMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(question.word.id, 'meaning', now));
+      if (grade.missingMeanings.length || grade.unexpectedMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(question.word.id, 'meaning', now));
       if (!grade.correct) {
-        const details = [!grade.spellingCorrect ? `正确拼写：${question.word.word}` : '', grade.missingMeanings.length ? `漏译：${grade.missingMeanings.join('、')}` : ''].filter(Boolean).join('；');
+        const details = [!grade.spellingCorrect ? `正确拼写：${question.word.word}` : '', grade.missingMeanings.length ? `漏译：${grade.missingMeanings.join('、')}` : '', grade.unexpectedMeanings.length ? `多写或误译：${grade.unexpectedMeanings.join('、')}` : ''].filter(Boolean).join('；');
         setFeedback(`本题未完全正确，已加入错题复习。${details}。请修改后重新提交。`);
         return;
       }
@@ -72,7 +72,7 @@ export function StrictVocabularyCheck({ repository, words, states, passedWordIds
   const needsEnglish = question.kind !== 'meaning';
   const needsChinese = question.kind !== 'spelling';
   return <section className="strict-vocabulary-check">
-    <header><span>掌握检测 · {position} / {allQuestions.length}</span><h1>严格检测今日新词</h1><p>拼写必须完全一致，中文词义不能遗漏；答错后改对才能进入下一词。</p></header>
+    <header><span>掌握检测 · {position} / {allQuestions.length}</span><h1>严格检测今日新词</h1><p>拼写必须完全一致，中文词义不能遗漏或多写；请用顿号分隔每个释义。</p></header>
     <article className="warmup-card strict-check-card">
       {question.kind === 'spelling' && <><span className="check-type">看中文，默写英文</span><h2>{question.word.meaningZh}</h2></>}
       {question.kind === 'meaning' && <><span className="check-type">看英文，写全中文词义</span><h2>{question.word.word}</h2></>}

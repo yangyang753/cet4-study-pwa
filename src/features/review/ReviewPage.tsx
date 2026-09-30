@@ -189,7 +189,8 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
       await repository.upsertReviewCard(updated);
       await completeDailyTask(repository, 'review', currentStudyDate);
       setCards((items) => items.map((item) => item.id === updated.id ? updated : item));
-      setMeaningFeedback(correct ? '全部释义填写完整。' : `漏译：${grade.missingMeanings.join('、')}。该词已自动改为待复习。`);
+      const details = [grade.missingMeanings.length ? `漏译：${grade.missingMeanings.join('、')}` : '', grade.unexpectedMeanings.length ? `多写或误译：${grade.unexpectedMeanings.join('、')}` : ''].filter(Boolean).join('；');
+      setMeaningFeedback(correct ? '全部释义填写完整。' : `${details}。该词已自动改为待复习。`);
       setResult(correct ? 'correct' : 'incorrect');
     } catch {
       setSubmitError('复习进度保存失败，答案已保留，请重新保存。');

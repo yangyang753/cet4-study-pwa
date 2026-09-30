@@ -15,6 +15,7 @@ export function verifyMigrationContracts(root = defaultRoot): string[] {
   for (const name of ['001_initial.sql', '002_complete_learning_sync.sql', '003_mistake_reasons.sql']) read(`supabase/migrations/${name}`);
   const dailyPlans = read('supabase/migrations/004_daily_plans.sql');
   const ownerKeys = read('supabase/migrations/005_owner_scoped_keys.sql');
+  const learningPayloads = read('supabase/migrations/006_preserve_learning_payloads.sql');
   const rls = read('supabase/tests/rls.test.sql');
 
   if (dailyPlans.includes('create table if not exists public.daily_plans')) errors.push('004 must upgrade the existing daily_plans table');
@@ -30,6 +31,9 @@ export function verifyMigrationContracts(root = defaultRoot): string[] {
   for (const table of ['daily_plans', ...requiredOwnerTables]) if (!rls.includes(`'${table}'`)) errors.push(`RLS tests missing ${table} owner-key assertion`);
   if (!rls.includes('select plan(20)')) errors.push('RLS pgTAP plan must match 20 assertions');
   if (!rls.includes("column_name = 'payload'")) errors.push('RLS tests must assert the daily plan payload type');
+  for (const table of ['review_queue', 'knowledge_states']) {
+    if (!learningPayloads.includes(`alter table public.${table}`) || !learningPayloads.includes('payload jsonb')) errors.push(`006 missing payload preservation for ${table}`);
+  }
   return errors;
 }
 
@@ -37,5 +41,5 @@ const isDirect = process.argv[1] && path.resolve(process.argv[1]) === path.resol
 if (isDirect) {
   const errors = verifyMigrationContracts();
   if (errors.length) { console.error(errors.join('\n')); process.exit(1); }
-  console.log('Supabase migration contracts verified: 001–005 and owner-scoped keys.');
+  console.log('Supabase migration contracts verified: 001–006, owner-scoped keys, and full learning payloads.');
 }

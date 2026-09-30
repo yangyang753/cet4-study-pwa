@@ -26,6 +26,8 @@ export function applyKnowledgeReviewResult(
   now: string,
 ): KnowledgeState {
   const state = current ?? initialKnowledgeState(itemId, now);
+  const answeredEarly = correct && Boolean(state.nextReviewAt) && Date.parse(now) < Date.parse(state.nextReviewAt!);
+  if (answeredEarly) return { ...state, lastReviewedAt: now, updatedAt: now };
   const reviewStage = correct ? Math.min(STABLE_MASTERY_STAGE, (state.reviewStage ?? 0) + 1) : 0;
   return {
     ...state,

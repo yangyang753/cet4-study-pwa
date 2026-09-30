@@ -22,25 +22,37 @@ describe('KnowledgePage', () => {
     expect(screen.queryByText('一个人')).not.toBeInTheDocument();
   });
 
-  it('opens a reinforcement exercise for an individual word', async () => {
-    render(<KnowledgePage random={() => 0.4} />);
-    await userEvent.click(screen.getByRole('button', { name: '巩固练习 passage' }));
-    expect(screen.getByRole('heading', { name: 'passage · 随机巩固' })).toBeVisible();
+  it('offers one aggregate review without per-word hint buttons', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: false, reviewStage: 0, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} random={() => 0.4} />);
+    expect(await screen.findByRole('button', { name: /开始待复习词总巩固/ })).toBeVisible();
+    expect(screen.queryByRole('button', { name: /巩固练习 passage/ })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: /开始待复习词总巩固/ }));
+    expect(screen.getByRole('heading', { name: /待复习单词总巩固/ })).toBeVisible();
+    expect(screen.queryByText(/passage · 随机巩固/)).not.toBeInTheDocument();
     expect(screen.getByLabelText('英文答案')).toBeVisible();
   });
 
-  it('sends an incorrect individual reinforcement to mistake review', async () => {
+  it('records an incorrect aggregate reinforcement as an attempt and mistake', async () => {
     const repository = {
-      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: false, reviewStage: 0, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
       upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
       upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
     } as unknown as LearningRepository;
     render(<KnowledgePage repository={repository} random={() => 0.4} />);
-    await userEvent.click(await screen.findByRole('button', { name: '巩固练习 passage' }));
+    await userEvent.click(await screen.findByRole('button', { name: /开始待复习词总巩固/ }));
     await userEvent.type(screen.getByLabelText('英文答案'), 'pasage');
     await userEvent.click(screen.getByRole('button', { name: '提交巩固结果' }));
     expect(await screen.findByText(/已加入错题复习/)).toBeVisible();
     expect(repository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ wordId: 'v0001', format: 'word-cloze' }));
+    expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ kind: 'vocabulary', mode: 'review', correct: false }));
   });
 
   it('filters vocabulary by the learner query', async () => {

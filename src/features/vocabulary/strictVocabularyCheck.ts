@@ -13,6 +13,7 @@ export interface StrictVocabularyGrade {
   correct: boolean;
   spellingCorrect: boolean;
   missingMeanings: string[];
+  unexpectedMeanings: string[];
 }
 
 function normalizeEnglish(value: string) {
@@ -23,7 +24,7 @@ function normalizeChinese(value: string) {
   return value.replace(/[^\u3400-\u9fff]/g, '');
 }
 
-function requiredMeanings(word: VocabularyEntry) {
+export function requiredMeanings(word: VocabularyEntry) {
   const accepted = word.meaningZh
     .replace(/(?:^|(?<=[^a-z]))(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./gi, ';')
     .replace(/[\u005b【(（][^\u005d】)）]*[\u005d】)）]/g, '')
@@ -51,8 +52,23 @@ export function gradeStrictVocabularyAnswer(
   const needsChinese = question.kind !== 'spelling';
   const spellingCorrect = !needsEnglish || normalizeEnglish(answer.english) === normalizeEnglish(question.word.word);
   const submittedChinese = normalizeChinese(answer.chinese);
+  const expected = requiredMeanings(question.word);
   const missingMeanings = needsChinese
-    ? requiredMeanings(question.word).filter((meaning) => !submittedChinese.includes(normalizeChinese(meaning)))
+    ? expected.filter((meaning) => !submittedChinese.includes(normalizeChinese(meaning)))
     : [];
-  return { correct: spellingCorrect && missingMeanings.length === 0, spellingCorrect, missingMeanings };
+  const submittedMeanings = needsChinese
+    ? answer.chinese
+      .replace(/[\u005b【(（][^\u005d】)）]*[\u005d】)）]/g, '')
+      .split(/[;；,，、/]|(?:以及|或者|并且|和|或|及|并)/)
+      .map(normalizeChinese)
+      .filter(Boolean)
+    : [];
+  const expectedNormalized = expected.map(normalizeChinese);
+  const unexpectedMeanings = submittedMeanings.filter((meaning) => !expectedNormalized.includes(meaning));
+  return {
+    correct: spellingCorrect && missingMeanings.length === 0 && unexpectedMeanings.length === 0,
+    spellingCorrect,
+    missingMeanings,
+    unexpectedMeanings,
+  };
 }

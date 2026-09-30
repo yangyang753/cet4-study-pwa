@@ -14,3 +14,11 @@ describe('complete learning sync migration', () => {
     expect(sql).toMatch(/review_queue alter column id type text/i);
   });
 });
+
+describe('learning payload preservation migration', () => {
+  it('adds json payloads for reviews and knowledge states', async () => {
+    const sql = await readFile(path.join(process.cwd(), 'supabase/migrations/006_preserve_learning_payloads.sql'), 'utf8');
+    expect(sql).toMatch(/alter table public\.review_queue[\s\S]*payload jsonb/i);
+    expect(sql).toMatch(/alter table public\.knowledge_states[\s\S]*payload jsonb/i);
+  });
+});

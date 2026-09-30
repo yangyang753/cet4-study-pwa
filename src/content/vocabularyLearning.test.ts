@@ -35,6 +35,15 @@ describe('learner-facing vocabulary', () => {
     expect(entry.exampleZh).toContain('样品');
   });
 
+  it('removes duplicated part-of-speech labels and normalizes phonetic symbols', () => {
+    const entry = qualityVocabularyEntry({
+      id: 'v-clean', word: 'one', phonetic: '/wΛn/', partOfSpeech: 'num./pron.', meaningZh: 'num.一pron.一个人',
+      example: 'The word “one” is presented as a number.', exampleZh: '', derivatives: [], confusables: [],
+    });
+    expect(entry.meaningZh).toBe('一；一个人');
+    expect(entry.phonetic).toBe('/wʌn/');
+  });
+
   it('provides a visible example for every high-frequency word', () => {
     expect(learningVocabulary.filter((entry) => !entry.example.trim())).toEqual([]);
     expect(learningVocabulary.filter((entry) => !entry.example.toLowerCase().includes(entry.word.toLowerCase()))).toEqual([]);

@@ -20,6 +20,9 @@ describe('strict vocabulary check', () => {
     expect(gradeStrictVocabularyAnswer(spelling, { english: 'pasage', chinese: '' }).correct).toBe(false);
     expect(gradeStrictVocabularyAnswer(meaning, { english: '', chinese: '好处' }).correct).toBe(false);
     expect(gradeStrictVocabularyAnswer(meaning, { english: '', chinese: '好处和益处' }).correct).toBe(true);
+    expect(gradeStrictVocabularyAnswer(meaning, { english: '', chinese: '好处、益处、坏处' })).toMatchObject({
+      correct: false, unexpectedMeanings: ['坏处'],
+    });
     expect(gradeStrictVocabularyAnswer(dual, { english: 'generate', chinese: '产生，生成' }).correct).toBe(true);
     expect(gradeStrictVocabularyAnswer(dual, { english: 'generate', chinese: '产生' }).missingMeanings).toContain('生成');
   });
@@ -31,7 +34,7 @@ describe('strict vocabulary check', () => {
     };
     const question = { ...buildStrictVocabularyQuestions([word])[0], kind: 'meaning' as const };
     expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '制造' }).missingMeanings).toEqual(['使', '做']);
-    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '使其完成并制造东西' }).missingMeanings).toEqual(['做']);
+    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '使其完成并制造东西' }).correct).toBe(false);
     expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '使、做、制造' }).correct).toBe(true);
   });
 });

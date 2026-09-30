@@ -33,7 +33,7 @@ pnpm preview:test
 ## 启用账户与跨设备同步
 
 1. 创建 Supabase 项目。
-2. 使用 Supabase CLI 按顺序应用 `supabase/migrations/001_initial.sql` 至 `005_owner_scoped_keys.sql`，按需执行 `supabase/seed.sql`。
+2. 使用 Supabase CLI 按顺序应用 `supabase/migrations/001_initial.sql` 至 `006_preserve_learning_payloads.sql`，按需执行 `supabase/seed.sql`。
 3. 复制 `.env.example` 为 `.env.local`，填写项目 URL 和 `sb_publishable_...` Publishable Key。
 4. 在 Supabase Authentication 中启用 Email 登录，然后重新启动开发服务器。
 
