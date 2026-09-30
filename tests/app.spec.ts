@@ -162,12 +162,19 @@ test('keeps one vocabulary cohort through study, strict testing, translation, an
   await expect(page.getByRole('heading', { level: 1, name: '中国文化翻译' })).toBeVisible();
   await page.getByRole('textbox', { name: '我的英文翻译' }).fill('Chinese culture has a long history and remains important in modern society.');
   await page.getByRole('button', { name: '提交文化翻译' }).click();
+  const retryTranslation = page.getByRole('button', { name: '修改后重新提交' });
+  await retryTranslation.waitFor();
+  const reference = (await page.locator('.translation-result details p').textContent()) ?? '';
+  await retryTranslation.click();
+  await page.getByRole('textbox', { name: '我的英文翻译' }).fill(reference);
+  await page.getByRole('button', { name: '提交文化翻译' }).click();
   await page.getByRole('button', { name: '继续学习重点搭配' }).click();
   for (let index = 0; index < 3; index += 1) {
     await expect(page.getByRole('heading', { level: 1, name: '单词之后学习重点搭配' })).toBeVisible();
     await page.getByRole('button', { name: '显示搭配释义' }).click();
+    const meaning = (await page.locator('.warmup-answer > strong').textContent()) ?? '';
     await page.getByRole('button', { name: '开始搭配测试' }).click();
-    await page.getByRole('radio').first().check();
+    await page.getByRole('radio', { name: new RegExp(`${meaning.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`) }).check();
     await page.getByRole('button', { name: '提交搭配答案' }).click();
     await page.getByRole('button', { name: index === 2 ? '完成重点搭配' : '下一个重点搭配' }).click();
   }

@@ -1,5 +1,4 @@
 import type { VocabularyEntry } from '../../domain/content';
-import { acceptedChineseMeanings } from '../translation/evaluateTranslation';
 
 export type StrictVocabularyQuestionKind = 'spelling' | 'meaning' | 'dual';
 
@@ -25,7 +24,12 @@ function normalizeChinese(value: string) {
 }
 
 function requiredMeanings(word: VocabularyEntry) {
-  const accepted = acceptedChineseMeanings(word.meaningZh);
+  const accepted = word.meaningZh
+    .replace(/(?:^|(?<=[^a-z]))(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./gi, ';')
+    .replace(/[\u005b【(（][^\u005d】)）]*[\u005d】)）]/g, '')
+    .split(/[;；,，、/]/)
+    .map((fragment) => fragment.replace(/^[^\u3400-\u9fff]+|[^\u3400-\u9fff]+$/g, '').trim())
+    .filter((fragment, index, all) => fragment.length >= 1 && all.indexOf(fragment) === index);
   return accepted.length ? accepted : [normalizeChinese(word.meaningZh)].filter(Boolean);
 }
 

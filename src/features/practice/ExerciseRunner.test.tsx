@@ -5,6 +5,7 @@ import { vi } from 'vitest';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { getPracticeItems } from '../../content/catalog';
 import { ExerciseRunner } from './ExerciseRunner';
+import collocations from '../../../content/v1/collocations.json';
 
 const validWriting = `First, daily practice helps students remember important knowledge and notice their weak points before an examination. A clear routine also makes a difficult goal feel smaller, so learners are more willing to begin instead of waiting for the perfect moment. Keeping a notebook beside the textbook also helps students capture useful expressions and review them before they disappear from memory.
 
@@ -17,9 +18,13 @@ async function unlockCurrentQuestion() {
 
 async function completeDailyCollocations() {
   for (let index = 0; index < 3; index += 1) {
+    const phrase = (await screen.findByRole('heading', { level: 2 })).textContent;
+    const entry = collocations.find((item) => item.phrase === phrase);
+    if (!entry) throw new Error(`Missing collocation fixture for ${phrase}`);
     await userEvent.click(await screen.findByRole('button', { name: '显示搭配释义' }));
     await userEvent.click(screen.getByRole('button', { name: '开始搭配测试' }));
-    await userEvent.click(screen.getAllByRole('radio')[0]);
+    const meaningPattern = new RegExp(`${entry.meaningZh.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
+    await userEvent.click(screen.getByRole('radio', { name: meaningPattern }));
     await userEvent.click(screen.getByRole('button', { name: '提交搭配答案' }));
     await userEvent.click(await screen.findByRole('button', { name: index === 2 ? '完成重点搭配' : '下一个重点搭配' }));
   }
@@ -227,7 +232,7 @@ describe('ExerciseRunner', () => {
     await user.click(screen.getByRole('button', { name: '完成单词学习' }));
     await user.type(await screen.findByLabelText('英文拼写'), 'passage');
     await user.click(screen.getByRole('button', { name: '提交并完成检测' }));
-    await user.type(await screen.findByLabelText('我的英文翻译'), 'Ancient trade helped language and culture develop, and it remains important in the world today.');
+    await user.type(await screen.findByLabelText('我的英文翻译'), 'The ancient Silk Road connected China with other parts of the world. Traders carried silk, tea and other goods, while also spreading languages, knowledge and art. Long-term exchange improved understanding and helped different societies develop together. Today, the Silk Road is still regarded as an important symbol of cultural exchange. As international exchange grows, more foreigners are beginning to learn about this cultural tradition and the values behind it.');
     await user.click(screen.getByRole('button', { name: '提交文化翻译' }));
     await user.click(await screen.findByRole('button', { name: '继续学习重点搭配' }));
     await completeDailyCollocations();

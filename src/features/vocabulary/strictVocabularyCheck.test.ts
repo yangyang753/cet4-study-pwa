@@ -23,4 +23,15 @@ describe('strict vocabulary check', () => {
     expect(gradeStrictVocabularyAnswer(dual, { english: 'generate', chinese: '产生，生成' }).correct).toBe(true);
     expect(gradeStrictVocabularyAnswer(dual, { english: 'generate', chinese: '产生' }).missingMeanings).toContain('生成');
   });
+
+  it('requires meaningful one-character Chinese senses instead of dropping them', () => {
+    const word: VocabularyEntry = {
+      id: 'v4', word: 'make', phonetic: '', partOfSpeech: 'v.', meaningZh: '使，做，制造',
+      example: 'Make a plan.', derivatives: [], confusables: [],
+    };
+    const question = { ...buildStrictVocabularyQuestions([word])[0], kind: 'meaning' as const };
+    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '制造' }).missingMeanings).toEqual(['使', '做']);
+    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '使其完成并制造东西' }).missingMeanings).toEqual(['做']);
+    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '使、做、制造' }).correct).toBe(true);
+  });
 });

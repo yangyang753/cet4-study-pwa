@@ -54,4 +54,16 @@ describe('DailyCultureTranslation', () => {
     expect(saveAttemptOnce).toHaveBeenCalledTimes(2);
     expect(saveAttemptOnce.mock.calls[0][0].id).toBe(saveAttemptOnce.mock.calls[1][0].id);
   });
+
+  it('requires an incomplete translation to be corrected before continuing', async () => {
+    const onComplete = vi.fn();
+    render(<DailyCultureTranslation repository={repository()} prompt={prompt} vocabulary={words} states={[]} date="2026-09-27" onComplete={onComplete} />);
+    await userEvent.type(screen.getByLabelText('我的英文翻译'), 'Chinese culture is important today.');
+    await userEvent.click(screen.getByRole('button', { name: '提交文化翻译' }));
+    expect(await screen.findByRole('button', { name: '修改后重新提交' })).toBeVisible();
+    expect(screen.queryByRole('button', { name: '继续学习重点搭配' })).not.toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByRole('button', { name: '修改后重新提交' }));
+    expect(screen.getByLabelText('我的英文翻译')).toBeEnabled();
+  });
 });

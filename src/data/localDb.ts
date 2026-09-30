@@ -9,6 +9,9 @@ export type VocabularySessionPhase = 'learning' | 'testing' | 'culture-review' |
 export interface VocabularySessionProgress {
   wordIds: string[];
   learnedWordIds: string[];
+  strictPassedWordIds?: string[];
+  cultureDraft?: string;
+  passedCollocationIds?: string[];
   phase: VocabularySessionPhase;
 }
 export interface CachedPlan {

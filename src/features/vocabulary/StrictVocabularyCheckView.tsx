@@ -6,13 +6,19 @@ import { applyVocabularyReviewResult } from './vocabularySchedule';
 import { vocabularyReviewCard } from './wordMastery';
 import { buildStrictVocabularyQuestions, gradeStrictVocabularyAnswer } from './strictVocabularyCheck';
 
-export function StrictVocabularyCheck({ repository, words, states, onComplete }: {
+export function StrictVocabularyCheck({ repository, words, states, passedWordIds = [], onWordPassed, onComplete }: {
   repository: LearningRepository;
   words: VocabularyEntry[];
   states: KnowledgeState[];
+  passedWordIds?: string[];
+  onWordPassed?: (wordId: string) => void | Promise<void>;
   onComplete: () => void | Promise<void>;
 }) {
-  const questions = useMemo(() => buildStrictVocabularyQuestions(words), [words]);
+  const allQuestions = useMemo(() => buildStrictVocabularyQuestions(words), [words]);
+  const [questions] = useState(() => {
+    const passed = new Set(passedWordIds);
+    return buildStrictVocabularyQuestions(words).filter((item) => !passed.has(item.word.id));
+  });
   const [stateById, setStateById] = useState(() => new Map(states.map((state) => [state.itemId, state])));
   const [index, setIndex] = useState(0);
   const [english, setEnglish] = useState('');
@@ -28,18 +34,24 @@ export function StrictVocabularyCheck({ repository, words, states, onComplete }:
     const current = stateById.get(question.word.id);
     setSaving(true);
     try {
-      const nextState = applyVocabularyReviewResult(current ?? {
+      const passedDate = now.slice(0, 10);
+      const alreadyPassedToday = grade.correct && current?.lastStrictPassedDate === passedDate;
+      const gradedState = alreadyPassedToday ? current : applyVocabularyReviewResult(current ?? {
         id: `knowledge:${question.word.id}`, itemId: question.word.id, status: 'learning', favorite: false, updatedAt: now,
       }, grade.correct, now);
+      const nextState = grade.correct
+        ? { ...gradedState, lastStrictPassedDate: passedDate }
+        : { ...gradedState, lastStrictPassedDate: undefined };
       await repository.upsertKnowledgeState(nextState);
+      setStateById((currentStates) => new Map(currentStates).set(question.word.id, nextState));
       if (!grade.spellingCorrect) await repository.upsertReviewCard(vocabularyReviewCard(question.word.id, 'cloze', now));
       if (grade.missingMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(question.word.id, 'meaning', now));
-      setStateById((currentStates) => new Map(currentStates).set(question.word.id, nextState));
       if (!grade.correct) {
         const details = [!grade.spellingCorrect ? `正确拼写：${question.word.word}` : '', grade.missingMeanings.length ? `漏译：${grade.missingMeanings.join('、')}` : ''].filter(Boolean).join('；');
         setFeedback(`本题未完全正确，已加入错题复习。${details}。请修改后重新提交。`);
         return;
       }
+      await onWordPassed?.(question.word.id);
       setFeedback('回答完整，已记录。');
       if (index >= questions.length - 1) await onComplete();
       else {
@@ -53,11 +65,12 @@ export function StrictVocabularyCheck({ repository, words, states, onComplete }:
     }
   }
 
-  if (!question) return <section className="vocabulary-warmup complete"><h1>今日没有需要检测的新词</h1><button className="primary-action" onClick={() => void onComplete()}>继续今日训练</button></section>;
+  if (!question) return <section className="vocabulary-warmup complete"><h1>今日新词已全部通过严格检测</h1><button className="primary-action" onClick={() => void onComplete()}>继续今日训练</button></section>;
+  const position = allQuestions.findIndex((item) => item.word.id === question.word.id) + 1;
   const needsEnglish = question.kind !== 'meaning';
   const needsChinese = question.kind !== 'spelling';
   return <section className="strict-vocabulary-check">
-    <header><span>掌握检测 · {index + 1} / {questions.length}</span><h1>严格检测今日新词</h1><p>拼写必须完全一致，中文词义不能遗漏；答错后改对才能进入下一词。</p></header>
+    <header><span>掌握检测 · {position} / {allQuestions.length}</span><h1>严格检测今日新词</h1><p>拼写必须完全一致，中文词义不能遗漏；答错后改对才能进入下一词。</p></header>
     <article className="warmup-card strict-check-card">
       {question.kind === 'spelling' && <><span className="check-type">看中文，默写英文</span><h2>{question.word.meaningZh}</h2></>}
       {question.kind === 'meaning' && <><span className="check-type">看英文，写全中文词义</span><h2>{question.word.word}</h2></>}

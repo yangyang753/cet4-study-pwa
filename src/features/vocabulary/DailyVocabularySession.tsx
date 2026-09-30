@@ -38,6 +38,9 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
   const [dailyWords, setDailyWords] = useState<VocabularyEntry[]>([]);
   const [warmupWords, setWarmupWords] = useState<VocabularyEntry[]>([]);
   const [learnedWordIds, setLearnedWordIds] = useState<string[]>([]);
+  const [strictPassedWordIds, setStrictPassedWordIds] = useState<string[]>([]);
+  const [cultureDraft, setCultureDraft] = useState('');
+  const [passedCollocationIds, setPassedCollocationIds] = useState<string[]>([]);
   const [cachedPlan, setCachedPlan] = useState<CachedPlan | null>(null);
   const dailyCulturePrompt = selectDailyCultureTranslation(culturePrompts ?? cultureTranslationBank, today);
 
@@ -65,6 +68,9 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
       setDailyWords(cohort);
       setWarmupWords(cohort.filter((word) => !learned.includes(word.id)));
       setLearnedWordIds(learned);
+      setStrictPassedWordIds(session?.strictPassedWordIds ?? []);
+      setCultureDraft(session?.cultureDraft ?? '');
+      setPassedCollocationIds(session?.passedCollocationIds ?? []);
       setPhase(session ? resumedPhase : next.dueWords.length ? 'review' : resumedPhase);
       if (!session && cohort.length && typeof repository.savePlan === 'function') {
         const created: CachedPlan = {
@@ -84,10 +90,14 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
   const reviewState = snapshot?.knowledgeStates.find((item) => item.itemId === reviewWord?.id);
   const dailyCollocations = selectDailyCollocations(collocationData as CollocationEntry[], snapshot?.knowledgeStates ?? [], `${today}T23:59:59.999Z`, 3);
 
-  async function persistSession(phaseValue: VocabularySessionPhase, learnedIds = learnedWordIds) {
-    const basePlan = cachedPlan ?? (typeof repository.getPlan === 'function' ? await repository.getPlan(today) : null) ?? { id: `plan:${today}`, date: today, tasks: [], updatedAt: new Date().toISOString() };
+  async function persistSession(phaseValue: VocabularySessionPhase, learnedIds = learnedWordIds, patch: Partial<VocabularySessionProgress> = {}) {
+    const storedPlan = typeof repository.getPlan === 'function' ? await repository.getPlan(today) : null;
+    const basePlan = storedPlan ?? cachedPlan ?? { id: `plan:${today}`, date: today, tasks: [], updatedAt: new Date().toISOString() };
     if (typeof repository.savePlan !== 'function') return;
-    const vocabularySession: VocabularySessionProgress = { wordIds: dailyWords.map((word) => word.id), learnedWordIds: learnedIds, phase: phaseValue };
+    const vocabularySession: VocabularySessionProgress = {
+      ...basePlan.vocabularySession,
+      wordIds: dailyWords.map((word) => word.id), learnedWordIds: learnedIds, phase: phaseValue, ...patch,
+    };
     const nextPlan = { ...basePlan, vocabularySession, updatedAt: new Date().toISOString() };
     await repository.savePlan(nextPlan);
     setCachedPlan(nextPlan);
@@ -154,7 +164,11 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
   if (phase === 'learning') {
     const nextPhase = workload.cultureWords.length ? 'culture-review' : 'culture-translation';
     if (!dailyWords.length) return <section className="vocabulary-warmup complete"><h1>今日没有新词</h1><p>先检测今天的翻译强化词，再完成中国文化翻译。</p>{error && <p role="alert">{error}</p>}<button className="primary-action" onClick={() => void moveTo(nextPhase)}>{workload.cultureWords.length ? '开始翻译强化词检测' : '开始今日文化翻译'}</button></section>;
-    if (!warmupWords.length) return <StrictVocabularyCheck repository={repository} words={dailyWords} states={snapshot.knowledgeStates} onComplete={() => moveTo(workload.cultureWords.length ? 'culture-review' : 'culture-translation')} />;
+    if (!warmupWords.length) return <StrictVocabularyCheck repository={repository} words={dailyWords} states={snapshot.knowledgeStates} passedWordIds={strictPassedWordIds} onWordPassed={async (wordId) => {
+      const passed = [...new Set([...strictPassedWordIds, wordId])];
+      await persistSession('testing', learnedWordIds, { strictPassedWordIds: passed });
+      setStrictPassedWordIds(passed);
+    }} onComplete={() => moveTo(workload.cultureWords.length ? 'culture-review' : 'culture-translation')} />;
     return <VocabularyWarmup repository={repository} entries={warmupWords} limit={warmupWords.length} onWordLearned={async (wordId) => {
       const nextLearned = [...new Set([...learnedWordIds, wordId])];
       await persistSession(nextLearned.length === dailyWords.length ? 'testing' : 'learning', nextLearned);
@@ -162,17 +176,28 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
     }} onComplete={() => setPhase('testing')} />;
   }
 
-  if (phase === 'testing') return <StrictVocabularyCheck repository={repository} words={dailyWords} states={snapshot.knowledgeStates} onComplete={() => moveTo(workload.cultureWords.length ? 'culture-review' : 'culture-translation')} />;
+  if (phase === 'testing') return <StrictVocabularyCheck repository={repository} words={dailyWords} states={snapshot.knowledgeStates} passedWordIds={strictPassedWordIds} onWordPassed={async (wordId) => {
+    const passed = [...new Set([...strictPassedWordIds, wordId])];
+    await persistSession('testing', learnedWordIds, { strictPassedWordIds: passed });
+    setStrictPassedWordIds(passed);
+  }} onComplete={() => moveTo(workload.cultureWords.length ? 'culture-review' : 'culture-translation')} />;
 
   if (phase === 'culture-review' && cultureReviewWord) return <section className="daily-word-review">
     <header><span>翻译强化词 · {cultureReviewIndex + 1}/{workload.cultureWords.length}</span><h1>先检测翻译强化词</h1><p>根据中文补全英文；答错会自动回到待复习。</p></header>
     <article className="warmup-card"><h2>{buildWordCloze(cultureReviewWord.word, cultureReviewState?.reviewStage ?? 0)}</h2><p>{cultureReviewWord.meaningZh}</p><label>补全强化词<input aria-label="补全强化词" autoComplete="off" value={answer} onChange={(event) => setAnswer(event.target.value)} /></label>{error && <p role="alert">{error}</p>}<div><button disabled={saving} onClick={() => void submitCultureReview(true)}>想不起来，加入错题</button><button className="primary-action" disabled={!answer.trim() || saving} onClick={() => void submitCultureReview()}>{saving ? '正在保存…' : '提交强化词检测'}</button></div></article>
   </section>;
 
-  if (phase === 'culture-translation') return <DailyCultureTranslation repository={repository} prompt={dailyCulturePrompt} vocabulary={entries} states={snapshot.knowledgeStates} date={today} onComplete={() => void moveTo('collocations')} />;
+  if (phase === 'culture-translation') return <DailyCultureTranslation repository={repository} prompt={dailyCulturePrompt} vocabulary={entries} states={snapshot.knowledgeStates} date={today} initialAnswer={cultureDraft} onDraftChange={(value) => {
+    setCultureDraft(value);
+    void persistSession('culture-translation', learnedWordIds, { cultureDraft: value });
+  }} onComplete={() => void moveTo('collocations')} />;
   if (phase === 'complete') return <section className="practice-summary"><h1>今日词汇训练已完成</h1><p>同一批新词已学习并通过严格检测，错误记录已进入错题复习。</p></section>;
 
-  return <CollocationCheck repository={repository} entries={dailyCollocations} allEntries={collocationData as CollocationEntry[]} states={snapshot.knowledgeStates} onComplete={async () => {
+  return <CollocationCheck repository={repository} entries={dailyCollocations} passedItemIds={passedCollocationIds} allEntries={collocationData as CollocationEntry[]} states={snapshot.knowledgeStates} onItemPassed={async (itemId) => {
+    const passed = [...new Set([...passedCollocationIds, itemId])];
+    await persistSession('collocations', learnedWordIds, { passedCollocationIds: passed });
+    setPassedCollocationIds(passed);
+  }} onComplete={async () => {
     const now = new Date().toISOString();
     const taskId = await completeDailyTask(repository, 'vocabulary', today);
     await repository.upsertKnowledgeState({ id: `mastery:${taskId}`, itemId: taskId, status: 'mastered', favorite: false, updatedAt: now });

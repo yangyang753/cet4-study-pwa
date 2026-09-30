@@ -30,12 +30,12 @@ describe('DailyVocabularySession', () => {
       settings: { id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-20T00:00:00.000Z' }, attempts: [], dueReviews: [], completions: [],
     });
     Object.assign(learningRepository, {
-      getPlan: vi.fn().mockResolvedValue({ id: 'plan:2026-09-25', date: '2026-09-25', tasks: [], vocabularySession: { wordIds: ['v1', 'v2'], learnedWordIds: ['v1', 'v2'], phase: 'testing' }, updatedAt: '2026-09-25T08:00:00.000Z' }),
+      getPlan: vi.fn().mockResolvedValue({ id: 'plan:2026-09-25', date: '2026-09-25', tasks: [], vocabularySession: { wordIds: ['v1', 'v2'], learnedWordIds: ['v1', 'v2'], strictPassedWordIds: ['v1'], phase: 'testing' }, updatedAt: '2026-09-25T08:00:00.000Z' }),
       savePlan: vi.fn().mockResolvedValue(undefined),
     });
     render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
     expect(await screen.findByRole('heading', { name: '严格检测今日新词' })).toBeVisible();
-    expect(screen.getByText(/1 \/ 2/)).toBeVisible();
+    expect(screen.getByText(/2 \/ 2/)).toBeVisible();
   });
   it('tests a learned culture target before opening the culture translation', async () => {
     const learningRepository = repository();

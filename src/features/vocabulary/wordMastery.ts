@@ -48,7 +48,7 @@ export function vocabularyReviewCard(
     id: `review:${wordId}:${kind === 'cloze' ? 'spelling' : 'meaning'}`,
     questionId: `${wordId}:${kind === 'cloze' ? 'spelling' : 'meaning'}`,
     wordId,
-    format: kind === 'cloze' ? 'word-cloze' : 'objective',
+    format: kind === 'cloze' ? 'word-cloze' : 'word-meaning',
     stage: 0,
     priority: 6,
     nextReviewAt: now,

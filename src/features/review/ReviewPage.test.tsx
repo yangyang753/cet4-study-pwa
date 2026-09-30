@@ -120,6 +120,21 @@ describe('ReviewPage', () => {
     expect(screen.getAllByText('请选择 passage 的正确含义。')[0]).toBeVisible();
   });
 
+  it('reviews a missed vocabulary meaning by complete free recall', async () => {
+    const repository = await setupRepository();
+    await repository.upsertReviewCard({
+      id: 'review:v0001:meaning', questionId: 'v0001:meaning', wordId: 'v0001', format: 'word-meaning',
+      stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
+    await userEvent.click(await screen.findByRole('button', { name: '复习完整释义 passage' }));
+    expect(screen.getByRole('textbox', { name: '写出全部中文释义' })).toBeVisible();
+    await userEvent.type(screen.getByRole('textbox', { name: '写出全部中文释义' }), '文章');
+    await userEvent.click(screen.getByRole('button', { name: '提交完整释义' }));
+    expect(await screen.findByText('复习错误')).toBeVisible();
+    expect(screen.getByText(/漏译/)).toBeVisible();
+  });
+
   it('shows a retry action when the review queue cannot be loaded', async () => {
     const repository = {
       listDueReviews: vi.fn().mockRejectedValueOnce(new Error('storage')).mockResolvedValueOnce([]),

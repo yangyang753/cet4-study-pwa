@@ -12,7 +12,7 @@ export interface ReviewCard {
   lastCorrect: boolean;
   priority?: number;
   reason?: MistakeReason;
-  format?: 'objective' | 'word-cloze';
+  format?: 'objective' | 'word-cloze' | 'word-meaning';
   wordId?: string;
   knowledgeItemId?: string;
   knowledgeKind?: 'vocabulary' | 'collocation' | 'grammar';
@@ -35,6 +35,7 @@ export interface KnowledgeState {
   reviewStage?: number;
   nextReviewAt?: string;
   lastReviewedAt?: string;
+  lastStrictPassedDate?: string;
   lapseCount?: number;
   updatedAt: string;
 }
