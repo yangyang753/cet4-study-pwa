@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { describeRuntimeConfiguration, determineRuntimeMode } from './verify-runtime-config.mts';
+import { describeRuntimeConfiguration, determineRuntimeMode, verifyRuntimeConfiguration } from './verify-runtime-config.mts';
 
 describe('runtime configuration', () => {
   it('accepts complete offline and cloud modes but rejects partial credentials', () => {
@@ -22,5 +22,16 @@ describe('runtime configuration', () => {
     expect(cloud).toContain('cloud mode');
     expect(cloud).not.toContain('private-project');
     expect(cloud).not.toContain('private-value');
+  });
+
+  it('blocks an offline deployment when cloud sync is required', () => {
+    expect(() => verifyRuntimeConfiguration({}, true)).toThrow('Cloud sync is required');
+    const result = verifyRuntimeConfiguration({
+      VITE_SUPABASE_URL: 'https://private-project.supabase.co',
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_private-value',
+    }, true);
+    expect(result).toContain('cloud mode');
+    expect(result).not.toContain('private-project');
+    expect(result).not.toContain('private-value');
   });
 });

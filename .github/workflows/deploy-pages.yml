@@ -36,11 +36,13 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          REQUIRE_CLOUD_SYNC: ${{ vars.REQUIRE_CLOUD_SYNC }}
       - name: Verify complete release
         run: pnpm release:verify
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          REQUIRE_CLOUD_SYNC: ${{ vars.REQUIRE_CLOUD_SYNC }}
       - name: Audit production dependencies
         run: pnpm audit --prod --audit-level moderate
       - uses: actions/configure-pages@v5
