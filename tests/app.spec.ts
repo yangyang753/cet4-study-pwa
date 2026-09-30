@@ -94,6 +94,7 @@ test('shows a diagnostic estimate and targeted task on desktop and phone', async
   });
   await page.reload();
   await expect(page.getByText('预计 319 分')).toBeVisible();
+  await expect(page.getByText('初步可信度 · 20 道诊断题')).toBeVisible();
   await expect(page.getByRole('heading', { name: '短文写作', exact: true })).toBeVisible();
   await expect(page.getByText('诊断补强').first()).toBeVisible();
 
@@ -179,6 +180,37 @@ test('keeps one vocabulary cohort through study, strict testing, translation, an
     await page.getByRole('button', { name: index === 2 ? '完成重点搭配' : '下一个重点搭配' }).click();
   }
   await expect(page.getByRole('heading', { level: 1, name: '今日词汇训练已完成' })).toBeVisible();
+});
+
+test('starts the no-repeat vocabulary review beside its launcher on desktop and phone', async ({ page }) => {
+  await page.goto('#/knowledge');
+  await page.evaluate(async () => {
+    const database = await new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open('cet4-study');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    await new Promise<void>((resolve, reject) => {
+      const transaction = database.transaction('knowledgeStates', 'readwrite');
+      transaction.objectStore('knowledgeStates').put({
+        id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: false,
+        reviewStage: 0, updatedAt: '2026-09-30T08:00:00.000Z',
+      });
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error);
+    });
+    database.close();
+  });
+  await page.reload();
+  await page.getByRole('button', { name: /开始待复习词总巩固，共 1 个/ }).click();
+  const launcher = page.getByRole('heading', { name: '无提示待复习总巩固' });
+  const exercise = page.getByRole('heading', { name: '待复习单词总巩固' });
+  await expect(exercise).toBeVisible();
+  await expect(page.getByText(/第 1 \/ 1 题/)).toBeVisible();
+  expect(await launcher.evaluate((node, target) => Boolean(node.compareDocumentPosition(target as Node) & Node.DOCUMENT_POSITION_FOLLOWING), await exercise.elementHandle())).toBeTruthy();
+
+  await page.setViewportSize({ width: 360, height: 800 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
 });
 
 test('reopens the visited study dashboard while offline', async ({ page, context }) => {
