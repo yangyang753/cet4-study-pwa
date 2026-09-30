@@ -58,6 +58,29 @@ describe('KnowledgePage', () => {
     expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ kind: 'vocabulary', mode: 'review', correct: false }));
   });
 
+  it('finishes a one-word aggregate round with a visible summary instead of repeating it', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: false, reviewStage: 0, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} random={() => 0.4} />);
+
+    await userEvent.click(await screen.findByRole('button', { name: /开始待复习词总巩固/ }));
+    expect(screen.getByText(/第 1 \/ 1 题/)).toBeVisible();
+    await userEvent.type(screen.getByLabelText('英文答案'), 'passage');
+    await userEvent.click(screen.getByRole('button', { name: '提交巩固结果' }));
+    await userEvent.click(await screen.findByRole('button', { name: '查看本轮报告' }));
+
+    expect(screen.getByRole('heading', { name: '本轮巩固完成' })).toBeVisible();
+    expect(screen.getByText('测试 1 个')).toBeVisible();
+    expect(screen.getByText('完全正确 1 个')).toBeVisible();
+    expect(screen.getByText('需要重学 0 个')).toBeVisible();
+  });
+
   it('filters vocabulary by the learner query', async () => {
     const user = userEvent.setup();
     render(<KnowledgePage />);

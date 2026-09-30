@@ -11,6 +11,7 @@ import type { WordReinforcement } from './wordReinforcement';
 import { buildWordReinforcement, gradeWordReinforcement } from './wordReinforcement';
 import { applyKnowledgeReviewResult } from '../mastery/knowledgeMastery';
 import { vocabularyReviewCard } from '../vocabulary/wordMastery';
+import { createAggregateReviewSession, recordAggregateReviewResult, type AggregateReviewSession } from './aggregateReviewSession';
 
 type Tab = 'vocabulary' | 'collocations' | 'grammar';
 type StateView = 'unlearned' | 'active' | 'mastered';
@@ -53,7 +54,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
   const [chineseAnswer, setChineseAnswer] = useState('');
   const [exerciseResult, setExerciseResult] = useState('');
   const [exerciseSaving, setExerciseSaving] = useState(false);
-  const [sessionNumber, setSessionNumber] = useState(0);
+  const [aggregateSession, setAggregateSession] = useState<AggregateReviewSession | null>(null);
   const [attemptId, setAttemptId] = useState('');
   useEffect(() => {
     let active = true;
@@ -103,9 +104,16 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
 
   const startAggregateReview = () => {
     if (!reviewWords.length) return;
-    const index = Math.floor(random() * reviewWords.length) % reviewWords.length;
-    setSessionNumber((value) => value + 1);
-    openExercise(reviewWords[index]);
+    const session = createAggregateReviewSession(reviewWords.map((word) => word.id), random);
+    const word = vocabulary.find((item) => item.id === session.currentId);
+    setAggregateSession(session);
+    if (word) openExercise(word);
+  };
+
+  const continueAggregateReview = () => {
+    if (!aggregateSession || aggregateSession.completed) { setExercise(null); return; }
+    const word = vocabulary.find((item) => item.id === aggregateSession.currentId);
+    if (word) openExercise(word);
   };
 
   const submitExercise = async () => {
@@ -126,6 +134,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
       if (!grade.spellingCorrect) await repository.upsertReviewCard(vocabularyReviewCard(exercise.word.id, 'cloze', now));
       if (grade.missingMeanings.length || grade.unexpectedMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(exercise.word.id, 'meaning', now));
       setStates((items) => new Map(items).set(exercise.word.id, next));
+      setAggregateSession((session) => session ? recordAggregateReviewResult(session, grade.correct) : session);
       setExerciseResult(grade.correct ? '回答完全正确，已记录一次巩固。' : `本次未通过，已加入错题复习。${!grade.spellingCorrect ? `正确拼写：${exercise.word.word}。` : ''}${grade.missingMeanings.length ? `漏译：${grade.missingMeanings.join('、')}。` : ''}${grade.unexpectedMeanings.length ? `多写或误译：${grade.unexpectedMeanings.join('、')}。` : ''}`);
     } catch {
       setExerciseResult('巩固结果保存失败，答案已保留，请重新提交。');
@@ -149,7 +158,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
       </section>
       {exercise && <section className="reinforcement-panel aggregate-session" aria-labelledby="reinforcement-title">
         <button className="reinforcement-close" aria-label="关闭巩固练习" onClick={() => setExercise(null)}>×</button>
-        <span>NO-HINT REVIEW · 第 {sessionNumber} 题</span><h2 id="reinforcement-title">待复习单词总巩固</h2>
+        <span>NO-HINT REVIEW · 第 {Math.min((aggregateSession?.answeredCount ?? 0) + 1, aggregateSession?.queue.length ?? 1)} / {aggregateSession?.queue.length ?? 1} 题</span><h2 id="reinforcement-title">待复习单词总巩固</h2>
         {exercise.kind === 'meaning' && <p className="reinforcement-prompt">看英文，写出全部中文释义：<strong>{exercise.word.word}</strong></p>}
         {exercise.kind === 'spelling' && <p className="reinforcement-prompt">根据中文写出完整英文：<strong>{exercise.word.meaningZh}</strong></p>}
         {exercise.kind === 'cloze' && <p className="reinforcement-prompt">补全随机缺失的字母：<strong>{exercise.cloze}</strong><small>{exercise.word.meaningZh}</small></p>}
@@ -158,8 +167,9 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
         {(exercise.kind === 'meaning' || exercise.kind === 'dual') && <label>中文释义<textarea aria-label="中文释义答案" value={chineseAnswer} onChange={(event) => setChineseAnswer(event.target.value)} rows={3} /></label>}
         {exerciseResult && <p className={exerciseResult.startsWith('回答完全正确') ? 'reinforcement-success' : 'reinforcement-error'} role="status">{exerciseResult}</p>}
         {!exerciseResult && <button className="reinforcement-submit" disabled={exerciseSaving || (exercise.kind !== 'meaning' && !englishAnswer.trim()) || ((exercise.kind === 'meaning' || exercise.kind === 'dual') && !chineseAnswer.trim())} onClick={() => void submitExercise()}>{exerciseSaving ? '正在保存…' : '提交巩固结果'}</button>}
-        {exerciseResult && <button className="reinforcement-again" onClick={startAggregateReview}>下一道随机巩固</button>}
+        {exerciseResult && <button className="reinforcement-again" onClick={continueAggregateReview}>{aggregateSession?.completed ? '查看本轮报告' : '下一道巩固'}</button>}
       </section>}
+      {aggregateSession?.completed && !exercise && <section className="aggregate-summary" aria-labelledby="aggregate-summary-title"><span>ROUND COMPLETE</span><h2 id="aggregate-summary-title">本轮巩固完成</h2><div><b>测试 {aggregateSession.answeredCount} 个</b><b>完全正确 {aggregateSession.correctCount} 个</b><b>需要重学 {aggregateSession.missedCount} 个</b></div><p>{aggregateSession.missedCount ? '答错或漏译的单词已经进入错题复习，并会重新安排间隔检测。' : '本轮全部通过，系统已安排下一次间隔检测。'}</p><button onClick={startAggregateReview}>开始新一轮</button></section>}
       <div className="vocabulary-state-tabs" role="group" aria-label="单词掌握状态"><button aria-pressed={stateView === 'unlearned'} onClick={() => { setStateView('unlearned'); setVisibleCount(18); }}>待学习（{counts.unlearned}）</button><button aria-pressed={stateView === 'active'} onClick={() => { setStateView('active'); setVisibleCount(18); }}>学习中与待复习（{counts.active}）</button><button aria-pressed={stateView === 'mastered'} onClick={() => { setStateView('mastered'); setVisibleCount(18); }}>已掌握（{counts.mastered}）</button></div>
       <div className="knowledge-tools"><label className="knowledge-search">搜索高频词<input type="search" aria-label="搜索高频词" value={query} onChange={(event) => { setQuery(event.target.value); setVisibleCount(18); }} placeholder="输入英文或中文释义" /></label></div>
       <p className="automatic-mastery-note">释义默认隐藏，先主动回想再点击查看；统一巩固会随机切换题型，答错自动进入错题复习。</p>

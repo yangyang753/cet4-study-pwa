@@ -58,6 +58,12 @@
 .reinforcement-again { margin-left: 8px; color: var(--color-green-dark); background: var(--color-green-soft); }
 .reinforcement-success { color: var(--color-green); font-weight: 800; }
 .reinforcement-error { color: #a33b18; font-weight: 800; }
+.aggregate-summary { padding: 26px 30px; border: 1px solid var(--color-line); border-radius: 22px; background: var(--color-panel); box-shadow: 0 16px 45px rgba(17, 72, 57, .1); }
+.aggregate-summary > span { color: var(--color-orange); font-size: 11px; font-weight: 900; letter-spacing: .14em; }
+.aggregate-summary h2 { margin: 7px 0 18px; font-size: 28px; }
+.aggregate-summary div { display: flex; flex-wrap: wrap; gap: 10px; }
+.aggregate-summary b { padding: 10px 14px; border-radius: 999px; color: var(--color-green-dark); background: var(--color-green-soft); }
+.aggregate-summary button { padding: 11px 16px; border: 0; border-radius: 12px; color: white; background: var(--color-green); font-weight: 900; }
 .phrase-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .phrase-list p { margin: 4px 0 10px; color: var(--color-green); }
 .grammar-grid ul { padding-left: 18px; color: var(--color-muted); }
