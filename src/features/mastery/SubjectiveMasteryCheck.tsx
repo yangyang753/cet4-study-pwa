@@ -3,6 +3,7 @@ import type { LearningRepository } from '../../data/repositories/LearningReposit
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import type { SubjectiveQuestion } from '../../domain/content';
 import { appHref } from '../../lib/appHref';
+import { createId } from '../../lib/createId';
 import { analyzeSubjectiveEvidence } from '../composition/subjectiveEvidence';
 import { recordMasteryOutcome } from './taskProgress';
 
@@ -29,7 +30,7 @@ export function SubjectiveMasteryCheck({ kind, taskId, question, repository = de
     const passed = checks.every((check) => check.passed);
     try {
       await repository.saveAttemptOnce({
-        id: crypto.randomUUID(), userId: 'local-learner', questionId: question.id, response: body,
+        id: createId(), userId: 'local-learner', questionId: question.id, response: body,
         correct: passed, score: passedCount / checks.length, durationSeconds: 0, contentVersion: 'v1',
         kind, mode: 'mastery', deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device', createdAt: now,
       });

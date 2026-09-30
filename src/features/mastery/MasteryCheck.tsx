@@ -5,6 +5,7 @@ import type { LearningRepository } from '../../data/repositories/LearningReposit
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import type { CatalogQuestion, ObjectiveQuestion as ObjectiveQuestionType, PracticeKind, SubjectiveQuestion } from '../../domain/content';
 import { appHref } from '../../lib/appHref';
+import { createId } from '../../lib/createId';
 import type { StudyKind } from '../planner/planDay';
 import { gradeAnswer } from '../practice/gradeAnswer';
 import { ObjectiveQuestion } from '../practice/ObjectiveQuestion';
@@ -49,7 +50,7 @@ function ObjectiveMasteryCheck({ kind, taskId, repository, now, sourceQuestionId
     setSaveError('');
     const graded = gradeAnswer(question, response);
     const nextResults = [...results, graded.correct];
-    const stableAttemptId = attemptId || crypto.randomUUID();
+    const stableAttemptId = attemptId || createId();
     if (!attemptId) setAttemptId(stableAttemptId);
     try {
       await repository.saveAttemptOnce({

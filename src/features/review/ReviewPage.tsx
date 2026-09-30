@@ -10,6 +10,7 @@ import { scheduleReviewStage } from './scheduleReview';
 import { completeDailyTask } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
 import { studyDate } from '../../lib/studyDate';
+import { createId } from '../../lib/createId';
 import { QuestionTranslationGate, questionNeedsTranslation } from '../translation/QuestionTranslationGate';
 import { learningVocabulary } from '../../content/vocabularyLearning';
 import { buildWordCloze } from '../vocabulary/vocabularySchedule';
@@ -105,7 +106,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
     const currentStudyDate = studyDate(new Date(now));
     const schedule = scheduleReviewStage(activeCard.stage, graded.correct, currentStudyDate, effectiveExamDate);
     let updated = { ...activeCard, stage: schedule.stage, nextReviewAt: schedule.nextReviewAt, lastCorrect: graded.correct, updatedAt: now };
-    const stableAttemptId = attemptId || crypto.randomUUID();
+    const stableAttemptId = attemptId || createId();
     if (!attemptId) setAttemptId(stableAttemptId);
     try {
       await repository.saveAttemptOnce({
@@ -139,7 +140,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
     const currentStudyDate = studyDate(new Date(now));
     const schedule = scheduleReviewStage(activeCard.stage, correct, currentStudyDate, effectiveExamDate);
     let updated = { ...activeCard, stage: schedule.stage, nextReviewAt: schedule.nextReviewAt, lastCorrect: correct, updatedAt: now };
-    const stableAttemptId = attemptId || crypto.randomUUID();
+    const stableAttemptId = attemptId || createId();
     if (!attemptId) setAttemptId(stableAttemptId);
     try {
       await repository.saveAttemptOnce({
@@ -172,7 +173,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
     const currentStudyDate = studyDate(new Date(now));
     const schedule = scheduleReviewStage(activeCard.stage, correct, currentStudyDate, effectiveExamDate);
     let updated = { ...activeCard, stage: schedule.stage, nextReviewAt: schedule.nextReviewAt, lastCorrect: correct, updatedAt: now };
-    const stableAttemptId = attemptId || crypto.randomUUID();
+    const stableAttemptId = attemptId || createId();
     if (!attemptId) setAttemptId(stableAttemptId);
     setSubmitting(true); setSubmitError('');
     try {
@@ -206,7 +207,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
     const currentStudyDate = studyDate(new Date(now));
     const schedule = scheduleReviewStage(activeCard.stage, correct, currentStudyDate, effectiveExamDate);
     const updated = { ...activeCard, stage: schedule.stage, nextReviewAt: schedule.nextReviewAt, lastCorrect: correct, updatedAt: now };
-    const stableAttemptId = attemptId || crypto.randomUUID();
+    const stableAttemptId = attemptId || createId();
     if (!attemptId) setAttemptId(stableAttemptId);
     try {
       await repository.saveAttemptOnce({
@@ -252,6 +253,21 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
     </div>
     <div className="review-list-heading"><h2>{filter}</h2><span>共 {shown.length} 项</span></div>
     {shown.length === 0 && <div className="review-empty"><span>✓</span><h2>这一组已经清空</h2><p>当前没有需要复习的题目。</p><small>可以切换分类查看其他内容。</small></div>}
-    <div className="review-grid">{shown.map((card) => { const question = reviewQuestion(card); const word = card.wordId ? learningVocabulary.find((item) => item.id === card.wordId) : null; const available = Boolean(question || ((card.format === 'word-cloze' || card.format === 'word-meaning') && word)); const actionLabel = word && card.format === 'word-cloze' ? `复习拼写 ${word.word}` : word && card.format === 'word-meaning' ? `复习完整释义 ${word.word}` : word && card.format === 'objective' ? `重新练习 ${word.word} 词义` : undefined; const kind = filterKind(card); const due = Date.parse(card.nextReviewAt) <= Date.parse(now); const progress = Math.min(card.stage, 4); return <article className="review-card" key={card.id}><div className="review-card-top"><span className="review-kind">{kind}</span><span className={`review-status ${card.stage >= 4 ? 'is-mastered' : due ? 'is-due' : ''}`}>{card.stage >= 4 ? '已掌握' : due ? '今日到期' : '巩固中'}</span></div><h2>{word ? `${word.word} · ${word.meaningZh}` : question?.prompt ?? '题目内容暂不可用'}</h2><p className="review-stage-label">掌握进度 · 第 {Math.min(card.stage + 1, 4)} 阶段</p><div className="review-stage-dots" role="progressbar" aria-label="掌握进度" aria-valuemin={0} aria-valuemax={4} aria-valuenow={progress}>{[0, 1, 2, 3].map((stage) => <span className={stage < card.stage ? 'is-complete' : ''} key={stage} />)}</div><footer><small>下次检测：{due ? '现在' : new Intl.DateTimeFormat('zh-CN', { month: 'numeric', day: 'numeric' }).format(new Date(card.nextReviewAt))}</small><button className="review-action-button" aria-label={actionLabel} disabled={!available} onClick={() => { setActiveId(card.id); setResponse(''); setResult(null); setTranslationUnlocked(false); setSubmitError(''); setAttemptId(''); setMeaningFeedback(''); }}>重新练习 <span aria-hidden="true">→</span></button></footer></article>; })}</div>
+    <div className="review-grid">{shown.map((card) => {
+      const question = reviewQuestion(card);
+      const word = card.wordId ? learningVocabulary.find((item) => item.id === card.wordId) : null;
+      const available = Boolean(question || ((card.format === 'word-cloze' || card.format === 'word-meaning') && word));
+      const actionLabel = word && card.format === 'word-cloze' ? `复习拼写 ${word.word}` : word && card.format === 'word-meaning' ? `复习完整释义 ${word.word}` : word && card.format === 'objective' ? `重新练习 ${word.word} 词义` : undefined;
+      const kind = filterKind(card);
+      const due = Date.parse(card.nextReviewAt) <= Date.parse(now);
+      const progress = Math.min(card.stage, 4);
+      return <article className="review-card" key={card.id}>
+        <div className="review-card-top"><span className="review-kind">{kind}</span><span className={`review-status ${card.stage >= 4 ? 'is-mastered' : due ? 'is-due' : ''}`}>{card.stage >= 4 ? '已掌握' : due ? '今日到期' : '巩固中'}</span></div>
+        <h2>{word ? `${word.word} · ${word.meaningZh}` : question?.prompt ?? '题目内容暂不可用'}</h2>
+        <p className="review-stage-label">掌握进度 · 第 {Math.min(card.stage + 1, 4)} 阶段</p>
+        <div className="review-stage-dots" role="progressbar" aria-label="掌握进度" aria-valuemin={0} aria-valuemax={4} aria-valuenow={progress}>{[0, 1, 2, 3].map((stage) => <span className={stage < card.stage ? 'is-complete' : ''} key={stage} />)}</div>
+        <footer><small>{due ? '下次检测：现在' : `未到复习时间 · ${new Intl.DateTimeFormat('zh-CN', { month: 'numeric', day: 'numeric' }).format(new Date(card.nextReviewAt))}`}</small><button className="review-action-button" aria-label={actionLabel} disabled={!available || !due} onClick={() => { setActiveId(card.id); setResponse(''); setResult(null); setTranslationUnlocked(false); setSubmitError(''); setAttemptId(''); setMeaningFeedback(''); }}>重新练习 <span aria-hidden="true">→</span></button></footer>
+      </article>;
+    })}</div>
   </section>;
 }

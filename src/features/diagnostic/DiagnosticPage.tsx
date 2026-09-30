@@ -5,6 +5,7 @@ import type { LearningRepository } from '../../data/repositories/LearningReposit
 import type { CatalogQuestion, ObjectiveQuestion as ObjectiveQuestionType, PracticeKind, SubjectiveQuestion } from '../../domain/content';
 import { publicAssetUrl } from '../../lib/publicAssetUrl';
 import { appHref } from '../../lib/appHref';
+import { createId } from '../../lib/createId';
 import { SubjectiveEditor } from '../composition/SubjectiveEditor';
 import type { SubjectiveFeedback } from '../composition/evaluateSubjective';
 import type { CoreStudyKind } from '../dashboard/learningEvidence';
@@ -21,7 +22,7 @@ export type DiagnosticQuestion = CatalogQuestion & { diagnosticKind: CoreStudyKi
 function deviceId() {
   const existing = localStorage.getItem('cet4:device-id');
   if (existing) return existing;
-  const created = crypto.randomUUID();
+  const created = createId();
   localStorage.setItem('cet4:device-id', created);
   return created;
 }
@@ -29,7 +30,7 @@ function deviceId() {
 function adHocSession(questions: DiagnosticQuestion[], timestamp: string): DiagnosticSessionV2 {
   const kinds = { vocabulary: 0, grammar: 0, listening: 0, reading: 0, writing: 0, translation: 0 } satisfies Record<CoreStudyKind, number>;
   for (const question of questions) kinds[question.diagnosticKind] += 1;
-  return { version: 2, sessionId: crypto.randomUUID(), date: timestamp.slice(0, 10), questionIds: questions.map((item) => item.id), kinds, currentIndex: 0, answers: [], startedAt: timestamp, updatedAt: timestamp };
+  return { version: 2, sessionId: createId(), date: timestamp.slice(0, 10), questionIds: questions.map((item) => item.id), kinds, currentIndex: 0, answers: [], startedAt: timestamp, updatedAt: timestamp };
 }
 
 export function DiagnosticPage({ repository = defaultRepository, now = () => new Date().toISOString(), questions: suppliedQuestions }: { repository?: LearningRepository; now?: () => string; questions?: DiagnosticQuestion[] }) {
@@ -43,7 +44,7 @@ export function DiagnosticPage({ repository = defaultRepository, now = () => new
     if (restored) return { session: restored, resume: true, setupError: '' };
     try {
       const timestamp = now();
-      return { session: suppliedQuestions ? adHocSession(suppliedQuestions, timestamp) : createDiagnosticSession(sourceQuestions, crypto.randomUUID(), timestamp.slice(0, 10), timestamp), resume: false, setupError: '' };
+      return { session: suppliedQuestions ? adHocSession(suppliedQuestions, timestamp) : createDiagnosticSession(sourceQuestions, createId(), timestamp.slice(0, 10), timestamp), resume: false, setupError: '' };
     } catch (error) {
       return { session: null, resume: false, setupError: error instanceof Error ? error.message : '诊断题库暂不可用。' };
     }
@@ -65,7 +66,7 @@ export function DiagnosticPage({ repository = defaultRepository, now = () => new
   const restart = () => {
     const timestamp = now();
     try {
-      const next = suppliedQuestions ? adHocSession(suppliedQuestions, timestamp) : createDiagnosticSession(sourceQuestions, crypto.randomUUID(), timestamp.slice(0, 10), timestamp);
+      const next = suppliedQuestions ? adHocSession(suppliedQuestions, timestamp) : createDiagnosticSession(sourceQuestions, createId(), timestamp.slice(0, 10), timestamp);
       localStorage.setItem(DIAGNOSTIC_SESSION_KEY, JSON.stringify(next));
       setSession(next); setResult(null); setResumePrompt(false); setResponse(''); setSaveError(''); setAudioError(false);
     } catch (error) {
@@ -106,13 +107,13 @@ export function DiagnosticPage({ repository = defaultRepository, now = () => new
     if (!question || !('options' in question) || !response || !session) return;
     const graded = gradeAnswer(question as ObjectiveQuestionType, response);
     const existing = session.answers.find((item) => item.questionId === question.id);
-    void persistAnswer({ questionId: question.id, kind: question.diagnosticKind, response, correct: graded.correct, score: graded.score, attemptId: existing?.attemptId ?? crypto.randomUUID() });
+    void persistAnswer({ questionId: question.id, kind: question.diagnosticKind, response, correct: graded.correct, score: graded.score, attemptId: existing?.attemptId ?? createId() });
   };
 
   const submitSubjective = (body: string, feedback: SubjectiveFeedback) => {
     if (!question || 'options' in question || !session) return;
     const existing = session.answers.find((item) => item.questionId === question.id);
-    void persistAnswer({ questionId: question.id, kind: question.diagnosticKind, response: body, correct: feedback.passed, score: feedback.score, attemptId: existing?.attemptId ?? crypto.randomUUID() });
+    void persistAnswer({ questionId: question.id, kind: question.diagnosticKind, response: body, correct: feedback.passed, score: feedback.score, attemptId: existing?.attemptId ?? createId() });
   };
 
   if (result) {

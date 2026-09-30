@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import type { KnowledgeState } from '../../domain/learning';
+import { createId } from '../../lib/createId';
 import { applyKnowledgeReviewResult } from '../mastery/knowledgeMastery';
 import { ObjectiveQuestion } from '../practice/ObjectiveQuestion';
 import { gradeAnswer } from '../practice/gradeAnswer';
@@ -35,7 +36,7 @@ export function CollocationCheck({ repository, entries, allEntries = entries, st
     setSaving(true); setError('');
     try {
       await repository.saveAttemptOnce({
-        id: crypto.randomUUID(), userId: 'local-learner', questionId: question.id, response,
+        id: createId(), userId: 'local-learner', questionId: question.id, response,
         correct: graded.correct, score: graded.score, durationSeconds: 0, contentVersion: 'v1',
         kind: 'collocation', mode: 'mastery', deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device', createdAt: now,
       });

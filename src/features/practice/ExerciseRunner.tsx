@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabaseClient } from '../../lib/runtime';
+import { createId } from '../../lib/createId';
 import rawContent from '../../content/starter/content.json';
 import { getPracticeItems } from '../../content/catalog';
 import { parseContentPack } from '../../content/schema';
@@ -78,7 +79,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
 
   const duration = () => Math.max(0, Math.round((Date.now() - startedAt) / 1000));
   const baseAttempt = (responseValue: unknown, correct: boolean | null, score: number | null): Attempt => ({
-    id: crypto.randomUUID(), userId, questionId, response: responseValue, correct, score,
+    id: createId(), userId, questionId, response: responseValue, correct, score,
     durationSeconds: duration(), contentVersion: 'v1', kind: kind ?? question.type, mode,
     deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device', createdAt: new Date().toISOString(),
   });

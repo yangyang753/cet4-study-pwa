@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import listeningSets from '../../../content/v1/listeningSets.json';
 import type { AudioAsset, ObjectiveQuestion } from '../../domain/content';
 import { publicAssetUrl } from '../../lib/publicAssetUrl';
+import { createId } from '../../lib/createId';
 import { DictationEditor } from './DictationEditor';
 import { ListeningFoundationDrill } from './ListeningFoundationDrill';
 import { useSegmentPlayer } from './useSegmentPlayer';
@@ -45,7 +46,7 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
   const [submissionState, setSubmissionState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [translationUnlocked, setTranslationUnlocked] = useState(false);
   const [initialStartedAt] = useState(() => Date.now());
-  const [initialAttemptId] = useState(() => crypto.randomUUID());
+  const [initialAttemptId] = useState(() => createId());
   const questionStartedAt = useRef(initialStartedAt);
   const attemptId = useRef(initialAttemptId);
   const submissionLock = useRef(false);
@@ -130,7 +131,7 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
     setTranslationUnlocked(false);
     submissionLock.current = false;
     questionStartedAt.current = Date.now();
-    attemptId.current = crypto.randomUUID();
+    attemptId.current = createId();
   };
 
   const completionPercent = Math.round((questionIndex / listeningSet.questions.length) * 100);

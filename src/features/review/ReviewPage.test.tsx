@@ -62,6 +62,8 @@ describe('ReviewPage', () => {
     render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
     await userEvent.click(await screen.findByRole('button', { name: '已掌握' }));
     expect(screen.getByText(queuedListeningPrompt!)).toBeVisible();
+    expect(screen.getByRole('button', { name: '重新练习' })).toBeDisabled();
+    expect(screen.getByText(/未到复习时间/)).toBeVisible();
   });
 
   it('offers explicit filters for every review category', async () => {

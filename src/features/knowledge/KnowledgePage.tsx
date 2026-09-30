@@ -7,6 +7,7 @@ import type { LearningRepository } from '../../data/repositories/LearningReposit
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import type { KnowledgeState } from '../../domain/learning';
 import { appHref } from '../../lib/appHref';
+import { createId } from '../../lib/createId';
 import type { WordReinforcement } from './wordReinforcement';
 import { buildWordReinforcement, gradeWordReinforcement } from './wordReinforcement';
 import { applyKnowledgeReviewResult } from '../mastery/knowledgeMastery';
@@ -99,7 +100,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
 
   const openExercise = (word: typeof vocabulary[number]) => {
     setExercise(buildWordReinforcement(word, random));
-    setEnglishAnswer(''); setChineseAnswer(''); setExerciseResult(''); setAttemptId(crypto.randomUUID());
+    setEnglishAnswer(''); setChineseAnswer(''); setExerciseResult(''); setAttemptId(createId());
   };
 
   const startAggregateReview = () => {
@@ -125,7 +126,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
     setExerciseSaving(true);
     try {
       await repository.saveAttemptOnce({
-        id: attemptId || crypto.randomUUID(), userId: 'local-learner', questionId: exercise.id,
+        id: attemptId || createId(), userId: 'local-learner', questionId: exercise.id,
         response: JSON.stringify({ english: englishAnswer, chinese: chineseAnswer }), correct: grade.correct,
         score: grade.correct ? 1 : 0, durationSeconds: 0, contentVersion: 'v1', kind: 'vocabulary', mode: 'review',
         deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device', createdAt: now,

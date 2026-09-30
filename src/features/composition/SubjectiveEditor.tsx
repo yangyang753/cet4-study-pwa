@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { SubjectiveQuestion } from '../../domain/content';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
+import { createId } from '../../lib/createId';
 import { evaluateSubjective, type SubjectiveFeedback } from './evaluateSubjective';
 import { countEnglishWords, validateSubjectiveSubmission } from './validateSubjectiveSubmission';
 
@@ -9,7 +10,7 @@ const defaultRepository = new DexieLearningRepository();
 function persistentId(key: string) {
   const existing = localStorage.getItem(key);
   if (existing) return existing;
-  const created = crypto.randomUUID();
+  const created = createId();
   localStorage.setItem(key, created);
   return created;
 }
