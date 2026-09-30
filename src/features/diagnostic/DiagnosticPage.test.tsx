@@ -52,6 +52,8 @@ describe('foundation diagnostic', () => {
     expect(await screen.findByText('语法：100%')).toBeVisible();
     expect(screen.getByText('优先加强：语法')).toBeVisible();
     expect(screen.getByText(/距离 425 分还差/)).toBeVisible();
+    expect(screen.getByText('训练参考估分 · 初步可信度 · 1 道诊断题')).toBeVisible();
+    expect(screen.getByText(/不能代替官方成绩或人工阅卷/)).toBeVisible();
     expect(screen.getByText('分项参考分')).toBeVisible();
     expect(screen.getByRole('button', { name: '重新诊断' })).toBeVisible();
     expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ mode: 'diagnostic', kind: 'grammar' }));

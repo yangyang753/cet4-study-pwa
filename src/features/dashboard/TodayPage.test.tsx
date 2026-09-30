@@ -171,6 +171,7 @@ describe('TodayPage', () => {
 
     expect(await screen.findByText('预计 319 分')).toBeVisible();
     expect(screen.getByText('参考区间 264～374')).toBeVisible();
+    expect(screen.getByText('初步可信度 · 20 道诊断题')).toBeVisible();
     expect(screen.getByText('距离 425 分还差 106 分')).toBeVisible();
     expect(screen.getByText('当前优先补强：写作、听力')).toBeVisible();
     expect(screen.getByRole('link', { name: '重新诊断' })).toHaveAttribute('href', expect.stringContaining('diagnostic'));

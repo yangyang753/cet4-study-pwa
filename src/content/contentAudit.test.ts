@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { auditContentDiversity, auditContentInventory, auditGeneratedQuestions, auditKnowledgeExamples } from './contentAudit';
+import { auditContentDiversity, auditContentInventory, auditContentShapes, auditGeneratedQuestions, auditKnowledgeExamples } from './contentAudit';
 import { getPracticeItems } from './catalog';
 import inventory from '../../content/v1/inventory.json';
 import { auditQuestionTemplateDiversity } from './questionDiversity';
@@ -93,6 +93,24 @@ describe('auditContentDiversity', () => {
       return count >= 120 && count <= 180;
     })).toBe(true);
     expect(inventory.translations.every((item) => item.prompt.replace(/\s/g, '').length >= 80)).toBe(true);
+  });
+});
+
+describe('auditContentShapes', () => {
+  it('accepts every shipped v1 content record', () => {
+    expect(auditContentShapes(inventory)).toEqual([]);
+  });
+
+  it('rejects missing vocabulary fields, invalid answers, and broken mock references', () => {
+    const malformed = structuredClone(inventory) as typeof inventory;
+    malformed.vocabulary[0].word = '';
+    malformed.listeningSets[0].questions[0].answer = 9;
+    malformed.mockExams[0].translationId = 'missing-translation';
+    expect(auditContentShapes(malformed)).toEqual(expect.arrayContaining([
+      'vocabulary:v0001: missing word',
+      'listeningSets:listen-01: question 1 answer must be an option index',
+      'mockExams:mock-1: unknown translation missing-translation',
+    ]));
   });
 });
 

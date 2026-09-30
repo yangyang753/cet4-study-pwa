@@ -1,5 +1,5 @@
 import inventory from '../content/v1/inventory.json' with { type: 'json' };
-import { auditContentDiversity, auditContentInventory, auditGeneratedQuestions, auditKnowledgeExamples } from '../src/content/contentAudit.ts';
+import { auditContentDiversity, auditContentInventory, auditContentShapes, auditGeneratedQuestions, auditKnowledgeExamples } from '../src/content/contentAudit.ts';
 import { getPracticeItems } from '../src/content/catalog.ts';
 import { cultureTranslationBank as culturePrompts } from '../src/content/cultureTranslations.ts';
 import vocabulary from '../content/v1/vocabulary.json' with { type: 'json' };
@@ -8,6 +8,7 @@ import { auditLearningVocabulary, learningVocabulary } from '../src/content/voca
 
 const errors = [
   ...auditContentInventory(inventory),
+  ...auditContentShapes(inventory),
   ...auditContentDiversity(inventory),
   ...auditGeneratedQuestions({ vocabulary: getPracticeItems('vocabulary'), grammar: getPracticeItems('grammar') }),
   ...auditKnowledgeExamples(inventory.vocabulary, inventory.collocations),

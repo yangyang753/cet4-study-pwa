@@ -35,6 +35,73 @@ interface DiversityInventory {
 
 const minimums: Record<keyof ContentInventory, number> = { vocabulary: 800, collocations: 120, grammarTopics: 15, listeningSets: 24, readingSets: 30, translations: 12, writingPrompts: 12, mockExams: 6 };
 
+const record = (value: unknown): Record<string, unknown> => typeof value === 'object' && value !== null ? value as Record<string, unknown> : {};
+const text = (value: unknown) => typeof value === 'string' && value.trim().length > 0;
+
+function auditQuestions(kind: 'listeningSets' | 'readingSets', setId: string, value: unknown) {
+  const errors: string[] = [];
+  if (!Array.isArray(value) || value.length === 0) return [`${kind}:${setId}: missing questions`];
+  value.forEach((candidate, index) => {
+    const question = record(candidate);
+    const options = Array.isArray(question.options) ? question.options : [];
+    if (!text(question.prompt)) errors.push(`${kind}:${setId}: question ${index + 1} missing prompt`);
+    if (options.length < 2 || options.some((option) => !text(option))) errors.push(`${kind}:${setId}: question ${index + 1} requires non-empty options`);
+    if (!Number.isInteger(question.answer) || Number(question.answer) < 0 || Number(question.answer) >= options.length) errors.push(`${kind}:${setId}: question ${index + 1} answer must be an option index`);
+  });
+  return errors;
+}
+
+export function auditContentShapes(inventory: ContentInventory): string[] {
+  const errors: string[] = [];
+  inventory.vocabulary.forEach((candidate) => {
+    const item = record(candidate); const id = String(item.id ?? 'unknown');
+    for (const field of ['word', 'phonetic', 'meaningZh']) if (!text(item[field])) errors.push(`vocabulary:${id}: missing ${field}`);
+  });
+  inventory.collocations.forEach((candidate) => {
+    const item = record(candidate); const id = String(item.id ?? 'unknown');
+    for (const field of ['phrase', 'meaningZh', 'example', 'exampleZh']) if (!text(item[field])) errors.push(`collocations:${id}: missing ${field}`);
+  });
+  inventory.grammarTopics.forEach((candidate) => {
+    const item = record(candidate); const id = String(item.id ?? 'unknown');
+    if (!text(item.title)) errors.push(`grammarTopics:${id}: missing title`);
+    if (!text(item.summary)) errors.push(`grammarTopics:${id}: missing summary`);
+    if (!Array.isArray(item.checklist) || item.checklist.length === 0 || item.checklist.some((entry) => !text(entry))) errors.push(`grammarTopics:${id}: missing checklist`);
+  });
+  inventory.listeningSets.forEach((candidate) => {
+    const item = record(candidate); const id = String(item.id ?? 'unknown');
+    if (!text(item.transcript)) errors.push(`listeningSets:${id}: missing transcript`);
+    if (!text(item.audioSrc)) errors.push(`listeningSets:${id}: missing audioSrc`);
+    errors.push(...auditQuestions('listeningSets', id, item.questions));
+  });
+  inventory.readingSets.forEach((candidate) => {
+    const item = record(candidate); const id = String(item.id ?? 'unknown');
+    if (!text(item.passage)) errors.push(`readingSets:${id}: missing passage`);
+    errors.push(...auditQuestions('readingSets', id, item.questions));
+  });
+  inventory.translations.forEach((candidate) => {
+    const item = record(candidate); const id = String(item.id ?? 'unknown');
+    if (!text(item.prompt)) errors.push(`translations:${id}: missing prompt`);
+    if (!text(item.referenceAnswer)) errors.push(`translations:${id}: missing referenceAnswer`);
+  });
+  inventory.writingPrompts.forEach((candidate) => {
+    const item = record(candidate); const id = String(item.id ?? 'unknown');
+    if (!text(item.prompt)) errors.push(`writingPrompts:${id}: missing prompt`);
+    if (!text(item.referenceAnswer)) errors.push(`writingPrompts:${id}: missing referenceAnswer`);
+  });
+  const listeningIds = new Set(inventory.listeningSets.map((item) => String(record(item).id ?? '')));
+  const readingIds = new Set(inventory.readingSets.map((item) => String(record(item).id ?? '')));
+  const translationIds = new Set(inventory.translations.map((item) => String(record(item).id ?? '')));
+  const writingIds = new Set(inventory.writingPrompts.map((item) => String(record(item).id ?? '')));
+  inventory.mockExams.forEach((candidate) => {
+    const item = record(candidate); const id = String(item.id ?? 'unknown');
+    for (const reference of Array.isArray(item.listeningSetIds) ? item.listeningSetIds : []) if (!listeningIds.has(String(reference))) errors.push(`mockExams:${id}: unknown listening set ${reference}`);
+    for (const reference of Array.isArray(item.readingSetIds) ? item.readingSetIds : []) if (!readingIds.has(String(reference))) errors.push(`mockExams:${id}: unknown reading set ${reference}`);
+    if (!translationIds.has(String(item.translationId ?? ''))) errors.push(`mockExams:${id}: unknown translation ${String(item.translationId ?? '')}`);
+    if (!writingIds.has(String(item.writingId ?? ''))) errors.push(`mockExams:${id}: unknown writing prompt ${String(item.writingId ?? '')}`);
+  });
+  return errors;
+}
+
 export function auditContentInventory(inventory: ContentInventory): string[] {
   const errors: string[] = [];
   for (const [key, minimum] of Object.entries(minimums) as [keyof ContentInventory, number][]) {
