@@ -30,4 +30,13 @@ describe('word reinforcement', () => {
     expect(exercise.cloze).toContain('_');
     expect(exercise.cloze).not.toBe(word.word);
   });
+
+  it('changes cloze positions when the random offset changes', () => {
+    const sequence = (...values: number[]) => () => values.shift() ?? 0;
+    const left = buildWordReinforcement(word, sequence(0.75, 0.1, 0));
+    const right = buildWordReinforcement(word, sequence(0.75, 0.1, 0.7));
+    expect(left.kind).toBe('cloze');
+    expect(right.kind).toBe('cloze');
+    expect(left.cloze).not.toBe(right.cloze);
+  });
 });
