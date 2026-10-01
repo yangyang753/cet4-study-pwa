@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { StrictVocabularyGrade } from './strictVocabularyCheck';
 import { requiredMeanings } from './strictVocabularyCheck';
 import { gradeWordReinforcement, type WordReinforcement } from '../knowledge/wordReinforcement';
@@ -33,8 +33,6 @@ export function VocabularyRecallExercise({ exercise, result = null, feedback = '
   const [saveError, setSaveError] = useState('');
   const needsEnglish = exercise.kind !== 'meaning';
   const needsChinese = exercise.kind === 'meaning' || exercise.kind === 'dual';
-
-  useEffect(() => { setEnglish(''); setChinese(''); setSaveError(''); }, [exercise.id, exercise.cloze]);
 
   async function submit() {
     if (saving || result || (needsEnglish && !english.trim()) || (needsChinese && !chinese.trim())) return;
