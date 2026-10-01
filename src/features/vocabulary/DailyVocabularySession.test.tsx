@@ -94,31 +94,52 @@ describe('DailyVocabularySession', () => {
 
   it('tests due old words before showing a new word', async () => {
     const learningRepository = repository();
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
     expect(await screen.findByRole('heading', { name: '先复习旧词' })).toBeVisible();
-    expect(screen.getByText('p_s_a_e')).toBeVisible();
+    expect(screen.getByText('文章，段落')).toBeVisible();
     expect(screen.queryByRole('heading', { name: 'benefit' })).not.toBeInTheDocument();
 
-    await userEvent.type(screen.getByLabelText('补全单词'), 'wrong');
-    await userEvent.click(screen.getByRole('button', { name: '提交旧词复习' }));
+    await userEvent.type(screen.getByLabelText('英文答案'), 'wrong');
+    await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
     expect(await screen.findByRole('heading', { name: 'benefit' })).toBeVisible();
     expect(learningRepository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'v1:spelling', format: 'word-cloze' }));
+  });
+
+  it('does not add a correctly recalled old word to mistake review', async () => {
+    const learningRepository = repository();
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
+
+    await userEvent.type(await screen.findByLabelText('英文答案'), 'passage');
+    await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
+    expect(await screen.findByRole('heading', { name: 'benefit' })).toBeVisible();
+    expect(learningRepository.upsertReviewCard).not.toHaveBeenCalled();
+  });
+
+  it('adds a meaning review only when an old word meaning is incomplete', async () => {
+    const learningRepository = repository();
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0} onComplete={() => undefined} />);
+
+    await userEvent.type(await screen.findByLabelText('中文释义答案'), '文章');
+    await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
+    expect(await screen.findByRole('heading', { name: 'benefit' })).toBeVisible();
+    expect(learningRepository.upsertReviewCard).toHaveBeenCalledTimes(1);
+    expect(learningRepository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'v1:meaning', format: 'word-meaning' }));
   });
 
   it('does not advance an old word when saving fails', async () => {
     const learningRepository = repository();
     vi.mocked(learningRepository.upsertKnowledgeState).mockRejectedValueOnce(new Error('storage'));
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
-    await userEvent.type(await screen.findByLabelText('补全单词'), 'passage');
-    await userEvent.click(screen.getByRole('button', { name: '提交旧词复习' }));
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
+    await userEvent.type(await screen.findByLabelText('英文答案'), 'passage');
+    await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('保存失败');
-    expect(screen.getByText('p_s_a_e')).toBeVisible();
+    expect(screen.getByRole('textbox', { name: '英文答案' })).toHaveValue('passage');
   });
 
   it('allows a forgotten word to be sent directly to review', async () => {
     const learningRepository = repository();
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
-    await userEvent.click(await screen.findByRole('button', { name: '想不起来，加入错题' }));
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
+    await userEvent.click(await screen.findByRole('button', { name: '想不起来' }));
     expect(await screen.findByRole('heading', { name: 'benefit' })).toBeVisible();
     expect(learningRepository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'v1:spelling', format: 'word-cloze' }));
   });

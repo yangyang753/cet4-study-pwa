@@ -98,10 +98,10 @@ describe('ReviewPage', () => {
       updatedAt: '2026-09-23T08:00:00.000Z',
     });
 
-    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
-    await userEvent.click(await screen.findByRole('button', { name: '复习拼写 passage' }));
-    await userEvent.type(screen.getByRole('textbox', { name: '补全单词' }), 'wrong');
-    await userEvent.click(screen.getByRole('button', { name: '提交拼写复习' }));
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => 0.4} />);
+    await userEvent.click(await screen.findByRole('button', { name: '重新练习 passage' }));
+    await userEvent.type(screen.getByRole('textbox', { name: '英文答案' }), 'wrong');
+    await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
 
     expect(await screen.findByText('复习错误')).toBeVisible();
     await waitFor(async () => expect((await repository.getDashboardSnapshot()).knowledgeStates).toContainEqual(
@@ -109,17 +109,18 @@ describe('ReviewPage', () => {
     ));
   });
 
-  it('rebuilds a generated vocabulary meaning question for review', async () => {
+  it('replaces a generated vocabulary multiple-choice card with random active recall', async () => {
     const repository = await setupRepository();
     await repository.upsertReviewCard({
       id: 'review:v0001:warmup', questionId: 'v0001:warmup', wordId: 'v0001', format: 'objective',
       stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z',
     });
-    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
-    const button = await screen.findByRole('button', { name: '重新练习 passage 词义' });
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => 0.4} />);
+    const button = await screen.findByRole('button', { name: '重新练习 passage' });
     expect(button).toBeEnabled();
     await userEvent.click(button);
-    expect(screen.getAllByText('请选择 passage 的正确含义。')[0]).toBeVisible();
+    expect(screen.getByRole('textbox', { name: '英文答案' })).toBeVisible();
+    expect(screen.queryByText('请选择 passage 的正确含义。')).not.toBeInTheDocument();
   });
 
   it('reviews a missed vocabulary meaning by complete free recall', async () => {
@@ -128,13 +129,13 @@ describe('ReviewPage', () => {
       id: 'review:v0001:meaning', questionId: 'v0001:meaning', wordId: 'v0001', format: 'word-meaning',
       stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z',
     });
-    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
-    await userEvent.click(await screen.findByRole('button', { name: '复习完整释义 passage' }));
-    expect(screen.getByRole('textbox', { name: '写出全部中文释义' })).toBeVisible();
-    await userEvent.type(screen.getByRole('textbox', { name: '写出全部中文释义' }), '文章');
-    await userEvent.click(screen.getByRole('button', { name: '提交完整释义' }));
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => 0} />);
+    await userEvent.click(await screen.findByRole('button', { name: '重新练习 passage' }));
+    expect(screen.getByRole('textbox', { name: '中文释义答案' })).toBeVisible();
+    await userEvent.type(screen.getByRole('textbox', { name: '中文释义答案' }), '文章');
+    await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
     expect(await screen.findByText('复习错误')).toBeVisible();
-    expect(screen.getByText(/漏译/)).toBeVisible();
+    expect(screen.getByText(/^漏译：/)).toBeVisible();
   });
 
   it('migrates an old objective meaning card to complete free recall', async () => {
@@ -143,9 +144,25 @@ describe('ReviewPage', () => {
       id: 'review:v0001:meaning', questionId: 'v0001:meaning', wordId: 'v0001', format: 'objective',
       stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z',
     });
-    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" />);
-    await userEvent.click(await screen.findByRole('button', { name: '复习完整释义 passage' }));
-    expect(screen.getByRole('textbox', { name: '写出全部中文释义' })).toBeVisible();
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => 0} />);
+    await userEvent.click(await screen.findByRole('button', { name: '重新练习 passage' }));
+    expect(screen.getByRole('textbox', { name: '中文释义答案' })).toBeVisible();
+  });
+
+  it('does not create another mistake card after a completely correct vocabulary recall', async () => {
+    const repository = await setupRepository();
+    await repository.upsertReviewCard({
+      id: 'review:v0001:meaning', questionId: 'v0001:meaning', wordId: 'v0001', format: 'word-meaning',
+      stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+    const before = await repository.listAllReviews();
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => 0} />);
+    await userEvent.click(await screen.findByRole('button', { name: '重新练习 passage' }));
+    await userEvent.type(screen.getByRole('textbox', { name: '中文释义答案' }), '文章，段落；通道，通路');
+    await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
+
+    expect(await screen.findByText('复习正确')).toBeVisible();
+    expect(await repository.listAllReviews()).toHaveLength(before.length);
   });
 
   it('shows a retry action when the review queue cannot be loaded', async () => {

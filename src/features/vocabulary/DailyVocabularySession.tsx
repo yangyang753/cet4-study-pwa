@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import type { CachedPlan, VocabularySessionPhase, VocabularySessionProgress } from '../../data/localDb';
 import { learningVocabulary } from '../../content/vocabularyLearning';
@@ -16,15 +16,19 @@ import { DailyCultureTranslation } from '../translation/DailyCultureTranslation'
 import { selectDailyCultureTranslation, type CultureTranslationPrompt } from '../translation/cultureTranslation';
 import { completeDailyTask } from '../mastery/taskProgress';
 import { studyDate } from '../../lib/studyDate';
+import { buildWordReinforcement } from '../knowledge/wordReinforcement';
+import type { StrictVocabularyGrade } from './strictVocabularyCheck';
+import { VocabularyRecallExercise } from './VocabularyRecallExercise';
 
 type Phase = 'loading' | 'review' | VocabularySessionPhase;
 
-export function DailyVocabularySession({ repository, entries = learningVocabulary, today, examDate, culturePrompts, onComplete }: {
+export function DailyVocabularySession({ repository, entries = learningVocabulary, today, examDate, culturePrompts, random = Math.random, onComplete }: {
   repository: LearningRepository;
   entries?: VocabularyEntry[];
   today: string;
   examDate?: string;
   culturePrompts?: CultureTranslationPrompt[];
+  random?: () => number;
   onComplete: (entries: VocabularyEntry[]) => void;
 }) {
   const [phase, setPhase] = useState<Phase>('loading');
@@ -96,6 +100,7 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
 
   const reviewWord = workload?.dueWords[reviewIndex];
   const reviewState = snapshot?.knowledgeStates.find((item) => item.itemId === reviewWord?.id);
+  const reviewExercise = useMemo(() => reviewWord ? buildWordReinforcement(reviewWord, random) : null, [random, reviewWord]);
   const dailyCollocations = selectDailyCollocations(collocationData as CollocationEntry[], snapshot?.knowledgeStates ?? [], `${today}T23:59:59.999Z`, 3);
 
   async function persistSession(phaseValue: VocabularySessionPhase, learnedIds = learnedWordIds, patch: Partial<VocabularySessionProgress> = {}) {
@@ -121,23 +126,14 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
     }
   }
 
-  async function submitReview(forceIncorrect = false) {
-    if (!reviewWord || !reviewState || (!answer.trim() && !forceIncorrect) || saving) return;
+  async function submitReview(grade: StrictVocabularyGrade) {
+    if (!reviewWord || !reviewState) return;
     const now = new Date().toISOString();
-    const correct = !forceIncorrect && answer.trim().toLowerCase() === reviewWord.word.toLowerCase();
-    const nextState = applyVocabularyReviewResult(reviewState, correct, now);
-    setSaving(true); setError('');
-    try {
-      await repository.upsertKnowledgeState(nextState);
-      if (!correct) await repository.upsertReviewCard(vocabularyReviewCard(reviewWord.id, 'cloze', now));
-      if (workload && reviewIndex < workload.dueWords.length - 1) setReviewIndex((value) => value + 1);
-      else setPhase('learning');
-      setAnswer('');
-    } catch {
-      setError('旧词复习结果保存失败，答案已保留，请重新提交。');
-    } finally {
-      setSaving(false);
-    }
+    await repository.upsertKnowledgeState(applyVocabularyReviewResult(reviewState, grade.correct, now));
+    if (!grade.spellingCorrect) await repository.upsertReviewCard(vocabularyReviewCard(reviewWord.id, 'cloze', now));
+    if (grade.missingMeanings.length || grade.unexpectedMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(reviewWord.id, 'meaning', now));
+    if (workload && reviewIndex < workload.dueWords.length - 1) setReviewIndex((value) => value + 1);
+    else setPhase('learning');
   }
 
   const cultureReviewWord = workload?.cultureWords.find((word) => !reviewedCultureWordIds.includes(word.id));
@@ -169,9 +165,9 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
   if (phase === 'loading') return <p role={error ? 'alert' : 'status'}>{error || '正在准备今日词汇计划…'}</p>;
   if (!workload || !snapshot) return <p role="alert">今日词汇计划暂不可用。</p>;
 
-  if (phase === 'review' && reviewWord) return <section className="daily-word-review">
-    <header><span>旧词复习 · {reviewIndex + 1}/{workload.dueWords.length}</span><h1>先复习旧词</h1><p>补全单词；忘记的词会自动加入错题复习。</p></header>
-    <article className="warmup-card"><h2>{buildWordCloze(reviewWord.word, reviewState?.reviewStage ?? 0)}</h2><p>{reviewWord.meaningZh}</p><label>补全单词<input aria-label="补全单词" autoComplete="off" value={answer} onChange={(event) => setAnswer(event.target.value)} /></label>{error && <p role="alert">{error}</p>}<div><button disabled={saving} onClick={() => void submitReview(true)}>想不起来，加入错题</button><button className="primary-action" disabled={!answer.trim() || saving} onClick={() => void submitReview()}>{saving ? '正在保存…' : '提交旧词复习'}</button></div></article>
+  if (phase === 'review' && reviewWord && reviewExercise) return <section className="daily-word-review">
+    <header><span>旧词复习 · {reviewIndex + 1}/{workload.dueWords.length}</span><h1>先复习旧词</h1><p>题型与挖空位置会随机变化；只有答错、拼写错误或漏译才进入错题复习。</p></header>
+    <VocabularyRecallExercise key={`${reviewWord.id}:${reviewIndex}`} exercise={reviewExercise} onSubmit={({ grade }) => submitReview(grade)} onForgotten={submitReview} />
   </section>;
 
   if (phase === 'learning') {
