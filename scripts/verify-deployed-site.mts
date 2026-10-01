@@ -27,7 +27,7 @@ export async function verifyDeployedSite(baseUrl: string, fetcher: Fetcher = fet
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  const baseUrl = process.argv[2];
+  const baseUrl = process.argv.slice(2).find((argument) => argument !== '--');
   assert.ok(baseUrl, 'Usage: pnpm site:verify -- <deployed-page-url>');
   const result = await verifyDeployedSite(baseUrl);
   console.log(`Deployed site verified: ${result.checked} public resources are available.`);
