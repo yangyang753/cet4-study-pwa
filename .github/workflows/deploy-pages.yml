@@ -30,7 +30,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec playwright install --with-deps chromium firefox webkit
       - name: Report deployment sync mode
         run: pnpm exec tsx scripts/verify-runtime-config.mts | tee -a "$GITHUB_STEP_SUMMARY"
         env:
@@ -52,3 +52,5 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify deployed public site
+        run: pnpm site:verify -- "${{ steps.deployment.outputs.page_url }}"

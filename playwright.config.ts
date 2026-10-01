@@ -6,6 +6,10 @@ const appUrl = new URL(appBasePath, 'http://127.0.0.1:4173').toString();
 export default defineConfig({
   testDir: './tests',
   use: { baseURL: appUrl, trace: 'retain-on-failure' },
-  projects: [{ name: 'chrome', use: { ...devices['Desktop Chrome'], channel: process.env.GITHUB_ACTIONS === 'true' ? undefined : 'chrome' } }],
+  projects: [
+    { name: 'chrome', use: { ...devices['Desktop Chrome'], channel: process.env.GITHUB_ACTIONS === 'true' ? undefined : 'chrome' } },
+    ...(process.env.GITHUB_ACTIONS === 'true' ? [{ name: 'firefox-compat', testMatch: '**/compat.spec.ts', use: { ...devices['Desktop Firefox'] } }] : []),
+    { name: 'webkit-mobile-compat', testMatch: '**/compat.spec.ts', use: { ...devices['iPhone 13'] } },
+  ],
   webServer: { command: 'npm run preview:test', url: appUrl, reuseExistingServer: true },
 });

@@ -19,6 +19,7 @@
     "audio:generate": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/generate-audio.ps1 && tsx scripts/sync-audio-timings.mts",
     "audio:audit": "tsx scripts/audio-manifest.mts",
     "pages:verify": "tsx scripts/verify-github-pages-build.mts",
+    "site:verify": "tsx scripts/verify-deployed-site.mts",
     "runtime:verify": "tsx scripts/verify-runtime-config.mts",
     "runtime:verify:cloud": "tsx scripts/verify-runtime-config.mts --require-cloud",
     "supabase:verify": "tsx scripts/verify-supabase-migrations.mts",

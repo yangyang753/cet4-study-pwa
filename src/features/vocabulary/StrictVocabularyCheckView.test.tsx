@@ -54,7 +54,7 @@ describe('StrictVocabularyCheck', () => {
     render(<StrictVocabularyCheck repository={repository} words={words} states={[{
       id: 'knowledge:v1', itemId: 'v1', status: 'review', favorite: false, reviewStage: 1,
       lastStrictPassedDate: '2026-09-30', updatedAt: '2026-09-30T08:00:00.000Z',
-    }]} onComplete={() => undefined} />);
+    }]} now="2026-09-30T08:00:00.000Z" onComplete={() => undefined} />);
     await userEvent.type(screen.getByLabelText('英文拼写'), 'passage');
     await userEvent.click(screen.getByRole('button', { name: '提交并完成检测' }));
     expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ reviewStage: 1 }));
