@@ -27,6 +27,7 @@ export function greetingForHour(hour: number) {
 }
 const taskCopy: Record<StudyKind, { icon: string; title: string; detail: string; href: string }> = {
   vocabulary: { icon: 'Aa', title: '高频词汇与词性', detail: '10 个核心词 + 5 道词性判断', href: 'practice/vocabulary' },
+  collocation: { icon: 'Co', title: '重点搭配', detail: '整体记忆搭配并在语境中检测', href: 'practice/collocation' },
   grammar: { icon: 'Gr', title: '重点语法', detail: '找主干并检查句子形式', href: 'practice/grammar' },
   listening: { icon: '♫', title: '长对话精听', detail: '校园活动 · 转折信号定位', href: 'listen' },
   reading: { icon: '▥', title: '仔细阅读', detail: '1 篇 · 主旨与细节', href: 'practice/reading' },
@@ -64,7 +65,8 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
   const weakKind: StudyKind | undefined = metrics.weakSkill?.kind;
   const diagnosticWeakKind = selectDiagnosticWeakSkill(snapshot?.settings.diagnosticLevels) ?? undefined;
   const priorities = useMemo(() => deriveAdaptivePriorities(snapshot?.settings.diagnosticProfile, snapshot?.attempts ?? [], `${today}T23:59:59.999Z`), [snapshot, today]);
-  const focusKind = priorities[0]?.kind ?? (metrics.hasEnoughData ? weakKind : diagnosticWeakKind);
+  const rawFocusKind = priorities[0]?.kind ?? (metrics.hasEnoughData ? weakKind : diagnosticWeakKind);
+  const focusKind: StudyKind | undefined = rawFocusKind === 'grammar' ? 'collocation' : rawFocusKind;
   const unfinished = carryoverFromPlan(previousPlan?.tasks ?? [], metrics.completedTaskIds);
   const dailyCulturePrompt = selectDailyCultureTranslation(cultureTranslationBank as CultureTranslationPrompt[], today);
   const vocabularyWorkload = snapshot ? buildVocabularyWorkload(learningVocabulary, snapshot.knowledgeStates, today, targetDate, dailyMinutes, { cultureWordIds: dailyCulturePrompt.targetWordIds }) : null;

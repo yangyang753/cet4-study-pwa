@@ -66,7 +66,7 @@ export interface ContentPack {
   audioAssets: AudioAsset[];
 }
 
-export type PracticeKind = 'vocabulary' | 'grammar' | 'listening' | 'reading' | 'translation' | 'writing';
+export type PracticeKind = 'vocabulary' | 'collocation' | 'grammar' | 'listening' | 'reading' | 'translation' | 'writing';
 export type CatalogQuestion = Question & {
   groupId: string;
   passage?: string;

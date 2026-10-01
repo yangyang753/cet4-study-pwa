@@ -155,13 +155,15 @@ describe('TodayPage', () => {
     expect(screen.queryByText('昨日顺延')).not.toBeInTheDocument();
   });
 
-  it('uses the diagnostic weakness before enough recent attempts exist', async () => {
+  it('replaces a diagnostic grammar slot with a real collocation task', async () => {
     render(<TodayPage today="2026-09-24" repository={repository({
       settings: { ...snapshot.settings, diagnosticCompletedAt: '2026-09-23T09:00:00.000Z', diagnosticLevels: { vocabulary: 0.67, grammar: 0.33, listening: 0.67, reading: 1 } },
     })} />);
 
-    expect(await screen.findByText('优先加强重点语法')).toBeVisible();
-    expect(screen.getByRole('heading', { name: '重点语法' })).toBeVisible();
+    expect(await screen.findByText('优先加强重点搭配')).toBeVisible();
+    expect(screen.getByRole('heading', { name: '重点搭配' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: '重点搭配' }).closest('article')?.querySelector('a')).toHaveAttribute('href', expect.stringContaining('practice/collocation'));
+    expect(screen.queryByRole('heading', { name: '重点语法' })).not.toBeInTheDocument();
   });
 
   it('shows the estimated score, pass gap, two weak skills, and diagnostic adaptation reason', async () => {

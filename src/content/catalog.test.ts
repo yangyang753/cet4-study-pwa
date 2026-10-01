@@ -14,6 +14,7 @@ describe('v1 content catalog', () => {
     const question = getQuestion('listen-01:q1');
     expect(question && 'correctAnswer' in question ? question.correctAnswer : null).toBe('A');
     expect(getPracticeItems('translation')).toHaveLength(12);
+    expect(getPracticeItems('collocation')).toHaveLength(126);
   });
 
   it('contains no broken references in the shipped catalog', () => {

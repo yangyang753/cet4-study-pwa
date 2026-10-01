@@ -23,7 +23,7 @@ import { recordMeaningResult } from '../vocabulary/wordMastery';
 
 const starterContent = parseContentPack(rawContent);
 const defaultRepository = new DexieLearningRepository();
-const practiceKinds: PracticeKind[] = ['vocabulary', 'grammar', 'listening', 'reading', 'translation', 'writing'];
+const practiceKinds: PracticeKind[] = ['vocabulary', 'collocation', 'grammar', 'listening', 'reading', 'translation', 'writing'];
 interface AnsweredItem { questionId: string; correct: boolean | null; durationSeconds: number }
 const reasonPriority: Record<MistakeReason, number> = { unknown: 6, misunderstood: 6, location: 5, guessed: 5, careless: 3, overtime: 4 };
 

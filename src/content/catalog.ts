@@ -150,6 +150,7 @@ export const contentCatalog = {
 
 const questionsByKind: Record<PracticeKind, CatalogQuestion[]> = {
   vocabulary: vocabularyQuestions,
+  collocation: collocationQuestions,
   grammar: grammarQuestions,
   listening,
   reading,

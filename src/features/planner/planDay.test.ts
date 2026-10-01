@@ -61,14 +61,15 @@ describe('planDay', () => {
     expect(carryoverFromPlan([{ id: 'sunday:mock', kind: 'mock', minutes: 125, priority: 6 }], new Set())).toEqual([]);
   });
 
-  it('uses a diagnostic weakness during foundation week', () => {
+  it('uses a collocation task instead of a diagnostic grammar slot', () => {
     const plan = planDay({ ...base, diagnosticWeakSkill: 'grammar', hasRecentEvidence: false });
-    expect(plan.tasks.some((task) => task.kind === 'grammar')).toBe(true);
+    expect(plan.tasks.some((task) => task.kind === 'collocation')).toBe(true);
+    expect(plan.tasks.some((task) => task.kind === 'grammar')).toBe(false);
   });
 
-  it('rotates foundation work across grammar reading writing and translation', () => {
+  it('rotates foundation work across collocations reading writing and translation', () => {
     const kinds = ['2026-09-24', '2026-09-25', '2026-09-26', '2026-09-27'].map((date) => planDay({ ...base, date }).tasks[2].kind);
-    expect(new Set(kinds)).toEqual(new Set(['grammar', 'reading', 'writing', 'translation']));
+    expect(new Set(kinds)).toEqual(new Set(['collocation', 'reading', 'writing', 'translation']));
   });
 
   it('prefers recent learning evidence over the earlier diagnostic result', () => {
@@ -87,6 +88,15 @@ describe('planDay', () => {
     expect(carryoverFromPlan(previousTasks, completedTaskIds)).toEqual([
       { id: '2026-10-19:writing', kind: 'writing', minutes: 20, priority: 2 },
     ]);
+  });
+
+  it('converts a saved unfinished grammar task into collocation practice', () => {
+    const plan = planDay({
+      ...base,
+      unfinished: [{ id: '2026-09-21:grammar', kind: 'grammar', minutes: 10, priority: 9 }],
+    });
+    expect(plan.tasks.some((task) => task.kind === 'grammar')).toBe(false);
+    expect(plan.tasks).toContainEqual(expect.objectContaining({ id: '2026-09-22:collocation', kind: 'collocation' }));
   });
 
   it('moves five minutes into vocabulary when diagnosis identifies vocabulary weakness', () => {
@@ -108,7 +118,7 @@ describe('planDay', () => {
     ];
     const unfinished = [{ id: 'old-reading', kind: 'reading' as const, minutes: 20, priority: 10 }];
     const kinds = ['2026-09-26', '2026-09-27'].map((date) => planDay({ ...base, date, priorities, unfinished }).tasks[2].kind);
-    expect(new Set(kinds)).toEqual(new Set(['writing', 'grammar']));
+    expect(new Set(kinds)).toEqual(new Set(['writing', 'collocation']));
     expect(kinds).not.toContain('reading');
   });
 

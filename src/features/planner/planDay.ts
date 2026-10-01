@@ -1,6 +1,6 @@
 import type { LearningPriority } from '../diagnostic/adaptivePriorities';
 
-export type StudyKind = 'vocabulary' | 'grammar' | 'listening' | 'reading' | 'translation' | 'writing' | 'review' | 'mock';
+export type StudyKind = 'vocabulary' | 'collocation' | 'grammar' | 'listening' | 'reading' | 'translation' | 'writing' | 'review' | 'mock';
 export type StudyPhase = 'foundation' | 'breakthrough' | 'sprint';
 export interface StudyTask { id: string; kind: StudyKind; minutes: number; priority: number }
 export interface PlannerInput { date: string; examDate: string; dailyMinutes: number; weakSkill: StudyKind; diagnosticWeakSkill?: StudyKind; hasRecentEvidence: boolean; unfinished: StudyTask[]; vocabularyMinutes?: number; priorities?: LearningPriority[] }
@@ -11,7 +11,7 @@ function daysBetween(start: string, end: string) {
 }
 
 function rotatingFoundationKind(date: string): StudyKind {
-  const kinds: StudyKind[] = ['grammar', 'writing', 'reading', 'translation'];
+  const kinds: StudyKind[] = ['collocation', 'writing', 'reading', 'translation'];
   const ordinal = Math.floor(Date.parse(`${date}T00:00:00Z`) / 86_400_000);
   return kinds[((ordinal % kinds.length) + kinds.length) % kinds.length];
 }
@@ -26,7 +26,8 @@ export function planDay(input: PlannerInput): DailyPlan {
   const priorityRotating = nonCorePriorities.length ? nonCorePriorities[((priorityOrdinal % nonCorePriorities.length) + nonCorePriorities.length) % nonCorePriorities.length] : undefined;
   const fullMockDay = phase === 'sprint' && new Date(`${input.date}T00:00:00Z`).getUTCDay() === 0;
   if (fullMockDay) return { date: input.date, phase, tasks: [{ id: `${input.date}:mock`, kind: 'mock', minutes: 125, priority: 6 }] };
-  const requestedRotating: StudyKind = priorityRotating ?? evidenceWeakSkill ?? rotatingFoundationKind(input.date);
+  const requested = priorityRotating ?? evidenceWeakSkill ?? rotatingFoundationKind(input.date);
+  const requestedRotating: StudyKind = requested === 'grammar' ? 'collocation' : requested;
   const rotating: StudyKind = ['vocabulary', 'listening', 'review'].includes(requestedRotating) ? 'reading' : requestedRotating;
   const minutes = input.dailyMinutes;
   const reviewMinutes = Math.min(5, minutes);
@@ -38,7 +39,10 @@ export function planDay(input: PlannerInput): DailyPlan {
   const maximumListeningMinutes = minutes - vocabularyMinutes - reviewMinutes - minimumRotatingMinutes;
   const listeningMinutes = Math.min(maximumListeningMinutes, Math.max(minimumListeningMinutes, Math.round(minutes / 3) + (priorityKinds.includes('listening') ? 5 : 0)));
   const rotatingMinutes = minutes - vocabularyMinutes - listeningMinutes - reviewMinutes;
-  const carryover = [...input.unfinished].sort((a, b) => b.priority - a.priority)[0];
+  const savedCarryover = [...input.unfinished].sort((a, b) => b.priority - a.priority)[0];
+  const carryover: StudyTask | undefined = savedCarryover?.kind === 'grammar'
+    ? { ...savedCarryover, id: `${input.date}:collocation`, kind: 'collocation' }
+    : savedCarryover;
   const tasks: StudyTask[] = [
     { id: `${input.date}:vocabulary`, kind: 'vocabulary', minutes: vocabularyMinutes, priority: 3 },
     { id: `${input.date}:listening`, kind: 'listening', minutes: listeningMinutes, priority: 4 },

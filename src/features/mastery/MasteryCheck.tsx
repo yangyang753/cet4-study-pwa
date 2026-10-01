@@ -16,7 +16,7 @@ import './mastery.css';
 
 const defaultRepository = new DexieLearningRepository();
 const masteryQuestionKind: Record<StudyKind, PracticeKind> = {
-  vocabulary: 'vocabulary', grammar: 'grammar', listening: 'listening', reading: 'reading',
+  vocabulary: 'vocabulary', collocation: 'collocation', grammar: 'grammar', listening: 'listening', reading: 'reading',
   translation: 'grammar', writing: 'grammar', review: 'vocabulary', mock: 'reading',
 };
 

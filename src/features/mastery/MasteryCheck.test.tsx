@@ -37,6 +37,11 @@ describe('MasteryCheck', () => {
     expect(selectMasteryQuestions('listening', sourceIds)).toHaveLength(3);
   });
 
+  it('uses collocation questions for a collocation mastery check', () => {
+    const sourceIds = getPracticeItems('collocation').slice(2, 4).map((question) => question.id);
+    expect(selectMasteryQuestions('collocation', sourceIds).map((question) => question.id)).toEqual(expect.arrayContaining(sourceIds));
+  });
+
   it('does not select unrelated objective grammar questions for writing or translation', () => {
     expect(selectMasteryQuestions('writing')).toHaveLength(0);
     expect(selectMasteryQuestions('translation')).toHaveLength(0);
