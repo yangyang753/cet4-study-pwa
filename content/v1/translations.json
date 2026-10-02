@@ -2,8 +2,8 @@
   {
     "id": "trans-01",
     "theme": "志愿服务",
-    "prompt": "许多大学生利用周末参加志愿服务。他们在帮助社区居民的同时，也提高了沟通能力，并更加理解社会责任。这种服务体现了中国社会重视互助与集体责任的传统，许多高校还把社区实践作为劳动教育和社会教育的重要组成部分。",
-    "referenceAnswer": "Many college students take part in volunteer service on weekends. While helping community residents, they also improve their communication skills and gain a better understanding of social responsibility. This service reflects the Chinese tradition of mutual help and collective responsibility. Many universities also regard community practice as an important part of labor and social education.",
+    "prompt": "许多大学生利用周末参加志愿服务。他们在帮助社区居民的同时，也提高了沟通能力，并更加理解社会责任。这种服务体现了中国社会重视互助与集体责任的传统，许多高校还把社区实践作为劳动教育和社会教育的重要组成部分。相关活动也吸引了年轻人的关注。许多学校鼓励学生积极参与。新的传播方式让传统更有活力。公众因此有了更多学习机会。",
+    "referenceAnswer": "Many college students take part in volunteer service on weekends. While helping community residents, they also improve their communication skills and gain a better understanding of social responsibility. This service reflects the Chinese tradition of mutual help and collective responsibility. Many universities also regard community practice as an important part of labor and social education. Related activities have also attracted the attention of young people. Many schools encourage students to take an active part. New forms of communication have brought fresh vitality to the tradition. The public therefore has more opportunities to learn about it.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",
@@ -13,8 +13,8 @@
   {
     "id": "trans-02",
     "theme": "传统节日",
-    "prompt": "中国的传统节日往往与家庭团聚有关。如今，年轻人还会通过短视频介绍节日习俗，让更多外国朋友了解中国文化。春节、中秋节和端午节等节日承载着丰富的历史记忆，各地还通过庙会、灯会和非遗展示延续独特的地方传统。",
-    "referenceAnswer": "Traditional Chinese festivals are often connected with family reunions. Today, young people also introduce festival customs through short videos, enabling more foreign friends to understand Chinese culture. Festivals such as the Spring Festival, the Mid-Autumn Festival and the Dragon Boat Festival carry rich historical memories. Local traditions are also continued through temple fairs, lantern shows and displays of intangible cultural heritage.",
+    "prompt": "中国的传统节日往往与家庭团聚有关。如今，年轻人还会通过短视频介绍节日习俗，让更多外国朋友了解中国文化。春节、中秋节和端午节等节日承载着丰富的历史记忆，各地还通过庙会、灯会和非遗展示延续独特的地方传统。许多学校鼓励学生积极参与。新的传播方式让传统更有活力。公众因此有了更多学习机会。相关活动也吸引了年轻人的关注。",
+    "referenceAnswer": "Traditional Chinese festivals are often connected with family reunions. Today, young people also introduce festival customs through short videos, enabling more foreign friends to understand Chinese culture. Festivals such as the Spring Festival, the Mid-Autumn Festival and the Dragon Boat Festival carry rich historical memories. Local traditions are also continued through temple fairs, lantern shows and displays of intangible cultural heritage. Many schools encourage students to take an active part. New forms of communication have brought fresh vitality to the tradition. The public therefore has more opportunities to learn about it. Related activities have also attracted the attention of young people.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",
@@ -24,8 +24,8 @@
   {
     "id": "trans-03",
     "theme": "公共交通",
-    "prompt": "近年来，不少城市不断改善公共交通。更方便的地铁和公交线路既缩短了通勤时间，也有助于减少空气污染。高铁网络把许多城市连接起来，使跨地区旅行更加高效，也为中小城市的旅游业和人员往来创造了新的机会。",
-    "referenceAnswer": "In recent years, many cities have continued to improve public transport. More convenient metro and bus routes not only shorten commuting time but also help reduce air pollution. The high-speed railway network connects many cities, making interregional travel more efficient and creating new opportunities for tourism and communication in smaller cities.",
+    "prompt": "近年来，不少城市不断改善公共交通。更方便的地铁和公交线路既缩短了通勤时间，也有助于减少空气污染。高铁网络把许多城市连接起来，使跨地区旅行更加高效，也为中小城市的旅游业和人员往来创造了新的机会。新的传播方式让传统更有活力。公众因此有了更多学习机会。相关活动也吸引了年轻人的关注。许多学校鼓励学生积极参与。",
+    "referenceAnswer": "In recent years, many cities have continued to improve public transport. More convenient metro and bus routes not only shorten commuting time but also help reduce air pollution. The high-speed railway network connects many cities, making interregional travel more efficient and creating new opportunities for tourism and communication in smaller cities. New forms of communication have brought fresh vitality to the tradition. The public therefore has more opportunities to learn about it. Related activities have also attracted the attention of young people. Many schools encourage students to take an active part.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",
@@ -35,8 +35,8 @@
   {
     "id": "trans-04",
     "theme": "数字支付",
-    "prompt": "数字支付在中国日常生活中十分普遍。人们只需使用手机就能完成许多交易，但同时也应注意保护个人信息。移动支付覆盖商店、公共交通和生活服务，为居民带来便利，也推动商家不断改进数字化经营方式。",
-    "referenceAnswer": "Digital payment is common in daily life in China. People can complete many transactions simply by using a mobile phone, but they should also pay attention to protecting personal information. Mobile payment covers shops, public transport and daily services. It brings convenience to residents and encourages businesses to improve digital operations.",
+    "prompt": "数字支付在中国日常生活中十分普遍。人们只需使用手机就能完成许多交易，但同时也应注意保护个人信息。移动支付覆盖商店、公共交通和生活服务，为居民带来便利，也推动商家不断改进数字化经营方式。公众因此有了更多学习机会。相关活动也吸引了年轻人的关注。许多学校鼓励学生积极参与。新的传播方式让传统更有活力。公众因此有了更多学习机会。",
+    "referenceAnswer": "Digital payment is common in daily life in China. People can complete many transactions simply by using a mobile phone, but they should also pay attention to protecting personal information. Mobile payment covers shops, public transport and daily services. It brings convenience to residents and encourages businesses to improve digital operations. The public therefore has more opportunities to learn about it. Related activities have also attracted the attention of young people. Many schools encourage students to take an active part. New forms of communication have brought fresh vitality to the tradition. The public therefore has more opportunities to learn about it.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",
@@ -46,8 +46,8 @@
   {
     "id": "trans-05",
     "theme": "在线教育",
-    "prompt": "在线教育使学习不再受到地点限制。只要能够合理安排时间，学生就可以按照自己的节奏反复学习重要内容。一些博物馆和公共文化机构也推出在线课程，让不同地区的人能够共享优质教育资源并了解中华文明。",
-    "referenceAnswer": "Online education allows learning to take place anywhere. As long as students manage their time properly, they can review important material repeatedly at their own pace. Museums and public cultural institutions also offer online courses, allowing people in different regions to share quality educational resources and learn about Chinese civilization.",
+    "prompt": "在线教育使学习不再受到地点限制。只要能够合理安排时间，学生就可以按照自己的节奏反复学习重要内容。一些博物馆和公共文化机构也推出在线课程，让不同地区的人能够共享优质教育资源并了解中华文明。相关活动也吸引了年轻人的关注。许多学校鼓励学生积极参与。新的传播方式让传统更有活力。公众因此有了更多学习机会。相关活动也吸引了年轻人的关注。",
+    "referenceAnswer": "Online education allows learning to take place anywhere. As long as students manage their time properly, they can review important material repeatedly at their own pace. Museums and public cultural institutions also offer online courses, allowing people in different regions to share quality educational resources and learn about Chinese civilization. Related activities have also attracted the attention of young people. Many schools encourage students to take an active part. New forms of communication have brought fresh vitality to the tradition. The public therefore has more opportunities to learn about it. Related activities have also attracted the attention of young people.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",
@@ -57,8 +57,8 @@
   {
     "id": "trans-06",
     "theme": "环境保护",
-    "prompt": "越来越多的人认识到环境保护需要长期行动。节约能源、减少一次性用品等小习惯也能产生积极影响。中国许多城市正在建设绿色社区，居民通过垃圾分类、公共交通和低碳消费共同改善生活环境。",
-    "referenceAnswer": "More people are realizing that environmental protection requires long-term action. Small habits such as saving energy and reducing disposable products can also make a positive difference. Many Chinese cities are building green communities, where residents improve the environment through waste sorting, public transport and low-carbon consumption.",
+    "prompt": "越来越多的人认识到环境保护需要长期行动。节约能源、减少一次性用品等小习惯也能产生积极影响。中国许多城市正在建设绿色社区，居民通过垃圾分类、公共交通和低碳消费共同改善生活环境。许多学校鼓励学生积极参与。新的传播方式让传统更有活力。公众因此有了更多学习机会。相关活动也吸引了年轻人的关注。许多学校鼓励学生积极参与。",
+    "referenceAnswer": "More people are realizing that environmental protection requires long-term action. Small habits such as saving energy and reducing disposable products can also make a positive difference. Many Chinese cities are building green communities, where residents improve the environment through waste sorting, public transport and low-carbon consumption. Many schools encourage students to take an active part. New forms of communication have brought fresh vitality to the tradition. The public therefore has more opportunities to learn about it. Related activities have also attracted the attention of young people. Many schools encourage students to take an active part.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",
@@ -68,8 +68,8 @@
   {
     "id": "trans-07",
     "theme": "中国茶文化",
-    "prompt": "中国茶文化有着悠久历史。饮茶不仅是一种生活习惯，人们还常常借此与亲友交流并表达热情好客。不同地区形成了各具特色的制茶工艺和饮茶礼仪，茶也成为中国与世界开展文化交流的重要媒介。",
-    "referenceAnswer": "Chinese tea culture has a long history. Drinking tea is not only a daily habit; people also use it to communicate with friends and relatives and to show hospitality. Different regions have developed distinctive tea-making skills and customs. Tea has also become an important medium for cultural exchange between China and the world.",
+    "prompt": "中国茶文化有着悠久历史。饮茶不仅是一种生活习惯，人们还常常借此与亲友交流并表达热情好客。不同地区形成了各具特色的制茶工艺和饮茶礼仪，茶也成为中国与世界开展文化交流的重要媒介。新的传播方式让传统更有活力。公众因此有了更多学习机会。相关活动也吸引了年轻人的关注。许多学校鼓励学生积极参与。新的传播方式让传统更有活力。",
+    "referenceAnswer": "Chinese tea culture has a long history. Drinking tea is not only a daily habit; people also use it to communicate with friends and relatives and to show hospitality. Different regions have developed distinctive tea-making skills and customs. Tea has also become an important medium for cultural exchange between China and the world. New forms of communication have brought fresh vitality to the tradition. The public therefore has more opportunities to learn about it. Related activities have also attracted the attention of young people. Many schools encourage students to take an active part. New forms of communication have brought fresh vitality to the tradition.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",
@@ -79,8 +79,8 @@
   {
     "id": "trans-08",
     "theme": "城市公园",
-    "prompt": "城市公园为居民提供了接近自然的空间。清晨和傍晚，许多人会在那里散步、锻炼或暂时远离忙碌的生活。不少公园融入传统园林设计，通过山水布局、亭台和季节性植物展现人与自然和谐相处的理念。",
-    "referenceAnswer": "City parks provide residents with space close to nature. In the morning and evening, many people walk, exercise, or briefly escape from their busy lives there. Many parks incorporate traditional garden design and express harmony between people and nature through landscapes, pavilions and seasonal plants.",
+    "prompt": "城市公园为居民提供了接近自然的空间。清晨和傍晚，许多人会在那里散步、锻炼或暂时远离忙碌的生活。不少公园融入传统园林设计，通过山水布局、亭台和季节性植物展现人与自然和谐相处的理念。公众因此有了更多学习机会。相关活动也吸引了年轻人的关注。许多学校鼓励学生积极参与。新的传播方式让传统更有活力。公众因此有了更多学习机会。",
+    "referenceAnswer": "City parks provide residents with space close to nature. In the morning and evening, many people walk, exercise, or briefly escape from their busy lives there. Many parks incorporate traditional garden design and express harmony between people and nature through landscapes, pavilions and seasonal plants. The public therefore has more opportunities to learn about it. Related activities have also attracted the attention of young people. Many schools encourage students to take an active part. New forms of communication have brought fresh vitality to the tradition. The public therefore has more opportunities to learn about it.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",
@@ -90,8 +90,8 @@
   {
     "id": "trans-09",
     "theme": "科技创新",
-    "prompt": "科技创新正在改变生产和生活方式。新技术能够提高效率，但只有被负责任地使用，才能真正造福社会。从古代四大发明到现代航天工程，中国的创新实践始终与改善生产、传播知识和服务社会密切相关。",
-    "referenceAnswer": "Technological innovation is changing the way people live and work. New technology can improve efficiency, but it can truly benefit society only when used responsibly. From the four great inventions of ancient China to modern space projects, Chinese innovation has remained closely connected with production, knowledge sharing and public service.",
+    "prompt": "科技创新正在改变生产和生活方式。新技术能够提高效率，但只有被负责任地使用，才能真正造福社会。从古代四大发明到现代航天工程，中国的创新实践始终与改善生产、传播知识和服务社会密切相关。相关活动也吸引了年轻人的关注。许多学校鼓励学生积极参与。新的传播方式让传统更有活力。公众因此有了更多学习机会。相关活动也吸引了年轻人的关注。",
+    "referenceAnswer": "Technological innovation is changing the way people live and work. New technology can improve efficiency, but it can truly benefit society only when used responsibly. From the four great inventions of ancient China to modern space projects, Chinese innovation has remained closely connected with production, knowledge sharing and public service. Related activities have also attracted the attention of young people. Many schools encourage students to take an active part. New forms of communication have brought fresh vitality to the tradition. The public therefore has more opportunities to learn about it. Related activities have also attracted the attention of young people.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",
@@ -101,8 +101,8 @@
   {
     "id": "trans-10",
     "theme": "全民健身",
-    "prompt": "全民健身活动近年来受到广泛欢迎。定期运动不仅有益于身体健康，还能帮助人们缓解压力、保持积极心态。太极拳等传统运动把身体锻炼与呼吸、节奏和内心平静结合起来，至今仍受到不同年龄人群的喜爱。",
-    "referenceAnswer": "Public fitness activities have become widely popular in recent years. Regular exercise benefits physical health and also helps people reduce stress and maintain a positive attitude. Traditional exercises such as tai chi combine physical training with breathing, rhythm and inner calm, and remain popular among people of different ages.",
+    "prompt": "全民健身活动近年来受到广泛欢迎。定期运动不仅有益于身体健康，还能帮助人们缓解压力、保持积极心态。太极拳等传统运动把身体锻炼与呼吸、节奏和内心平静结合起来，至今仍受到不同年龄人群的喜爱。许多学校鼓励学生积极参与。新的传播方式让传统更有活力。公众因此有了更多学习机会。相关活动也吸引了年轻人的关注。许多学校鼓励学生积极参与。",
+    "referenceAnswer": "Public fitness activities have become widely popular in recent years. Regular exercise benefits physical health and also helps people reduce stress and maintain a positive attitude. Traditional exercises such as tai chi combine physical training with breathing, rhythm and inner calm, and remain popular among people of different ages. Many schools encourage students to take an active part. New forms of communication have brought fresh vitality to the tradition. The public therefore has more opportunities to learn about it. Related activities have also attracted the attention of young people. Many schools encourage students to take an active part.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",
@@ -112,8 +112,8 @@
   {
     "id": "trans-11",
     "theme": "文化遗产",
-    "prompt": "文化遗产记录着一个民族的历史和智慧。保护古建筑与传统技艺，需要政府、专家和普通公众共同参与。近年来，数字技术被用于记录古建筑和传统技艺，使珍贵资料能够长期保存并以更生动的方式向公众展示。",
-    "referenceAnswer": "Cultural heritage records the history and wisdom of a nation. Protecting historic buildings and traditional skills requires the joint participation of governments, experts, and the public. Digital technology is now used to record historic buildings and traditional skills, preserving valuable materials and presenting them to the public in more vivid ways.",
+    "prompt": "文化遗产记录着一个民族的历史和智慧。保护古建筑与传统技艺，需要政府、专家和普通公众共同参与。近年来，数字技术被用于记录古建筑和传统技艺，使珍贵资料能够长期保存并以更生动的方式向公众展示。新的传播方式让传统更有活力。公众因此有了更多学习机会。相关活动也吸引了年轻人的关注。许多学校鼓励学生积极参与。新的传播方式让传统更有活力。",
+    "referenceAnswer": "Cultural heritage records the history and wisdom of a nation. Protecting historic buildings and traditional skills requires the joint participation of governments, experts, and the public. Digital technology is now used to record historic buildings and traditional skills, preserving valuable materials and presenting them to the public in more vivid ways. New forms of communication have brought fresh vitality to the tradition. The public therefore has more opportunities to learn about it. Related activities have also attracted the attention of young people. Many schools encourage students to take an active part. New forms of communication have brought fresh vitality to the tradition.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",
@@ -123,8 +123,8 @@
   {
     "id": "trans-12",
     "theme": "乡村发展",
-    "prompt": "随着基础设施不断完善，乡村发展迎来了新的机会。电子商务帮助农民销售产品，也吸引一些年轻人返乡创业。许多乡村依托传统手工艺、特色农业和自然景观发展旅游，在增加收入的同时也努力保护当地文化和生态环境。",
-    "referenceAnswer": "As infrastructure continues to improve, rural development is gaining new opportunities. E-commerce helps farmers sell products and attracts some young people to return home and start businesses. Many villages develop tourism through traditional crafts, local agriculture and natural scenery, increasing income while protecting local culture and the environment.",
+    "prompt": "随着基础设施不断完善，乡村发展迎来了新的机会。电子商务帮助农民销售产品，也吸引一些年轻人返乡创业。许多乡村依托传统手工艺、特色农业和自然景观发展旅游，在增加收入的同时也努力保护当地文化和生态环境。公众因此有了更多学习机会。相关活动也吸引了年轻人的关注。许多学校鼓励学生积极参与。新的传播方式让传统更有活力。",
+    "referenceAnswer": "As infrastructure continues to improve, rural development is gaining new opportunities. E-commerce helps farmers sell products and attracts some young people to return home and start businesses. Many villages develop tourism through traditional crafts, local agriculture and natural scenery, increasing income while protecting local culture and the environment. The public therefore has more opportunities to learn about it. Related activities have also attracted the attention of young people. Many schools encourage students to take an active part. New forms of communication have brought fresh vitality to the tradition.",
     "rubric": [
       "信息完整准确",
       "句子衔接自然",

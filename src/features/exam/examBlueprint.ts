@@ -22,9 +22,9 @@ function groupedSlice(questions: CatalogQuestion[], type: CatalogQuestion['type'
   const groupIds = [...new Set(questions.filter((question) => question.type === type).map((question) => question.groupId))];
   if (groupIds.length < perGroup.length) throw new Error(`Insufficient ${type} groups: expected ${perGroup.length}, received ${groupIds.length}`);
   const groupStart = (index: number) => {
-    if (groupIds.length === 8 && perGroup.length === 3) return [0, 3, 6, 1, 4, 2][index] ?? (index * 3) % groupIds.length;
-    if (groupIds.length === 8 && perGroup.length === 2) return [0, 2, 4, 6, 1, 3][index] ?? (index * 2) % groupIds.length;
-    if (groupIds.length === 10 && perGroup.length === 2) return [0, 2, 4, 6, 8, 1][index] ?? (index * 2) % groupIds.length;
+    if (groupIds.length === 8 && perGroup.length === 3) return [0, 3, 6, 1, 4, 2, 5, 7, 0, 3][index] ?? (index * 3) % groupIds.length;
+    if (groupIds.length === 8 && perGroup.length === 2) return [0, 2, 4, 6, 1, 3, 5, 7, 0, 2][index] ?? (index * 2) % groupIds.length;
+    if (groupIds.length === 10 && perGroup.length === 2) return [0, 2, 4, 6, 8, 1, 3, 5, 7, 9][index] ?? (index * 2) % groupIds.length;
     return (index * perGroup.length) % groupIds.length;
   };
   const groupOffset = groupStart(mockIndex);

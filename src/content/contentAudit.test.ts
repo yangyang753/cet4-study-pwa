@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { auditContentDiversity, auditContentInventory, auditContentShapes, auditGeneratedQuestions, auditKnowledgeExamples } from './contentAudit';
+import { auditContentDiversity, auditContentInventory, auditContentShapes, auditFullMockMaterial, auditGeneratedQuestions, auditKnowledgeExamples } from './contentAudit';
 import { getPracticeItems } from './catalog';
 import inventory from '../../content/v1/inventory.json';
 import { auditQuestionTemplateDiversity } from './questionDiversity';
@@ -9,12 +9,12 @@ describe('auditContentInventory', () => {
     const errors = auditContentInventory({ vocabulary: [], collocations: [], grammarTopics: [], listeningSets: [], readingSets: [], translations: [], writingPrompts: [], mockExams: [] });
     expect(errors).toContain('vocabulary: expected at least 800, received 0');
     expect(errors).toContain('listeningSets: expected at least 24, received 0');
-    expect(errors).toContain('mockExams: expected at least 6, received 0');
+    expect(errors).toContain('mockExams: expected at least 10, received 0');
   });
 
   it('accepts an inventory meeting every minimum', () => {
     const make = (count: number) => Array.from({ length: count }, (_, index) => ({ id: `id-${index}` }));
-    expect(auditContentInventory({ vocabulary: make(800), collocations: make(120), grammarTopics: make(15), listeningSets: make(24), readingSets: make(30), translations: make(12), writingPrompts: make(12), mockExams: make(6) })).toEqual([]);
+    expect(auditContentInventory({ vocabulary: make(800), collocations: make(120), grammarTopics: make(15), listeningSets: make(24), readingSets: make(30), translations: make(12), writingPrompts: make(12), mockExams: make(10) })).toEqual([]);
   });
 
   it('accepts only shipped mocks with the complete 57-question structure', () => {
@@ -93,6 +93,24 @@ describe('auditContentDiversity', () => {
       return count >= 120 && count <= 180;
     })).toBe(true);
     expect(inventory.translations.every((item) => item.prompt.replace(/\s/g, '').length >= 80)).toBe(true);
+  });
+});
+
+describe('auditFullMockMaterial', () => {
+  it('rejects practice-sized material presented as a full mock', () => {
+    expect(auditFullMockMaterial({
+      listeningSets: [{ id: 'l1', type: 'news', transcript: 'A short notice.' }],
+      readingSets: [{ id: 'r1', type: 'reading', passage: 'A short passage.' }],
+      translations: [{ id: 't1', prompt: '一段过短的翻译。' }],
+    })).toEqual(expect.arrayContaining([
+      'listeningSets:l1: news transcript must contain 145-170 words, received 3',
+      'readingSets:r1: reading passage must contain 300-350 words, received 3',
+      'translations:t1: full-mock prompt must contain 140-160 Chinese characters, received 7',
+    ]));
+  });
+
+  it('accepts the shipped full-mock material lengths', () => {
+    expect(auditFullMockMaterial(inventory)).toEqual([]);
   });
 });
 

@@ -39,7 +39,7 @@ describe('resolveExam', () => {
     expect(() => resolveExam('missing')).toThrow('Unknown mock exam: missing');
   });
 
-  it('does not reuse question ids across the six shipped mock exams', () => {
+  it('does not reuse question ids across the ten shipped mock exams', () => {
     const seen = new Set<string>();
     for (const mock of contentCatalog.mocks) {
       const ids = resolveExam(mock.id).sections.flatMap((section) => section.questions.map((question) => question.id));

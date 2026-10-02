@@ -33,7 +33,7 @@ interface DiversityInventory {
   writingPrompts: SubjectiveDiversityCandidate[];
 }
 
-const minimums: Record<keyof ContentInventory, number> = { vocabulary: 800, collocations: 120, grammarTopics: 15, listeningSets: 24, readingSets: 30, translations: 12, writingPrompts: 12, mockExams: 6 };
+const minimums: Record<keyof ContentInventory, number> = { vocabulary: 800, collocations: 120, grammarTopics: 15, listeningSets: 24, readingSets: 30, translations: 12, writingPrompts: 12, mockExams: 10 };
 
 const record = (value: unknown): Record<string, unknown> => typeof value === 'object' && value !== null ? value as Record<string, unknown> : {};
 const text = (value: unknown) => typeof value === 'string' && value.trim().length > 0;
@@ -99,6 +99,38 @@ export function auditContentShapes(inventory: ContentInventory): string[] {
     if (!translationIds.has(String(item.translationId ?? ''))) errors.push(`mockExams:${id}: unknown translation ${String(item.translationId ?? '')}`);
     if (!writingIds.has(String(item.writingId ?? ''))) errors.push(`mockExams:${id}: unknown writing prompt ${String(item.writingId ?? '')}`);
   });
+  return errors;
+}
+
+interface FullMockMaterialInventory {
+  listeningSets: Array<{ id?: string; type?: string; transcript?: string }>;
+  readingSets: Array<{ id?: string; type?: string; passage?: string }>;
+  translations: Array<{ id?: string; prompt?: string }>;
+}
+
+const englishWordCount = (value = '') => value.trim().split(/\s+/).filter(Boolean).length;
+const chineseCharacterCount = (value = '') => (value.match(/[\u3400-\u9fff]/g) ?? []).length;
+
+export function auditFullMockMaterial(inventory: FullMockMaterialInventory): string[] {
+  const errors: string[] = [];
+  const listeningRanges: Record<string, [number, number]> = { news: [145, 170], conversation: [240, 280], passage: [220, 240] };
+  const readingRanges: Record<string, [number, number]> = { cloze: [200, 250], matching: [950, 1100], reading: [300, 350] };
+  for (const set of inventory.listeningSets) {
+    const range = listeningRanges[set.type ?? ''];
+    if (!range) continue;
+    const count = englishWordCount(set.transcript);
+    if (count < range[0] || count > range[1]) errors.push(`listeningSets:${set.id ?? 'unknown'}: ${set.type} transcript must contain ${range[0]}-${range[1]} words, received ${count}`);
+  }
+  for (const set of inventory.readingSets) {
+    const range = readingRanges[set.type ?? ''];
+    if (!range) continue;
+    const count = englishWordCount(set.passage);
+    if (count < range[0] || count > range[1]) errors.push(`readingSets:${set.id ?? 'unknown'}: ${set.type} passage must contain ${range[0]}-${range[1]} words, received ${count}`);
+  }
+  for (const item of inventory.translations) {
+    const count = chineseCharacterCount(item.prompt);
+    if (count < 140 || count > 160) errors.push(`translations:${item.id ?? 'unknown'}: full-mock prompt must contain 140-160 Chinese characters, received ${count}`);
+  }
   return errors;
 }
 

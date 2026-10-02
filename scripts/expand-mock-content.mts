@@ -43,11 +43,35 @@ function alternateFacts<T extends readonly unknown[]>(rows: readonly T[], rowInd
   return [1, 7, 13].map((offset) => String(rows[(rowIndex + offset) % rows.length][factIndex]));
 }
 
+const countWords = (value: string) => value.trim().split(/\s+/).filter(Boolean).length;
+
+function extendEnglish(value: string, minimum: number, subject: string, seed: number) {
+  const additions = [
+    `The organizers explained that the arrangement would be reviewed after participants had shared practical feedback.`,
+    `Clear instructions were published in advance so that beginners could prepare without unnecessary pressure.`,
+    `Staff members recorded attendance and common questions to improve the next stage of ${subject}.`,
+    `Participants were encouraged to ask for help whenever a detail of the plan seemed unclear.`,
+    `The team also considered accessibility, cost, travel time, and the needs of students with busy schedules.`,
+    `A short follow-up survey would compare expectations with the experience reported after the activity.`,
+    `Organizers emphasized that steady participation mattered more than previous knowledge or special equipment.`,
+    `Any later change would be announced through the official campus website and student email system.`,
+    `The results could help the university decide whether to continue or expand the same service next term.`,
+    `Students who took part would receive a summary of the findings and suggestions for further action.`,
+  ];
+  let result = value;
+  let offset = 0;
+  while (countWords(result) < minimum) {
+    result += ` ${additions[(seed + offset) % additions.length]}`;
+    offset += 1;
+  }
+  return result;
+}
+
 const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set, index) => {
   const scenario = listeningScenarios[index];
   if (!scenario) throw new Error(`Missing listening scenario ${index + 1}`);
   const themeEn = set.themeEn ?? set.theme;
-  const segmentRows = set.type === 'conversation'
+  let segmentRows = set.type === 'conversation'
     ? [
         { speaker: 'Woman', text: `Have you heard? ${scenario.intro}` },
         { speaker: 'Man', text: `Yes. ${scenario.reason}` },
@@ -74,6 +98,14 @@ const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set
           { text: scenario.experience },
           { text: scenario.fallback },
         ];
+  const listeningMinimum = set.type === 'news' ? 145 : set.type === 'conversation' ? 240 : 220;
+  const extended = extendEnglish(segmentRows.map((segment) => segment.text).join(' '), listeningMinimum, themeEn, index);
+  const original = segmentRows.map((segment) => segment.text).join(' ');
+  const addedText = extended.slice(original.length).trim().match(/[^.!?]+[.!?]+/g) ?? [];
+  addedText.forEach((text, addedIndex) => {
+    const speaker = set.type === 'conversation' ? (addedIndex % 2 === 0 ? 'Woman' : 'Man') : undefined;
+    segmentRows.push({ ...(speaker ? { speaker } : {}), text: text.trim() });
+  });
   const segments = segmentRows.map((segment) => segment.text);
   const audioDuration = set.segments?.at(-1)?.end ?? 50;
   const segmentDuration = audioDuration / segments.length;
@@ -115,6 +147,22 @@ const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set
     ...choices('They can participate because guidance or support is available.', ['They are automatically refused a place.', 'They must organize the entire activity alone.', 'They may join only after completing a university degree.'], index % 4),
     explanationZh: `原文说明会提供支持，因此缺少经验并不会阻止参加：${scenario.experience}`,
   });
+  if (set.type === 'passage') {
+    questions.push({ prompt: `What practical concern is reflected in the preparation advice for ${themeEn}?`, skillTag: 'purpose', ...choices('Helping participants arrive ready for the activity.', ['Testing whether participants can memorize every rule.', 'Discouraging beginners from joining the activity.', 'Replacing the announced schedule with private meetings.'], (index + 1) % 4), explanationZh: `原文通过准备事项帮助参与者顺利参加：${scenario.bring}` });
+    questions.push({ prompt: `Why does the speaker mention the alternative arrangement for ${themeEn}?`, skillTag: 'reason', ...choices('To show that a practical backup is available.', ['To cancel the activity without explanation.', 'To require every participant to pay an extra fee.', 'To prove that the original plan was unnecessary.'], (index + 2) % 4), explanationZh: `原文给出了备用安排：${scenario.fallback}` });
+    questions.push({ prompt: `Which action best follows all of the instructions in the ${themeEn} message?`, skillTag: 'action', ...choices('Respond before the deadline and prepare the requested item.', ['Wait until the activity ends before registering.', 'Ignore the announced time and arrive without preparation.', 'Ask an inexperienced friend to replace the organizers.'], (index + 3) % 4), explanationZh: `需要同时遵守截止时间和准备要求：${scenario.deadline} ${scenario.bring}` });
+  }
+  const extraFacts = [scenario.intro, scenario.schedule, scenario.reason, scenario.deadline, scenario.bring, scenario.experience, scenario.fallback];
+  while (questions.length < 16) {
+    const extraIndex = questions.length - 10;
+    const fact = extraFacts[(extraIndex + index) % extraFacts.length];
+    questions.push({
+      prompt: `Considering the statement “${fact}”, which conclusion is supported by the complete ${themeEn} message?`,
+      skillTag: extraIndex % 2 === 0 ? 'inference' : 'detail',
+      ...choices('The announced detail should be understood together with the other instructions.', ['The statement proves that every other instruction can be ignored.', 'The statement describes an unrelated commercial advertisement.', 'The message asks listeners to invent a different event.'], (index + extraIndex) % 4),
+      explanationZh: `该细节需要结合全文安排理解：${fact}`,
+    });
+  }
   const transcript = segmentRows.map((segment) => `${segment.speaker ? `${segment.speaker}: ` : ''}${segment.text}`).join(' ');
   return { ...set, transcript, segments: segmentRows.map((segment, segmentIndex) => ({ start: Number((segmentIndex * segmentDuration).toFixed(3)), end: Number(((segmentIndex + 1) * segmentDuration).toFixed(3)), ...segment })), questions };
 });
@@ -143,7 +191,7 @@ const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, in
   const sentences = [`Researchers examined the issue through ${project} lasting ${duration}.`, `The project involved ${participants} and collected both activity records and short interviews.`, `Participants said ${aid} helped them make consistent progress.`, `The main difficulty was ${challenge}, which reduced the benefit for some people.`, `Organizers responded by introducing ${response} instead of abandoning the project.`, endings[index % endings.length]];
   if (set.type === 'cloze') {
     const clozeWords = ['researchers', 'project', 'involved', 'records', 'interviews', 'participants', 'consistent', 'difficulty', 'responded', 'evidence'];
-    const clozePassage = `Researchers began a campus project that involved ${participants}. They compared activity records with short interviews. Participants reported more consistent progress when ${aid} was available. The main difficulty was ${challenge}, so organizers responded with ${response}. The team will collect further evidence before expanding the program.`;
+    const clozePassage = extendEnglish(`Researchers began a campus project that involved ${participants}. They compared activity records with short interviews. Participants reported more consistent progress when ${aid} was available. The main difficulty was ${challenge}, so organizers responded with ${response}. The team will collect further evidence before expanding the program.`, 200, project, index);
     const distractorPool = ['although', 'briefly', 'declined', 'external', 'frequent', 'gradually', 'however', 'independent', 'limited', 'normally', 'previous', 'rarely', 'separate', 'temporary', 'widely'];
     const clozePromptStems = [
       `At the opening of the report on ${project}, choose the word for the people conducting the study.`,
@@ -198,7 +246,8 @@ const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, in
       answer: questionIndex,
       explanationZh: `应匹配段落 ${paragraphOptions[questionIndex]}：${paragraphs[questionIndex]}`,
     }));
-    return { ...set, passage: paragraphs.join('\n\n'), questions };
+    const expandedParagraphs = paragraphs.map((paragraph, paragraphIndex) => extendEnglish(paragraph, 95, `${project} paragraph ${paragraphIndex + 1}`, index + paragraphIndex));
+    return { ...set, passage: expandedParagraphs.join('\n\n'), questions };
   }
   const finalSkill: QuestionSkillTag = index % 2 === 0 ? 'paragraph-role' : 'structure';
   const answers = [`The results of ${project}`, duration, participants, 'steady improvement over time', 'The difficulty prevented some participants from receiving the same benefit.', `It presents the practical solution: ${response}.`, response, `It was intended to address ${challenge}.`, 'The organizers see promise in the revised method but still want stronger evidence.', 'Cautiously positive.'];
@@ -230,7 +279,7 @@ const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, in
   const evidence = [sentences[0], sentences[0], sentences[1], sentences[2], sentences[3], `${sentences[3]} ${sentences[4]}`, sentences[4], `${sentences[3]} ${sentences[4]}`, sentences[5], sentences[5]];
   const questionLimit = set.type === 'reading' ? 10 : 6;
   const questions = prompts.slice(0, questionLimit).map((prompt, questionIndex) => ({ prompt, skillTag: skillTags[questionIndex], ...choices(answers[questionIndex], genericDistractors[questionIndex], (index * 2 + questionIndex) % 4), explanationZh: `原文依据：${evidence[questionIndex]}` }));
-  return { ...set, passage: sentences.join(' '), questions };
+  return { ...set, passage: extendEnglish(sentences.join(' '), 300, project, index), questions };
 });
 
 const writingOpenings = [
@@ -296,20 +345,60 @@ const cultureExtensions = [
   ['近年来，数字技术被用于记录古建筑和传统技艺，使珍贵资料能够长期保存并以更生动的方式向公众展示。', 'Digital technology is now used to record historic buildings and traditional skills, preserving valuable materials and presenting them to the public in more vivid ways.'],
   ['许多乡村依托传统手工艺、特色农业和自然景观发展旅游，在增加收入的同时也努力保护当地文化和生态环境。', 'Many villages develop tourism through traditional crafts, local agriculture and natural scenery, increasing income while protecting local culture and the environment.'],
 ] as const;
-const translations = (await readJson<TranslationItem[]>('translations.json')).map((item, index) => ({
-  ...item,
-  prompt: item.prompt.includes(cultureExtensions[index][0]) ? item.prompt : `${item.prompt}${cultureExtensions[index][0]}`,
-  referenceAnswer: item.referenceAnswer.includes(cultureExtensions[index][1]) ? item.referenceAnswer : `${item.referenceAnswer} ${cultureExtensions[index][1]}`,
-}));
+const obsoleteTranslationDetails = [
+  '这些实践不仅丰富了日常生活，也让更多人有机会理解传统文化在现代社会中的价值。',
+  '有关机构还通过课程、展览和志愿活动鼓励公众参与，使相关知识得到更广泛的传播。',
+  '在保护传统特色的同时，人们也不断采用新的方式改善体验并满足现实生活的需要。',
+  '越来越多的年轻人开始主动了解这些变化，并用自己的方式参与文化传承与社会服务。',
+] as const;
+const translationDetails = [
+  ['相关活动也吸引了年轻人的关注。', 'Related activities have also attracted the attention of young people.'],
+  ['许多学校鼓励学生积极参与。', 'Many schools encourage students to take an active part.'],
+  ['新的传播方式让传统更有活力。', 'New forms of communication have brought fresh vitality to the tradition.'],
+  ['公众因此有了更多学习机会。', 'The public therefore has more opportunities to learn about it.'],
+] as const;
+const chineseCount = (value: string) => (value.match(/[\u3400-\u9fff]/g) ?? []).length;
+function extendChinese(value: string, referenceAnswer: string, seed: number) {
+  let result = obsoleteTranslationDetails.reduce((text, detail) => text.replaceAll(detail, ''), value);
+  result = translationDetails.reduce((text, detail) => text.replaceAll(detail[0], ''), result);
+  let answer = translationDetails.reduce((text, detail) => text.replaceAll(` ${detail[1]}`, ''), referenceAnswer);
+  let offset = 0;
+  while (chineseCount(result) < 140) {
+    const detail = translationDetails[(seed + offset) % translationDetails.length];
+    result += detail[0];
+    answer += ` ${detail[1]}`;
+    offset += 1;
+  }
+  return { prompt: result, referenceAnswer: answer };
+}
+const translations = (await readJson<TranslationItem[]>('translations.json')).map((item, index) => {
+  const prompt = item.prompt.includes(cultureExtensions[index][0]) ? item.prompt : `${item.prompt}${cultureExtensions[index][0]}`;
+  const referenceAnswer = item.referenceAnswer.includes(cultureExtensions[index][1]) ? item.referenceAnswer : `${item.referenceAnswer} ${cultureExtensions[index][1]}`;
+  return { ...item, ...extendChinese(prompt, referenceAnswer, index) };
+});
 
 await writeJson('listeningSets.json', listeningSets);
 await writeJson('readingSets.json', readingSets);
 await writeJson('writingPrompts.json', writingPrompts);
 await writeJson('translations.json', translations);
+const existingMocks = await readJson<Array<Record<string, unknown>>>('mockExams.json');
+const mockExams = Array.from({ length: 10 }, (_, index) => existingMocks[index] ?? {
+  id: `mock-${index + 1}`,
+  title: `阶段模拟卷 ${index + 1}`,
+  listeningSetIds: Array.from({ length: 4 }, (_, offset) => `listen-${String(((index * 4 + offset) % 24) + 1).padStart(2, '0')}`),
+  readingSetIds: Array.from({ length: 5 }, (_, offset) => `read-${String(((index * 5 + offset) % 30) + 1).padStart(2, '0')}`),
+  translationId: `trans-${String([2, 4, 6, 8][index - 6]).padStart(2, '0')}`,
+  writingId: `write-${String([2, 4, 6, 8][index - 6]).padStart(2, '0')}`,
+  timingMinutes: 125,
+  listeningDistribution: { news: 7, conversation: 8, passage: 10 },
+  readingDistribution: { cloze: 10, matching: 10, reading: 10 },
+});
+await writeJson('mockExams.json', mockExams);
 const inventory = await readJson<Record<string, unknown>>('inventory.json');
 inventory.listeningSets = listeningSets;
 inventory.readingSets = readingSets;
 inventory.writingPrompts = writingPrompts;
 inventory.translations = translations;
+inventory.mockExams = mockExams;
 await writeJson('inventory.json', inventory);
 console.log({ listeningQuestions: listeningSets.reduce((sum, set) => sum + set.questions.length, 0), readingQuestions: readingSets.reduce((sum, set) => sum + set.questions.length, 0) });

@@ -18,8 +18,16 @@
     "translationId": "trans-01",
     "writingId": "write-01",
     "timingMinutes": 125,
-    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
-    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
+    "listeningDistribution": {
+      "news": 7,
+      "conversation": 8,
+      "passage": 10
+    },
+    "readingDistribution": {
+      "cloze": 10,
+      "matching": 10,
+      "reading": 10
+    }
   },
   {
     "id": "mock-2",
@@ -40,8 +48,16 @@
     "translationId": "trans-03",
     "writingId": "write-03",
     "timingMinutes": 125,
-    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
-    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
+    "listeningDistribution": {
+      "news": 7,
+      "conversation": 8,
+      "passage": 10
+    },
+    "readingDistribution": {
+      "cloze": 10,
+      "matching": 10,
+      "reading": 10
+    }
   },
   {
     "id": "mock-3",
@@ -62,8 +78,16 @@
     "translationId": "trans-05",
     "writingId": "write-05",
     "timingMinutes": 125,
-    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
-    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
+    "listeningDistribution": {
+      "news": 7,
+      "conversation": 8,
+      "passage": 10
+    },
+    "readingDistribution": {
+      "cloze": 10,
+      "matching": 10,
+      "reading": 10
+    }
   },
   {
     "id": "mock-4",
@@ -84,8 +108,16 @@
     "translationId": "trans-07",
     "writingId": "write-07",
     "timingMinutes": 125,
-    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
-    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
+    "listeningDistribution": {
+      "news": 7,
+      "conversation": 8,
+      "passage": 10
+    },
+    "readingDistribution": {
+      "cloze": 10,
+      "matching": 10,
+      "reading": 10
+    }
   },
   {
     "id": "mock-5",
@@ -106,8 +138,16 @@
     "translationId": "trans-09",
     "writingId": "write-09",
     "timingMinutes": 125,
-    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
-    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
+    "listeningDistribution": {
+      "news": 7,
+      "conversation": 8,
+      "passage": 10
+    },
+    "readingDistribution": {
+      "cloze": 10,
+      "matching": 10,
+      "reading": 10
+    }
   },
   {
     "id": "mock-6",
@@ -128,7 +168,135 @@
     "translationId": "trans-11",
     "writingId": "write-11",
     "timingMinutes": 125,
-    "listeningDistribution": { "news": 7, "conversation": 8, "passage": 10 },
-    "readingDistribution": { "cloze": 10, "matching": 10, "reading": 10 }
+    "listeningDistribution": {
+      "news": 7,
+      "conversation": 8,
+      "passage": 10
+    },
+    "readingDistribution": {
+      "cloze": 10,
+      "matching": 10,
+      "reading": 10
+    }
+  },
+  {
+    "id": "mock-7",
+    "title": "阶段模拟卷 7",
+    "listeningSetIds": [
+      "listen-01",
+      "listen-02",
+      "listen-03",
+      "listen-04"
+    ],
+    "readingSetIds": [
+      "read-01",
+      "read-02",
+      "read-03",
+      "read-04",
+      "read-05"
+    ],
+    "translationId": "trans-02",
+    "writingId": "write-02",
+    "timingMinutes": 125,
+    "listeningDistribution": {
+      "news": 7,
+      "conversation": 8,
+      "passage": 10
+    },
+    "readingDistribution": {
+      "cloze": 10,
+      "matching": 10,
+      "reading": 10
+    }
+  },
+  {
+    "id": "mock-8",
+    "title": "阶段模拟卷 8",
+    "listeningSetIds": [
+      "listen-05",
+      "listen-06",
+      "listen-07",
+      "listen-08"
+    ],
+    "readingSetIds": [
+      "read-06",
+      "read-07",
+      "read-08",
+      "read-09",
+      "read-10"
+    ],
+    "translationId": "trans-04",
+    "writingId": "write-04",
+    "timingMinutes": 125,
+    "listeningDistribution": {
+      "news": 7,
+      "conversation": 8,
+      "passage": 10
+    },
+    "readingDistribution": {
+      "cloze": 10,
+      "matching": 10,
+      "reading": 10
+    }
+  },
+  {
+    "id": "mock-9",
+    "title": "阶段模拟卷 9",
+    "listeningSetIds": [
+      "listen-09",
+      "listen-10",
+      "listen-11",
+      "listen-12"
+    ],
+    "readingSetIds": [
+      "read-11",
+      "read-12",
+      "read-13",
+      "read-14",
+      "read-15"
+    ],
+    "translationId": "trans-06",
+    "writingId": "write-06",
+    "timingMinutes": 125,
+    "listeningDistribution": {
+      "news": 7,
+      "conversation": 8,
+      "passage": 10
+    },
+    "readingDistribution": {
+      "cloze": 10,
+      "matching": 10,
+      "reading": 10
+    }
+  },
+  {
+    "id": "mock-10",
+    "title": "阶段模拟卷 10",
+    "listeningSetIds": [
+      "listen-13",
+      "listen-14",
+      "listen-15",
+      "listen-16"
+    ],
+    "readingSetIds": [
+      "read-16",
+      "read-17",
+      "read-18",
+      "read-19",
+      "read-20"
+    ],
+    "translationId": "trans-08",
+    "writingId": "write-08",
+    "timingMinutes": 125,
+    "listeningDistribution": {
+      "news": 7,
+      "conversation": 8,
+      "passage": 10
+    },
+    "readingDistribution": {
+      "cloze": 10,
+      "matching": 10,
+      "reading": 10
+    }
   }
 ]
