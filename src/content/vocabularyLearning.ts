@@ -142,7 +142,9 @@ export const learningVocabulary: VocabularyEntry[] = (rawVocabulary as Vocabular
 
 export function auditLearningVocabulary(entries: VocabularyEntry[]): string[] {
   const errors: string[] = [];
+  if (Object.keys(commonMeanings).length !== entries.length) errors.push(`common meanings: expected ${entries.length}, received ${Object.keys(commonMeanings).length}`);
   for (const entry of entries) {
+    if (!commonMeanings[entry.word.toLowerCase()]?.trim()) errors.push(`${entry.id}: common meaning source is missing`);
     if (isSyntheticMetaExample(entry.example)) errors.push(`${entry.id}: synthetic meta example is visible`);
     if (!entry.example.trim()) errors.push(`${entry.id}: example is missing`);
     if (!entry.example.toLowerCase().includes(entry.word.toLowerCase())) errors.push(`${entry.id}: example does not contain target word`);

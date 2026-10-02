@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import rawVocabulary from '../../content/v1/vocabulary.json';
+import commonMeaningData from '../../content/v1/vocabulary-common-meanings.json';
 import { auditLearningVocabulary, learningVocabulary, qualityVocabularyEntry } from './vocabularyLearning';
 
 describe('learner-facing vocabulary', () => {
@@ -53,6 +54,30 @@ describe('learner-facing vocabulary', () => {
     expect(learningVocabulary.find((entry) => entry.word === 'get')?.meaningZh).toContain('得到');
     expect(learningVocabulary.find((entry) => entry.word === 'fine')?.meaningZh).toContain('好的');
     expect(learningVocabulary.find((entry) => entry.word === 'passage')?.meaningZh).not.toContain('通过；通路，通道');
+  });
+
+  it('ships a source-backed common-meaning record for all 800 words', () => {
+    const meanings = commonMeaningData as Record<string, string>;
+    expect(Object.keys(meanings)).toHaveLength(800);
+    expect(rawVocabulary.every((entry) => meanings[entry.word.toLowerCase()]?.trim())).toBe(true);
+  });
+
+  it('keeps the frequent senses of representative polysemous words', () => {
+    const expected: Record<string, string[]> = {
+      make: ['做', '使', '赚'],
+      get: ['得到', '到达', '变得', '理解'],
+      mean: ['意思', '意味着', '平均'],
+      hold: ['拿', '举办', '容纳'],
+      present: ['现在', '礼物', '提出', '出席'],
+      light: ['光', '点燃', '轻'],
+      sound: ['声音', '听起来', '可靠'],
+      address: ['地址', '演说', '处理'],
+    };
+    for (const [word, senses] of Object.entries(expected)) {
+      const meaning = learningVocabulary.find((entry) => entry.word === word)?.meaningZh ?? '';
+      expect(meaning, word).toEqual(expect.stringContaining(senses[0]));
+      for (const sense of senses.slice(1)) expect(meaning, `${word}: ${sense}`).toContain(sense);
+    }
   });
 
   it('removes duplicated part-of-speech labels and normalizes phonetic symbols', () => {
