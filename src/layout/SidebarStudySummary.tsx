@@ -4,7 +4,7 @@ import type { LearningRepository } from '../data/repositories/LearningRepository
 import { deriveShellSummary, type ShellSummary } from './deriveShellSummary';
 
 const defaultRepository = new DexieLearningRepository();
-const emptySummary: ShellSummary = { completed: 0, total: 4, dueReviews: 0, daysToExam: 0, phaseLabel: '学习准备中' };
+const emptySummary: ShellSummary = { completed: 0, total: 5, dueReviews: 0, daysToExam: 0, phaseLabel: '学习准备中' };
 const localDate = () => {
   const date = new Date();
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;

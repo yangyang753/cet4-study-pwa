@@ -17,6 +17,7 @@ const DiagnosticPage = lazy(() => import('../features/diagnostic/DiagnosticPage'
 const PasswordRecoveryPage = lazy(() => import('../features/auth/PasswordRecoveryPage').then((module) => ({ default: module.PasswordRecoveryPage })));
 const KnowledgePage = lazy(() => import('../features/knowledge/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
 const PrintPage = lazy(() => import('../features/print/PrintPage').then((module) => ({ default: module.PrintPage })));
+const DailyCultureRoute = lazy(() => import('../features/translation/DailyCultureTask').then((module) => ({ default: module.DailyCultureRoute })));
 const loading = (message: string, element: ReactNode) => <Suspense fallback={<p role="status">{message}</p>}>{element}</Suspense>;
 
 export const router = createHashRouter([
@@ -29,7 +30,9 @@ export const router = createHashRouter([
       { path: 'today', element: <TodayPage /> },
       { path: 'listen', element: loading('正在加载听力训练…', <ListeningPage />) },
       { path: 'practice', element: loading('正在加载专项练习…', <PracticeHub />) },
+      { path: 'practice/culture', element: loading('正在加载中国文化翻译…', <DailyCultureRoute />) },
       { path: 'practice/:kind', element: loading('正在加载练习题…', <PracticeRoute />) },
+      { path: 'culture', element: <Navigate replace to="/practice/culture" /> },
       { path: 'review', element: loading('正在加载错题复习…', <ReviewPage />) },
       { path: 'mastery/:kind', element: loading('正在生成掌握检测…', <MasteryRoute />) },
       { path: 'diagnostic', element: loading('正在加载基础诊断…', <DiagnosticPage />) },

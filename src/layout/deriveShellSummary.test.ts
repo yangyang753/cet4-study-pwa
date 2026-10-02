@@ -22,7 +22,7 @@ describe('deriveShellSummary', () => {
   it('derives today completion and due review totals', () => {
     expect(deriveShellSummary(snapshot(), '2026-09-27')).toEqual({
       completed: 2,
-      total: 4,
+      total: 5,
       dueReviews: 2,
       daysToExam: 76,
       phaseLabel: '基础补强期',
@@ -33,5 +33,11 @@ describe('deriveShellSummary', () => {
     const result = deriveShellSummary(snapshot({ settings: { ...snapshot().settings, examDate: '2026-09-01' } }), '2026-09-27');
     expect(result.daysToExam).toBe(0);
     expect(result.phaseLabel).toBe('冲刺模拟期');
+  });
+
+  it('matches the four-task route used for a short daily plan', () => {
+    const result = deriveShellSummary(snapshot({ settings: { ...snapshot().settings, dailyMinutes: 20 } }), '2026-09-27');
+    expect(result.total).toBe(4);
+    expect(result.completed).toBe(2);
   });
 });

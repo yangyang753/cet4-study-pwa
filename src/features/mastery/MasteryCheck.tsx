@@ -16,12 +16,12 @@ import './mastery.css';
 
 const defaultRepository = new DexieLearningRepository();
 const masteryQuestionKind: Record<StudyKind, PracticeKind> = {
-  vocabulary: 'vocabulary', collocation: 'collocation', grammar: 'grammar', listening: 'listening', reading: 'reading',
+  vocabulary: 'vocabulary', culture: 'translation', collocation: 'collocation', grammar: 'grammar', listening: 'listening', reading: 'reading',
   translation: 'grammar', writing: 'grammar', review: 'vocabulary', mock: 'reading',
 };
 
 export function selectMasteryQuestions(kind: StudyKind, sourceQuestionIds: string[] = []) {
-  if (kind === 'writing' || kind === 'translation') return [];
+  if (kind === 'writing' || kind === 'translation' || kind === 'culture') return [];
   const sourceQuestions = sourceQuestionIds.map(getQuestion).filter((question): question is CatalogQuestion => Boolean(question));
   const knowledgePointIds = new Set(sourceQuestions.flatMap((question) => question.knowledgePointIds));
   const objectiveSource = sourceQuestions.filter((question) => 'options' in question) as Array<CatalogQuestion & ObjectiveQuestionType>;
@@ -82,11 +82,12 @@ function ObjectiveMasteryCheck({ kind, taskId, repository, now, sourceQuestionId
 }
 
 export function MasteryCheck({ kind, taskId, repository = defaultRepository, now = new Date().toISOString(), sourceQuestionIds = [] }: { kind: StudyKind; taskId: string; repository?: LearningRepository; now?: string; sourceQuestionIds?: string[] }) {
-  if (kind === 'writing' || kind === 'translation') {
+  if (kind === 'writing' || kind === 'translation' || kind === 'culture') {
+    const subjectiveKind = kind === 'culture' ? 'translation' : kind;
     const sourced = sourceQuestionIds.map(getQuestion).find((question): question is CatalogQuestion & SubjectiveQuestion => Boolean(question && !('options' in question)));
-    const fallback = getPracticeItems(kind).find((question): question is CatalogQuestion & SubjectiveQuestion => !('options' in question));
+    const fallback = getPracticeItems(subjectiveKind).find((question): question is CatalogQuestion & SubjectiveQuestion => !('options' in question));
     const question = sourced ?? fallback;
-    return question ? <SubjectiveMasteryCheck kind={kind} taskId={taskId} question={question} repository={repository} now={now} /> : <p>暂时无法生成掌握检测题。</p>;
+    return question ? <SubjectiveMasteryCheck kind={subjectiveKind} taskId={taskId} question={question} repository={repository} now={now} /> : <p>暂时无法生成掌握检测题。</p>;
   }
   return <ObjectiveMasteryCheck kind={kind} taskId={taskId} repository={repository} now={now} sourceQuestionIds={sourceQuestionIds} />;
 }

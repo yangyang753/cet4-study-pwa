@@ -158,11 +158,34 @@ describe('ReviewPage', () => {
     const before = await repository.listAllReviews();
     render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => 0} />);
     await userEvent.click(await screen.findByRole('button', { name: '重新练习 passage' }));
-    await userEvent.type(screen.getByRole('textbox', { name: '中文释义答案' }), '文章，段落；通道，通路');
+    await userEvent.type(screen.getByRole('textbox', { name: '中文释义答案' }), '文章，段落；通道，通路；通过');
     await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
 
     expect(await screen.findByText('复习正确')).toBeVisible();
     expect(await repository.listAllReviews()).toHaveLength(before.length);
+  });
+
+  it('retries a collocation review without duplicating the attempt and completes review', async () => {
+    const name = `review-test-${crypto.randomUUID()}`;
+    names.push(name);
+    const repository = new DexieLearningRepository(new LearningDatabase(name));
+    await repository.upsertReviewCard({
+      id: 'review:c001:collocation', questionId: 'c001:collocation', knowledgeItemId: 'c001', knowledgeKind: 'collocation', format: 'objective',
+      stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+    const originalUpsert = repository.upsertKnowledgeState.bind(repository);
+    repository.upsertKnowledgeState = vi.fn().mockRejectedValueOnce(new Error('storage')).mockImplementation(originalUpsert);
+
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => 0} />);
+    await userEvent.click(await screen.findByRole('button', { name: '重新练习' }));
+    await userEvent.type(screen.getByLabelText('填写重点搭配'), 'take part in');
+    await userEvent.click(screen.getByRole('button', { name: '提交搭配复习' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('重点搭配复习保存失败');
+    await userEvent.click(screen.getByRole('button', { name: '提交搭配复习' }));
+
+    expect(await screen.findByText('复习正确')).toBeVisible();
+    expect((await repository.listAttempts()).filter((attempt) => attempt.questionId === 'c001:collocation')).toHaveLength(1);
+    expect((await repository.getDashboardSnapshot()).completions).toContainEqual(expect.objectContaining({ taskId: '2026-09-23:review' }));
   });
 
   it('shows a retry action when the review queue cannot be loaded', async () => {

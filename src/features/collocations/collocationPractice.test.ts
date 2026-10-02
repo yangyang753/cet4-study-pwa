@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { KnowledgeState } from '../../domain/learning';
-import { buildCollocationQuestion, collocationReviewCard, selectDailyCollocations, type CollocationEntry } from './collocationPractice';
+import { buildCollocationRecallExercise, collocationReviewCard, gradeCollocationRecall, selectDailyCollocations, type CollocationEntry } from './collocationPractice';
 
 const entries: CollocationEntry[] = [
   { id: 'c1', phrase: 'take part in', meaningZh: '参加', example: 'We take part in it.', exampleZh: '我们参加。' },
@@ -10,17 +10,16 @@ const entries: CollocationEntry[] = [
 ];
 
 describe('collocation practice', () => {
-  it('builds a real four-option meaning assessment', () => {
-    const question = buildCollocationQuestion(entries[0], entries);
-    expect(question.type).toBe('collocation');
-    expect(question.knowledgePointIds).toEqual(['collocation:c1']);
-    expect(question.options).toHaveLength(4);
-    expect(question.options.find((option) => option.id === question.correctAnswer)?.text).toBe('参加');
+  it('builds free-response translation and cloze exercises without options', () => {
+    expect(buildCollocationRecallExercise(entries[0], () => 0)).toMatchObject({ mode: 'zh-to-en', prompt: '参加', answer: 'take part in' });
+    expect(buildCollocationRecallExercise(entries[0], () => 0.4)).toMatchObject({ mode: 'en-to-zh', prompt: 'take part in', answer: '参加' });
+    expect(buildCollocationRecallExercise(entries[0], () => 0.9)).toMatchObject({ mode: 'cloze', answer: 'take part in' });
   });
 
-  it('does not put every correct collocation answer in the same option position', () => {
-    const answers = entries.map((entry) => buildCollocationQuestion(entry, entries).correctAnswer);
-    expect(new Set(answers).size).toBeGreaterThan(1);
+  it('grades English phrases exactly and accepts the complete Chinese meaning', () => {
+    expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0), 'take part in')).toBe(true);
+    expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0), 'take part')).toBe(false);
+    expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0.4), '参加')).toBe(true);
   });
 
   it('selects due collocations before unseen collocations and excludes future mastered items', () => {

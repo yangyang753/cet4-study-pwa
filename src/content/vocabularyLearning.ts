@@ -1,10 +1,13 @@
 import rawVocabulary from '../../content/v1/vocabulary.json';
+import commonMeaningData from '../../content/v1/vocabulary-common-meanings.json';
 import type { VocabularyEntry } from '../domain/content';
+
+const commonMeanings = commonMeaningData as Record<string, string>;
 
 const reviewedCorrections: Record<string, Partial<VocabularyEntry>> = {
   v0001: {
     partOfSpeech: 'n.',
-    meaningZh: '文章，段落；通道，通路',
+    meaningZh: '文章，段落；通道，通路；通过',
     example: 'Read the passage carefully before answering the questions.',
     exampleZh: '回答问题前请仔细阅读这篇文章。',
   },
@@ -14,16 +17,26 @@ const reviewedCorrections: Record<string, Partial<VocabularyEntry>> = {
     example: 'It did not take long to finish the reading task.',
     exampleZh: '完成这项阅读任务没有花很长时间。',
   },
+  v0026: {
+    partOfSpeech: 'prep./v.',
+    meaningZh: '像，如同；喜欢，喜爱；赞同；希望；像要',
+    example: 'Many students like the idea because it feels like a practical solution.',
+    exampleZh: '许多学生喜欢并赞同这个想法，因为它像是一个切实可行的解决办法。',
+  },
+  v0470: { meaningZh: '地址；演说；处理，应对；向……讲话' },
+  v0495: { meaningZh: '穿，戴；磨损；耐用，经受' },
+  v0648: { meaningZh: '选择，挑选；采摘；捡起；接人' },
 };
 
 const isSyntheticMetaExample = (example: string) => /\bis presented as\b/i.test(example);
 
 function normalizeMeaning(value: string) {
-  return value
+  const normalized = value
     .replace(/(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./gi, '；')
     .replace(/[;；]+/g, '；')
     .replace(/^；|；$/g, '')
     .trim();
+  return [...new Set(normalized.split('；').map((meaning) => meaning.trim()).filter(Boolean))].join('；');
 }
 
 function normalizePhonetic(value: string) {
@@ -80,7 +93,8 @@ function contextualExample(entry: VocabularyEntry): Pick<VocabularyEntry, 'examp
 
 export function qualityVocabularyEntry(entry: VocabularyEntry): VocabularyEntry {
   const source = { ...entry, ...reviewedCorrections[entry.id] };
-  const corrected = { ...source, meaningZh: normalizeMeaning(source.meaningZh), phonetic: normalizePhonetic(source.phonetic) };
+  const supplementaryMeaning = reviewedCorrections[entry.id] ? '' : commonMeanings[source.word.toLowerCase()] ?? '';
+  const corrected = { ...source, meaningZh: normalizeMeaning(`${source.meaningZh}；${supplementaryMeaning}`), phonetic: normalizePhonetic(source.phonetic) };
   if (!isSyntheticMetaExample(corrected.example) && corrected.example.trim()) return corrected;
   return { ...corrected, ...contextualExample(corrected) };
 }
@@ -100,5 +114,11 @@ export function auditLearningVocabulary(entries: VocabularyEntry[]): string[] {
   if (!passage?.meaningZh.includes('文章')) errors.push('v0001: missing common reading sense');
   const long = entries.find((entry) => entry.id === 'v0030');
   if (!long?.meaningZh.includes('长的')) errors.push('v0030: missing common adjective sense');
+  const like = entries.find((entry) => entry.word.toLowerCase() === 'like');
+  if (!like || !['像', '喜欢', '赞同'].every((meaning) => like.meaningZh.includes(meaning))) errors.push('like: missing common senses');
+  for (const [word, senses] of Object.entries({ wear: ['穿', '戴'], pick: ['选择', '挑选'], address: ['地址', '处理'] })) {
+    const entry = entries.find((item) => item.word.toLowerCase() === word);
+    if (!entry || !senses.every((sense) => entry.meaningZh.includes(sense))) errors.push(`${word}: missing common senses`);
+  }
   return errors;
 }

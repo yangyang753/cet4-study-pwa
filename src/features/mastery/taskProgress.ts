@@ -11,7 +11,7 @@ export async function completeDailyTask(repository: LearningRepository, kind: St
 }
 
 export type MasteryOutcome = 'mastered' | 'remediation';
-const supportedKinds: StudyKind[] = ['vocabulary', 'grammar', 'listening', 'reading', 'translation', 'writing', 'review', 'mock'];
+const supportedKinds: StudyKind[] = ['vocabulary', 'culture', 'collocation', 'grammar', 'listening', 'reading', 'translation', 'writing', 'review', 'mock'];
 
 export async function recordMasteryOutcome(repository: LearningRepository, taskId: string, correct: number, total: number, now: string): Promise<MasteryOutcome> {
   const rawKind = taskId.split(':').at(-1) ?? 'review';

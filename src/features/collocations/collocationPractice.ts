@@ -9,6 +9,32 @@ export interface CollocationEntry {
   exampleZh: string;
 }
 
+export interface CollocationRecallExercise {
+  itemId: string;
+  mode: 'zh-to-en' | 'en-to-zh' | 'cloze';
+  prompt: string;
+  answer: string;
+  instruction: string;
+}
+
+function normalizeRecall(value: string) {
+  return value.toLowerCase().replace(/[，。；、,.!?！？…\s]/g, '').trim();
+}
+
+export function buildCollocationRecallExercise(item: CollocationEntry, random: () => number = Math.random): CollocationRecallExercise {
+  const value = random();
+  if (value < 1 / 3) return { itemId: item.id, mode: 'zh-to-en', prompt: item.meaningZh, answer: item.phrase, instruction: '根据中文写出完整重点搭配' };
+  if (value < 2 / 3) return { itemId: item.id, mode: 'en-to-zh', prompt: item.phrase, answer: item.meaningZh, instruction: '写出重点搭配的完整中文含义' };
+  const words = item.phrase.split(/\s+/);
+  const hiddenIndex = Math.min(words.length - 1, Math.floor(((value - 2 / 3) * 3) * words.length));
+  const prompt = words.map((word, index) => index === hiddenIndex ? '_'.repeat(Math.max(4, word.length)) : word).join(' ');
+  return { itemId: item.id, mode: 'cloze', prompt, answer: item.phrase, instruction: '补全挖空，并写出完整重点搭配' };
+}
+
+export function gradeCollocationRecall(exercise: CollocationRecallExercise, response: string) {
+  return normalizeRecall(response) === normalizeRecall(exercise.answer);
+}
+
 const optionId = (index: number) => String.fromCharCode(65 + index);
 
 export function buildCollocationQuestion(item: CollocationEntry, entries: CollocationEntry[]): ObjectiveQuestion {

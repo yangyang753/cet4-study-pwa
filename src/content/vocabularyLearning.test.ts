@@ -11,16 +11,19 @@ describe('learner-facing vocabulary', () => {
     expect(rawPassage?.meaningZh).toBe('n.通过;通路，通道');
     expect(passage).toMatchObject({
       partOfSpeech: 'n.',
-      meaningZh: '文章，段落；通道，通路',
       example: 'Read the passage carefully before answering the questions.',
       exampleZh: '回答问题前请仔细阅读这篇文章。',
     });
+    expect(passage?.meaningZh).toContain('文章，段落');
+    expect(passage?.meaningZh).toContain('通道，通路');
+    expect(passage?.meaningZh).toContain('通过');
     expect(long).toMatchObject({
       partOfSpeech: 'a./ad.',
-      meaningZh: '长的；长时间的，长期地',
       example: 'It did not take long to finish the reading task.',
       exampleZh: '完成这项阅读任务没有花很长时间。',
     });
+    expect(long?.meaningZh).toContain('长的');
+    expect(long?.meaningZh).toContain('长期地');
   });
 
   it('replaces synthetic meta examples with a usable contextual sentence', () => {
@@ -33,6 +36,16 @@ describe('learner-facing vocabulary', () => {
     expect(entry.example).toContain('sample');
     expect(entry.example).not.toContain('is presented as');
     expect(entry.exampleZh).toContain('样品');
+  });
+
+  it('combines the common meanings of polysemous CET-4 words', () => {
+    const like = learningVocabulary.find((entry) => entry.word === 'like');
+    expect(like?.meaningZh).toContain('像');
+    expect(like?.meaningZh).toContain('喜欢');
+    expect(like?.meaningZh).toContain('赞同');
+    expect(learningVocabulary.find((entry) => entry.word === 'wear')?.meaningZh).toContain('穿');
+    expect(learningVocabulary.find((entry) => entry.word === 'pick')?.meaningZh).toContain('选择');
+    expect(learningVocabulary.find((entry) => entry.word === 'address')?.meaningZh).toContain('处理');
   });
 
   it('removes duplicated part-of-speech labels and normalizes phonetic symbols', () => {

@@ -7,7 +7,7 @@ export interface MasteryContext {
   sourceQuestionIds: string[];
 }
 
-const studyKinds: StudyKind[] = ['vocabulary', 'grammar', 'listening', 'reading', 'translation', 'writing', 'review', 'mock'];
+const studyKinds: StudyKind[] = ['vocabulary', 'culture', 'collocation', 'grammar', 'listening', 'reading', 'translation', 'writing', 'review', 'mock'];
 
 function safeKind(value: string): StudyKind {
   return studyKinds.includes(value as StudyKind) ? value as StudyKind : 'vocabulary';

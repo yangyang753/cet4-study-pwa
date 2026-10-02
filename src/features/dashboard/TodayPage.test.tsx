@@ -50,7 +50,8 @@ describe('TodayPage', () => {
   it('starts daily training with vocabulary before questions', async () => {
     render(<TodayPage today="2026-09-22" repository={repository()} />);
     expect(await screen.findByRole('link', { name: '先学高频词 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
-    expect(screen.getByText(/先复习旧词，再学新词并检测翻译强化词/)).toBeVisible();
+    expect(screen.getByText(/先完成独立的高频词学习/)).toBeVisible();
+    expect(screen.getByRole('heading', { name: '中国文化中译英' }).closest('article')).toHaveTextContent('完成高频词后解锁');
   });
 
   it('presents the day as a structured premium learning cockpit', async () => {
@@ -68,6 +69,13 @@ describe('TodayPage', () => {
     expect(await screen.findByRole('heading', { name: '今日学习路线' })).toBeVisible();
     expect(screen.queryByRole('alert', { name: '本机备份提醒' })).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: '考试准备' })).not.toBeInTheDocument();
+  });
+
+  it('normalizes legacy daily time below the supported minimum', async () => {
+    render(<TodayPage today="2026-09-22" repository={repository({ settings: { ...snapshot.settings, dailyMinutes: 10 } })} />);
+    expect(await screen.findByText('今天只需要专注 20 分钟。')).toBeVisible();
+    expect(screen.queryByText(/今天是每周整套模考日/)).not.toBeInTheDocument();
+    expect(screen.getByText('20 分钟 · 按顺序完成效果更稳')).toBeVisible();
   });
 
   it('preserves the saved vocabulary cohort when refreshing the daily plan', async () => {
@@ -111,13 +119,13 @@ describe('TodayPage', () => {
     expect(screen.getByText('81')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: '今日学习路线' })).toBeInTheDocument();
     expect(screen.getByText('60 分钟 · 按顺序完成效果更稳')).toBeVisible();
-    expect(screen.getAllByRole('article')).toHaveLength(4);
+    expect(screen.getAllByRole('article')).toHaveLength(5);
     expect(screen.getByText('正在积累数据')).toBeVisible();
   });
 
   it('does not offer manual completion controls', async () => {
     render(<TodayPage today="2026-09-22" repository={repository()} />);
-    expect(await screen.findAllByText('未完成')).toHaveLength(4);
+    expect(await screen.findAllByText(/未完成|待解锁/)).toHaveLength(5);
     expect(screen.queryByRole('button', { name: '标记完成' })).not.toBeInTheDocument();
   });
 
@@ -198,7 +206,7 @@ describe('TodayPage', () => {
     expect(screen.getByText(/预计.*前完成稳定掌握/)).toBeVisible();
     expect(screen.getByText(/仍需完成.*次巩固检测/)).toBeVisible();
     expect(screen.getByText('425 参考线 · 450 安全目标')).toBeVisible();
-    expect(screen.getByRole('heading', { name: '高频词汇与词性' }).closest('article')).toHaveTextContent('29 分钟');
+    expect(screen.getByRole('heading', { name: '高频词汇与词性' }).closest('article')).toHaveTextContent('25 分钟');
   });
 
   it('warns when the capped daily pace cannot finish before the exam', async () => {

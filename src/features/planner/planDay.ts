@@ -1,6 +1,6 @@
 import type { LearningPriority } from '../diagnostic/adaptivePriorities';
 
-export type StudyKind = 'vocabulary' | 'collocation' | 'grammar' | 'listening' | 'reading' | 'translation' | 'writing' | 'review' | 'mock';
+export type StudyKind = 'vocabulary' | 'culture' | 'collocation' | 'grammar' | 'listening' | 'reading' | 'translation' | 'writing' | 'review' | 'mock';
 export type StudyPhase = 'foundation' | 'breakthrough' | 'sprint';
 export interface StudyTask { id: string; kind: StudyKind; minutes: number; priority: number }
 export interface PlannerInput { date: string; examDate: string; dailyMinutes: number; weakSkill: StudyKind; diagnosticWeakSkill?: StudyKind; hasRecentEvidence: boolean; unfinished: StudyTask[]; vocabularyMinutes?: number; priorities?: LearningPriority[] }
@@ -28,32 +28,34 @@ export function planDay(input: PlannerInput): DailyPlan {
   if (fullMockDay) return { date: input.date, phase, tasks: [{ id: `${input.date}:mock`, kind: 'mock', minutes: 125, priority: 6 }] };
   const requested = priorityRotating ?? evidenceWeakSkill ?? rotatingFoundationKind(input.date);
   const requestedRotating: StudyKind = requested === 'grammar' ? 'collocation' : requested;
-  const rotating: StudyKind = ['vocabulary', 'listening', 'review'].includes(requestedRotating) ? 'reading' : requestedRotating;
-  const minutes = input.dailyMinutes;
+  const rotating: StudyKind = ['vocabulary', 'culture', 'listening', 'review'].includes(requestedRotating) ? 'reading' : requestedRotating;
+  const minutes = Math.max(20, input.dailyMinutes);
   const reviewMinutes = Math.min(5, minutes);
-  const minimumListeningMinutes = Math.min(minutes - reviewMinutes, minutes >= 45 ? 15 : Math.max(5, Math.round(minutes * 0.35)));
+  const cultureMinutes = Math.min(10, Math.max(5, minutes >= 45 ? 10 : Math.round(minutes * 0.15)));
+  const minimumListeningMinutes = Math.min(minutes - reviewMinutes - cultureMinutes, minutes >= 45 ? 15 : 5);
   const minimumRotatingMinutes = minutes >= 30 ? 5 : 0;
   const defaultVocabularyMinutes = Math.max(5, Math.round(minutes * 0.25)) + (priorityKinds.includes('vocabulary') ? 5 : 0);
-  const maximumVocabularyMinutes = Math.max(0, minutes - reviewMinutes - minimumListeningMinutes - minimumRotatingMinutes);
+  const maximumVocabularyMinutes = Math.max(5, minutes - reviewMinutes - cultureMinutes - minimumListeningMinutes - minimumRotatingMinutes);
   const vocabularyMinutes = Math.min(maximumVocabularyMinutes, Math.max(defaultVocabularyMinutes, input.vocabularyMinutes ?? defaultVocabularyMinutes));
-  const maximumListeningMinutes = minutes - vocabularyMinutes - reviewMinutes - minimumRotatingMinutes;
+  const maximumListeningMinutes = minutes - vocabularyMinutes - cultureMinutes - reviewMinutes - minimumRotatingMinutes;
   const listeningMinutes = Math.min(maximumListeningMinutes, Math.max(minimumListeningMinutes, Math.round(minutes / 3) + (priorityKinds.includes('listening') ? 5 : 0)));
-  const rotatingMinutes = minutes - vocabularyMinutes - listeningMinutes - reviewMinutes;
+  const rotatingMinutes = minutes - vocabularyMinutes - cultureMinutes - listeningMinutes - reviewMinutes;
   const savedCarryover = [...input.unfinished].sort((a, b) => b.priority - a.priority)[0];
   const carryover: StudyTask | undefined = savedCarryover?.kind === 'grammar'
     ? { ...savedCarryover, id: `${input.date}:collocation`, kind: 'collocation' }
     : savedCarryover;
   const tasks: StudyTask[] = [
     { id: `${input.date}:vocabulary`, kind: 'vocabulary', minutes: vocabularyMinutes, priority: 3 },
+    { id: `${input.date}:culture`, kind: 'culture', minutes: cultureMinutes, priority: 4 },
     { id: `${input.date}:listening`, kind: 'listening', minutes: listeningMinutes, priority: 4 },
   ];
   if (rotatingMinutes >= 5) tasks.push(carryover && priorityKinds.length === 0 ? { ...carryover, minutes: Math.min(rotatingMinutes, carryover.minutes) } : { id: `${input.date}:${rotating}`, kind: rotating, minutes: rotatingMinutes, priority: 2 });
-  else tasks[1] = { ...tasks[1], minutes: tasks[1].minutes + rotatingMinutes };
+  else tasks[2] = { ...tasks[2], minutes: tasks[2].minutes + rotatingMinutes };
   tasks.push({ id: `${input.date}:review`, kind: 'review', minutes: reviewMinutes, priority: 5 });
   const total = tasks.reduce((sum, task) => sum + task.minutes, 0);
   if (total < minutes) {
-    const targetIndex = tasks.findIndex((task) => !['vocabulary', 'listening', 'review'].includes(task.kind));
-    const index = targetIndex >= 0 ? targetIndex : 1;
+    const targetIndex = tasks.findIndex((task) => !['vocabulary', 'culture', 'listening', 'review'].includes(task.kind));
+    const index = targetIndex >= 0 ? targetIndex : 2;
     tasks[index] = { ...tasks[index], minutes: tasks[index].minutes + minutes - total };
   }
   return { date: input.date, phase, tasks };
@@ -61,7 +63,7 @@ export function planDay(input: PlannerInput): DailyPlan {
 
 export function carryoverFromPlan(previousTasks: StudyTask[], completedTaskIds: Set<string>): StudyTask[] {
   return previousTasks.filter((task) =>
-    !completedTaskIds.has(task.id) && !['vocabulary', 'listening', 'review', 'mock'].includes(task.kind));
+    !completedTaskIds.has(task.id) && !['vocabulary', 'culture', 'listening', 'review', 'mock'].includes(task.kind));
 }
 
 export function daysUntil(date: string, examDate: string) { return Math.max(0, daysBetween(date, examDate)); }

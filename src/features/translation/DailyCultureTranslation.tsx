@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createId } from '../../lib/createId';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import type { VocabularyEntry } from '../../domain/content';
 import type { KnowledgeState } from '../../domain/learning';
 import { recordTranslationResult, vocabularyReviewCard } from '../vocabulary/wordMastery';
 import { evaluateCultureTranslation, type CultureTranslationEvaluation, type CultureTranslationPrompt } from './cultureTranslation';
 
-export function DailyCultureTranslation({ repository, prompt, vocabulary, states, date, now = new Date().toISOString(), initialAnswer = '', onDraftChange, onPassed, onComplete }: {
+export function DailyCultureTranslation({ repository, prompt, vocabulary, states, now = new Date().toISOString(), initialAnswer = '', completeLabel = '继续学习重点搭配', onDraftChange, onPassed, onComplete }: {
   repository: LearningRepository;
   prompt: CultureTranslationPrompt;
   vocabulary: VocabularyEntry[];
@@ -13,6 +14,7 @@ export function DailyCultureTranslation({ repository, prompt, vocabulary, states
   date: string;
   now?: string;
   initialAnswer?: string;
+  completeLabel?: string;
   onDraftChange?: (answer: string) => void | Promise<void>;
   onPassed?: (answer: string) => void | Promise<void>;
   onComplete: () => void;
@@ -23,7 +25,7 @@ export function DailyCultureTranslation({ repository, prompt, vocabulary, states
   const [result, setResult] = useState<CultureTranslationEvaluation | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  const [attemptNumber, setAttemptNumber] = useState(1);
+  const [attemptId, setAttemptId] = useState(() => createId());
   const draftCallback = useRef(onDraftChange);
   const initialDraft = useRef(initialAnswer);
   useEffect(() => { draftCallback.current = onDraftChange; }, [onDraftChange]);
@@ -43,7 +45,7 @@ export function DailyCultureTranslation({ repository, prompt, vocabulary, states
     try {
       await onDraftChange?.(answer);
       await repository.saveAttemptOnce({
-        id: `culture-translation:${date}:${prompt.id}:${attemptNumber}`,
+        id: attemptId,
         userId: 'local-user',
         questionId: prompt.id,
         response: answer,
@@ -86,8 +88,8 @@ export function DailyCultureTranslation({ repository, prompt, vocabulary, states
       {!result.meaningComplete && <p>译文缺少题目主题的关键信息，本次暂不判定通过；请对照参考译文检查遗漏。</p>}
       <details><summary>查看参考译文与要点</summary><p>{prompt.referenceAnswer}</p><ul>{prompt.keyPoints.map((point) => <li key={point}>{point}</li>)}</ul></details>
       {result.passed
-        ? <button className="primary-action" onClick={onComplete}>继续学习重点搭配</button>
-        : <button className="primary-action" onClick={() => { setAttemptNumber((value) => value + 1); setResult(null); }}>修改后重新提交</button>}
+        ? <button className="primary-action" onClick={onComplete}>{completeLabel}</button>
+        : <button className="primary-action" onClick={() => { setAttemptId(createId()); setResult(null); }}>修改后重新提交</button>}
     </div>}
   </section>;
 }

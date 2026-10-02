@@ -12,9 +12,10 @@ export interface ShellSummary {
 export function deriveShellSummary(snapshot: DashboardSnapshot, today: string): ShellSummary {
   const completedKinds = new Set(snapshot.completions.filter((item) => item.date === today).map((item) => item.kind));
   const daysToExam = daysUntil(today, snapshot.settings.examDate);
+  const total = snapshot.settings.dailyMinutes < 30 ? 4 : 5;
   return {
-    completed: Math.min(completedKinds.size, 4),
-    total: 4,
+    completed: Math.min(completedKinds.size, total),
+    total,
     dueReviews: snapshot.dueReviews.length,
     daysToExam,
     phaseLabel: daysToExam <= 28 ? '冲刺模拟期' : daysToExam <= 56 ? '题型突破期' : '基础补强期',

@@ -45,6 +45,14 @@ describe('MasteryCheck', () => {
   it('does not select unrelated objective grammar questions for writing or translation', () => {
     expect(selectMasteryQuestions('writing')).toHaveLength(0);
     expect(selectMasteryQuestions('translation')).toHaveLength(0);
+    expect(selectMasteryQuestions('culture')).toHaveLength(0);
+  });
+
+  it('uses a free-response translation check for culture mastery', () => {
+    render(<MasteryCheck kind="culture" taskId="2026-09-22:culture" repository={repository()} now="2026-09-22T09:00:00.000Z" />);
+    expect(screen.getByRole('heading', { name: '不看答案，再译一次关键句' })).toBeVisible();
+    expect(screen.getByLabelText('翻译掌握证明')).toBeVisible();
+    expect(screen.queryByRole('radio')).not.toBeInTheDocument();
   });
 
   it('marks the task mastered after all three contextual answers are correct', async () => {

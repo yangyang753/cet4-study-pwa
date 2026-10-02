@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
@@ -19,11 +19,14 @@ function repository() {
     }),
     upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
     upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+    completeTask: vi.fn().mockResolvedValue(undefined),
+    getPlan: vi.fn().mockResolvedValue(null),
+    savePlan: vi.fn().mockResolvedValue(undefined),
   } as unknown as LearningRepository;
 }
 
 describe('DailyVocabularySession', () => {
-  it('resumes culture target review after words already passed in the saved session', async () => {
+  it('migrates a saved legacy post-vocabulary phase to completed vocabulary', async () => {
     const learningRepository = repository();
     vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({
       knowledgeStates: entries.map((item) => ({ id: `knowledge:${item.id}`, itemId: item.id, status: 'mastered' as const, favorite: false, reviewStage: 4, updatedAt: '2026-09-25T08:00:00.000Z' })),
@@ -33,24 +36,11 @@ describe('DailyVocabularySession', () => {
       getPlan: vi.fn().mockResolvedValue({ id: 'plan:2026-09-25', date: '2026-09-25', tasks: [], vocabularySession: { wordIds: [], learnedWordIds: [], strictPassedWordIds: [], passedCultureReviewWordIds: ['v1'], phase: 'culture-review' }, updatedAt: '2026-09-25T08:00:00.000Z' }),
       savePlan: vi.fn().mockResolvedValue(undefined),
     });
-    const culturePrompts = [{ id: 'test', theme: '测试', promptZh: '文章带来益处。', referenceAnswer: 'A passage brings a benefit.', targetWordIds: ['v1', 'v2'], keyPoints: ['文章', '益处'] }];
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} culturePrompts={culturePrompts} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
-    expect(await screen.findByText(/翻译强化词 · 2\/2/)).toBeVisible();
-    expect(screen.getByText('_______')).toBeVisible();
-  });
-
-  it('skips a culture translation that already passed before refresh', async () => {
-    const learningRepository = repository();
-    vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({
-      knowledgeStates: [], settings: { id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-20T00:00:00.000Z' }, attempts: [], dueReviews: [], completions: [],
-    });
-    Object.assign(learningRepository, {
-      getPlan: vi.fn().mockResolvedValue({ id: 'plan:2026-09-25', date: '2026-09-25', tasks: [], vocabularySession: { wordIds: [], learnedWordIds: [], culturePassed: true, phase: 'culture-translation' }, updatedAt: '2026-09-25T08:00:00.000Z' }),
-      savePlan: vi.fn().mockResolvedValue(undefined),
-    });
     render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
-    expect(await screen.findByRole('heading', { name: '单词之后学习重点搭配' })).toBeVisible();
+    expect(await screen.findByRole('heading', { name: '今日词汇训练已完成' })).toBeVisible();
     expect(screen.queryByRole('heading', { name: '中国文化翻译' })).not.toBeInTheDocument();
+    await waitFor(() => expect(learningRepository.completeTask).toHaveBeenCalledWith(expect.objectContaining({ taskId: '2026-09-25:vocabulary' })));
+    expect(learningRepository.savePlan).toHaveBeenCalledWith(expect.objectContaining({ vocabularySession: expect.objectContaining({ phase: 'complete' }) }));
   });
   it('reuses the saved daily word cohort instead of selecting a fresh batch', async () => {
     const learningRepository = repository();
@@ -66,21 +56,7 @@ describe('DailyVocabularySession', () => {
     expect(await screen.findByRole('heading', { name: '严格检测今日新词' })).toBeVisible();
     expect(screen.getByText(/2 \/ 2/)).toBeVisible();
   });
-  it('tests a learned culture target before opening the culture translation', async () => {
-    const learningRepository = repository();
-    vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({
-      knowledgeStates: entries.map((item) => ({ id: `knowledge:${item.id}`, itemId: item.id, status: 'mastered' as const, favorite: false, reviewStage: 4, nextReviewAt: '2026-12-20T00:00:00.000Z', updatedAt: '2026-09-23T00:00:00.000Z' })),
-      settings: { id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-20T00:00:00.000Z' },
-      attempts: [], dueReviews: [], completions: [],
-    });
-    const culturePrompts = [{ id: 'test', theme: '测试', promptZh: '文化带来益处。', referenceAnswer: 'Culture brings a benefit.', targetWordIds: ['v2'], keyPoints: ['益处'] }];
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} culturePrompts={culturePrompts} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
-    await userEvent.click(await screen.findByRole('button', { name: '开始翻译强化词检测' }));
-    expect(await screen.findByRole('heading', { name: '先检测翻译强化词' })).toBeVisible();
-    expect(screen.getByText('_______')).toBeVisible();
-  });
-
-  it('continues into a daily culture translation even when there are no new words', async () => {
+  it('completes vocabulary without embedding the separate culture translation', async () => {
     const learningRepository = repository();
     vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({
       knowledgeStates: entries.map((item) => ({ id: `knowledge:${item.id}`, itemId: item.id, status: 'mastered', favorite: false, reviewStage: 4, nextReviewAt: '2026-12-20T00:00:00.000Z', updatedAt: '2026-09-23T00:00:00.000Z' })),
@@ -88,14 +64,15 @@ describe('DailyVocabularySession', () => {
       attempts: [], dueReviews: [], completions: [],
     });
     render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
-    await userEvent.click(await screen.findByRole('button', { name: '开始今日文化翻译' }));
-    expect(await screen.findByRole('heading', { name: /中国文化翻译/ })).toBeVisible();
+    await userEvent.click(await screen.findByRole('button', { name: '完成今日词汇学习' }));
+    expect(await screen.findByRole('heading', { name: '今日词汇训练已完成' })).toBeVisible();
+    expect(screen.queryByLabelText('我的英文翻译')).not.toBeInTheDocument();
   });
 
   it('tests due old words before showing a new word', async () => {
     const learningRepository = repository();
     render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
-    expect(await screen.findByRole('heading', { name: '先复习旧词' })).toBeVisible();
+    expect(await screen.findByRole('heading', { name: '先复习今天要用的单词' })).toBeVisible();
     expect(screen.getByText('文章，段落')).toBeVisible();
     expect(screen.queryByRole('heading', { name: 'benefit' })).not.toBeInTheDocument();
 

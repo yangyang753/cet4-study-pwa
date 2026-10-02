@@ -5,7 +5,6 @@ import { vi } from 'vitest';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { getPracticeItems } from '../../content/catalog';
 import { ExerciseRunner } from './ExerciseRunner';
-import collocations from '../../../content/v1/collocations.json';
 
 const validWriting = `First, daily practice helps students remember important knowledge and notice their weak points before an examination. A clear routine also makes a difficult goal feel smaller, so learners are more willing to begin instead of waiting for the perfect moment. Keeping a notebook beside the textbook also helps students capture useful expressions and review them before they disappear from memory.
 
@@ -14,20 +13,6 @@ Therefore, I plan to study at the same time each evening, review mistakes, and w
 async function unlockCurrentQuestion() {
   for (const input of screen.getAllByRole('textbox')) fireEvent.change(input, { target: { value: '这是什么以及如何安排，什么时候进行，为什么这样做，星期天下午或星期一早上。' } });
   await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
-}
-
-async function completeDailyCollocations() {
-  for (let index = 0; index < 3; index += 1) {
-    const phrase = (await screen.findByRole('heading', { level: 2 })).textContent;
-    const entry = collocations.find((item) => item.phrase === phrase);
-    if (!entry) throw new Error(`Missing collocation fixture for ${phrase}`);
-    await userEvent.click(await screen.findByRole('button', { name: '显示搭配释义' }));
-    await userEvent.click(screen.getByRole('button', { name: '开始搭配测试' }));
-    const meaningPattern = new RegExp(`${entry.meaningZh.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
-    await userEvent.click(screen.getByRole('radio', { name: meaningPattern }));
-    await userEvent.click(screen.getByRole('button', { name: '提交搭配答案' }));
-    await userEvent.click(await screen.findByRole('button', { name: index === 2 ? '完成重点搭配' : '下一个重点搭配' }));
-  }
 }
 
 describe('ExerciseRunner', () => {
@@ -232,10 +217,6 @@ describe('ExerciseRunner', () => {
     await user.click(screen.getByRole('button', { name: '完成单词学习' }));
     await user.type(await screen.findByLabelText('英文拼写'), 'passage');
     await user.click(screen.getByRole('button', { name: '提交并完成检测' }));
-    await user.type(await screen.findByLabelText('我的英文翻译'), 'The ancient Silk Road connected China with other parts of the world. Traders carried silk, tea and other goods, while also spreading languages, knowledge and art. Long-term exchange improved understanding and helped different societies develop together. Today, the Silk Road is still regarded as an important symbol of cultural exchange. As international exchange grows, more foreigners are beginning to learn about this cultural tradition and the values behind it.');
-    await user.click(screen.getByRole('button', { name: '提交文化翻译' }));
-    await user.click(await screen.findByRole('button', { name: '继续学习重点搭配' }));
-    await completeDailyCollocations();
     expect(await screen.findByRole('heading', { name: '今日词汇训练已完成' })).toBeVisible();
     expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({
       id: '2026-09-22:vocabulary', taskId: '2026-09-22:vocabulary', kind: 'vocabulary',

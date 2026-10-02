@@ -8,7 +8,7 @@ describe('planDay', () => {
     const plan = planDay(base);
     expect(plan.phase).toBe('foundation');
     expect(plan.tasks.map((task) => [task.kind, task.minutes])).toEqual([
-      ['vocabulary', 15], ['listening', 20], ['reading', 20], ['review', 5],
+      ['vocabulary', 15], ['culture', 10], ['listening', 20], ['reading', 10], ['review', 5],
     ]);
     expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBe(60);
   });
@@ -16,7 +16,7 @@ describe('planDay', () => {
   it('caps missed-work carryover instead of creating an unlimited backlog', () => {
     const unfinished = Array.from({ length: 12 }, (_, index) => ({ id: `old-${index}`, kind: 'reading' as const, minutes: 20, priority: index }));
     const plan = planDay({ ...base, unfinished });
-    expect(plan.tasks).toHaveLength(4);
+    expect(plan.tasks).toHaveLength(5);
     expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBeLessThanOrEqual(60);
   });
 
@@ -24,8 +24,8 @@ describe('planDay', () => {
     const plan = planDay({ ...base, vocabularyMinutes: 24 });
     expect(plan.tasks[0]).toMatchObject({ kind: 'vocabulary', minutes: 24 });
     expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBe(60);
-    expect(plan.tasks[1].minutes).toBeGreaterThanOrEqual(15);
-    expect(plan.tasks[2].minutes).toBeGreaterThanOrEqual(10);
+    expect(plan.tasks.find((task) => task.kind === 'listening')?.minutes).toBeGreaterThanOrEqual(15);
+    expect(plan.tasks.find((task) => task.kind === 'culture')?.minutes).toBeGreaterThanOrEqual(5);
   });
 
   it.each([20, 30, 60, 180])('never creates negative time inside a %i-minute budget', (dailyMinutes) => {
@@ -36,7 +36,7 @@ describe('planDay', () => {
 
   it('drops the rotating task when a short plan cannot give it meaningful time', () => {
     const plan = planDay({ ...base, dailyMinutes: 20 });
-    expect(plan.tasks.map((task) => task.kind)).toEqual(['vocabulary', 'listening', 'review']);
+    expect(plan.tasks.map((task) => task.kind)).toEqual(['vocabulary', 'culture', 'listening', 'review']);
   });
 
   it('moves into sprint phase within four weeks of the exam', () => {
@@ -67,14 +67,20 @@ describe('planDay', () => {
     expect(plan.tasks.some((task) => task.kind === 'grammar')).toBe(false);
   });
 
+  it('normalizes invalid legacy time settings without creating negative tasks', () => {
+    const plan = planDay({ ...base, dailyMinutes: 10 });
+    expect(plan.tasks.every((task) => task.minutes > 0)).toBe(true);
+    expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBe(20);
+  });
+
   it('rotates foundation work across collocations reading writing and translation', () => {
-    const kinds = ['2026-09-24', '2026-09-25', '2026-09-26', '2026-09-27'].map((date) => planDay({ ...base, date }).tasks[2].kind);
+    const kinds = ['2026-09-24', '2026-09-25', '2026-09-26', '2026-09-27'].map((date) => planDay({ ...base, date }).tasks[3].kind);
     expect(new Set(kinds)).toEqual(new Set(['collocation', 'reading', 'writing', 'translation']));
   });
 
   it('prefers recent learning evidence over the earlier diagnostic result', () => {
     const plan = planDay({ ...base, weakSkill: 'writing', diagnosticWeakSkill: 'grammar', hasRecentEvidence: true });
-    expect(plan.tasks[2].kind).toBe('writing');
+    expect(plan.tasks[3].kind).toBe('writing');
   });
 
   it('carries yesterday unfinished rotating task without duplicating daily routines', () => {
@@ -86,7 +92,7 @@ describe('planDay', () => {
 
     const previousTasks = planDay({ ...base, date: '2026-10-19', weakSkill: 'writing' }).tasks;
     expect(carryoverFromPlan(previousTasks, completedTaskIds)).toEqual([
-      { id: '2026-10-19:writing', kind: 'writing', minutes: 20, priority: 2 },
+      { id: '2026-10-19:writing', kind: 'writing', minutes: 10, priority: 2 },
     ]);
   });
 
@@ -117,7 +123,7 @@ describe('planDay', () => {
       { kind: 'grammar' as const, level: 0.3, source: 'diagnostic' as const, attempts: 0 },
     ];
     const unfinished = [{ id: 'old-reading', kind: 'reading' as const, minutes: 20, priority: 10 }];
-    const kinds = ['2026-09-26', '2026-09-27'].map((date) => planDay({ ...base, date, priorities, unfinished }).tasks[2].kind);
+    const kinds = ['2026-09-26', '2026-09-27'].map((date) => planDay({ ...base, date, priorities, unfinished }).tasks[3].kind);
     expect(new Set(kinds)).toEqual(new Set(['writing', 'collocation']));
     expect(kinds).not.toContain('reading');
   });
@@ -127,7 +133,7 @@ describe('planDay', () => {
       { kind: 'vocabulary', level: 0.1, source: 'diagnostic', attempts: 0 },
       { kind: 'listening', level: 0.2, source: 'diagnostic', attempts: 0 },
     ] });
-    expect(plan.tasks.map((task) => task.kind)).toEqual(['vocabulary', 'listening', 'review']);
+    expect(plan.tasks.map((task) => task.kind)).toEqual(['vocabulary', 'culture', 'listening', 'review']);
     expect(plan.tasks.every((task) => task.minutes >= 5)).toBe(true);
     expect(plan.tasks.reduce((sum, task) => sum + task.minutes, 0)).toBe(20);
   });
