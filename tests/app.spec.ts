@@ -231,6 +231,6 @@ test('continues a full mock into the next locked section', async ({ page, reques
   expect(audioSrc).toContain('/audio/');
   expect((await request.get(new URL(audioSrc!, page.url()).toString())).ok()).toBeTruthy();
   await page.getByRole('button', { name: '交卷' }).click();
-  await expect(page.getByText('备考估分', { exact: true })).toBeVisible();
-  await expect(page.getByText(/备考估分基于本应用规则，不是官方 CET-4 标准分，也不能保证实际成绩/)).toBeVisible();
+  await expect(page.getByText('训练参考估分', { exact: true })).toBeVisible();
+  await expect(page.getByText(/训练参考估分基于本应用规则，不是官方 CET-4 标准分，也不能保证实际成绩/)).toBeVisible();
 });
