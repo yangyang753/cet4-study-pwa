@@ -45,7 +45,7 @@ describe('ListeningPage', () => {
     render(<ListeningPage />);
     expect(screen.getByText('LISTENING LAB · 听力训练舱')).toBeVisible();
     expect(screen.getByRole('region', { name: '本组训练进度' })).toHaveTextContent('题组 1 / 24');
-    expect(screen.getByRole('region', { name: '本组训练进度' })).toHaveTextContent('题目 1 / 10');
+    expect(screen.getByRole('region', { name: '本组训练进度' })).toHaveTextContent('题目 1 / 16');
     expect(screen.getByRole('region', { name: '音频训练进度' })).toBeVisible();
     expect(screen.getByText('01 精听定位')).toBeVisible();
     expect(screen.getByText('02 翻译解锁')).toBeVisible();

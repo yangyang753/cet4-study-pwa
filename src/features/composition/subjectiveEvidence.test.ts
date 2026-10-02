@@ -34,6 +34,12 @@ describe('analyzeSubjectiveEvidence', () => {
     expect(result.stableEligible).toBe(false);
   });
 
+  it('does not mistake ordinary sentence-opening words for required proper names', () => {
+    const question = { ...translationQuestion, referenceAnswer: 'Related activities attracted young people. New methods gave the public more opportunities to learn.' };
+    const result = analyzeSubjectiveEvidence('translation', 'Youth became interested in these activities, and modern methods created additional learning opportunities for the public.', question);
+    expect(result.errorCodes).not.toContain('named-detail');
+  });
+
   it('accepts a structured 120–180 word essay with task coverage', () => {
     const essay = `Daily reading matters because it gives students a calm way to build knowledge beyond their classes. It also improves concentration and helps readers discover different views.\n\nFor example, our university could hold a weekly book circle in the library. Students would choose a short book, record one useful idea, and discuss it with classmates. This activity would make reading social without turning it into another examination. Moreover, teachers could recommend accessible books while allowing students to make the final choice. The circle could also display short student reviews for newcomers.\n\nIn conclusion, a simple reading routine can support both academic progress and personal growth. If the campus provides a welcoming activity and enough freedom, more students will continue reading every day and gradually become confident, independent learners.`;
     const result = analyzeSubjectiveEvidence('writing', essay, writingQuestion);

@@ -7,7 +7,7 @@ describe('v1 content catalog', () => {
     expect(contentCatalog.reading).toHaveLength(30);
     expect(contentCatalog.translation).toHaveLength(12);
     expect(contentCatalog.writing).toHaveLength(12);
-    expect(contentCatalog.mocks).toHaveLength(6);
+    expect(contentCatalog.mocks).toHaveLength(10);
   });
 
   it('normalizes answer indexes and stable question ids', () => {

@@ -31,7 +31,8 @@ function hasFiller(body: string) {
 
 function namedDetails(question: SubjectiveQuestion) {
   const numbers = question.referenceAnswer.match(/\b\d+(?:[.,]\d+)?\b/g) ?? [];
-  const capitals = question.referenceAnswer.match(/\b[A-Z][a-z]{2,}\b/g)?.filter((word) => !['The', 'This', 'That', 'Many', 'More', 'While', 'Today'].includes(word)) ?? [];
+  const sentenceInitials = new Set(question.referenceAnswer.split(/[.!?]+/).map((sentence) => sentence.trim().match(/^[A-Z][a-z]{2,}\b/)?.[0]).filter((word): word is string => Boolean(word)));
+  const capitals = question.referenceAnswer.match(/\b[A-Z][a-z]{2,}\b/g)?.filter((word) => !sentenceInitials.has(word) && !['The', 'This', 'That', 'Many', 'More', 'While', 'Today'].includes(word)) ?? [];
   return [...new Set([...numbers, ...capitals])];
 }
 

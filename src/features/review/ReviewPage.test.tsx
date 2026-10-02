@@ -9,6 +9,7 @@ import { DexieLearningRepository } from '../../data/repositories/DexieLearningRe
 import { ReviewPage } from './ReviewPage';
 import vocabulary from '../../../content/v1/vocabulary.json';
 import { getQuestion } from '../../content/catalog';
+import { learningVocabulary } from '../../content/vocabularyLearning';
 
 const names: string[] = [];
 const queuedListeningPrompt = getQuestion('listen-01:q1')?.prompt;
@@ -158,7 +159,7 @@ describe('ReviewPage', () => {
     const before = await repository.listAllReviews();
     render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => 0} />);
     await userEvent.click(await screen.findByRole('button', { name: '重新练习 passage' }));
-    await userEvent.type(screen.getByRole('textbox', { name: '中文释义答案' }), '文章，段落；通道，通路；通过');
+    await userEvent.type(screen.getByRole('textbox', { name: '中文释义答案' }), learningVocabulary.find((entry) => entry.id === 'v0001')!.meaningZh);
     await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
 
     expect(await screen.findByText('复习正确')).toBeVisible();
