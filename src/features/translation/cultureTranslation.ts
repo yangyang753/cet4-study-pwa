@@ -27,7 +27,7 @@ export function selectDailyCultureTranslation<T extends CultureTranslationPrompt
 }
 
 const tokens = (text: string) => text.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) ?? [];
-const referenceStopWords = new Set(['a', 'an', 'and', 'are', 'as', 'at', 'be', 'been', 'by', 'for', 'from', 'has', 'have', 'in', 'into', 'is', 'it', 'many', 'of', 'on', 'or', 'that', 'the', 'their', 'them', 'they', 'this', 'through', 'to', 'was', 'were', 'while', 'with']);
+const referenceStopWords = new Set(['a', 'an', 'and', 'are', 'as', 'at', 'be', 'been', 'by', 'for', 'from', 'has', 'have', 'in', 'into', 'is', 'it', 'many', 'of', 'on', 'or', 'that', 'the', 'their', 'them', 'they', 'this', 'through', 'across', 'to', 'was', 'were', 'while', 'with']);
 function forms(word: string) {
   const lower = word.toLowerCase();
   const result = new Set([lower, `${lower}s`, `${lower}ed`, `${lower}ing`]);
@@ -50,7 +50,7 @@ export function evaluateCultureTranslation(prompt: CultureTranslationPrompt, ans
     return word ? [...forms(word.word)] : [];
   }));
   const referenceAnchors = [...new Set(tokens(prompt.referenceAnswer).filter((token) => !referenceStopWords.has(token) && !targetForms.has(token)))];
-  const requiredAnchors = referenceAnchors.length ? Math.max(1, Math.ceil(referenceAnchors.length * 0.2)) : 0;
+  const requiredAnchors = referenceAnchors.length ? Math.max(1, Math.ceil(referenceAnchors.length * 0.6)) : 0;
   const matchedAnchors = referenceAnchors.filter((anchor) => answerTokens.has(anchor)).length;
   const meaningComplete = matchedAnchors >= requiredAnchors;
   const referenceWordCount = tokens(prompt.referenceAnswer).length;

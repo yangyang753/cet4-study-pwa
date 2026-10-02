@@ -12,7 +12,12 @@ describe('word reinforcement', () => {
     expect(buildWordReinforcement(word, () => 0).kind).toBe('meaning');
     expect(buildWordReinforcement(word, () => 0.4).kind).toBe('spelling');
     expect(buildWordReinforcement(word, () => 0.75).kind).toBe('cloze');
-    expect(buildWordReinforcement(word, () => 0.99).kind).toBe('dual');
+    expect(buildWordReinforcement(word, () => 0.99).kind).toBe('cloze');
+  });
+
+  it('never hides both the English word and its Chinese meaning', () => {
+    const exercises = Array.from({ length: 100 }, (_, index) => buildWordReinforcement(word, () => index / 100));
+    expect(exercises.map((exercise) => exercise.kind)).not.toContain('dual');
   });
 
   it('requires exact spelling and every listed meaning', () => {
@@ -29,6 +34,7 @@ describe('word reinforcement', () => {
     const exercise = buildWordReinforcement(word, () => 0.75);
     expect(exercise.cloze).toContain('_');
     expect(exercise.cloze).not.toBe(word.word);
+    expect(exercise.cloze.match(/_+/g)).toHaveLength(1);
   });
 
   it('changes cloze positions when the random offset changes', () => {
@@ -38,5 +44,12 @@ describe('word reinforcement', () => {
     expect(left.kind).toBe('cloze');
     expect(right.kind).toBe('cloze');
     expect(left.cloze).not.toBe(right.cloze);
+  });
+
+  it('keeps a hyphenated word to one continuous blank', () => {
+    const sequence = (...values: number[]) => () => values.shift() ?? 0;
+    const exercise = buildWordReinforcement({ ...word, id: 'v2', word: 'well-being' }, sequence(0.99, 0.99, 0));
+    expect(exercise.kind).toBe('cloze');
+    expect(exercise.cloze.match(/_+/g)).toHaveLength(1);
   });
 });

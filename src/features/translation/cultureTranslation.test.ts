@@ -37,6 +37,17 @@ describe('daily culture translation', () => {
     expect(result.passed).toBe(false);
   });
 
+  it('does not accept a long keyword pile that covers only a minority of the reference meaning', () => {
+    const prompt = {
+      id: 'culture-strict', theme: '文化交流', promptZh: '中国文化促进不同社会之间的理解与交流。',
+      referenceAnswer: 'Chinese culture promotes understanding and communication between different societies.',
+      targetWordIds: ['v0164'], keyPoints: ['中国文化', '促进理解', '社会交流'],
+    };
+    const result = evaluateCultureTranslation(prompt, 'Chinese culture promotes understanding in modern life today.', vocabulary);
+    expect(result.meaningComplete).toBe(false);
+    expect(result.passed).toBe(false);
+  });
+
   it('contains a valid original culture bank with auditable target words', () => {
     expect(culturePrompts.length).toBeGreaterThanOrEqual(60);
     expect(auditCultureTranslations(culturePrompts, vocabulary)).toEqual([]);

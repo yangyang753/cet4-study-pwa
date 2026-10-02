@@ -45,7 +45,14 @@ describe('learner-facing vocabulary', () => {
     expect(like?.meaningZh).toContain('赞同');
     expect(learningVocabulary.find((entry) => entry.word === 'wear')?.meaningZh).toContain('穿');
     expect(learningVocabulary.find((entry) => entry.word === 'pick')?.meaningZh).toContain('选择');
+    expect(learningVocabulary.find((entry) => entry.word === 'pick')?.meaningZh).toContain('镐');
+    expect(learningVocabulary.find((entry) => entry.word === 'long')?.meaningZh).toContain('渴望');
     expect(learningVocabulary.find((entry) => entry.word === 'address')?.meaningZh).toContain('处理');
+    expect(learningVocabulary.find((entry) => entry.word === 'sound')?.meaningZh).toEqual(expect.stringMatching(/声音|听起来/));
+    expect(learningVocabulary.find((entry) => entry.word === 'light')?.meaningZh).toContain('光');
+    expect(learningVocabulary.find((entry) => entry.word === 'get')?.meaningZh).toContain('得到');
+    expect(learningVocabulary.find((entry) => entry.word === 'fine')?.meaningZh).toContain('好的');
+    expect(learningVocabulary.find((entry) => entry.word === 'passage')?.meaningZh).not.toContain('通过；通路，通道');
   });
 
   it('removes duplicated part-of-speech labels and normalizes phonetic symbols', () => {
@@ -53,7 +60,10 @@ describe('learner-facing vocabulary', () => {
       id: 'v-clean', word: 'one', phonetic: '/wΛn/', partOfSpeech: 'num./pron.', meaningZh: 'num.一pron.一个人',
       example: 'The word “one” is presented as a number.', exampleZh: '', derivatives: [], confusables: [],
     });
-    expect(entry.meaningZh).toBe('一；一个人');
+    expect(entry.meaningZh).toContain('一');
+    expect(entry.meaningZh).toContain('一个人');
+    expect(entry.meaningZh).toContain('唯一的');
+    expect(entry.meaningZh).not.toMatch(/(?:num|pron)\./i);
     expect(entry.phonetic).toBe('/wʌn/');
   });
 

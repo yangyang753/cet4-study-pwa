@@ -1,6 +1,6 @@
 import type { VocabularyEntry } from '../../domain/content';
 
-export type StrictVocabularyQuestionKind = 'spelling' | 'meaning' | 'dual';
+export type StrictVocabularyQuestionKind = 'spelling' | 'meaning';
 
 export interface StrictVocabularyQuestion {
   id: string;
@@ -35,7 +35,7 @@ export function requiredMeanings(word: VocabularyEntry) {
 }
 
 export function buildStrictVocabularyQuestions(words: VocabularyEntry[]): StrictVocabularyQuestion[] {
-  const kinds: StrictVocabularyQuestionKind[] = ['spelling', 'meaning', 'dual'];
+  const kinds: StrictVocabularyQuestionKind[] = ['spelling', 'meaning'];
   return words.map((word, index) => ({
     id: `${word.id}:strict`,
     kind: kinds[index % kinds.length],

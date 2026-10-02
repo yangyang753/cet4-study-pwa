@@ -76,7 +76,6 @@ export function StrictVocabularyCheck({ repository, words, states, passedWordIds
     <article className="warmup-card strict-check-card">
       {question.kind === 'spelling' && <><span className="check-type">看中文，默写英文</span><h2>{question.word.meaningZh}</h2></>}
       {question.kind === 'meaning' && <><span className="check-type">看英文，写全中文词义</span><h2>{question.word.word}</h2></>}
-      {question.kind === 'dual' && <><span className="check-type">补齐单词和词义</span><h2>{question.cloze}</h2><p>{question.word.partOfSpeech}</p></>}
       {needsEnglish && <label>英文拼写<input aria-label="英文拼写" autoComplete="off" value={english} onChange={(event) => setEnglish(event.target.value)} /></label>}
       {needsChinese && <label>完整中文词义<textarea aria-label="完整中文词义" value={chinese} onChange={(event) => setChinese(event.target.value)} /></label>}
       {feedback && <p className={feedback.startsWith('回答完整') ? 'strict-success' : 'strict-error'} role="alert">{feedback}</p>}

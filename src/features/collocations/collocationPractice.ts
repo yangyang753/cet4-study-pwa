@@ -15,6 +15,7 @@ export interface CollocationRecallExercise {
   prompt: string;
   answer: string;
   instruction: string;
+  hint?: string;
 }
 
 function normalizeRecall(value: string) {
@@ -27,8 +28,9 @@ export function buildCollocationRecallExercise(item: CollocationEntry, random: (
   if (value < 2 / 3) return { itemId: item.id, mode: 'en-to-zh', prompt: item.phrase, answer: item.meaningZh, instruction: '写出重点搭配的完整中文含义' };
   const words = item.phrase.split(/\s+/);
   const hiddenIndex = Math.min(words.length - 1, Math.floor(((value - 2 / 3) * 3) * words.length));
+  const hiddenWord = words[hiddenIndex];
   const prompt = words.map((word, index) => index === hiddenIndex ? '_'.repeat(Math.max(4, word.length)) : word).join(' ');
-  return { itemId: item.id, mode: 'cloze', prompt, answer: item.phrase, instruction: '补全挖空，并写出完整重点搭配' };
+  return { itemId: item.id, mode: 'cloze', prompt, answer: hiddenWord, instruction: '根据中文提示，补全重点搭配中唯一的空白', hint: item.meaningZh };
 }
 
 export function gradeCollocationRecall(exercise: CollocationRecallExercise, response: string) {

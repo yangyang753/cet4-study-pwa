@@ -4,6 +4,36 @@ import type { VocabularyEntry } from '../domain/content';
 
 const commonMeanings = commonMeaningData as Record<string, string>;
 
+// High-frequency polysemous words whose most common CET reading/listening senses
+// are split across dictionary entries or absent from the imported source.
+const reviewedCommonSenses: Record<string, string> = {
+  one: '一，一个；一个人；唯一的', make: '做，制造；使，让；成为；赚得', say: '说，讲；说明；比如说；大约',
+  part: '部分；零件；角色；分开', follow: '跟随；遵循；理解；接着发生', mark: '标记；分数；迹象；给分',
+  read: '阅读；读懂；显示；写着', hear: '听见；听说；审理', give: '给；提供；举办；让步',
+  base: '基础；基地；以……为基础', get: '得到，取得；到达；变得；理解；使得', out: '出去；在外；熄灭；公开',
+  find: '找到；发现；认为', sheet: '纸张；薄片；床单', change: '改变；变化；零钱', first: '第一；首先',
+  high: '高的；高水平；高处', live: '居住；生活；现场直播；活的', line: '线；行；队伍；台词；路线',
+  come: '来；发生；达到', mean: '意思是；意味着；平均的；吝啬的；平均值', letter: '字母；信件',
+  end: '结束；末端；目的', company: '公司；陪伴；同伴', look: '看；看起来；外表',
+  business: '商业；事务；职责', own: '自己的；拥有；承认', feel: '感觉；认为；触摸',
+  home: '家；故乡；在家；本土', last: '最后的；上一个；持续', place: '地方；放置；名次',
+  pay: '支付；工资；有利可图', keep: '保持；保留；遵守；饲养', book: '书；预订',
+  put: '放置；表达；使处于', blank: '空白；空白的；茫然的', report: '报告；报道；报到',
+  public: '公共的；公众', far: '远；很大程度上', call: '打电话；称呼；呼叫；要求',
+  leave: '离开；留下；假期；使处于', cause: '导致；原因；事业', down: '向下；下降；情绪低落',
+  bank: '银行；岸；堆', hard: '努力地；困难的；坚硬的', class: '班级；课程；阶级；类别',
+  cost: '花费；成本；代价', group: '组；群体；把……分组', play: '玩；演奏；扮演；戏剧',
+  course: '课程；过程；路线；一道菜', offer: '提供；提议；报价', experience: '经历；经验；体验',
+  care: '关心；照料；小心', program: '程序；节目；计划', market: '市场；推销',
+  kind: '种类；友善的', form: '形式；表格；形成', face: '脸；面对；表面',
+  process: '过程；处理', rate: '比率；评价；费率', power: '力量；权力；电力；幂',
+  lot: '许多；一批；地块；命运', control: '控制；管理；对照', hold: '拿住；持有；举办；容纳；认为',
+  value: '价值；重视；数值', hand: '手；帮助；指针；递给', open: '打开；开放的；公开的；空缺的',
+  fall: '落下；下降；秋天；陷入', sound: '声音；听起来；健康的；可靠的',
+  light: '光；灯；点燃；轻的；浅色的', fine: '好的，优质的；细小的；罚款；处以罚款',
+  present: '现在的；目前；礼物；提出；呈现；出席的', address: '地址；演说；处理，应对；向……讲话',
+};
+
 const reviewedCorrections: Record<string, Partial<VocabularyEntry>> = {
   v0001: {
     partOfSpeech: 'n.',
@@ -37,6 +67,16 @@ function normalizeMeaning(value: string) {
     .replace(/^；|；$/g, '')
     .trim();
   return [...new Set(normalized.split('；').map((meaning) => meaning.trim()).filter(Boolean))].join('；');
+}
+
+function mergeMeanings(primary: string, ...supplements: string[]) {
+  const merged = normalizeMeaning(primary).split('；').filter(Boolean);
+  const covered = () => merged.join('，').replace(/[^\u3400-\u9fff]/g, '');
+  for (const fragment of normalizeMeaning(supplements.join('；')).split('；').filter(Boolean)) {
+    const senses = fragment.split(/[，,、]/).map((sense) => sense.replace(/[^\u3400-\u9fff]/g, '')).filter(Boolean);
+    if (!senses.length || !senses.every((sense) => covered().includes(sense))) merged.push(fragment);
+  }
+  return normalizeMeaning(merged.join('；'));
 }
 
 function normalizePhonetic(value: string) {
@@ -93,8 +133,7 @@ function contextualExample(entry: VocabularyEntry): Pick<VocabularyEntry, 'examp
 
 export function qualityVocabularyEntry(entry: VocabularyEntry): VocabularyEntry {
   const source = { ...entry, ...reviewedCorrections[entry.id] };
-  const supplementaryMeaning = reviewedCorrections[entry.id] ? '' : commonMeanings[source.word.toLowerCase()] ?? '';
-  const corrected = { ...source, meaningZh: normalizeMeaning(`${source.meaningZh}；${supplementaryMeaning}`), phonetic: normalizePhonetic(source.phonetic) };
+  const corrected = { ...source, meaningZh: mergeMeanings(source.meaningZh, commonMeanings[source.word.toLowerCase()] ?? '', reviewedCommonSenses[source.word.toLowerCase()] ?? ''), phonetic: normalizePhonetic(source.phonetic) };
   if (!isSyntheticMetaExample(corrected.example) && corrected.example.trim()) return corrected;
   return { ...corrected, ...contextualExample(corrected) };
 }
@@ -119,6 +158,10 @@ export function auditLearningVocabulary(entries: VocabularyEntry[]): string[] {
   for (const [word, senses] of Object.entries({ wear: ['穿', '戴'], pick: ['选择', '挑选'], address: ['地址', '处理'] })) {
     const entry = entries.find((item) => item.word.toLowerCase() === word);
     if (!entry || !senses.every((sense) => entry.meaningZh.includes(sense))) errors.push(`${word}: missing common senses`);
+  }
+  for (const [word, senses] of Object.entries({ sound: ['声音', '听起来'], light: ['光', '点燃'], get: ['得到', '理解'], fine: ['好的', '罚款'] })) {
+    const entry = entries.find((item) => item.word.toLowerCase() === word);
+    if (!entry || !senses.every((sense) => entry.meaningZh.includes(sense))) errors.push(`${word}: missing reviewed common senses`);
   }
   return errors;
 }

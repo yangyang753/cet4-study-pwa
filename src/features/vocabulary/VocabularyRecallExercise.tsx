@@ -10,7 +10,7 @@ export interface VocabularyRecallSubmission {
 
 export function forgottenWordReinforcementGrade(exercise: WordReinforcement): StrictVocabularyGrade {
   const needsEnglish = exercise.kind !== 'meaning';
-  const needsChinese = exercise.kind === 'meaning' || exercise.kind === 'dual';
+  const needsChinese = exercise.kind === 'meaning';
   return {
     correct: false,
     spellingCorrect: !needsEnglish,
@@ -32,7 +32,7 @@ export function VocabularyRecallExercise({ exercise, result = null, feedback = '
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
   const needsEnglish = exercise.kind !== 'meaning';
-  const needsChinese = exercise.kind === 'meaning' || exercise.kind === 'dual';
+  const needsChinese = exercise.kind === 'meaning';
 
   async function submit() {
     if (saving || result || (needsEnglish && !english.trim()) || (needsChinese && !chinese.trim())) return;
@@ -52,11 +52,10 @@ export function VocabularyRecallExercise({ exercise, result = null, feedback = '
   }
 
   return <article className="warmup-card review-practice-panel vocabulary-recall-exercise">
-    <span className="review-kind">词汇 · {exercise.kind === 'meaning' ? '完整释义' : exercise.kind === 'spelling' ? '完整拼写' : exercise.kind === 'cloze' ? '随机挖空' : '双重检测'}</span>
+    <span className="review-kind">词汇 · {exercise.kind === 'meaning' ? '完整释义' : exercise.kind === 'spelling' ? '完整拼写' : '单处挖空'}</span>
     {exercise.kind === 'meaning' && <><h2>{exercise.word.word}</h2><p>{exercise.word.phonetic}</p><p>请写出全部中文释义，不能漏译或多写。</p></>}
     {exercise.kind === 'spelling' && <><h2>{exercise.word.meaningZh}</h2><p>根据中文写出完整英文单词。</p></>}
-    {exercise.kind === 'cloze' && <><h2>{exercise.cloze}</h2><p>{exercise.word.meaningZh}</p><p>补全所有随机缺失的字母。</p></>}
-    {exercise.kind === 'dual' && <><h2>{exercise.cloze}</h2><p>补全英文，并写出这个单词的全部中文释义。</p></>}
+    {exercise.kind === 'cloze' && <><h2>{exercise.cloze}</h2><p>{exercise.word.meaningZh}</p><p>根据完整中文提示，补全英文中唯一的一处空白。</p></>}
     {needsEnglish && <label className="review-spelling-field">英文答案<input aria-label="英文答案" autoComplete="off" value={english} disabled={Boolean(result) || saving} onChange={(event) => setEnglish(event.target.value)} /></label>}
     {needsChinese && <label className="review-spelling-field">中文释义答案<textarea aria-label="中文释义答案" rows={4} value={chinese} disabled={Boolean(result) || saving} onChange={(event) => setChinese(event.target.value)} /></label>}
     {saveError && <p role="alert">{saveError}</p>}

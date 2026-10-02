@@ -40,4 +40,13 @@ describe('deriveShellSummary', () => {
     expect(result.total).toBe(4);
     expect(result.completed).toBe(2);
   });
+
+  it('matches the single full mock route on sprint Sundays', () => {
+    const result = deriveShellSummary(snapshot({
+      settings: { ...snapshot().settings, examDate: '2026-12-12' },
+      completions: [{ id: 'mock', date: '2026-11-22', taskId: '2026-11-22:mock', kind: 'mock', completedAt: '2026-11-22T10:00:00.000Z' }],
+    }), '2026-11-22');
+    expect(result.total).toBe(1);
+    expect(result.completed).toBe(1);
+  });
 });

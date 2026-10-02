@@ -9,13 +9,14 @@ const words: VocabularyEntry[] = [
 ];
 
 describe('strict vocabulary check', () => {
-  it('builds spelling, meaning, and dual-cloze questions over the same cohort', () => {
-    expect(buildStrictVocabularyQuestions(words).map((item) => item.kind)).toEqual(['spelling', 'meaning', 'dual']);
+  it('builds only one-answer spelling or meaning questions over the same cohort', () => {
+    expect(buildStrictVocabularyQuestions(words).map((item) => item.kind)).toEqual(['spelling', 'meaning', 'spelling']);
+    expect(buildStrictVocabularyQuestions(words).map((item) => item.kind)).not.toContain('dual');
     expect(buildStrictVocabularyQuestions(words).map((item) => item.word.id)).toEqual(['v1', 'v2', 'v3']);
   });
 
   it('requires exact spelling and every listed Chinese meaning', () => {
-    const [spelling, meaning, dual] = buildStrictVocabularyQuestions(words);
+    const [spelling, meaning, nextSpelling] = buildStrictVocabularyQuestions(words);
     expect(gradeStrictVocabularyAnswer(spelling, { english: 'passage', chinese: '' }).correct).toBe(true);
     expect(gradeStrictVocabularyAnswer(spelling, { english: 'pasage', chinese: '' }).correct).toBe(false);
     expect(gradeStrictVocabularyAnswer(meaning, { english: '', chinese: '好处' }).correct).toBe(false);
@@ -23,8 +24,7 @@ describe('strict vocabulary check', () => {
     expect(gradeStrictVocabularyAnswer(meaning, { english: '', chinese: '好处、益处、坏处' })).toMatchObject({
       correct: false, unexpectedMeanings: ['坏处'],
     });
-    expect(gradeStrictVocabularyAnswer(dual, { english: 'generate', chinese: '产生，生成' }).correct).toBe(true);
-    expect(gradeStrictVocabularyAnswer(dual, { english: 'generate', chinese: '产生' }).missingMeanings).toContain('生成');
+    expect(gradeStrictVocabularyAnswer(nextSpelling, { english: 'generate', chinese: '' }).correct).toBe(true);
   });
 
   it('requires meaningful one-character Chinese senses instead of dropping them', () => {

@@ -162,12 +162,11 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
         <span>NO-HINT REVIEW · 第 {Math.min((aggregateSession?.answeredCount ?? 0) + 1, aggregateSession?.queue.length ?? 1)} / {aggregateSession?.queue.length ?? 1} 题</span><h2 id="reinforcement-title">待复习单词总巩固</h2>
         {exercise.kind === 'meaning' && <p className="reinforcement-prompt">看英文，写出全部中文释义：<strong>{exercise.word.word}</strong></p>}
         {exercise.kind === 'spelling' && <p className="reinforcement-prompt">根据中文写出完整英文：<strong>{exercise.word.meaningZh}</strong></p>}
-        {exercise.kind === 'cloze' && <p className="reinforcement-prompt">补全随机缺失的字母：<strong>{exercise.cloze}</strong><small>{exercise.word.meaningZh}</small></p>}
-        {exercise.kind === 'dual' && <p className="reinforcement-prompt">双重检测：补全 <strong>{exercise.cloze}</strong>，并写出全部中文释义。</p>}
+        {exercise.kind === 'cloze' && <p className="reinforcement-prompt">根据完整中文提示补全唯一空白：<strong>{exercise.cloze}</strong><small>{exercise.word.meaningZh}</small></p>}
         {exercise.kind !== 'meaning' && <label>英文答案<input aria-label="英文答案" autoComplete="off" value={englishAnswer} onChange={(event) => setEnglishAnswer(event.target.value)} /></label>}
-        {(exercise.kind === 'meaning' || exercise.kind === 'dual') && <label>中文释义<textarea aria-label="中文释义答案" value={chineseAnswer} onChange={(event) => setChineseAnswer(event.target.value)} rows={3} /></label>}
+        {exercise.kind === 'meaning' && <label>中文释义<textarea aria-label="中文释义答案" value={chineseAnswer} onChange={(event) => setChineseAnswer(event.target.value)} rows={3} /></label>}
         {exerciseResult && <p className={exerciseResult.startsWith('回答完全正确') ? 'reinforcement-success' : 'reinforcement-error'} role="status">{exerciseResult}</p>}
-        {!exerciseResult && <button className="reinforcement-submit" disabled={exerciseSaving || (exercise.kind !== 'meaning' && !englishAnswer.trim()) || ((exercise.kind === 'meaning' || exercise.kind === 'dual') && !chineseAnswer.trim())} onClick={() => void submitExercise()}>{exerciseSaving ? '正在保存…' : '提交巩固结果'}</button>}
+        {!exerciseResult && <button className="reinforcement-submit" disabled={exerciseSaving || (exercise.kind !== 'meaning' && !englishAnswer.trim()) || (exercise.kind === 'meaning' && !chineseAnswer.trim())} onClick={() => void submitExercise()}>{exerciseSaving ? '正在保存…' : '提交巩固结果'}</button>}
         {exerciseResult && <button className="reinforcement-again" onClick={continueAggregateReview}>{aggregateSession?.completed ? '查看本轮报告' : '下一道巩固'}</button>}
       </section>}
       {aggregateSession?.completed && !exercise && <section className="aggregate-summary" aria-labelledby="aggregate-summary-title"><span>ROUND COMPLETE</span><h2 id="aggregate-summary-title">本轮巩固完成</h2><div><b>测试 {aggregateSession.answeredCount} 个</b><b>完全正确 {aggregateSession.correctCount} 个</b><b>需要重学 {aggregateSession.missedCount} 个</b></div><p>{aggregateSession.missedCount ? '答错或漏译的单词已经进入错题复习，并会重新安排间隔检测。' : '本轮全部通过，系统已安排下一次间隔检测。'}</p><button onClick={startAggregateReview}>开始新一轮</button></section>}

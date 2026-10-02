@@ -13,13 +13,15 @@ describe('collocation practice', () => {
   it('builds free-response translation and cloze exercises without options', () => {
     expect(buildCollocationRecallExercise(entries[0], () => 0)).toMatchObject({ mode: 'zh-to-en', prompt: '参加', answer: 'take part in' });
     expect(buildCollocationRecallExercise(entries[0], () => 0.4)).toMatchObject({ mode: 'en-to-zh', prompt: 'take part in', answer: '参加' });
-    expect(buildCollocationRecallExercise(entries[0], () => 0.9)).toMatchObject({ mode: 'cloze', answer: 'take part in' });
+    expect(buildCollocationRecallExercise(entries[0], () => 0.9)).toMatchObject({ mode: 'cloze', prompt: 'take part ____', answer: 'in', hint: '参加' });
   });
 
   it('grades English phrases exactly and accepts the complete Chinese meaning', () => {
     expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0), 'take part in')).toBe(true);
     expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0), 'take part')).toBe(false);
     expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0.4), '参加')).toBe(true);
+    expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0.9), 'in')).toBe(true);
+    expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0.9), 'take part in')).toBe(false);
   });
 
   it('selects due collocations before unseen collocations and excludes future mastered items', () => {
