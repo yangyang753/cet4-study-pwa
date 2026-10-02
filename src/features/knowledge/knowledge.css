@@ -40,6 +40,10 @@
 .word-card h2, .phrase-list h2, .grammar-grid h2 { margin: 0 0 5px; font-size: 20px; }
 .word-card p { margin: 6px 0; }
 .word-card .phonetic { color: var(--color-green); }
+.pronunciation-control { display: inline-flex; align-items: center; gap: 8px; margin: 2px 0 10px; }
+.pronounce-button { border: 1px solid color-mix(in srgb, var(--color-green) 55%, transparent); border-radius: 999px; padding: 7px 12px; background: #f2f8f4; color: var(--color-green); font-weight: 800; cursor: pointer; }
+.pronounce-button:hover, .pronounce-button:focus-visible { background: var(--color-green); color: white; }
+.pronunciation-control small { color: var(--color-orange); }
 .word-practice-button { display: block; margin: 0 0 12px; padding: 7px 11px; border: 1px solid #dca13c; border-radius: 999px; color: #754900; background: #fff2d8; font-weight: 800; }
 .meaning-toggle { width: 100%; margin-top: 8px; padding: 10px 12px; border: 1px dashed var(--color-green); border-radius: 10px; color: var(--color-green-dark); background: #f4faf6; font-weight: 800; }
 .word-reveal { margin-top: 10px; padding: 12px; border-radius: 12px; background: var(--color-green-soft); }

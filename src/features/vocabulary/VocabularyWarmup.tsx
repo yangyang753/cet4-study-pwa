@@ -4,6 +4,7 @@ import { learningVocabulary } from '../../content/vocabularyLearning';
 import type { VocabularyEntry } from '../../domain/content';
 import type { KnowledgeState } from '../../domain/learning';
 import { selectWarmupWords } from './selectWarmupWords';
+import { PronounceButton } from './PronounceButton';
 
 const vocabulary = learningVocabulary;
 
@@ -80,7 +81,7 @@ export function VocabularyWarmup({ repository, entries = vocabulary, limit = 10,
   return <section className="vocabulary-warmup">
     <header><span>词汇热身 · {index + 1}/{words.length}</span><h1>先学单词，再开始做题</h1><p>先看英文回想词义，再显示答案并进入下一个；掌握情况由后面的严格检测自动判定。</p></header>
     <article className="warmup-card">
-      <h2>{word.word}</h2><p className="phonetic">{word.phonetic} · {word.partOfSpeech}</p>
+      <h2>{word.word}</h2><p className="phonetic">{word.phonetic} · {word.partOfSpeech}</p><PronounceButton text={word.word} />
       {!revealed ? <button className="primary-action" onClick={() => setRevealed(true)}>显示释义</button> : <div className="warmup-answer"><strong>{word.meaningZh}</strong><p>{word.example}</p>{word.exampleZh && <p>{word.exampleZh}</p>}<div><button disabled={saving} className="primary-action" onClick={() => void save()}>{saving ? '正在保存…' : words && index >= words.length - 1 ? '完成单词学习' : '下一个单词'}</button></div></div>}
       {error && <p role="alert">{error}</p>}
       {error && retryPending && <button disabled={saving} onClick={() => void save()}>重新保存</button>}
