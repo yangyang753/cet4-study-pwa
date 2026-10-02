@@ -22,6 +22,8 @@ describe('AccountPage sync explanation', () => {
     expect(screen.getByText(/生产站点还没有配置云同步连接/)).toBeVisible();
     expect(screen.getByRole('button', { name: '导出 JSON 备份' })).toBeVisible();
     expect(screen.getByText('导入 JSON')).toBeVisible();
+    expect(await screen.findByRole('heading', { name: '考试准备' })).toBeVisible();
+    expect(screen.getByLabelText('报名信息已确认')).toBeVisible();
   });
 
   it('does not show the local-only warning when cloud sync is configured', async () => {

@@ -16,7 +16,7 @@ describe('ExamResult', () => {
     expect(screen.getByText('主观题自查')).toBeVisible();
     expect(screen.getByText('分项完成情况')).toBeVisible();
     expect(screen.getByText('0 / 710')).toBeVisible();
-    expect(screen.getByText('距离 425 估计还差 425 分')).toBeVisible();
+    expect(screen.getByText('按训练估算，距 425 参考线约 425 分')).toBeVisible();
     expect(screen.getByText(/稳定性样本不足/)).toBeVisible();
     expect(screen.getByText(/不是官方 CET-4 标准分，也不能保证实际成绩/)).toBeVisible();
   });

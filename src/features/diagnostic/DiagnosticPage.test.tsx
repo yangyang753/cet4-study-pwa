@@ -51,7 +51,8 @@ describe('foundation diagnostic', () => {
     await user.click(screen.getByRole('button', { name: '完成诊断' }));
     expect(await screen.findByText('语法：100%')).toBeVisible();
     expect(screen.getByText('优先加强：语法')).toBeVisible();
-    expect(screen.getByText(/距离 425 分还差/)).toBeVisible();
+    expect(screen.getByText(/按训练估算.*425/)).toBeVisible();
+    expect(screen.queryByText('已达到 425 分参考线')).not.toBeInTheDocument();
     expect(screen.getByText('训练参考估分 · 初步可信度 · 1 道诊断题')).toBeVisible();
     expect(screen.getByText(/不能代替官方成绩或人工阅卷/)).toBeVisible();
     expect(screen.getByText('分项参考分')).toBeVisible();
