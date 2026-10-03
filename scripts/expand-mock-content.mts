@@ -71,7 +71,7 @@ const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set
   const scenario = listeningScenarios[index];
   if (!scenario) throw new Error(`Missing listening scenario ${index + 1}`);
   const themeEn = set.themeEn ?? set.theme;
-  let segmentRows = set.type === 'conversation'
+  const segmentRows = set.type === 'conversation'
     ? [
         { speaker: 'Woman', text: `Have you heard? ${scenario.intro}` },
         { speaker: 'Man', text: `Yes. ${scenario.reason}` },

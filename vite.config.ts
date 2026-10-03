@@ -16,6 +16,9 @@ export default defineConfig({
           if (id.includes('node_modules/react') || id.includes('node_modules/@remix-run') || id.includes('node_modules/react-router')) return 'vendor-react';
           if (id.includes('node_modules/dexie')) return 'vendor-dexie';
           if (id.includes('node_modules/@supabase')) return 'vendor-supabase';
+          if (id.includes('content/v1/listeningSets.json')) return 'content-listening';
+          if (id.includes('content/v1/readingSets.json')) return 'content-reading';
+          if (id.includes('content/v1/translations.json') || id.includes('content/v1/writingPrompts.json') || id.includes('content/v1/mockExams.json')) return 'content-mock-subjective';
         },
       },
     },
