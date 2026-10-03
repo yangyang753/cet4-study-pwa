@@ -42,7 +42,7 @@ async function responseHasBody(response: Response, label: string, timeoutMs: num
   }
 }
 
-export async function verifyDeployedSite(baseUrl: string, fetcher: Fetcher = fetch, { timeoutMs = 10_000 }: { timeoutMs?: number } = {}) {
+export async function verifyDeployedSite(baseUrl: string, fetcher: Fetcher = fetch, { timeoutMs = 30_000 }: { timeoutMs?: number } = {}) {
   const base = new URL(baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`);
   const checks = [
     { path: '', contentType: /text\/html/i },
