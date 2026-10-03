@@ -5,6 +5,14 @@ const appUrl = new URL(appBasePath, 'http://127.0.0.1:4173').toString();
 
 export default defineConfig({
   testDir: './tests',
+  // Accessibility scans, service-worker reloads, and WebKit startup are all
+  // resource intensive. Capping concurrency keeps the release gate stable on
+  // ordinary developer laptops instead of turning CPU contention into timeouts.
+  // The PWA tests share one origin and exercise service-worker activation plus
+  // IndexedDB migrations. Run them serially so one context cannot interrupt
+  // another context's first navigation or database setup.
+  workers: 1,
+  timeout: 60_000,
   use: { baseURL: appUrl, trace: 'retain-on-failure' },
   projects: [
     { name: 'chrome', use: { ...devices['Desktop Chrome'], channel: process.env.GITHUB_ACTIONS === 'true' ? undefined : 'chrome' } },
