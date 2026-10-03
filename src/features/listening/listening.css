@@ -40,6 +40,11 @@
 .controls .primary-player-control { border-color: #f6c35e; color: #163e34; background: #f6c35e; }
 .controls select option { color: var(--color-ink); }
 .controls label { display: flex; align-items: center; gap: 7px; color: #d8eee5; font-size: .8rem; }
+.offline-audio-row { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; color: #bcd7cc; font-size: .76rem; }
+.offline-audio-row button { min-height: 38px; padding: 8px 12px; border: 1px solid rgb(246 195 94 / 55%); border-radius: 11px; color: #ffe2a5; background: rgb(246 195 94 / 8%); font-weight: 800; }
+.offline-audio-row button:disabled { opacity: .72; cursor: default; }
+.offline-audio-message { position: relative; z-index: 1; margin: 10px 0 0; color: #d8eee5; font-size: .78rem; }
+.offline-audio-message.error { padding: 10px 12px; border-radius: 10px; color: #5b2718; background: #f8e5d6; }
 .player-command-row { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 13px; color: #adc9be; font-size: .76rem; }
 .player-status { display: inline-flex; gap: 7px; align-items: center; margin: 0; padding: 5px 10px; border-radius: 999px; color: #d8eee5; background: rgb(255 255 255 / 10%); }
 .player-status i { width: 7px; height: 7px; border-radius: 50%; background: #80d3b3; box-shadow: 0 0 0 5px rgb(128 211 179 / 10%); }

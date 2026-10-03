@@ -13,6 +13,7 @@ import { getQuestion } from '../../content/catalog';
 import { completeDailyTask, localStudyDate } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
 import { QuestionTranslationGate, questionNeedsTranslation } from '../translation/QuestionTranslationGate';
+import { cacheListeningAudio } from './cacheListeningAudio';
 
 type PlayerStatus = 'loading' | 'ready' | 'playing' | 'paused' | 'buffering' | 'error';
 
@@ -45,6 +46,8 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
   const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
   const [submissionState, setSubmissionState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [translationUnlocked, setTranslationUnlocked] = useState(false);
+  const [offlineState, setOfflineState] = useState<'idle' | 'downloading' | 'cached' | 'error'>('idle');
+  const [offlineMessage, setOfflineMessage] = useState('');
   const [initialStartedAt] = useState(() => Date.now());
   const [initialAttemptId] = useState(() => createId());
   const questionStartedAt = useRef(initialStartedAt);
@@ -89,6 +92,20 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
     player.selectSegment(index);
     player.setRate(0.75);
     void play();
+  };
+
+  const downloadOffline = async () => {
+    if (offlineState === 'downloading' || offlineState === 'cached') return;
+    setOfflineState('downloading');
+    setOfflineMessage('正在下载本套音频，请保持页面打开…');
+    try {
+      const result = await cacheListeningAudio(audio.src);
+      setOfflineState('cached');
+      setOfflineMessage(result === 'already-cached' ? '本套已在离线缓存中' : '本套已可离线播放');
+    } catch {
+      setOfflineState('error');
+      setOfflineMessage('离线下载失败，可能是网络中断或手机存储空间不足，请稍后重试。');
+    }
   };
 
   const submit = async () => {
@@ -187,6 +204,11 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
           <button onClick={player.previous}>← 上一句</button><button aria-pressed={player.looping} onClick={player.loopSegment}>↻ 单句循环</button><button onClick={player.next}>下一句 →</button>
           <label>播放速度<select value={String(player.rate)} onChange={(event) => player.setRate(Number(event.target.value))}>{[0.75, 1, 1.25, 1.5].map((rate) => <option key={rate} value={rate}>{rate}×</option>)}</select></label>
         </div>
+        <div className="offline-audio-row">
+          <button disabled={offlineState === 'downloading' || offlineState === 'cached'} onClick={() => void downloadOffline()}>{offlineState === 'downloading' ? '正在下载…' : offlineState === 'cached' ? '本套已下载' : '下载本套离线'}</button>
+          <span>仅下载当前一套，避免一次占用约 98 MB 手机空间。</span>
+        </div>
+        {offlineMessage && <p className={`offline-audio-message ${offlineState === 'error' ? 'error' : ''}`} role={offlineState === 'error' ? 'alert' : 'status'}>{offlineMessage}</p>}
         {mediaError && <div role="alert" className="media-error"><span>{mediaError}</span><button onClick={retry}>重试</button><button onClick={() => setShowTranscript(true)}>文本模式</button></div>}
       </section>
       <aside className="listening-question">

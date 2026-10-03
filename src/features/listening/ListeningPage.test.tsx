@@ -41,6 +41,26 @@ describe('ListeningPage', () => {
     expect(screen.getByText(/合成语音训练材料/)).toBeInTheDocument();
   });
 
+  it('downloads only the current listening set for offline use and reports completion', async () => {
+    const add = vi.fn(async () => undefined);
+    vi.stubGlobal('caches', {
+      open: vi.fn(async () => ({ match: vi.fn(async () => undefined), add })),
+    });
+    render(<ListeningPage />);
+    await userEvent.click(screen.getByRole('button', { name: '下载本套离线' }));
+    expect(await screen.findByText('本套已可离线播放')).toBeVisible();
+    expect(add).toHaveBeenCalledWith('/audio/v1/listen-01.wav');
+  });
+
+  it('explains when offline audio caching fails', async () => {
+    vi.stubGlobal('caches', {
+      open: vi.fn(async () => ({ match: vi.fn(async () => undefined), add: vi.fn(async () => { throw new DOMException('Quota exceeded', 'QuotaExceededError'); }) })),
+    });
+    render(<ListeningPage />);
+    await userEvent.click(screen.getByRole('button', { name: '下载本套离线' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('离线下载失败');
+  });
+
   it('presents listening as a structured premium training workspace', () => {
     render(<ListeningPage />);
     expect(screen.getByText('LISTENING LAB · 听力训练舱')).toBeVisible();

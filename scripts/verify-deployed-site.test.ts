@@ -18,6 +18,9 @@ describe('verifyDeployedSite', () => {
       'https://example.test/cet4-study-pwa/sw.js',
       'https://example.test/cet4-study-pwa/audio/v1/listen-01.wav',
     ]);
+    expect(fetcher.mock.calls[3][1]).toEqual(expect.objectContaining({
+      headers: { Range: 'bytes=0-1023' },
+    }));
   });
 
   it('fails when a deployed asset cannot be fetched', async () => {
@@ -30,5 +33,13 @@ describe('verifyDeployedSite', () => {
       });
     });
     await expect(verifyDeployedSite('https://example.test/app/', fetcher)).rejects.toThrow(/sw\.js.*404/);
+  });
+
+  it('aborts a resource check that exceeds the configured timeout', async () => {
+    const fetcher = vi.fn((_input: string | URL, init?: RequestInit) => new Promise<Response>((_resolve, reject) => {
+      init?.signal?.addEventListener('abort', () => reject(new DOMException('aborted', 'AbortError')));
+    }));
+    await expect(verifyDeployedSite('https://example.test/app/', fetcher, { timeoutMs: 5 })).rejects.toThrow(/site root timed out after 5ms/);
+    expect((fetcher.mock.calls[0][1]?.signal as AbortSignal).aborted).toBe(true);
   });
 });
