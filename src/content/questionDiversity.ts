@@ -1,7 +1,7 @@
 import type { QuestionSkillTag } from '../domain/content';
 
 type CandidateQuestion = { prompt?: string; options?: string[]; answer?: number; skillTag?: string };
-type CandidateSet = { id?: string; theme?: string; themeEn?: string; questions?: CandidateQuestion[] };
+type CandidateSet = { id?: string; theme?: string; themeEn?: string; segments?: Array<{ text?: string }>; questions?: CandidateQuestion[] };
 
 const requiredSkills: Record<'listening' | 'reading', QuestionSkillTag[]> = {
   listening: ['detail', 'reason', 'purpose', 'action', 'attitude', 'inference', 'main-idea'],
@@ -28,6 +28,20 @@ export function auditQuestionTemplateDiversity(sets: CandidateSet[], kind: 'list
   const errors: string[] = [];
   const questions = sets.flatMap((set) => (set.questions ?? []).map((question) => ({ set, question })));
   if (!questions.length) return [`${kind}: no questions available`];
+
+  if (kind === 'listening') {
+    const segmentUses = new Map<string, Set<string>>();
+    for (const set of sets) for (const segment of set.segments ?? []) {
+      const normalized = (segment.text ?? '').toLocaleLowerCase().replace(/[^a-z]+/g, ' ').trim();
+      if (!normalized) continue;
+      const ids = segmentUses.get(normalized) ?? new Set<string>();
+      ids.add(set.id ?? 'unknown');
+      segmentUses.set(normalized, ids);
+    }
+    for (const [segment, ids] of segmentUses) {
+      if (ids.size > 2) errors.push(`listening: repeated transcript segment appears in ${ids.size} sets: "${segment.slice(0, 80)}"`);
+    }
+  }
 
   const shapes = questions.map(({ set, question }) => normalizedPrompt(question.prompt ?? '', set));
   const counts = new Map<string, number>();

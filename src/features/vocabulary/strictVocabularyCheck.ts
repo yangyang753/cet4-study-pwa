@@ -48,6 +48,9 @@ const equivalentMeaningGroups = [
   ['展示', '显示'],
   ['购买', '买'],
   ['需要', '需求'],
+  ['喜欢', '喜爱', '爱好'],
+  ['赞同', '同意', '认可'],
+  ['像', '如同', '类似'],
 ] as const;
 
 function normalizeEnglish(value: string) {
@@ -75,9 +78,15 @@ function aliasesFor(meaning: string) {
 }
 
 function requiredMeaningConcepts(word: VocabularyEntry): MeaningConcept[] {
+  const groupedMeanings = word.meaningZh
+    .replace(/(?:^|(?<=[^a-z]))(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./gi, ';')
+    .split(/[;；]/)
+    .map((group) => group.split(/[，,、/]/).map((item) => item.replace(/^[^\u3400-\u9fff]+|[^\u3400-\u9fff]+$/g, '').trim()).filter(Boolean))
+    .filter((group) => group.length);
   const concepts: MeaningConcept[] = [];
-  requiredMeanings(word).forEach((meaning) => {
-    const aliases = aliasesFor(meaning).map(normalizeChinese).filter(Boolean);
+  groupedMeanings.forEach((group) => {
+    const aliases = [...new Set(group.flatMap((meaning) => aliasesFor(meaning)).map(normalizeChinese).filter(Boolean))];
+    const meaning = group[0];
     const existing = concepts.find((concept) => concept.aliases.some((alias) => aliases.includes(alias)));
     if (existing) {
       existing.aliases = [...new Set([...existing.aliases, ...aliases])];

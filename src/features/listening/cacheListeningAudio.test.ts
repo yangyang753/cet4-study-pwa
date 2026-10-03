@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { cacheListeningAudio } from './cacheListeningAudio';
+import { cacheListeningAudio, clearCachedListeningAudio, listCachedListeningAudio } from './cacheListeningAudio';
 
 function cacheStorage({ matched = false, addError }: { matched?: boolean; addError?: Error } = {}) {
   const cache = {
@@ -19,6 +19,15 @@ describe('cacheListeningAudio', () => {
     expect(storage.open).toHaveBeenCalledWith('cet4-audio-v2');
     expect(cache.match).toHaveBeenCalledWith('/audio/v1/listen-01.wav');
     expect(cache.add).toHaveBeenCalledWith('/audio/v1/listen-01.wav');
+  });
+
+  it('lists and clears downloaded listening files', async () => {
+    const keys = vi.fn(async () => [new Request('https://example.test/audio/v1/listen-01.wav'), new Request('https://example.test/app.js')]);
+    const cache = { keys };
+    const storage = { open: vi.fn(async () => cache), delete: vi.fn(async () => true) } as unknown as CacheStorage;
+    await expect(listCachedListeningAudio(storage)).resolves.toEqual(['/audio/v1/listen-01.wav']);
+    await expect(clearCachedListeningAudio(storage)).resolves.toBe(true);
+    expect(storage.delete).toHaveBeenCalledWith('cet4-audio-v2');
   });
 
   it('does not download a file that is already cached', async () => {

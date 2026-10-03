@@ -6,7 +6,7 @@ import Dexie from 'dexie';
 import { LearningDatabase } from '../../data/localDb';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import { ListeningPage } from './ListeningPage';
-import vocabulary from '../../../content/v1/vocabulary.json';
+import { learningVocabulary } from '../../content/vocabularyLearning';
 import listeningSets from '../../../content/v1/listeningSets.json';
 
 const databases: string[] = [];
@@ -19,7 +19,7 @@ function repository() {
 }
 
 async function unlockListeningQuestion() {
-  const translation = `这段内容说明了什么、什么时候以及如何安排。活动可能在星期天下午、星期一晚上或早上进行，原因和具体要求都已说明。${vocabulary.map((item) => item.meaningZh).join(' ')}`;
+  const translation = `这段内容说明了什么、什么时候以及如何安排。活动可能在星期天下午、星期一晚上或早上进行，原因和具体要求都已说明。${learningVocabulary.map((item) => item.meaningZh).join(' ')}`;
   for (const input of screen.getAllByRole('textbox').filter((item) => item.getAttribute('aria-label')?.includes('中文翻译'))) {
     fireEvent.change(input, { target: { value: translation } });
   }

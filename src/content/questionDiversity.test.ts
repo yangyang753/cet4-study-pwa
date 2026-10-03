@@ -21,6 +21,18 @@ describe('auditQuestionTemplateDiversity', () => {
     expect(auditQuestionTemplateDiversity(readingSets, 'reading')).toEqual([]);
   });
 
+  it('rejects listening banks built from repeated stock transcript segments', () => {
+    const repeated = Array.from({ length: 8 }, (_, index) => ({
+      id: `listen-${index}`,
+      themeEn: `topic ${index}`,
+      segments: [{ text: 'Participants were encouraged to ask for help whenever a detail seemed unclear.' }],
+      questions: [{ prompt: `What happened in topic ${index}?`, skillTag: 'detail', options: ['a', 'b', 'c', 'd'], answer: 0 }],
+    }));
+    expect(auditQuestionTemplateDiversity(repeated, 'listening')).toEqual(expect.arrayContaining([
+      expect.stringContaining('repeated transcript segment'),
+    ]));
+  });
+
   it('keeps Chinese topic labels out of English reading passages', () => {
     expect(readingSets.filter((set) => /[\u3400-\u9fff]/u.test(set.passage))).toEqual([]);
   });

@@ -27,12 +27,12 @@ describe('word reinforcement', () => {
 
     const meaning = buildWordReinforcement(word, () => 0);
     expect(gradeWordReinforcement(meaning, { english: '', chinese: '短文' })).toMatchObject({
-      correct: false,
+      correct: true,
       matchedMeaningCount: 1,
-      requiredMeaningCount: 2,
-      remainingMeanings: ['段落'],
+      requiredMeaningCount: 1,
+      remainingMeanings: [],
     });
-    expect(gradeWordReinforcement(meaning, { english: '', chinese: '篇章和段' }).correct).toBe(true);
+    expect(gradeWordReinforcement(meaning, { english: '', chinese: '道路' }).correct).toBe(false);
   });
 
   it('creates a usable random cloze without revealing the complete word', () => {

@@ -7,7 +7,6 @@ import type { LearningRepository } from '../../data/repositories/LearningReposit
 import { LearningDatabase } from '../../data/localDb';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import { ReviewPage } from './ReviewPage';
-import vocabulary from '../../../content/v1/vocabulary.json';
 import { getQuestion } from '../../content/catalog';
 import { learningVocabulary } from '../../content/vocabularyLearning';
 
@@ -27,7 +26,7 @@ async function setupRepository(stage = 0) {
 }
 
 async function unlockReviewQuestion() {
-  const translation = `这段内容说明了什么、什么时候以及如何安排。活动可能在星期天下午、星期一晚上或早上进行，原因和具体要求都已说明。${vocabulary.map((item) => item.meaningZh).join(' ')}`;
+  const translation = `这段内容说明了什么、什么时候以及如何安排。活动可能在星期天下午、星期一晚上或早上进行，原因和具体要求都已说明。${learningVocabulary.map((item) => item.meaningZh).join(' ')}`;
   for (const input of screen.getAllByRole('textbox')) fireEvent.change(input, { target: { value: translation } });
   await userEvent.click(await screen.findByRole('button', { name: '检查翻译并解锁选项' }));
   await screen.findByText('高频词义覆盖通过，可以开始作答。');

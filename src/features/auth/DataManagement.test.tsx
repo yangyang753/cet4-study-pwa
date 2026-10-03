@@ -31,4 +31,12 @@ describe('DataManagement', () => {
     await userEvent.click(button);
     expect(clear).toHaveBeenCalledTimes(1);
   });
+
+  it('lets the learner request protection from automatic browser cleanup', async () => {
+    const manager = { persisted: vi.fn(async () => false), persist: vi.fn(async () => true), estimate: vi.fn(async () => ({ usage: 1024, quota: 4096 })) };
+    render(<DataManagement storageManager={manager} actions={{ exportData: vi.fn(), importData: vi.fn(), clearData: vi.fn() }} />);
+    await userEvent.click(await screen.findByRole('button', { name: '保护本机学习记录' }));
+    expect(manager.persist).toHaveBeenCalledOnce();
+    expect(await screen.findByText(/浏览器已保护学习记录/)).toBeVisible();
+  });
 });

@@ -1,0 +1,3070 @@
+{
+  "access": {
+    "example": "Access is by means of a small door on the right.",
+    "exampleZh": "入口是右边的一扇小门。"
+  },
+  "acquire": {
+    "example": "She has acquired an email address and a site on the World Wide Web.",
+    "exampleZh": "她获得了一个电子邮件地址和万维网网址。"
+  },
+  "adapt": {
+    "example": "The ability to adapt is a definite asset in this job.",
+    "exampleZh": "适应能力是做这份工作的绝对有利条件。"
+  },
+  "admit": {
+    "example": "Admit it! I’m right, aren’t I?",
+    "exampleZh": "承认吧！我对了，是不是？"
+  },
+  "advance": {
+    "example": "A line of US tanks slowly advanced.",
+    "exampleZh": "一列美军坦克缓缓前进。"
+  },
+  "afford": {
+    "example": "The room affords a beautiful view over the city.",
+    "exampleZh": "这房间可以俯瞰城市美景。"
+  },
+  "alter": {
+    "example": "Her face hadn’t altered much over the years.",
+    "exampleZh": "过了这么多年，她的容貌并没有多大改变。"
+  },
+  "ancient": {
+    "example": "the ancient civilizations of Asia",
+    "exampleZh": "亚洲的古代文明"
+  },
+  "appeal": {
+    "example": "She is not happy with the decision and plans to appeal.",
+    "exampleZh": "她不服判决，打算上诉。"
+  },
+  "assume": {
+    "example": "I think we can safely assume (= it is almost certain ) that interest rates will go up again soon.",
+    "exampleZh": "我想我们几乎可以肯定，利率很快会再次上调。"
+  },
+  "attempt": {
+    "example": "Weather conditions prevented them from attempting the jump.",
+    "exampleZh": "天气状况使他们无法尝试跳伞。"
+  },
+  "available": {
+    "example": "Tickets are available from the box office.",
+    "exampleZh": "售票处有票出售。"
+  },
+  "award": {
+    "example": "an award-winning restaurant",
+    "exampleZh": "获奖餐厅"
+  },
+  "background": {
+    "example": "Do you know anything about his background?",
+    "exampleZh": "关于他的背景，你知道什么吗？"
+  },
+  "benefit": {
+    "example": "They are working together to benefit the whole community.",
+    "exampleZh": "他们在为整个社区的利益共同努力。"
+  },
+  "campaign": {
+    "example": "We are campaigning for law reform.",
+    "exampleZh": "我们正从事法律改革运动。"
+  },
+  "candidate": {
+    "example": "a presidential candidate",
+    "exampleZh": "总统候选人"
+  },
+  "challenge": {
+    "example": "They threw down the challenge that he couldn’t wash 40 cars in one hour (= invited him to try to do it ) .",
+    "exampleZh": "他们激将他，说他不可能在1小时内擦洗40辆汽车。"
+  },
+  "character": {
+    "example": "his temper and other character flaws",
+    "exampleZh": "他的火爆脾气和其他性格缺陷"
+  },
+  "circumstance": {
+    "example": "I can’t imagine a circumstance in which I would be willing to steal.",
+    "exampleZh": "我无法想象我在什么情况下会愿意去偷东西。"
+  },
+  "citizen": {
+    "example": "We need our schools to teach students to be good citizens.",
+    "exampleZh": "我们需要学校把学生培养为好公民。"
+  },
+  "colleague": {
+    "example": "a colleague of mine from the bank",
+    "exampleZh": "我在银行的一位同事"
+  },
+  "combine": {
+    "example": "Diets are most effective when combined with exercise.",
+    "exampleZh": "节食和锻炼相结合是最有效的。"
+  },
+  "comment": {
+    "example": "So far, Mr. Cook has not commented on these reports.",
+    "exampleZh": "到目前为止，库克先生还未对这些报告进行过评论。"
+  },
+  "commit": {
+    "example": "Women commit fewer crimes than men.",
+    "exampleZh": "女性犯罪比男性少。"
+  },
+  "compare": {
+    "example": "The report compares the different types of home computer available.",
+    "exampleZh": "这份报告比较了市场上不同类型的家用计算机。"
+  },
+  "compete": {
+    "example": "The banks have long competed with American Express's charge cards and various shop cards.",
+    "exampleZh": "这些银行长期以来一直与美国运通公司的记账卡和各种商店卡竞争。"
+  },
+  "complain": {
+    "example": "I shouldn't complain, I've got a good job to go back to.",
+    "exampleZh": "我不该抱怨，我已有可回去干的一份好工作。"
+  },
+  "complete": {
+    "example": "a complete stranger",
+    "exampleZh": "一个完全陌生的人"
+  },
+  "concern": {
+    "example": "He was moved by her obvious concern.",
+    "exampleZh": "她明显的关心使他感动。"
+  },
+  "confidence": {
+    "example": "I felt I was doing well and my confidence began to grow.",
+    "exampleZh": "我觉得自己干得不错，自信心就开始增加了。"
+  },
+  "conflict": {
+    "example": "Personal ethics and professional ethics sometimes conflict.",
+    "exampleZh": "个人道德与职业道德之间有时会相冲突。"
+  },
+  "consequence": {
+    "example": "I don’t suppose it is of any consequence now.",
+    "exampleZh": "现在我觉得这事一点都无所谓了。"
+  },
+  "contact": {
+    "example": "Contact the Women's Alliance for further details.",
+    "exampleZh": "请联系妇女联合会获取详情。"
+  },
+  "content": {
+    "example": "Andy was a good husband, and Nicky was clearly very content.",
+    "exampleZh": "安迪是个好丈夫，尼基显然非常满足。"
+  },
+  "contrast": {
+    "example": "an essay comparing and contrasting (= showing how two things are similar and different ) Verdi and Wagner and their operas",
+    "exampleZh": "把威尔第和瓦格纳以及他们的歌剧进行比较和对照的一篇文章"
+  },
+  "contribute": {
+    "example": "The three sons also contribute to the family business.",
+    "exampleZh": "3个儿子也为家族企业做贡献。"
+  },
+  "couple": {
+    "example": "the couple next door",
+    "exampleZh": "隔壁的那对夫妇"
+  },
+  "crisis": {
+    "example": "the current debt crisis",
+    "exampleZh": "当前的债务危机"
+  },
+  "current": {
+    "example": "the current President",
+    "exampleZh": "现任总统"
+  },
+  "debt": {
+    "example": "students who run up huge debts",
+    "exampleZh": "欠下巨额债务的学生"
+  },
+  "degree": {
+    "example": "Preheat the oven to 425 degrees.",
+    "exampleZh": "把烘箱预热至425度。"
+  },
+  "deliver": {
+    "example": "Do you deliver on Saturdays?",
+    "exampleZh": "星期六你们送货吗？"
+  },
+  "demand": {
+    "example": "Too many things demanded his attention at the same time.",
+    "exampleZh": "太多事情同时需要他的关注。"
+  },
+  "department": {
+    "example": "the English department",
+    "exampleZh": "英语系"
+  },
+  "derive": {
+    "example": "Mr. Ying is one of those happy people who derive pleasure from helping others.",
+    "exampleZh": "英先生是那种助人为乐的快活人。"
+  },
+  "desire": {
+    "example": "Add lemon juice if desired .",
+    "exampleZh": "需要的话加点柠檬汁。"
+  },
+  "despite": {
+    "example": "Liz realized that, despite herself, she cared about Edward.",
+    "exampleZh": "利兹发现自己不由自主地在乎爱德华。"
+  },
+  "detail": {
+    "example": "This issue will be discussed in more detail in Chapter 5.",
+    "exampleZh": "这个问题将在第五章里作更为详细的论述。"
+  },
+  "device": {
+    "example": "modern labour-saving devices",
+    "exampleZh": "省力的现代设备"
+  },
+  "discover": {
+    "example": "The body was discovered in a field.",
+    "exampleZh": "尸体是在一块田地里找到的。"
+  },
+  "display": {
+    "example": "shop windows displaying the latest fashions",
+    "exampleZh": "展示最新时装的商店橱窗"
+  },
+  "distance": {
+    "example": "Measure the distance between the two points.",
+    "exampleZh": "量出两点之间的距离。"
+  },
+  "divide": {
+    "example": "The physical benefits of exercise can be divided into three factors.",
+    "exampleZh": "锻炼对身体的好处可以分成3个方面。"
+  },
+  "due": {
+    "example": "Any money due you will be sent by cheque through the post.",
+    "exampleZh": "应该支付给你的款项将会以支票邮寄给你。"
+  },
+  "effect": {
+    "example": "the long-term effects of the drug",
+    "exampleZh": "这种毒品的长期影响"
+  },
+  "eliminate": {
+    "example": "Our team was eliminated in the first round.",
+    "exampleZh": "我们队第一轮就被淘汰了。"
+  },
+  "encourage": {
+    "example": "I want to thank everyone who has encouraged and supported me.",
+    "exampleZh": "我要感谢每一位鼓励和支持过我的人。"
+  },
+  "engage": {
+    "example": "I have never engaged in drug trafficking.",
+    "exampleZh": "我从来没有从事过贩毒。"
+  },
+  "ensure": {
+    "example": "facilities to ensure the safety of cyclists",
+    "exampleZh": "确保骑车人安全的设施"
+  },
+  "equal": {
+    "example": "Our constitution states that all men are equal.",
+    "exampleZh": "我们的宪法规定人人平等。"
+  },
+  "essay": {
+    "example": "We asked Jason to write an essay about his hometown.",
+    "exampleZh": "我们让杰森写一篇关于他家乡的短文。"
+  },
+  "establish": {
+    "example": "Our goal is to establish a new research centre in the North.",
+    "exampleZh": "我们的目标是在北方建立一个新的研究中心。"
+  },
+  "estimate": {
+    "example": "Try to estimate how many steps it will take to get to a close object.",
+    "exampleZh": "估计一下需要多少步才能到达一个近距目标。"
+  },
+  "exchange": {
+    "example": "Four of my cassettes for your Madonna CD is a fair exchange.",
+    "exampleZh": "我用四盒磁带换你的麦当娜激光唱片很公平。"
+  },
+  "expand": {
+    "example": "his expanding waistline",
+    "exampleZh": "他那逐渐增大的腰围"
+  },
+  "explore": {
+    "example": "I’m going to explore the possibility of a part-time job.",
+    "exampleZh": "我要好好想想兼职工作的可能性。"
+  },
+  "expose": {
+    "example": "The film exposes the utter horror of war.",
+    "exampleZh": "这部电影揭示了战争的极端恐怖。"
+  },
+  "familiar": {
+    "example": "a familiar tune",
+    "exampleZh": "熟悉的曲调"
+  },
+  "feature": {
+    "example": "The exhibition features paintings by Picasso.",
+    "exampleZh": "这次展览重点展出毕加索的画作。"
+  },
+  "figure": {
+    "example": "Reform now figures high on the agenda.",
+    "exampleZh": "眼下，改革是当务之急。"
+  },
+  "function": {
+    "example": "Her legs have now ceased to function .",
+    "exampleZh": "她的双腿现在已经丧失正常功能了。"
+  },
+  "fund": {
+    "example": "The fund was set up to try to save the cathedral.",
+    "exampleZh": "设立基金以挽救大教堂。"
+  },
+  "gap": {
+    "example": "a gap in the traffic",
+    "exampleZh": "车流中的一个空档"
+  },
+  "generation": {
+    "example": "In my generation the divorce rate is very high.",
+    "exampleZh": "我们这一代人离婚率很高。"
+  },
+  "gift": {
+    "example": "expensive wedding gifts",
+    "exampleZh": "昂贵的结婚礼物"
+  },
+  "handle": {
+    "example": "Then he turned the handle and went in.",
+    "exampleZh": "然后他转动把手走了进去。"
+  },
+  "harm": {
+    "example": "The scandal did his career a lot of harm.",
+    "exampleZh": "丑闻对他的职业生涯造成很大损害。"
+  },
+  "hire": {
+    "example": "What does it cost to hire a boat for a week?",
+    "exampleZh": "一艘小船租用一星期的费用是多少？"
+  },
+  "household": {
+    "example": "...growing up in a male-only household.",
+    "exampleZh": "…在全体成员均为男性的家庭里长大。"
+  },
+  "identify": {
+    "example": "He was too far away to be able to identify faces.",
+    "exampleZh": "他离得太远，没法看面孔认出谁是谁。"
+  },
+  "ignore": {
+    "example": "problems which we can’t afford to ignore",
+    "exampleZh": "我们不能置之不理的问题"
+  },
+  "illustrate": {
+    "example": "She illustrated her discussion with diagrams.",
+    "exampleZh": "她用图表来说明她的论述。"
+  },
+  "image": {
+    "example": "He had the clearest image in his mind of his mother and father.",
+    "exampleZh": "他脑海中对父母的印象极其清晰。"
+  },
+  "impact": {
+    "example": "The force of the impact knocked the breath out of her.",
+    "exampleZh": "撞击力使她喘不过气来。"
+  },
+  "include": {
+    "example": "Does the price include postage?",
+    "exampleZh": "这个价格包含邮费吗？"
+  },
+  "indicate": {
+    "example": "The study indicates a connection between poverty and crime.",
+    "exampleZh": "研究显示贫穷和犯罪有关联。"
+  },
+  "individual": {
+    "example": "the needs of the individual customer",
+    "exampleZh": "每位顾客的需求"
+  },
+  "influence": {
+    "example": "As a scientist, his influence was immense.",
+    "exampleZh": "身为一名科学家，他的影响力极大。"
+  },
+  "institution": {
+    "example": "social institutions such as the family and religion",
+    "exampleZh": "家庭和宗教这一类社会制度"
+  },
+  "intelligent": {
+    "example": "a group of highly intelligent (= very intelligent )students",
+    "exampleZh": "一组聪明异常的学生"
+  },
+  "intend": {
+    "example": "Maybe he intends to leave her.",
+    "exampleZh": "也许他打算离开她。"
+  },
+  "interview": {
+    "example": "a portfolio of work presented at interview",
+    "exampleZh": "在面试时呈递的工作成果样本"
+  },
+  "involve": {
+    "example": "What will the job involve?",
+    "exampleZh": "这份工作包括什么？"
+  },
+  "issue": {
+    "example": "a warning issued by the Surgeon General",
+    "exampleZh": "（美国）卫生局局长发出的警告"
+  },
+  "item": {
+    "example": "I also saw that news item in the Sunday Times.",
+    "exampleZh": "我在《星期日泰晤士报》上也看到了那条新闻。"
+  },
+  "launch": {
+    "example": "The organization has launched a campaign to raise $150,000.",
+    "exampleZh": "为了筹集15万美元，该组织发起了一场募捐活动。"
+  },
+  "legal": {
+    "example": "What the company has done is perfectly legal.",
+    "exampleZh": "公司所做的这一切完全合法。"
+  },
+  "maintain": {
+    "example": "How can we maintain control of spending?",
+    "exampleZh": "我们如何保持对开支的控制？"
+  },
+  "major": {
+    "example": "He underwent major heart surgery recently.",
+    "exampleZh": "他最近做了心脏大手术。"
+  },
+  "manufacture": {
+    "example": "the company that manufactured the drug",
+    "exampleZh": "生产这种药的公司"
+  },
+  "matter": {
+    "example": "There are more important matters we need to discuss.",
+    "exampleZh": "我们有更重要的事情需要讨论。"
+  },
+  "measure": {
+    "example": "The rainfall was measured over a three-month period.",
+    "exampleZh": "对三个月内的降雨量进行了测量。"
+  },
+  "obtain": {
+    "example": "These conditions no longer obtain.",
+    "exampleZh": "这些状况已不复存在。"
+  },
+  "outline": {
+    "example": "a research proposal outline",
+    "exampleZh": "研究计划梗概"
+  },
+  "particular": {
+    "example": "a particular type of food",
+    "exampleZh": "某一类食品"
+  },
+  "pattern": {
+    "example": "a dress pattern",
+    "exampleZh": "连衣裙的纸样"
+  },
+  "physical": {
+    "example": "She was in constant physical pain.",
+    "exampleZh": "她一直感到身上疼痛。"
+  },
+  "planet": {
+    "example": "The picture shows six of the nine planets in the solar system.",
+    "exampleZh": "这张图片展示太阳系9个行星中的6个行星。"
+  },
+  "position": {
+    "example": "Lie in a comfortable position .",
+    "exampleZh": "以一个舒服的姿势躺下。"
+  },
+  "potential": {
+    "example": "The company has identified 60 potential customers.",
+    "exampleZh": "该公司已确定了60位潜在的客户。"
+  },
+  "predict": {
+    "example": "Sales were five percent lower than predicted.",
+    "exampleZh": "销售额比预期低5%。"
+  },
+  "prevent": {
+    "example": "We were prevented from entering the site.",
+    "exampleZh": "我们被阻止进入现场。"
+  },
+  "previous": {
+    "example": "She has a teenage daughter from a previous marriage.",
+    "exampleZh": "她有个出自前一次婚姻的十几岁的女儿。"
+  },
+  "principle": {
+    "example": "The general principle is that education should be available to all children up to the age of 16.",
+    "exampleZh": "总的原则是，16 岁以下儿童都应该能接受教育。"
+  },
+  "process": {
+    "example": "the Israeli-Egyptian peace process",
+    "exampleZh": "以－埃和平进程"
+  },
+  "project": {
+    "example": "projected sales figures",
+    "exampleZh": "预计的销售数字"
+  },
+  "promote": {
+    "example": "You don't have to sacrifice environmental protection to promote economic growth.",
+    "exampleZh": "你们没有必要牺牲环保来促进经济增长。"
+  },
+  "quality": {
+    "example": "Use only high quality ingredients.",
+    "exampleZh": "只使用上等的材料。"
+  },
+  "raise": {
+    "example": "Can you raise the lamp so I can see?",
+    "exampleZh": "你能把灯举高点好让我看清吗？"
+  },
+  "range": {
+    "example": "They range in price from $3 to $15.",
+    "exampleZh": "它们的价格在$3到$15之间变化。"
+  },
+  "rank": {
+    "example": "There were several pairs of riding boots ranked neatly in the hall.",
+    "exampleZh": "门厅里整齐地摆放着几双马靴。"
+  },
+  "reduce": {
+    "example": "The governor announced a new plan to reduce crime.",
+    "exampleZh": "州长宣布了一项降低犯罪率的新计划。"
+  },
+  "regular": {
+    "example": "a regular job",
+    "exampleZh": "固定的工作"
+  },
+  "release": {
+    "example": "The bears are eventually released into the wild.",
+    "exampleZh": "这些熊最后被放回野生环境中。"
+  },
+  "remove": {
+    "example": "Remove the old wallpaper and fill any holes in the walls.",
+    "exampleZh": "撕下旧墙纸，把墙上的洞都填平。"
+  },
+  "represent": {
+    "example": "Mr Kobayashi was chosen to represent the company at the conference.",
+    "exampleZh": "小林先生被选中代表公司出席会议。"
+  },
+  "require": {
+    "example": "Most house plants require regular watering.",
+    "exampleZh": "大多数室内盆栽植物需要定期浇水。"
+  },
+  "reveal": {
+    "example": "a test that can reveal a teacher’s hidden skills",
+    "exampleZh": "能够展现老师潜在技能的测试"
+  },
+  "revolution": {
+    "example": "the French Revolution of 1789",
+    "exampleZh": "1789年法国大革命"
+  },
+  "reward": {
+    "example": "The school has a system of rewards and punishments to encourage good behaviour.",
+    "exampleZh": "学校有奖惩制度以鼓励良好行为。"
+  },
+  "schedule": {
+    "example": "How can he fit everything into his busy schedule ?",
+    "exampleZh": "他是怎么把所有的事情都排进自己忙碌的时间表的？"
+  },
+  "sensitive": {
+    "example": "a very sensitive child",
+    "exampleZh": "一个很敏感的小孩"
+  },
+  "signal": {
+    "example": "He pressed the red alarm signal to see if it was on or off.",
+    "exampleZh": "他按了一下红色报警信号钮，检查一下它是开著的还是关著的。"
+  },
+  "significant": {
+    "example": "Please inform us if there are any significant changes in your plans.",
+    "exampleZh": "你们的计划如有重大变动，请通知我们。"
+  },
+  "similar": {
+    "example": "We have similar tastes in music.",
+    "exampleZh": "我们对音乐的品位相近。"
+  },
+  "site": {
+    "example": "an archaeological site",
+    "exampleZh": "考古现场"
+  },
+  "specific": {
+    "example": "games suitable for specific age groups",
+    "exampleZh": "适合特定年龄组的游戏"
+  },
+  "stock": {
+    "example": "My boss had a stock response – \"If it ain't broke, don't fix it!\"",
+    "exampleZh": "我的老板是老一套的回答–“没坏的话就别修了！”"
+  },
+  "strategy": {
+    "example": "a company’s business strategy",
+    "exampleZh": "公司的经营策略"
+  },
+  "stress": {
+    "example": "all the stresses of public life",
+    "exampleZh": "公众生活的所有压力"
+  },
+  "suppose": {
+    "example": "There were many more deaths than was first supposed.",
+    "exampleZh": "死亡人数远远超过最初的预料。"
+  },
+  "track": {
+    "example": "a steep mountain track",
+    "exampleZh": "陡峭的山路"
+  },
+  "unique": {
+    "example": "a unique opportunity to study these rare creatures",
+    "exampleZh": "研究这些珍稀动物的难得机会"
+  },
+  "value": {
+    "example": "The value of his investment has risen by more than $50,000.",
+    "exampleZh": "他的投资价值已经增长$50000多。"
+  },
+  "vehicle": {
+    "example": "Have you locked your vehicle?",
+    "exampleZh": "你锁车了吗？"
+  },
+  "yield": {
+    "example": "Our research has only recently begun to yield important results.",
+    "exampleZh": "直到最近我们的研究才开始取得重要成果。"
+  },
+  "instance": {
+    "example": "We need to rethink the way we consume energy. Take, for instance, our approach to transport.",
+    "exampleZh": "我们需要重新考虑我们使用能源的方式，例如我们的运输方式。"
+  },
+  "domestic": {
+    "example": "Unfortunately his domestic life wasn’t very happy.",
+    "exampleZh": "不幸的是，他的家庭生活并不幸福。"
+  },
+  "consume": {
+    "example": "A smaller vehicle will consume less fuel.",
+    "exampleZh": "汽车小耗费燃料也少。"
+  },
+  "complex": {
+    "example": "a complex system of highways",
+    "exampleZh": "复杂的公路网"
+  },
+  "rate": {
+    "example": "Immediately his heart rate (= the number of beats per minute ) increased.",
+    "exampleZh": "他的心率立即加快了。"
+  },
+  "prepare": {
+    "example": "The prosecution wanted more time to prepare their case.",
+    "exampleZh": "原告想要有更多的时间来准备诉讼。"
+  },
+  "underline": {
+    "example": "This tragic incident underlines the need for immediate action.",
+    "exampleZh": "这一悲剧事件突显了立即采取行动的必要性。"
+  },
+  "generate": {
+    "example": "Wind turbines generate electricity for the local community.",
+    "exampleZh": "风力机为当地社区发电。"
+  },
+  "primary": {
+    "example": "Personal safety is of primary importance .",
+    "exampleZh": "人身安全至关重要。"
+  },
+  "solve": {
+    "example": "Charlie thinks money will solve all his problems.",
+    "exampleZh": "查理认为钱能解决他所有的问题。"
+  },
+  "observe": {
+    "example": "Scientists have observed a drop in ozone levels over the Antarctic.",
+    "exampleZh": "科学家已经观察到南极洲上方的臭氧浓度有所下降。"
+  },
+  "private": {
+    "example": "Morris has a private jet.",
+    "exampleZh": "莫里斯拥有一架私人喷气式飞机。"
+  },
+  "enable": {
+    "example": "The new test should enable doctors to detect the disease early.",
+    "exampleZh": "新的检验使医生能在早期发现该种疾病。"
+  },
+  "scale": {
+    "example": "A structural survey revealed the full scale of the damage.",
+    "exampleZh": "结构检验揭示了实际受损程度。"
+  },
+  "reflect": {
+    "example": "The drop in consumer spending reflects concern about the economy.",
+    "exampleZh": "消费支出的下降反映出人们对经济的担忧。"
+  },
+  "long": {
+    "example": "How long will it take to get there?",
+    "exampleZh": "到那里去要多长时间？"
+  },
+  "welfare": {
+    "example": "Our only concern is the children’s welfare.",
+    "exampleZh": "我们唯一关心的是孩子们的幸福。"
+  },
+  "plant": {
+    "example": "Don’t forget to water the plants.",
+    "exampleZh": "别忘记给植物浇水。"
+  },
+  "status": {
+    "example": "These documents have no legal status in Britain.",
+    "exampleZh": "这些文件在英国并无法律效力。"
+  },
+  "hit": {
+    "example": "He raised the hammer and hit the bell.",
+    "exampleZh": "他举起钟锤敲钟。"
+  },
+  "define": {
+    "example": "Define precisely what you mean by ‘crime’.",
+    "exampleZh": "把你说的 “犯罪” 明确定义一下。"
+  },
+  "reserve": {
+    "example": "Do you have to reserve tickets in advance?",
+    "exampleZh": "你必须预先订票吗？"
+  },
+  "moral": {
+    "example": "Man is gifted with a moral sense by which he distinguishes good from evil.",
+    "exampleZh": "人类天生有道德意识，能区分善与恶。"
+  },
+  "review": {
+    "example": "The decision will be reviewed by the Supreme Court.",
+    "exampleZh": "这个判决将由最高法院复核。"
+  },
+  "code": {
+    "example": "The spy sent his message in code.",
+    "exampleZh": "这个间谍用密码发送情报。"
+  },
+  "emerge": {
+    "example": "The flowers emerge in the spring.",
+    "exampleZh": "花儿在春天开放。"
+  },
+  "senior": {
+    "example": "the senior partner in a law firm",
+    "exampleZh": "律师事务所里的资深合伙人"
+  },
+  "expert": {
+    "example": "...a yoga expert.",
+    "exampleZh": "…一位瑜伽专家。"
+  },
+  "grant": {
+    "example": "The university gets a government grant.",
+    "exampleZh": "这所大学获得政府拨款。"
+  },
+  "account": {
+    "example": "My salary is paid into my bank account.",
+    "exampleZh": "我的工资直接存入我的银行账户。"
+  },
+  "address": {
+    "example": "The address is 2025 M Street, NW, Washington, DC, 20036.",
+    "exampleZh": "地址是华盛顿哥伦比亚特区，华盛顿西北，M街2025号，邮编20036。"
+  },
+  "affect": {
+    "example": "decisions which affect our lives",
+    "exampleZh": "影响我们生活的决定"
+  },
+  "age": {
+    "example": "Dad retired at the age of 56.",
+    "exampleZh": "爸爸是在56岁时退休的。"
+  },
+  "article": {
+    "example": "The paper’s leading article (= the main article ) described the government as weak.",
+    "exampleZh": "该报社论称政府软弱。"
+  },
+  "aspect": {
+    "example": "a south-facing aspect",
+    "exampleZh": "朝南方向"
+  },
+  "attach": {
+    "example": "When approving a merger, the commission can attach conditions.",
+    "exampleZh": "委员会在批准公司合并时可能附加条件。"
+  },
+  "attend": {
+    "example": "Only 12 people attended the meeting.",
+    "exampleZh": "只有12个人出席了会议。"
+  },
+  "audience": {
+    "example": "The audience began clapping and cheering.",
+    "exampleZh": "观众开始鼓掌欢呼。"
+  },
+  "aware": {
+    "example": "As you are aware, a fee will be charged annually.",
+    "exampleZh": "正如你所知道的那样，每年都要收取一笔费用。"
+  },
+  "baby": {
+    "example": "The baby is crying.",
+    "exampleZh": "宝宝在哭。"
+  },
+  "bad": {
+    "example": "a bad smell",
+    "exampleZh": "难闻的气味"
+  },
+  "balance": {
+    "example": "Job losses in manufacturing were balanced by job increases in the service sector.",
+    "exampleZh": "制造业职位减少了，而服务行业就业机会却增加了，正好相抵。"
+  },
+  "base": {
+    "example": "India has a good scientific research base.",
+    "exampleZh": "印度有良好的科研基础。"
+  },
+  "basic": {
+    "example": "The basic idea is simple.",
+    "exampleZh": "基本思想很简单。"
+  },
+  "basis": {
+    "example": "Their claim had no basis in fact (= it was not true ) .",
+    "exampleZh": "他们的说法没有事实根据。"
+  },
+  "bear": {
+    "example": "a mother bear and her cubs",
+    "exampleZh": "母熊和它的熊崽们"
+  },
+  "because": {
+    "example": "‘Why can’t I go?’ ‘Because you’re not old enough.’",
+    "exampleZh": "“我为什么不能去？”“因为你年纪太小。”"
+  },
+  "become": {
+    "example": "Pollution from cars has become a major problem.",
+    "exampleZh": "汽车污染已成为严重的问题。"
+  },
+  "before": {
+    "example": "Larry arrived home before me.",
+    "exampleZh": "拉里在我之前到家。"
+  },
+  "begin": {
+    "example": "As everybody’s here, let’s begin.",
+    "exampleZh": "大家都到齐了，我们就开始吧。"
+  },
+  "belief": {
+    "example": "When you get something wrong, it can shake your belief in yourself.",
+    "exampleZh": "如果有什么事情没做好，就会动摇你对自己的信心。"
+  },
+  "believe": {
+    "example": "You shouldn’t believe everything you read.",
+    "exampleZh": "你不应尽信书上看来的东西。"
+  },
+  "below": {
+    "example": "He had a bruise just below his right eye.",
+    "exampleZh": "就在他的右眼下面有一块伤痕。"
+  },
+  "between": {
+    "example": "He supplements his regular meals by eating between meals.",
+    "exampleZh": "他在两餐之间吃点东西来补充正餐。"
+  },
+  "beyond": {
+    "example": "The financing of home ownership will continue through the 1990s and beyond.",
+    "exampleZh": "房屋产权的融资将持续到20世纪90年代及以后。"
+  },
+  "big": {
+    "example": "a big house",
+    "exampleZh": "大房子"
+  },
+  "bill": {
+    "example": "Have you paid the phone bill?",
+    "exampleZh": "电话费你付了吗？"
+  },
+  "billion": {
+    "example": "The final cost could be as much as one billion dollars.",
+    "exampleZh": "最后的费用可能高达十亿美元。"
+  },
+  "bird": {
+    "example": "a flock of birds",
+    "exampleZh": "一群飞鸟"
+  },
+  "bit": {
+    "example": "He’s taken the engine to bits .",
+    "exampleZh": "他把发动机拆开了。"
+  },
+  "black": {
+    "example": "a black evening dress",
+    "exampleZh": "黑色晚礼服"
+  },
+  "blank": {
+    "example": "a blank cassette",
+    "exampleZh": "一盒空白磁带"
+  },
+  "blood": {
+    "example": "Her body was found in a pool of blood.",
+    "exampleZh": "她的尸体被发现倒在血泊之中。"
+  },
+  "board": {
+    "example": "Several students boarded with Mrs. Smith.",
+    "exampleZh": "有几名学生寄宿在史密斯夫人家里。"
+  },
+  "body": {
+    "example": "My fingers were numb and my whole body ached.",
+    "exampleZh": "我手指麻木，浑身疼痛。"
+  },
+  "book": {
+    "example": "a cookery book",
+    "exampleZh": "烹饪书"
+  },
+  "boss": {
+    "example": "I’ll have to ask my boss for a day off.",
+    "exampleZh": "我得向老板请一天假。"
+  },
+  "box": {
+    "example": "Jim watched the game from a private box.",
+    "exampleZh": "吉姆在私人包厢里观看比赛。"
+  },
+  "boy": {
+    "example": "boys and girls aged 11–18",
+    "exampleZh": "11到18岁之间的男孩和女孩"
+  },
+  "brain": {
+    "example": "the chemistry of the brain",
+    "exampleZh": "大脑的化学性质"
+  },
+  "brand": {
+    "example": "products which lack a strong brand image",
+    "exampleZh": "缺乏鲜明品牌形象的产品"
+  },
+  "break": {
+    "example": "The silence was broken by a loud scream.",
+    "exampleZh": "一声尖叫打破了寂静。"
+  },
+  "bring": {
+    "example": "The discovery of gold brought thousands of people to the Transvaal.",
+    "exampleZh": "黄金的发现把成千上万的人引到了德兰士瓦。"
+  },
+  "brother": {
+    "example": "my twin brother",
+    "exampleZh": "我的双胞胎兄弟"
+  },
+  "build": {
+    "example": "The road took many years to build.",
+    "exampleZh": "这条路修了好几年。"
+  },
+  "burn": {
+    "example": "Cars were burned and shops were looted during the rioting.",
+    "exampleZh": "暴乱期间，汽车被焚，商店遭抢劫。"
+  },
+  "bus": {
+    "example": "I took a bus to San Francisco.",
+    "exampleZh": "我乘公共汽车去旧金山。"
+  },
+  "business": {
+    "example": "He has a wide range of business interests.",
+    "exampleZh": "他的生意面很广。"
+  },
+  "busy": {
+    "example": "a busy mother of four",
+    "exampleZh": "一个忙忙碌碌、育有四个孩子的妈妈"
+  },
+  "buy": {
+    "example": "People say the judge had been bought by the Mafia.",
+    "exampleZh": "人们都说法官被黑手党收买了。"
+  },
+  "call": {
+    "example": "You may call it harmless fun, but I call it pornography.",
+    "exampleZh": "你可能会说这是无恶意的小玩笑，但是我却认为这是色情。"
+  },
+  "campus": {
+    "example": "a beautiful campus in New England",
+    "exampleZh": "新英格兰的一个美丽校园"
+  },
+  "cancer": {
+    "example": "He died of cancer last month.",
+    "exampleZh": "上个月他死于癌症。"
+  },
+  "capacity": {
+    "example": "an infinite capacity for love",
+    "exampleZh": "无尽的爱心"
+  },
+  "capital": {
+    "example": "Washington D.C., the capital of the United States",
+    "exampleZh": "美国首都华盛顿特区"
+  },
+  "car": {
+    "example": "He isn’t old enough to drive a car.",
+    "exampleZh": "他还未到可以开车的年龄。"
+  },
+  "carbon": {
+    "example": "They degrade into carbon and oxygen.",
+    "exampleZh": "他们能被降解成碳和氧。"
+  },
+  "card": {
+    "example": "I haven’t got my membership card yet.",
+    "exampleZh": "我还没拿到会员卡。"
+  },
+  "care": {
+    "example": "She felt that nobody cared.",
+    "exampleZh": "她觉得没有人在乎。"
+  },
+  "career": {
+    "example": "a teaching career",
+    "exampleZh": "教学事业"
+  },
+  "carry": {
+    "example": "The ship was carrying drugs.",
+    "exampleZh": "这艘船上载有毒品。"
+  },
+  "case": {
+    "example": "a classic case (= typical example ) of poor design",
+    "exampleZh": "蹩脚设计的典型例子"
+  },
+  "catch": {
+    "example": "Did you catch any fish?",
+    "exampleZh": "你捕到鱼了吗？"
+  },
+  "cause": {
+    "example": "It’s our job to establish the cause of the fire.",
+    "exampleZh": "查明起火原因是我们的责任。"
+  },
+  "cell": {
+    "example": "Embryos grow by cell division (= the splitting of cells ) .",
+    "exampleZh": "胚胎通过细胞分裂而成长。"
+  },
+  "cent": {
+    "example": "A cup of rice which cost thirty cents a few weeks ago is now being sold for up to one dollar.",
+    "exampleZh": "几周前价值30美分的1杯米如今卖到了1美元。"
+  },
+  "century": {
+    "example": "the story of life on a small farm at the turn of the century",
+    "exampleZh": "讲述世纪初一个小农场生活的故事"
+  },
+  "certain": {
+    "example": "I felt certain that I’d passed the test.",
+    "exampleZh": "我感觉自己肯定通过这次测验了。"
+  },
+  "chance": {
+    "example": "There is little chance of her being found alive.",
+    "exampleZh": "她生还的可能性很小。"
+  },
+  "change": {
+    "example": "I find it hard to cope with change.",
+    "exampleZh": "我觉得很难适应变化。"
+  },
+  "charge": {
+    "example": "They have the evidence to charge him.",
+    "exampleZh": "他们有证据来指控他。"
+  },
+  "cheap": {
+    "example": "cheap rail fares",
+    "exampleZh": "便宜的火车票"
+  },
+  "check": {
+    "example": "Check the tiles carefully before you buy them.",
+    "exampleZh": "购买之前要把瓷砖仔细检查一下。"
+  },
+  "chief": {
+    "example": "his chief rival for the job",
+    "exampleZh": "和他竞争这份工作的主要对手"
+  },
+  "child": {
+    "example": "child victims of war",
+    "exampleZh": "战争受难儿童"
+  },
+  "choice": {
+    "example": "They gave us no choice in the matter.",
+    "exampleZh": "在这件事情上他们没给我们选择的余地。"
+  },
+  "choose": {
+    "example": "It took us ages to choose a new carpet.",
+    "exampleZh": "我们挑选新地毯花了很长时间。"
+  },
+  "church": {
+    "example": "a short church service",
+    "exampleZh": "简短的教堂礼拜仪式"
+  },
+  "city": {
+    "example": "The nearest big city was St. Louis.",
+    "exampleZh": "最近的大城市是圣路易斯。"
+  },
+  "claim": {
+    "example": "Opposition leaders will claim victory if the turnout is lower than 50%.",
+    "exampleZh": "如果投票率低于 50%，反对党领袖将宣布获胜。"
+  },
+  "class": {
+    "example": "He’s not in the same class (= not as good ) as her at tennis.",
+    "exampleZh": "他的网球水平并不如她。"
+  },
+  "classroom": {
+    "example": "The boy bounced out of the classroom.",
+    "exampleZh": "那男孩突然从教室里奔出去。"
+  },
+  "clean": {
+    "example": "Are your hands clean?",
+    "exampleZh": "你的手干净吗？"
+  },
+  "clear": {
+    "example": "The question wasn’t very clear.",
+    "exampleZh": "这问题不是很清楚。"
+  },
+  "climate": {
+    "example": "Los Angeles’ warm dry climate",
+    "exampleZh": "洛杉矶温暖干燥的气候"
+  },
+  "clock": {
+    "example": "I heard the clock strike six (= make six loud sounds ) .",
+    "exampleZh": "我听到钟敲了六下。"
+  },
+  "close": {
+    "example": "She closed the curtains.",
+    "exampleZh": "她拉上了窗帘。"
+  },
+  "clothe": {
+    "example": "They could barely keep the family fed and clothed.",
+    "exampleZh": "他们几乎无力为家人提供衣食。"
+  },
+  "cold": {
+    "example": "a blast of cold air",
+    "exampleZh": "一股冷空气"
+  },
+  "collect": {
+    "example": "We’ve been out collecting signatures for our petition.",
+    "exampleZh": "我们出去为我们的请愿征集签名。"
+  },
+  "college": {
+    "example": "a teacher training college",
+    "exampleZh": "师范学院"
+  },
+  "come": {
+    "example": "Let me know when they come.",
+    "exampleZh": "他们来了就告诉我。"
+  },
+  "communicate": {
+    "example": "A baby communicates its needs by crying.",
+    "exampleZh": "婴儿用哭来表达需要。"
+  },
+  "community": {
+    "example": "The new arts centre will serve the whole community.",
+    "exampleZh": "这座新的艺术中心将为整个社区服务。"
+  },
+  "company": {
+    "example": "Which company do you work for?",
+    "exampleZh": "你在哪家公司上班？"
+  },
+  "conclude": {
+    "example": "When the investigation is concluded, the results will be sent to the US Attorney’s office.",
+    "exampleZh": "等到调查结束后，结果会被送到联邦检察官办公室。"
+  },
+  "condition": {
+    "example": "Profits increased by £1.5m, despite the difficult economic conditions.",
+    "exampleZh": "尽管经济形势不佳，利润还是增长了150万英镑。"
+  },
+  "conduct": {
+    "example": "his arrest for disorderly conduct",
+    "exampleZh": "他因妨害治安行为而遭逮捕"
+  },
+  "conference": {
+    "example": "Representatives from over 100 countries attended the International Peace Conference in Geneva.",
+    "exampleZh": "来自一百多个国家的代表出席了在日内瓦举行的国际和平大会。"
+  },
+  "connect": {
+    "example": "We’d like two rooms with connecting doors (= doors that join the rooms ) .",
+    "exampleZh": "我们想要两个有门相通的房间。"
+  },
+  "consider": {
+    "example": "We will have to consider your offer carefully .",
+    "exampleZh": "我们得仔细考虑你的提议。"
+  },
+  "continue": {
+    "example": "I felt too sick to continue.",
+    "exampleZh": "我感觉很难受，无法继续下去了。"
+  },
+  "control": {
+    "example": "Police had to be called in to control the crowds.",
+    "exampleZh": "只好调来警察控制人群。"
+  },
+  "cook": {
+    "example": "a cooked breakfast",
+    "exampleZh": "做好的早餐"
+  },
+  "correct": {
+    "example": "Score one point for each correct answer .",
+    "exampleZh": "答对一题得一分。"
+  },
+  "correspond": {
+    "example": "The two halves of the document did not correspond.",
+    "exampleZh": "这份文件的前后两部分不相符。"
+  },
+  "cost": {
+    "example": "low cost housing",
+    "exampleZh": "低成本住宅"
+  },
+  "count": {
+    "example": "I was amazed at the number of plants - I counted 147.",
+    "exampleZh": "我对植物的数量之多感到惊讶，我数了有147棵。"
+  },
+  "country": {
+    "example": "travelling to a foreign country",
+    "exampleZh": "到国外旅行"
+  },
+  "court": {
+    "example": "It could not be proved in a court of law.",
+    "exampleZh": "这无法在法庭上证实。"
+  },
+  "cover": {
+    "example": "Cover the pot and bake for an hour.",
+    "exampleZh": "把锅盖上，烘烤一小时。"
+  },
+  "create": {
+    "example": "The new factory is expected to create more than 400 new jobs.",
+    "exampleZh": "这家新工厂预计能创造400多个新的就业机会。"
+  },
+  "credit": {
+    "example": "The store agreed to let him have credit.",
+    "exampleZh": "商店同意他赊购。"
+  },
+  "crime": {
+    "example": "a police crackdown on car crime",
+    "exampleZh": "警察对汽车犯罪活动的一次严厉打击"
+  },
+  "crop": {
+    "example": "crops grown for market",
+    "exampleZh": "为供应市场而种植的作物"
+  },
+  "cross": {
+    "example": "He raised his arms in triumph as he crossed the line for his 100-metres win.",
+    "exampleZh": "他以胜利的姿态高举双手跑过终点线，赢得了这场百米赛。"
+  },
+  "cry": {
+    "example": "I just couldn’t stop crying.",
+    "exampleZh": "我就是哭个不停。"
+  },
+  "culture": {
+    "example": "In our culture, it is rude to ask someone how much they earn.",
+    "exampleZh": "在我们的文化里，问别人收入多少是不礼貌的。"
+  },
+  "customer": {
+    "example": "He’s one of our regular customers .",
+    "exampleZh": "他是我们的一个老主顾。"
+  },
+  "cut": {
+    "example": "You need to cut the amount of fat and sugar in your diet.",
+    "exampleZh": "你需要减少饮食中脂肪和糖的摄入量。"
+  },
+  "daily": {
+    "example": "daily flights to Miami",
+    "exampleZh": "每日飞往迈阿密的航班"
+  },
+  "damage": {
+    "example": "insects that damage crops",
+    "exampleZh": "破坏庄稼的昆虫"
+  },
+  "danger": {
+    "example": "Danger! No boats beyond this point.",
+    "exampleZh": "危险！船只不可越过此处。"
+  },
+  "date": {
+    "example": "What’s today’s date?",
+    "exampleZh": "今天几号？"
+  },
+  "day": {
+    "example": "It was a cold blustery day.",
+    "exampleZh": "那是个寒风呼啸的冷天。"
+  },
+  "deal": {
+    "example": "The prime minister promised farmers a new deal (= a new and fairer system ) .",
+    "exampleZh": "首相向农民保证推行一项新政策。"
+  },
+  "death": {
+    "example": "1.5 million people are in immediate danger of death from starvation.",
+    "exampleZh": "150万人正因饥饿而即将面临死亡的危险。"
+  },
+  "debate": {
+    "example": "the gun-control debate in the US",
+    "exampleZh": "美国有关控制枪支的争论"
+  },
+  "decade": {
+    "example": "...the last decade of the nineteenth century.",
+    "exampleZh": "…19世纪的最后10年。"
+  },
+  "decide": {
+    "example": "Has anything been decided yet?",
+    "exampleZh": "已经作出什么决定了吗？"
+  },
+  "decrease": {
+    "example": "They want to decrease their reliance on oil.",
+    "exampleZh": "他们想减少对石油的依赖。"
+  },
+  "deep": {
+    "example": "a deep wound",
+    "exampleZh": "很深的伤口"
+  },
+  "describe": {
+    "example": "The police asked her to describe the man.",
+    "exampleZh": "警察叫她描述一下那名男子。"
+  },
+  "design": {
+    "example": "The tower was designed by Gilbert Scott.",
+    "exampleZh": "这座塔楼是吉尔伯特·斯科特设计的。"
+  },
+  "develop": {
+    "example": "exercises to develop muscle strength",
+    "exampleZh": "锻炼肌肉力量的运动"
+  },
+  "die": {
+    "example": "He died in 1985 at the age of 76.",
+    "exampleZh": "他1985年去世，终年76岁。"
+  },
+  "differ": {
+    "example": "The two systems differ in many respects.",
+    "exampleZh": "这两个系统在许多方面不同。"
+  },
+  "difficult": {
+    "example": "a difficult question",
+    "exampleZh": "难解的问题"
+  },
+  "dinner": {
+    "example": "What’s for dinner?",
+    "exampleZh": "晚饭吃什么？"
+  },
+  "direct": {
+    "example": "I’m not in direct contact with them.",
+    "exampleZh": "我和他们没有直接的联系。"
+  },
+  "disaster": {
+    "example": "The drought could spell disaster for wildlife.",
+    "exampleZh": "干旱可能会对野生生物造成灾难。"
+  },
+  "discipline": {
+    "example": "The book gives parents advice on discipline.",
+    "exampleZh": "这本书指导父母如何管教孩子。"
+  },
+  "discuss": {
+    "example": "Littman refused to discuss the case publicly.",
+    "exampleZh": "利特曼拒绝公开讨论此案。"
+  },
+  "disease": {
+    "example": "His father died of heart disease.",
+    "exampleZh": "他父亲死于心脏病。"
+  },
+  "doctor": {
+    "example": "She was treated by her local doctor.",
+    "exampleZh": "她由她的本区医生治疗。"
+  },
+  "dog": {
+    "example": "I could hear a dog barking .",
+    "exampleZh": "我听到了狗吠声。"
+  },
+  "dollar": {
+    "example": "a ten-dollar bill",
+    "exampleZh": "一张十元钞票"
+  },
+  "door": {
+    "example": "Could you open the door for me?",
+    "exampleZh": "请你帮我开门好吗？"
+  },
+  "double": {
+    "example": "a double sink",
+    "exampleZh": "双水槽"
+  },
+  "doubt": {
+    "example": "There was still one little nagging doubt at the back of his mind.",
+    "exampleZh": "他的心头仍有一丝挥之不去的疑虑。"
+  },
+  "down": {
+    "example": "Get down off the table.",
+    "exampleZh": "从桌子上下来。"
+  },
+  "dream": {
+    "example": "I had lots of dreams last night.",
+    "exampleZh": "昨晚我做了很多梦。"
+  },
+  "drink": {
+    "example": "What would you like to drink?",
+    "exampleZh": "你想喝点什么？"
+  },
+  "drive": {
+    "example": "Torrential rain drove the players off the course.",
+    "exampleZh": "滂沱大雨迫使选手们离开了赛场。"
+  },
+  "drug": {
+    "example": "a drug used in the treatment of cancer",
+    "exampleZh": "用于治疗癌症的一种药物"
+  },
+  "during": {
+    "example": "Foxes remain hidden during the day.",
+    "exampleZh": "狐狸白天一直躲藏着。"
+  },
+  "early": {
+    "example": "We arrived early.",
+    "exampleZh": "我们提早到了。"
+  },
+  "earn": {
+    "example": "He earns nearly £20,000 a year.",
+    "exampleZh": "他每年挣近20,000英镑。"
+  },
+  "easy": {
+    "example": "The test was easy.",
+    "exampleZh": "考试很容易。"
+  },
+  "eat": {
+    "example": "Does Rob eat fish?",
+    "exampleZh": "罗布吃鱼吗？"
+  },
+  "economy": {
+    "example": "Not insuring your belongings is a false economy (= it is cheaper but could have bad results ).",
+    "exampleZh": "不给个人财产投保实际上并不划算。"
+  },
+  "educate": {
+    "example": "The Ormerod School educates handicapped children.",
+    "exampleZh": "奥默罗德学校的教育对象为残疾儿童。"
+  },
+  "effort": {
+    "example": "Frank put a lot of effort into the party.",
+    "exampleZh": "弗兰克办这次聚会花了不少精力。"
+  },
+  "eight": {
+    "example": "It’s only eight days till Christmas.",
+    "exampleZh": "还有8天就到圣诞节了。"
+  },
+  "else": {
+    "example": "Who else was at the party?",
+    "exampleZh": "还有谁参加了聚会？"
+  },
+  "emotion": {
+    "example": "Her voice was full of emotion.",
+    "exampleZh": "她的声音充满了激情。"
+  },
+  "employ": {
+    "example": "The factory employs over 2,000 people.",
+    "exampleZh": "这家工厂雇用了2,000多名员工。"
+  },
+  "end": {
+    "example": "The end of the pencil snapped.",
+    "exampleZh": "铅笔的笔尖啪的一声断了。"
+  },
+  "energy": {
+    "example": "The water is heated using energy from the sun.",
+    "exampleZh": "水是利用太阳能加热的。"
+  },
+  "engineer": {
+    "example": "He trained as a civil engineer (= one who designs and builds roads, bridges etc ).",
+    "exampleZh": "他接受过土木工程师培训。"
+  },
+  "enough": {
+    "example": "Her disappearance and death would give proof enough of Charles' guilt.",
+    "exampleZh": "她的失踪和死亡将提供足够的证据证明查尔斯有罪。"
+  },
+  "environment": {
+    "example": "legislation to protect the environment",
+    "exampleZh": "保护环境的法规"
+  },
+  "especially": {
+    "example": "I never liked long walks, especially in winter.",
+    "exampleZh": "我向来不喜欢长距离散步，尤其在冬天。"
+  },
+  "even": {
+    "example": "She did not even bother to phone us.",
+    "exampleZh": "她甚至连电话都没打给我们。"
+  },
+  "event": {
+    "example": "one of the most important events in the history of mankind",
+    "exampleZh": "人类历史上最重大的事件之一"
+  },
+  "eventually": {
+    "example": "Eventually, she got a job and moved to London.",
+    "exampleZh": "最终，她找到了工作并移居伦敦。"
+  },
+  "ever": {
+    "example": "Have you ever been to Paris?",
+    "exampleZh": "你去过巴黎吗？"
+  },
+  "everyone": {
+    "example": "Not everyone enjoys sport.",
+    "exampleZh": "并不是谁都喜欢体育运动的。"
+  },
+  "everything": {
+    "example": "I decided to tell her everything.",
+    "exampleZh": "我决定把一切都告诉她。"
+  },
+  "exact": {
+    "example": "What were his exact words?",
+    "exampleZh": "他的原话是什么？"
+  },
+  "examine": {
+    "example": "A team of divers was sent down to examine the wreck.",
+    "exampleZh": "一组潜水员被送到水下检查沉船。"
+  },
+  "example": {
+    "example": "Many countries, for example Mexico and Japan, have a lot of earthquakes.",
+    "exampleZh": "许多国家，例如墨西哥和日本，经常发生地震。"
+  },
+  "except": {
+    "example": "We all went except him.",
+    "exampleZh": "除他以外， 我们都去了。"
+  },
+  "exercise": {
+    "example": "Working in an office, I don’t get much exercise.",
+    "exampleZh": "由于在办公室工作，我很少运动。"
+  },
+  "exist": {
+    "example": "Stop pretending that the problem doesn’t exist.",
+    "exampleZh": "别再假装这个问题不存在了。"
+  },
+  "expect": {
+    "example": "He didn’t get his expected pay rise.",
+    "exampleZh": "他没有得到他预想的加薪。"
+  },
+  "expense": {
+    "example": "Conference rooms were equipped at great expense.",
+    "exampleZh": "装备会议室花费巨大。"
+  },
+  "experience": {
+    "example": "I had some experience in fashion design.",
+    "exampleZh": "我有一些时装设计方面的经验。"
+  },
+  "experiment": {
+    "example": "The astronauts are conducting a series of experiments to learn more about how the body adapts to weightlessness.",
+    "exampleZh": "那些宇航员正在进行一系列实验，以便更多地了解人体如何适应失重状态。"
+  },
+  "explain": {
+    "example": "He carefully explained the procedure.",
+    "exampleZh": "他仔细解释了程序。"
+  },
+  "express": {
+    "example": "She expressed an interest in seeing York.",
+    "exampleZh": "她表示有兴趣见见约克。"
+  },
+  "extend": {
+    "example": "Management have agreed to extend the deadline.",
+    "exampleZh": "管理层已同意延长最后期限。"
+  },
+  "extra": {
+    "example": "an extra special effort",
+    "exampleZh": "格外的努力"
+  },
+  "eye": {
+    "example": "He’s got beautiful eyes.",
+    "exampleZh": "他有一双漂亮的眼睛。"
+  },
+  "face": {
+    "example": "She had a beautiful face.",
+    "exampleZh": "她面容秀美。"
+  },
+  "fact": {
+    "example": "Our decision to build the museum in Hartlepool was influenced by the fact that there were no national museums in the North East.",
+    "exampleZh": "我们之所以决定在哈特尔浦建造博物馆，是因为东北地区没有国家级的博物馆。"
+  },
+  "factor": {
+    "example": "The rise in crime is mainly due to social and economic factors.",
+    "exampleZh": "犯罪率上升主要由社会和经济因素造成。"
+  },
+  "factory": {
+    "example": "a car factory",
+    "exampleZh": "汽车制造厂"
+  },
+  "fail": {
+    "example": "his efforts to save his failing marriage",
+    "exampleZh": "他挽救自己濒危婚姻的努力"
+  },
+  "fair": {
+    "example": "£150 is a fair price.",
+    "exampleZh": "150英镑是个合理的价钱。"
+  },
+  "fall": {
+    "example": "The tree was about to fall.",
+    "exampleZh": "那棵树快要倒下了。"
+  },
+  "family": {
+    "example": "The family now live in London.",
+    "exampleZh": "那家人现居伦敦。"
+  },
+  "far": {
+    "example": "We can walk to my house from here. It isn’t far.",
+    "exampleZh": "我们可以从这里步行去我家，不远。"
+  },
+  "farm": {
+    "example": "a 300-hectare farm",
+    "exampleZh": "一座300公顷的农场"
+  },
+  "fashion": {
+    "example": "Hats like that just aren’t the fashion.",
+    "exampleZh": "那样的帽子不流行。"
+  },
+  "fast": {
+    "example": "a fast car",
+    "exampleZh": "速度很快的汽车"
+  },
+  "father": {
+    "example": "Ask your father to help you.",
+    "exampleZh": "叫你父亲帮你。"
+  },
+  "fear": {
+    "example": "I was sitting on the floor shivering with fear because a bullet had been fired through a window.",
+    "exampleZh": "我坐在地板上吓得浑身发抖，因为有一颗子弹射穿窗户打了进来。"
+  },
+  "federal": {
+    "example": "Switzerland is a federal republic.",
+    "exampleZh": "瑞士是一个联邦共和国。"
+  },
+  "feel": {
+    "example": "I am feeling very depressed.",
+    "exampleZh": "我感到很沮丧。"
+  },
+  "female": {
+    "example": "Over half of the staff is female.",
+    "exampleZh": "半数以上的员工是女性。"
+  },
+  "field": {
+    "example": "a view of green fields and rolling hills",
+    "exampleZh": "田野青翠、丘陵起伏的景色"
+  },
+  "fight": {
+    "example": "Neither country is capable of fighting a long war .",
+    "exampleZh": "两个国家都没有能力打持久战。"
+  },
+  "fill": {
+    "example": "My job was filling the flour sacks.",
+    "exampleZh": "我的工作是装面粉袋。"
+  },
+  "film": {
+    "example": "Have you seen any good films recently?",
+    "exampleZh": "你最近看过什么好的影片吗？"
+  },
+  "find": {
+    "example": "I can’t find the car keys.",
+    "exampleZh": "我找不到汽车钥匙。"
+  },
+  "fine": {
+    "example": "It’s a fine idea.",
+    "exampleZh": "这是个很妙的主意。"
+  },
+  "finish": {
+    "example": "Have you finished that book yet?",
+    "exampleZh": "那本书你看完了吗？"
+  },
+  "fire": {
+    "example": "The warehouse was completely destroyed by fire.",
+    "exampleZh": "仓库全给烧毁了。"
+  },
+  "firm": {
+    "example": "The firm's employees were expecting large bonuses.",
+    "exampleZh": "这家公司的雇员们正期待着大笔的奖金。"
+  },
+  "first": {
+    "example": "‘I think he’ll agree to it.’ ‘ That will be a first .’",
+    "exampleZh": "“我想他会同意的。”“那倒是破天荒头一遭。”"
+  },
+  "fit": {
+    "example": "The sash, kimono, and other garments were made to fit a child.",
+    "exampleZh": "这些腰带、和服和其他衣服都做得适合孩子穿。"
+  },
+  "five": {
+    "example": "I’ll be back by five (= five o’clock ) .",
+    "exampleZh": "我五点前回来。"
+  },
+  "fix": {
+    "example": "He's going to fix a time when I can see him.",
+    "exampleZh": "他将确定一个我可以见他的时间。"
+  },
+  "floor": {
+    "example": "a polished wooden floor",
+    "exampleZh": "上过蜡的木地板"
+  },
+  "follow": {
+    "example": "Are those men following us?",
+    "exampleZh": "那些人在跟着我们吗？"
+  },
+  "food": {
+    "example": "I love Italian food, especially pasta.",
+    "exampleZh": "我喜欢意大利食物，尤其是面食。"
+  },
+  "foot": {
+    "example": "My foot hurts.",
+    "exampleZh": "我脚痛。"
+  },
+  "force": {
+    "example": "Westerly gales forced the ship off course.",
+    "exampleZh": "强劲的西风将那艘船吹离了航道。"
+  },
+  "foreign": {
+    "example": "I thought she sounded foreign.",
+    "exampleZh": "我觉得她说话像外国人。"
+  },
+  "forest": {
+    "example": "a tropical forest",
+    "exampleZh": "热带森林"
+  },
+  "form": {
+    "example": "We oppose racism in all its forms.",
+    "exampleZh": "我们反对各种形式的种族主义。"
+  },
+  "formal": {
+    "example": "a formal agreement between the countries",
+    "exampleZh": "两国间的正式协议"
+  },
+  "former": {
+    "example": "the former Soviet Union",
+    "exampleZh": "前苏联"
+  },
+  "forward": {
+    "example": "The crowd surged forwards.",
+    "exampleZh": "人群向前涌去。"
+  },
+  "four": {
+    "example": "She is married with four children.",
+    "exampleZh": "她已婚，有四个孩子。"
+  },
+  "free": {
+    "example": "With one leap he was free!",
+    "exampleZh": "这一跳他就自由了！"
+  },
+  "friend": {
+    "example": "I met Jim through a friend.",
+    "exampleZh": "经一位朋友介绍，我认识了吉姆。"
+  },
+  "front": {
+    "example": "the dog’s front legs",
+    "exampleZh": "狗的前腿"
+  },
+  "fuel": {
+    "example": "We’d better fuel up at the next town.",
+    "exampleZh": "我们最好在下个小镇加油。"
+  },
+  "full": {
+    "example": "The train was completely full.",
+    "exampleZh": "火车坐得满满的。"
+  },
+  "future": {
+    "example": "a leader who will shape the organization’s future",
+    "exampleZh": "将决定该组织未来的一位领导者"
+  },
+  "gain": {
+    "example": "After gaining independence in 1957, it was renamed ‘Ghana’.",
+    "exampleZh": "1957年获得独立后，该国改名为“加纳”。"
+  },
+  "game": {
+    "example": "The boys were playing a game in the backyard.",
+    "exampleZh": "男孩们在后院里玩游戏。"
+  },
+  "gather": {
+    "example": "A crowd gathered to watch the fight.",
+    "exampleZh": "一群人聚拢来围观打架。"
+  },
+  "general": {
+    "example": "ways to improve your general health",
+    "exampleZh": "全面提高身体素质的方法"
+  },
+  "get": {
+    "example": "We need to get help quickly!",
+    "exampleZh": "我们需要马上得到帮助！"
+  },
+  "girl": {
+    "example": "a teenage girl",
+    "exampleZh": "十几岁的女孩"
+  },
+  "give": {
+    "example": "Most people are willing to give to charity .",
+    "exampleZh": "大多数人都愿意向慈善事业捐款。"
+  },
+  "goal": {
+    "example": "Your goal as a parent is to help your child become an independent adult.",
+    "exampleZh": "身为父母，你的目标就是要培养孩子成为独立的成年人。"
+  },
+  "gold": {
+    "example": "She came to the party dripping with gold (= wearing a lot of gold ) .",
+    "exampleZh": "她披金戴银地来参加派对。"
+  },
+  "good": {
+    "example": "a good hotel",
+    "exampleZh": "一家不错的宾馆"
+  },
+  "grade": {
+    "example": "All the parks are regularly checked and graded by tourist board inspectors.",
+    "exampleZh": "所有公园都由旅游协会的检查员进行定期检查和评级。"
+  },
+  "graduate": {
+    "example": "a graduate student",
+    "exampleZh": "研究生"
+  },
+  "great": {
+    "example": "The movie was a great success.",
+    "exampleZh": "这部影片大获成功。"
+  },
+  "green": {
+    "example": "beautiful green eyes",
+    "exampleZh": "漂亮的碧眼"
+  },
+  "ground": {
+    "example": "‘You’re under arrest.’ ‘On what grounds?’",
+    "exampleZh": "“你被捕了。”“理由是什么？”"
+  },
+  "group": {
+    "example": "A group of us are going to London.",
+    "exampleZh": "我们有一群人要去伦敦。"
+  },
+  "grow": {
+    "example": "Victor seemed to grow taller every day.",
+    "exampleZh": "维克托好像一天比一天高。"
+  },
+  "guest": {
+    "example": "a banquet for 250 distinguished guests",
+    "exampleZh": "250位贵宾出席的宴会"
+  },
+  "guide": {
+    "example": "an experienced mountain guide",
+    "exampleZh": "一位有经验的登山向导"
+  },
+  "habit": {
+    "example": "Regular exercise is a good habit.",
+    "exampleZh": "经常锻炼是个好习惯。"
+  },
+  "half": {
+    "example": "...a half measure of fresh lemon juice.",
+    "exampleZh": "…半量杯的新鲜柠檬汁。"
+  },
+  "hand": {
+    "example": "In her hand was a tattered old photograph.",
+    "exampleZh": "她手中拿着的是一张破旧的老照片。"
+  },
+  "happen": {
+    "example": "When did the accident happen?",
+    "exampleZh": "事故什么时候发生的？"
+  },
+  "happy": {
+    "example": "the happy faces of the children",
+    "exampleZh": "孩子们快乐的表情"
+  },
+  "hard": {
+    "example": "a hard wooden chair",
+    "exampleZh": "一把硬木椅"
+  },
+  "hardly": {
+    "example": "I can hardly believe it.",
+    "exampleZh": "这简直让我难以置信。"
+  },
+  "head": {
+    "example": "He kissed the top of her head.",
+    "exampleZh": "他吻了一下她的头顶。"
+  },
+  "health": {
+    "example": "I’m worried about my husband’s health.",
+    "exampleZh": "我担心我丈夫的健康状况。"
+  },
+  "hear": {
+    "example": "Old Zeke doesn’t hear too well any more.",
+    "exampleZh": "老齐克的耳朵已不灵了。"
+  },
+  "heart": {
+    "example": "Can you hear my heart beating?",
+    "exampleZh": "你能听见我的心跳吗？"
+  },
+  "heat": {
+    "example": "Ice needs heat to melt.",
+    "exampleZh": "冰需要热才能融化。"
+  },
+  "heavy": {
+    "example": "a heavy suitcase",
+    "exampleZh": "沉重的手提箱"
+  },
+  "help": {
+    "example": "If there’s anything I can do to help, just give me a call.",
+    "exampleZh": "如果需要我帮忙，就给我打个电话。"
+  },
+  "her": {
+    "example": "Give her the keys.",
+    "exampleZh": "把钥匙给她。"
+  },
+  "herself": {
+    "example": "She made herself a cup of coffee.",
+    "exampleZh": "她给自己煮了杯咖啡。"
+  },
+  "high": {
+    "example": "a ten-foot high statue",
+    "exampleZh": "10英尺高的雕像"
+  },
+  "himself": {
+    "example": "He barred himself in.",
+    "exampleZh": "他把自己关在里面。"
+  },
+  "his": {
+    "example": "He stated his views to me.",
+    "exampleZh": "他向我说明了他的观点。"
+  },
+  "history": {
+    "example": "a college steeped in history",
+    "exampleZh": "一所历史悠久的学院"
+  },
+  "hold": {
+    "example": "He holds shares in ICI.",
+    "exampleZh": "他持有帝国化学工业集团的股份。"
+  },
+  "holiday": {
+    "example": "The school holidays start tomorrow.",
+    "exampleZh": "学校假期从明天开始。"
+  },
+  "home": {
+    "example": "Good luck in your new home!",
+    "exampleZh": "祝你在新家一切顺利！"
+  },
+  "hope": {
+    "example": "I do hope everything goes well.",
+    "exampleZh": "我真心希望一切顺利。"
+  },
+  "hospital": {
+    "example": "They are building a new hospital.",
+    "exampleZh": "他们正在建一家新医院。"
+  },
+  "hot": {
+    "example": "a hot curry",
+    "exampleZh": "一种辛辣的咖喱"
+  },
+  "hotel": {
+    "example": "We’ll be staying at the Hotel Ibis.",
+    "exampleZh": "我们将住在宜必思酒店。"
+  },
+  "hour": {
+    "example": "a five-hour delay",
+    "exampleZh": "五小时的延误"
+  },
+  "house": {
+    "example": "an auction house",
+    "exampleZh": "一家拍卖行"
+  },
+  "however": {
+    "example": "This is a cheap and simple process. However, there are dangers.",
+    "exampleZh": "这是个花钱少而又简单的方法，不过有危险。"
+  },
+  "huge": {
+    "example": "a huge dog",
+    "exampleZh": "一条大狗"
+  },
+  "human": {
+    "example": "the power of the human mind",
+    "exampleZh": "人脑的威力"
+  },
+  "hundred": {
+    "example": "I’m not a hundred percent sure where she lives.",
+    "exampleZh": "我不能完全确定她住在哪里。"
+  },
+  "hunt": {
+    "example": "A forensic team was hunting for clues.",
+    "exampleZh": "法医小组正在搜寻线索。"
+  },
+  "husband": {
+    "example": "Have you met my husband Roy?",
+    "exampleZh": "你见过我的丈夫罗伊吗？"
+  },
+  "ice": {
+    "example": "Her hands were as cold as ice.",
+    "exampleZh": "她双手冰冷。"
+  },
+  "idea": {
+    "example": "It was my wife’s idea to move house.",
+    "exampleZh": "要搬家是我妻子的主意。"
+  },
+  "ideal": {
+    "example": "advice on how to reach your ideal weight",
+    "exampleZh": "如何达到理想体重的建议"
+  },
+  "ill": {
+    "example": "Bridget can’t come – she’s ill.",
+    "exampleZh": "布里奇特不能来了，她生病了。"
+  },
+  "important": {
+    "example": "a very important meeting",
+    "exampleZh": "很重要的会议"
+  },
+  "impossible": {
+    "example": "The noise made sleep impossible.",
+    "exampleZh": "噪音吵得人无法睡觉。"
+  },
+  "improve": {
+    "example": "a course for students wishing to improve their English",
+    "exampleZh": "为想提高英语水平的学生开设的一门课"
+  },
+  "increase": {
+    "example": "Visits to the site have increased threefold since May.",
+    "exampleZh": "来这里的参观者自5月起已增至原来的三倍。"
+  },
+  "indeed": {
+    "example": "The blood tests prove that Vince is indeed the father.",
+    "exampleZh": "验血证明文斯确实是父亲。"
+  },
+  "industry": {
+    "example": "I work in the oil industry.",
+    "exampleZh": "我在石油行业工作。"
+  },
+  "inform": {
+    "example": "My daughter informed me that she was pregnant.",
+    "exampleZh": "我女儿告诉我她怀孕了。"
+  },
+  "inside": {
+    "example": "He concealed the key inside his tie.",
+    "exampleZh": "他把钥匙藏在领带里面。"
+  },
+  "instead": {
+    "example": "If Jo can’t attend the meeting, I could go instead.",
+    "exampleZh": "如果乔不能去开会，我可以代他去。"
+  },
+  "intellectual": {
+    "example": "Mark’s very intellectual.",
+    "exampleZh": "马克很聪明。"
+  },
+  "interest": {
+    "example": "I read your article with great interest.",
+    "exampleZh": "我兴致勃勃地拜读了您的文章。"
+  },
+  "international": {
+    "example": "the response of the international community",
+    "exampleZh": "国际社会的反响"
+  },
+  "introduce": {
+    "example": "Have you two been introduced? Tom, this is Greg.",
+    "exampleZh": "有人给你们俩互相介绍了吗？汤姆，这位是格雷格。"
+  },
+  "invite": {
+    "example": "I’m afraid I wasn’t invited.",
+    "exampleZh": "恐怕我没有受到邀请。"
+  },
+  "its": {
+    "example": "He emphasized its importance to me.",
+    "exampleZh": "他向我强调它的重要性。"
+  },
+  "itself": {
+    "example": "The cat lay on the sofa, washing itself.",
+    "exampleZh": "猫躺在沙发上把自己舔干。"
+  },
+  "job": {
+    "example": "Do you enjoy your job?",
+    "exampleZh": "你喜欢自己的工作吗？"
+  },
+  "journal": {
+    "example": "the British Medical Journal",
+    "exampleZh": "《英国医学杂志》"
+  },
+  "judge": {
+    "example": "The trial judge specifies the number of years to be spent in prison.",
+    "exampleZh": "由主审法官确定刑期。"
+  },
+  "keep": {
+    "example": "The noise kept him awake.",
+    "exampleZh": "噪音使他一直醒着。"
+  },
+  "key": {
+    "example": "A bunch of keys hung from his belt.",
+    "exampleZh": "他的皮带上挂着一串钥匙。"
+  },
+  "kid": {
+    "example": "He’s married with three kids.",
+    "exampleZh": "他已婚，有三个孩子。"
+  },
+  "kill": {
+    "example": "Why did she kill her husband?",
+    "exampleZh": "她为什么杀死丈夫？"
+  },
+  "kind": {
+    "example": "Get me a sandwich – any kind will do.",
+    "exampleZh": "给我一份三明治，随便哪种都可以。"
+  },
+  "know": {
+    "example": "Who knows the answer?",
+    "exampleZh": "谁知道答案？"
+  },
+  "label": {
+    "example": "a luggage label",
+    "exampleZh": "行李标签"
+  },
+  "lack": {
+    "example": "There was no lack of willing helpers.",
+    "exampleZh": "主动提出帮助的不乏其人。"
+  },
+  "land": {
+    "example": "They own a lot of land.",
+    "exampleZh": "他们拥有许多土地。"
+  },
+  "language": {
+    "example": "How many languages do you speak?",
+    "exampleZh": "你能说几种语言？"
+  },
+  "large": {
+    "example": "large sums ofmoney",
+    "exampleZh": "大笔的钱"
+  },
+  "last": {
+    "example": "Much has changed since my last visit.",
+    "exampleZh": "自我上次来访后，变化很大。"
+  },
+  "late": {
+    "example": "Sorry I’m late – I overslept.",
+    "exampleZh": "对不起，来晚了——我睡过头了。"
+  },
+  "law": {
+    "example": "Elected officials ought to obey the law.",
+    "exampleZh": "民选官员理应遵守法律。"
+  },
+  "lay": {
+    "example": "Lay the material flat on the table.",
+    "exampleZh": "把布料平铺在桌上。"
+  },
+  "learn": {
+    "example": "What’s the best way to learn a language?",
+    "exampleZh": "学习语言的最佳方法是什么？"
+  },
+  "leave": {
+    "example": "Leave the motorway at Junction 7.",
+    "exampleZh": "请在七号交叉路口驶离高速公路。"
+  },
+  "lecture": {
+    "example": "...a series of lectures by Professor Eric Robinson.",
+    "exampleZh": "…埃里克·鲁滨逊教授的系列讲座。"
+  },
+  "let": {
+    "example": "I can’t come out tonight – my dad won’t let me.",
+    "exampleZh": "今天晚上我不能出来，我爸爸不允许。"
+  },
+  "letter": {
+    "example": "There are 26 letters in the English alphabet.",
+    "exampleZh": "英语字母表有26个字母。"
+  },
+  "level": {
+    "example": "Inflation fell to its lowest level in 30 years.",
+    "exampleZh": "通货膨胀降至30年来最低点。"
+  },
+  "library": {
+    "example": "a library book",
+    "exampleZh": "图书馆的书"
+  },
+  "lie": {
+    "example": "The town lies in a small wooded valley.",
+    "exampleZh": "该城镇坐落于一个林木茂盛的山谷中。"
+  },
+  "life": {
+    "example": "Learning goes on throughout life.",
+    "exampleZh": "学习是一生的事。"
+  },
+  "light": {
+    "example": "You should wear light, comfortable shoes.",
+    "exampleZh": "你应该穿轻便舒适的鞋子。"
+  },
+  "like": {
+    "example": "I like your jacket.",
+    "exampleZh": "我喜欢你这件上衣。"
+  },
+  "limit": {
+    "example": "a 55 mph speed limit",
+    "exampleZh": "55英里的时速限制"
+  },
+  "line": {
+    "example": "He raced towards the finishing line.",
+    "exampleZh": "他朝终点线冲刺。"
+  },
+  "link": {
+    "example": "Police think the murders are linked.",
+    "exampleZh": "警方认为这些谋杀案互有关联。"
+  },
+  "list": {
+    "example": "High on the list of public demands is to end military control of broadcasting.",
+    "exampleZh": "高居公众要求事项前列的是结束对广播的军事控制。"
+  },
+  "listen": {
+    "example": "Listen! There’s a strange noise in the engine.",
+    "exampleZh": "听！引擎发出奇怪的声音。"
+  },
+  "little": {
+    "example": "a cake decorated with little flowers",
+    "exampleZh": "点缀着小花的蛋糕"
+  },
+  "live": {
+    "example": "They’ve finally found a place to live.",
+    "exampleZh": "他们终于找到了住的地方。"
+  },
+  "look": {
+    "example": "Gina covered her eyes, afraid to look.",
+    "exampleZh": "吉娜捂住眼睛，不敢看。"
+  },
+  "lose": {
+    "example": "Try not to lose heart (= become sad and hopeless ) - there are plenty of other jobs.",
+    "exampleZh": "不要灰心―还有很多其他的工作。"
+  },
+  "lot": {
+    "example": "‘How many CDs have you got?’ ‘Lots.’",
+    "exampleZh": "“你有多少张CD？”“多着呢。”"
+  },
+  "love": {
+    "example": "I love you, Tracy.",
+    "exampleZh": "我爱你，特雷西。"
+  },
+  "low": {
+    "example": "the children’s low achievement in school",
+    "exampleZh": "孩子们在学校里不好的成绩"
+  },
+  "machine": {
+    "example": "The fax machine is broken.",
+    "exampleZh": "传真机坏了。"
+  },
+  "magazine": {
+    "example": "a magazine article",
+    "exampleZh": "杂志中的文章"
+  },
+  "mail": {
+    "example": "You shouldn’t read other people’s mail.",
+    "exampleZh": "你不应该看别人的信件。"
+  },
+  "main": {
+    "example": "the main bedroom",
+    "exampleZh": "主卧室"
+  },
+  "make": {
+    "example": "Make a list of all the things you need.",
+    "exampleZh": "把你需要的所有物品列一份清单。"
+  },
+  "male": {
+    "example": "a deep male voice",
+    "exampleZh": "低沉的男声"
+  },
+  "manage": {
+    "example": "He was asked to manage a new department.",
+    "exampleZh": "他被要求去管理一个新的部门。"
+  },
+  "manner": {
+    "example": "He felt some guilt over the manner of her death.",
+    "exampleZh": "她以这种方式死去，他心里有些内疚。"
+  },
+  "mark": {
+    "example": "The kitten is mainly white with black marks on her back.",
+    "exampleZh": "小猫身体基本为白色，背上有黑色斑点。"
+  },
+  "market": {
+    "example": "Our main overseas market is Japan.",
+    "exampleZh": "我们的主要海外市场是日本。"
+  },
+  "marry": {
+    "example": "I’m going to ask her to marry me on St Valentine’s Day.",
+    "exampleZh": "我打算在情人节向她求婚。"
+  },
+  "mass": {
+    "example": "a mass protest",
+    "exampleZh": "大规模的抗议"
+  },
+  "match": {
+    "example": "It’s our last match of the season.",
+    "exampleZh": "这是我们本赛季最后一场比赛。"
+  },
+  "material": {
+    "example": "According to some, the material world is all that exists.",
+    "exampleZh": "有些人认为，物质世界就是存在的一切。"
+  },
+  "meal": {
+    "example": "We must have a meal together some time.",
+    "exampleZh": "我们一定要找个时间一起吃顿饭。"
+  },
+  "mean": {
+    "example": "What does \"evidence\" mean?",
+    "exampleZh": "是什么意思？"
+  },
+  "medical": {
+    "example": "a medical student",
+    "exampleZh": "医科学生"
+  },
+  "medicine": {
+    "example": "the remarkable achievements of modern medicine",
+    "exampleZh": "现代医学的非凡成就"
+  },
+  "medium": {
+    "example": "hair of medium length",
+    "exampleZh": "中等长短的头发"
+  },
+  "meet": {
+    "example": "I was worried I might meet Henry on the bus.",
+    "exampleZh": "我担心可能会在公共汽车上遇到亨利。"
+  },
+  "meeting": {
+    "example": "We’re having a meeting next week to discuss the matter.",
+    "exampleZh": "我们下周将开会讨论此事。"
+  },
+  "member": {
+    "example": "The majority of union members voted in favour of a strike.",
+    "exampleZh": "大多数工会成员投票赞成罢工。"
+  },
+  "mental": {
+    "example": "Stress has an effect on both your physical and mental health .",
+    "exampleZh": "压力对身体健康和心理健康都有影响。"
+  },
+  "mention": {
+    "example": "Was my name mentioned at all?",
+    "exampleZh": "我的名字被提到过吗？"
+  },
+  "message": {
+    "example": "He left a message saying he would probably be a little late.",
+    "exampleZh": "他留言说可能会晚一点来。"
+  },
+  "method": {
+    "example": "traditional teaching methods",
+    "exampleZh": "传统的教学法"
+  },
+  "middle": {
+    "example": "There are plenty of small houses for sale, and quite a lot of very large ones, but very little in the middle.",
+    "exampleZh": "在售的小房子很多，大房子也有不少，但是不大不小的很少。"
+  },
+  "mile": {
+    "example": "We walked about half a mile .",
+    "exampleZh": "我们大约走了半英里。"
+  },
+  "million": {
+    "example": "£37 million of new investment",
+    "exampleZh": "3,700万英镑的新投资额"
+  },
+  "mind": {
+    "example": "Mind and body are closely related.",
+    "exampleZh": "思想和肉体紧密相连。"
+  },
+  "minute": {
+    "example": "He returned a few minutes later.",
+    "exampleZh": "几分钟后他回来了。"
+  },
+  "miss": {
+    "example": "I’d like to make an appointment with Miss Taylor.",
+    "exampleZh": "我想约一下泰勒小姐。"
+  },
+  "mistake": {
+    "example": "The most common mistake is to plant them too deep.",
+    "exampleZh": "最常见的错误就是把它们种得太深了。"
+  },
+  "model": {
+    "example": "a working model (= one with parts which move ) of a steam engine",
+    "exampleZh": "蒸汽机车的活动模型"
+  },
+  "modern": {
+    "example": "a book about modern history",
+    "exampleZh": "一本关于现代史的书"
+  },
+  "moment": {
+    "example": "It was one of the most exciting moments in his life.",
+    "exampleZh": "这是他一生中最激动人心的时刻之一。"
+  },
+  "money": {
+    "example": "The repairs will cost quite a lot of money.",
+    "exampleZh": "修理要花一大笔钱。"
+  },
+  "month": {
+    "example": "We update the schedule at least once a month.",
+    "exampleZh": "我们至少每月更新一次日程表。"
+  },
+  "morning": {
+    "example": "She took the early morning train.",
+    "exampleZh": "她搭乘了一大早的火车。"
+  },
+  "mother": {
+    "example": "Mother said they’d met at university.",
+    "exampleZh": "母亲说他们是在大学里认识的。"
+  },
+  "move": {
+    "example": "‘Come on,’ Sue said. No one moved.",
+    "exampleZh": "“来吧。”休说。但没有人动。"
+  },
+  "movie": {
+    "example": "It was like one of those old John Wayne movies.",
+    "exampleZh": "这部电影有点像约翰•韦恩演的一部老片子。"
+  },
+  "multiple": {
+    "example": "His new album includes multiple versions of the same songs.",
+    "exampleZh": "他的新专辑包括同一些歌曲的多种版本。"
+  },
+  "museum": {
+    "example": "the Museum of Modern Art",
+    "exampleZh": "现代艺术博物馆"
+  },
+  "music": {
+    "example": "I often listen to classic music when I’m in the car.",
+    "exampleZh": "我在车上经常听古典音乐。"
+  },
+  "name": {
+    "example": "What’s your name?",
+    "exampleZh": "你叫什么名字？"
+  },
+  "nation": {
+    "example": "an independent nation",
+    "exampleZh": "独立的国家"
+  },
+  "native": {
+    "example": "Singapore has many native species of palm.",
+    "exampleZh": "新加坡有很多土生的棕榈树种。"
+  },
+  "nature": {
+    "example": "Disease is nature’s way of keeping the population down.",
+    "exampleZh": "疾病是大自然控制人口的方法。"
+  },
+  "near": {
+    "example": "They live near London.",
+    "exampleZh": "他们住在伦敦附近。"
+  },
+  "necessary": {
+    "example": "No further changes were considered necessary.",
+    "exampleZh": "没有必要作出进一步改变。"
+  },
+  "need": {
+    "example": "You don’t really need a car.",
+    "exampleZh": "你其实并不需要一辆车。"
+  },
+  "neither": {
+    "example": "She lives in retirement, neither making nor receiving visits.",
+    "exampleZh": "她过着隐退的生活， 既不访客， 也不见客。"
+  },
+  "network": {
+    "example": "Hungary’s telephone network",
+    "exampleZh": "匈牙利的电话网"
+  },
+  "never": {
+    "example": "He’s never been to Australia.",
+    "exampleZh": "他从未去过澳大利亚。"
+  },
+  "new": {
+    "example": "a new range of drugs",
+    "exampleZh": "一系列新药"
+  },
+  "news": {
+    "example": "I hope to have some good news for you soon.",
+    "exampleZh": "我希望很快就能给你好消息。"
+  },
+  "newspaper": {
+    "example": "She had read about it in the newspapers.",
+    "exampleZh": "关于这件事她已经在报纸上看到了。"
+  },
+  "next": {
+    "example": "The man in the next chair was asleep.",
+    "exampleZh": "邻座的男子睡着了。"
+  },
+  "night": {
+    "example": "It was a cold moonlit night.",
+    "exampleZh": "那是个寒冷的月夜。"
+  },
+  "nor": {
+    "example": "Neither Matt nor Julie said anything.",
+    "exampleZh": "马特和朱莉都没有说什么。"
+  },
+  "normal": {
+    "example": "A normal working week is 40 hours.",
+    "exampleZh": "一个正常的工作周是40小时。"
+  },
+  "north": {
+    "example": "Which way is north?",
+    "exampleZh": "哪边是北？"
+  },
+  "note": {
+    "example": "Can I borrow your lecture notes?",
+    "exampleZh": "我能不能借用一下你的课堂笔记？"
+  },
+  "nothing": {
+    "example": "He had nothing more to say.",
+    "exampleZh": "他没有更多要说的了。"
+  },
+  "novel": {
+    "example": "a novel by Jane Austen",
+    "exampleZh": "简·奥斯丁的小说"
+  },
+  "now": {
+    "example": "She's a widow now.",
+    "exampleZh": "她现在是一个寡妇。"
+  },
+  "nuclear": {
+    "example": "a nuclear power station",
+    "exampleZh": "核电站"
+  },
+  "number": {
+    "example": "Add all the numbers together.",
+    "exampleZh": "把所有数字加起来。"
+  },
+  "nurse": {
+    "example": "a male nurse",
+    "exampleZh": "男护士"
+  },
+  "object": {
+    "example": "If no one objects, I would like Mrs Harrison to be present.",
+    "exampleZh": "如果没人反对的话，我想请哈里森夫人出席。"
+  },
+  "objective": {
+    "example": "Scientists need to be objective when doing research.",
+    "exampleZh": "科学家做研究时要客观。"
+  },
+  "obvious": {
+    "example": "The obvious way of reducing pollution is to use cars less.",
+    "exampleZh": "减少污染显而易见的办法就是少用汽车。"
+  },
+  "occur": {
+    "example": "A third of accidental deaths occur in the home.",
+    "exampleZh": "有三分之一的意外死亡发生在家里。"
+  },
+  "ocean": {
+    "example": "The cape extends far into the ocean.",
+    "exampleZh": "那海岬伸向海洋远处。"
+  },
+  "off": {
+    "example": "How are you off for sports equipment? (= do you have enough? )",
+    "exampleZh": "你的体育运动装备够不够？"
+  },
+  "offer": {
+    "example": "A number of groups offer their services free of charge.",
+    "exampleZh": "一些团体免费提供服务。"
+  },
+  "office": {
+    "example": "the increased demand for office space",
+    "exampleZh": "对办公室空间日益增长的需求"
+  },
+  "often": {
+    "example": "She often works at the weekend.",
+    "exampleZh": "她周末经常要上班。"
+  },
+  "oil": {
+    "example": "an oil refinery",
+    "exampleZh": "炼油厂"
+  },
+  "old": {
+    "example": "How old are you?",
+    "exampleZh": "你多大年纪？"
+  },
+  "once": {
+    "example": "I’ve only met her once.",
+    "exampleZh": "我只见过她一面。"
+  },
+  "one": {
+    "example": "They had one daughter.",
+    "exampleZh": "他们有一个女儿。"
+  },
+  "open": {
+    "example": "an open window",
+    "exampleZh": "打开的窗户"
+  },
+  "operate": {
+    "example": "The Lewis family operated a number of boats on the canal.",
+    "exampleZh": "刘易斯一家在运河上经营着几艘船。"
+  },
+  "opinion": {
+    "example": "When choosing an insurance policy it’s best to get an independent opinion.",
+    "exampleZh": "选择保险时，最好听听专家的独立意见。"
+  },
+  "order": {
+    "example": "There seemed to be no logical order to the sections.",
+    "exampleZh": "这几部分似乎没有逻辑顺序。"
+  },
+  "organize": {
+    "example": "The lawyer helped to organize a group of parents who took action for their children.",
+    "exampleZh": "这位律师帮助把一群为孩子而采取行动的家长组织起来。"
+  },
+  "other": {
+    "example": "They were just like any other young couple.",
+    "exampleZh": "他们那时就和其他任何年轻夫妇一样。"
+  },
+  "ourselves": {
+    "example": "It was strange seeing ourselves on television.",
+    "exampleZh": "在电视上看到自己感觉很奇怪。"
+  },
+  "out": {
+    "example": "Lock the door on your way out.",
+    "exampleZh": "你出去时把门锁上。"
+  },
+  "outside": {
+    "example": "We turned off the outside lights and went to bed.",
+    "exampleZh": "我们关掉外头的电灯，上床睡觉了。"
+  },
+  "over": {
+    "example": "A lamp hung over the table.",
+    "exampleZh": "一盏灯悬挂在桌子上方。"
+  },
+  "overall": {
+    "example": "An overall winner and a runner-up were chosen.",
+    "exampleZh": "总冠军和第二名被选了出来。"
+  },
+  "own": {
+    "example": "Bring your own equipment.",
+    "exampleZh": "带上你自己的装备。"
+  },
+  "page": {
+    "example": "a 400﹣page novel",
+    "exampleZh": "一本400页的小说"
+  },
+  "paint": {
+    "example": "The ceiling needs painting.",
+    "exampleZh": "天花板需要粉刷了。"
+  },
+  "paper": {
+    "example": "Do you have a pen and paper?",
+    "exampleZh": "你有笔和纸吗？"
+  },
+  "paragraph": {
+    "example": "the opening paragraphs of the novel",
+    "exampleZh": "小说开篇的几个段落"
+  },
+  "parent": {
+    "example": "The eggs are guarded by both parents.",
+    "exampleZh": "那些蛋由两只亲鸟共同守护着。"
+  },
+  "park": {
+    "example": "a park bench",
+    "exampleZh": "公园长椅"
+  },
+  "part": {
+    "example": "For part of the day, you will be outside doing practical work.",
+    "exampleZh": "你们每天将有一部分时间在户外实际操作。"
+  },
+  "partner": {
+    "example": "I used to partner him in tennis matches.",
+    "exampleZh": "我过去常在网球比赛中与他搭档。"
+  },
+  "party": {
+    "example": "the party spirit",
+    "exampleZh": "参加社交聚会的乐趣"
+  },
+  "pass": {
+    "example": "He gave me a smile as he passed.",
+    "exampleZh": "他经过时对我微笑了一下。"
+  },
+  "passage": {
+    "example": "an underground passage",
+    "exampleZh": "地下通道"
+  },
+  "passenger": {
+    "example": "Neither the driver nor the passengers were hurt.",
+    "exampleZh": "司机和乘客均未受伤。"
+  },
+  "past": {
+    "example": "Judging by her past performance, Jane should do very well.",
+    "exampleZh": "从以往的表现来看，简应该会干得很好。"
+  },
+  "patient": {
+    "example": "You’ll just have to be patient and wait till I’m off the phone.",
+    "exampleZh": "你只能耐心点，等我打完电话。"
+  },
+  "pause": {
+    "example": "There was a pause while Alice changed the tape.",
+    "exampleZh": "艾丽斯换磁带的时候出现了短暂的停顿。"
+  },
+  "pay": {
+    "example": "How would you like to pay?",
+    "exampleZh": "你想怎么付款？"
+  },
+  "people": {
+    "example": "the people who live next door",
+    "exampleZh": "住在隔壁的那些人"
+  },
+  "per": {
+    "example": "rooms costing £40 per night",
+    "exampleZh": "每晚收费40英镑的房间"
+  },
+  "percent": {
+    "example": "At the end of the day, add up the percent DVs.",
+    "exampleZh": "在一天结束后，把所有营养素的百分比加起来。"
+  },
+  "perfect": {
+    "example": "a perfect performance",
+    "exampleZh": "完美的演出"
+  },
+  "perform": {
+    "example": "The children perform two plays each school year.",
+    "exampleZh": "孩子们一学年表演两部话剧。"
+  },
+  "perhaps": {
+    "example": "Perhaps she’s next door.",
+    "exampleZh": "她也许在隔壁。"
+  },
+  "period": {
+    "example": "The drug was tested over a five-week period.",
+    "exampleZh": "那种药品进行了为期五周的试验。"
+  },
+  "person": {
+    "example": "I like her as a person , but not as a boss.",
+    "exampleZh": "我喜欢她这个人，但作为老板我就不喜欢了。"
+  },
+  "phrase": {
+    "example": "Who first used the phrase ‘survival of the fittest’?",
+    "exampleZh": "“适者生存”这一说法最早是谁说的？"
+  },
+  "picture": {
+    "example": "a book with pictures in it",
+    "exampleZh": "带插图的书"
+  },
+  "piece": {
+    "example": "Cut off a piece of wood 5 cm in length.",
+    "exampleZh": "截下一段五厘米长的木头。"
+  },
+  "place": {
+    "example": "The place was full of screaming children.",
+    "exampleZh": "那地方全是大叫大嚷的孩子们。"
+  },
+  "plan": {
+    "example": "Do you have any plans for the weekend?",
+    "exampleZh": "你周末有什么打算？"
+  },
+  "play": {
+    "example": "Kids were playing and chasing each other.",
+    "exampleZh": "孩子们在互相追逐嬉闹。"
+  },
+  "please": {
+    "example": "Most children are eager to please .",
+    "exampleZh": "大多数孩子都渴望取悦别人。"
+  },
+  "police": {
+    "example": "Police surrounded the courthouse.",
+    "exampleZh": "警察围在法院大楼四周。"
+  },
+  "policy": {
+    "example": "an insurance policy",
+    "exampleZh": "保险单"
+  },
+  "poor": {
+    "example": "an area where poor people lived",
+    "exampleZh": "穷人居住区"
+  },
+  "popular": {
+    "example": "a popular holiday resort",
+    "exampleZh": "人们喜欢的度假胜地"
+  },
+  "population": {
+    "example": "Nearly 70 percent of the population still live in the countryside.",
+    "exampleZh": "人口中差不多有70%仍住在乡村。"
+  },
+  "positive": {
+    "example": "TV can be a positive influence .",
+    "exampleZh": "电视也会有好的影响。"
+  },
+  "possible": {
+    "example": "Is it possible toget tickets for the game?",
+    "exampleZh": "有没有可能弄到比赛的门票？"
+  },
+  "post": {
+    "example": "a fence post",
+    "exampleZh": "篱笆桩"
+  },
+  "power": {
+    "example": "They seized power in a military coup.",
+    "exampleZh": "他们在一场军事政变中夺取了政权。"
+  },
+  "practical": {
+    "example": "the practical problems of old age",
+    "exampleZh": "老年的实际问题"
+  },
+  "present": {
+    "example": "the present situation of the millions of people who are suffering poverty and disease",
+    "exampleZh": "遭受贫困和疾病折磨的数百万人民的现状"
+  },
+  "press": {
+    "example": "He pressed a card into her hand before leaving.",
+    "exampleZh": "离开之前他往她手里塞了一张卡片。"
+  },
+  "pretty": {
+    "example": "a pretty little girl",
+    "exampleZh": "漂亮的小姑娘"
+  },
+  "price": {
+    "example": "They may pay a high price for their few years of glory.",
+    "exampleZh": "为了短短几年的辉煌，他们也许要付出高昂的代价。"
+  },
+  "print": {
+    "example": "Over five million copies of the paper are printed every day.",
+    "exampleZh": "这份报纸每日印量超过五百万。"
+  },
+  "prize": {
+    "example": "The total prize money was £30,000.",
+    "exampleZh": "奖金总额为3万英镑。"
+  },
+  "problem": {
+    "example": "She was older than me, but that wasn’t really a problem.",
+    "exampleZh": "她比我年长，不过那不算什么问题。"
+  },
+  "produce": {
+    "example": "a rise in sea level produced by climatic change",
+    "exampleZh": "由气候变化引起的海平面升高"
+  },
+  "product": {
+    "example": "He works in marketing and product development.",
+    "exampleZh": "他从事营销和产品开发。"
+  },
+  "professor": {
+    "example": "The professor improvised a poem in the class.",
+    "exampleZh": "教授在课堂上即兴创作了一首诗。"
+  },
+  "profit": {
+    "example": "Because we need to give profit to the capital, otherwise we get no capital.",
+    "exampleZh": "因为我们需要为了资本来获得利益，否则就得不到资本。"
+  },
+  "program": {
+    "example": "a word processing program",
+    "exampleZh": "文字处理程序"
+  },
+  "progress": {
+    "example": "We made good progress despite the snow.",
+    "exampleZh": "尽管下雪，我们的行程还是很顺利。"
+  },
+  "promise": {
+    "example": "If you make a promise, you should keep it.",
+    "exampleZh": "如果你许下一个诺言，你就应该遵守它。"
+  },
+  "property": {
+    "example": "Some of the stolen property was found in Mason’s house.",
+    "exampleZh": "在梅森家里找到了部分被盗财物。"
+  },
+  "protect": {
+    "example": "Are we doing enough to protect the environment?",
+    "exampleZh": "我们在保护环境方面做得够吗？"
+  },
+  "prove": {
+    "example": "You’re wrong, and I can prove it.",
+    "exampleZh": "你错了，我可以证明。"
+  },
+  "provide": {
+    "example": "Tea and biscuits will be provided.",
+    "exampleZh": "有茶水和饼干供应。"
+  },
+  "public": {
+    "example": "full public access to information",
+    "exampleZh": "公众对信息的充分知情权"
+  },
+  "publish": {
+    "example": "The first edition was published in 1765.",
+    "exampleZh": "第一版于1765年出版。"
+  },
+  "pupil": {
+    "example": "a star pupil",
+    "exampleZh": "一名优秀的小学生"
+  },
+  "purchase": {
+    "example": "Where did you purchase the car?",
+    "exampleZh": "你在哪里买的车？"
+  },
+  "purpose": {
+    "example": "Nick had no particular purpose in mind when he started.",
+    "exampleZh": "尼克开始的时候头脑中并没有明确的目标。"
+  },
+  "push": {
+    "example": "shoppers pushing their grocery carts",
+    "exampleZh": "推着购物车的购物者"
+  },
+  "put": {
+    "example": "He put the coffee on the table.",
+    "exampleZh": "他把咖啡放在桌上。"
+  },
+  "question": {
+    "example": "Can I ask you a question?",
+    "exampleZh": "我能问你个问题吗？"
+  },
+  "quick": {
+    "example": "Have we got time for a quick drink?",
+    "exampleZh": "我们有时间喝口东西吗？"
+  },
+  "quite": {
+    "example": "I felt quite bitter about it at the time.",
+    "exampleZh": "当时我对此感到相当痛苦。"
+  },
+  "race": {
+    "example": "The women's race was won by the only American in the field, Patti Sue Plumer.",
+    "exampleZh": "女子赛跑被田赛场上惟一的一名美国人帕蒂·休·普卢默赢得了。"
+  },
+  "radio": {
+    "example": "The last 12 months have been difficult ones for local radio.",
+    "exampleZh": "最近的12个月对地方广播电台来说是艰难的。"
+  },
+  "rain": {
+    "example": "a night of wind and rain",
+    "exampleZh": "风雨交加的夜晚"
+  },
+  "rather": {
+    "example": "I'm afraid it's a rather long story.",
+    "exampleZh": "我恐怕这是个相当长的故事。"
+  },
+  "reach": {
+    "example": "Chelsea could reach the final of the European Cup.",
+    "exampleZh": "切尔西队会进入欧洲杯决赛。"
+  },
+  "read": {
+    "example": "I can’t read your writing.",
+    "exampleZh": "我看不懂你写的东西。"
+  },
+  "ready": {
+    "example": "Come on. Aren’t you ready yet?",
+    "exampleZh": "快点，你还没准备好吗？"
+  },
+  "real": {
+    "example": "There is no real reason to worry.",
+    "exampleZh": "没有什么真正的理由需要担心。"
+  },
+  "realize": {
+    "example": "It was only later that I realized my mistake.",
+    "exampleZh": "我到后来才认识到自己的错误。"
+  },
+  "reason": {
+    "example": "She has reason to feel guilty.",
+    "exampleZh": "她有理由感到内疚。"
+  },
+  "receive": {
+    "example": "All the children will receive a small gift.",
+    "exampleZh": "每个孩子都会收到一份小礼物。"
+  },
+  "recent": {
+    "example": "the recent past",
+    "exampleZh": "不久前"
+  },
+  "recognize": {
+    "example": "I didn’t recognize you in your uniform.",
+    "exampleZh": "你穿上制服我认不出你了。"
+  },
+  "reform": {
+    "example": "plans to radically reform the tax system",
+    "exampleZh": "彻底改革税收制度的计划"
+  },
+  "refuse": {
+    "example": "She asked him to leave, but he refused.",
+    "exampleZh": "她叫他走，但他不肯。"
+  },
+  "regard": {
+    "example": "He was regarded as the most successful president of modern times.",
+    "exampleZh": "他被看成是近代最成功的总统。"
+  },
+  "region": {
+    "example": "efforts to bring peace to the region",
+    "exampleZh": "给这个地区带来和平的努力"
+  },
+  "relate": {
+    "example": "I don’t understand how the two ideas relate.",
+    "exampleZh": "我不明白这两个观点有什么联系。"
+  },
+  "remain": {
+    "example": "The refugees were allowed to remain in the UK.",
+    "exampleZh": "难民获准留在英国。"
+  },
+  "remember": {
+    "example": "Do you remember Rosa Davies?",
+    "exampleZh": "你记得罗莎·戴维斯吗？"
+  },
+  "rent": {
+    "example": "I’d rather have my own house than rent.",
+    "exampleZh": "我更想有自己的房子，不想租房。"
+  },
+  "repair": {
+    "example": "Where can I get my shoes repaired ?",
+    "exampleZh": "哪儿能修补鞋子？"
+  },
+  "report": {
+    "example": "We aim to report the news as fairly as possible.",
+    "exampleZh": "我们力求公正地报道这一新闻。"
+  },
+  "risk": {
+    "example": "Meat from the infected animals is regarded as a serious health risk (= something likely to harm people’s health ) .",
+    "exampleZh": "受感染动物的肉被认为对健康有严重威胁。"
+  },
+  "robot": {
+    "example": "cars built by robots",
+    "exampleZh": "机器人制造的汽车"
+  },
+  "sample": {
+    "example": "They took a blood sample to test for hepatitis.",
+    "exampleZh": "他们取了血样做肝炎化验。"
+  },
+  "say": {
+    "example": "Don’t believe anything he says.",
+    "exampleZh": "他说什么都不要相信。"
+  },
+  "score": {
+    "example": "She scored an average of 9.9 in the test.",
+    "exampleZh": "这次考试她的平均分是9.9。"
+  },
+  "section": {
+    "example": "the smoking section (= where you can smoke )",
+    "exampleZh": "吸烟区"
+  },
+  "seek": {
+    "example": "new graduates seeking employment",
+    "exampleZh": "正在求职的刚毕业的大学生"
+  },
+  "separate": {
+    "example": "The gym and the sauna are in separate buildings.",
+    "exampleZh": "健身房和桑拿浴室在不同的大楼里。"
+  },
+  "series": {
+    "example": "the series of events that led to the outbreak of war",
+    "exampleZh": "导致战争爆发的一系列事件"
+  },
+  "sheet": {
+    "example": "white cotton sheets",
+    "exampleZh": "白色的棉布床单"
+  },
+  "shift": {
+    "example": "He stopped, shifting his cane to his left hand.",
+    "exampleZh": "他停下来，把手杖移到左手。"
+  },
+  "sign": {
+    "example": "the dollar sign",
+    "exampleZh": "美元符号"
+  },
+  "smart": {
+    "example": "The smart kids get good grades and go off to college.",
+    "exampleZh": "聪明的孩子成绩好，可以去上大学。"
+  },
+  "soil": {
+    "example": "She moistenend the soil round the plant.",
+    "exampleZh": "她把植物周围的土壤弄湿。"
+  },
+  "sort": {
+    "example": "They do burgers, pizzas, that sort of thing .",
+    "exampleZh": "他们供应汉堡包、比萨饼什么的。"
+  },
+  "sound": {
+    "example": "a sound knowledge of English",
+    "exampleZh": "扎实的英语知识"
+  },
+  "staff": {
+    "example": "10 staff were allocated to the task.",
+    "exampleZh": "10名员工被分派做这项任务。"
+  },
+  "stage": {
+    "example": "We’re getting to the stage where we hardly ever go out together.",
+    "exampleZh": "我们快要到几乎不一起外出的地步了。"
+  },
+  "store": {
+    "example": "At Christmas the stores stay open late.",
+    "exampleZh": "在圣诞节期间，商店营业到很晚。"
+  },
+  "strange": {
+    "example": "It’s strange that we’ve never met before.",
+    "exampleZh": "很奇怪，我们以前居然从来没有碰见过。"
+  },
+  "survive": {
+    "example": "She survived the attack.",
+    "exampleZh": "她在袭击中幸免于难。"
+  },
+  "talk": {
+    "example": "I could hear Sarah and Andy talking in the next room.",
+    "exampleZh": "我听到萨拉和安迪在隔壁讲话。"
+  },
+  "taste": {
+    "example": "It palls on my taste.",
+    "exampleZh": "我觉得它毫无滋味。"
+  },
+  "tend": {
+    "example": "Sofia was in the bedroom tending to her son.",
+    "exampleZh": "索菲娅在卧室里照料她的儿子。"
+  },
+  "therefore": {
+    "example": "Their car was bigger and therefore more comfortable.",
+    "exampleZh": "他们的车大些，所以更舒适些。"
+  },
+  "threat": {
+    "example": "Your threats don’t scare me.",
+    "exampleZh": "你的那些威胁吓不倒我。"
+  },
+  "throughout": {
+    "example": "The route is well sign-posted throughout.",
+    "exampleZh": "这条路线全程设有路标。"
+  },
+  "thus": {
+    "example": "Most of the evidence was destroyed in the fire. Thus it would be almost impossible to prove him guilty.",
+    "exampleZh": "大多数证据已在大火中烧毁，因而要证明他有罪几乎是不可能的。"
+  },
+  "total": {
+    "example": "a total ban on cigarette advertising",
+    "exampleZh": "香烟广告的全面禁止"
+  },
+  "trade": {
+    "example": "unfair trade practices",
+    "exampleZh": "不公平的贸易行为"
+  },
+  "traffic": {
+    "example": "There wasn’t much traffic on the roads.",
+    "exampleZh": "路上车辆不多。"
+  },
+  "treat": {
+    "example": "sewage treated so that it can be used as fertilizer",
+    "exampleZh": "经过处理可用作肥料的污水"
+  },
+  "trend": {
+    "example": "the downward trend in the price of gold",
+    "exampleZh": "黄金价格的下滑势头"
+  },
+  "trust": {
+    "example": "an agreement made on the basis of mutual trust",
+    "exampleZh": "在相互信任的基础上达成的一项协议"
+  },
+  "truth": {
+    "example": "How do we know you’re telling us the truth?",
+    "exampleZh": "我们怎么知道你告诉我们的是真话？"
+  },
+  "type": {
+    "example": "Jo’s not really the sporty type.",
+    "exampleZh": "乔可不是那种喜欢运动的人。"
+  },
+  "union": {
+    "example": "Are you planning to join the union?",
+    "exampleZh": "你打算加入工会吗？"
+  },
+  "unless": {
+    "example": "I can’t leave her unless I know she’s all right.",
+    "exampleZh": "除非我知道她没事，否则我不能离开她。"
+  },
+  "urban": {
+    "example": "unemployment in urban areas",
+    "exampleZh": "城市地区的失业状况"
+  },
+  "various": {
+    "example": "The jacket is available in various colours.",
+    "exampleZh": "这种夹克有好多种颜色可选。"
+  },
+  "vast": {
+    "example": "The refugees come across the border in vast numbers.",
+    "exampleZh": "大量难民涌过边境。"
+  },
+  "want": {
+    "example": "The gallery closed down for want of funding.",
+    "exampleZh": "那家画廊由于缺乏资金关闭了。"
+  },
+  "water": {
+    "example": "a fresh water spring",
+    "exampleZh": "淡水泉"
+  },
+  "wear": {
+    "example": "The cushions are starting to wear a little.",
+    "exampleZh": "这些靠垫开始有点磨破了。"
+  },
+  "worth": {
+    "example": "You should not deprecate your own worth.",
+    "exampleZh": "你不应该贬低你自己的价值。"
+  },
+  "official": {
+    "example": "the official policy on education",
+    "exampleZh": "官方的教育政策"
+  }
+}

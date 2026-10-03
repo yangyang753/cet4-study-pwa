@@ -29,14 +29,33 @@ describe('learner-facing vocabulary', () => {
 
   it('replaces synthetic meta examples with a usable contextual sentence', () => {
     const entry = qualityVocabularyEntry({
-      id: 'v-test', word: 'sample', phonetic: '', partOfSpeech: 'n.', meaningZh: '样品',
-      example: 'In a survey, “sample” is presented as a noun meaning “样品”.',
-      exampleZh: '记忆提示：sample 在此处表示“样品”。', derivatives: [], confusables: [],
+      id: 'v-test', word: 'samplestone', phonetic: '', partOfSpeech: 'n.', meaningZh: '样品',
+      example: 'In a survey, “samplestone” is presented as a noun meaning “样品”.',
+      exampleZh: '记忆提示：samplestone 在此处表示“样品”。', derivatives: [], confusables: [],
     });
 
-    expect(entry.example).toContain('sample');
+    expect(entry.example).toContain('samplestone');
     expect(entry.example).not.toContain('is presented as');
     expect(entry.exampleZh).toContain('样品');
+    expect(entry.exampleZh).not.toMatch(/[“”][^“”]+[“”]/);
+  });
+
+  it('deduplicates atomic meanings and puts reviewed CET senses first', () => {
+    const mean = learningVocabulary.find((entry) => entry.word === 'mean');
+    const like = learningVocabulary.find((entry) => entry.word === 'like');
+
+    expect(mean?.meaningZh.startsWith('意思是；意味着')).toBe(true);
+    expect(mean?.meaningZh.match(/平均的/g)).toHaveLength(1);
+    expect(like?.meaningZh.startsWith('喜欢，喜爱；像，如同')).toBe(true);
+    expect(like?.meaningZh.match(/喜欢/g)).toHaveLength(1);
+  });
+
+  it('uses a natural bilingual sentence instead of a definition template', () => {
+    const mean = learningVocabulary.find((entry) => entry.word === 'mean');
+    expect(mean?.example).toMatch(/\bmean(?:s|t|ing)?\b/i);
+    expect(mean?.example).not.toMatch(/presented as|meaning [“"]|surrounding details/i);
+    expect(mean?.exampleZh).not.toMatch(/表示[“"]|含义是|语境|这一动作/);
+    expect(mean?.exampleZh).toMatch(/[。！？]$/);
   });
 
   it('repairs source rows that accidentally swallowed the following headword', () => {
@@ -144,7 +163,7 @@ describe('learner-facing vocabulary', () => {
 
   it('provides a visible example for every high-frequency word', () => {
     expect(learningVocabulary.filter((entry) => !entry.example.trim())).toEqual([]);
-    expect(learningVocabulary.filter((entry) => !entry.example.toLowerCase().includes(entry.word.toLowerCase()))).toEqual([]);
+    expect(auditLearningVocabulary(learningVocabulary).filter((error) => error.includes('example does not contain target word'))).toEqual([]);
   });
 
   it('uses varied deterministic contexts instead of repeating five sentences across the library', () => {
@@ -154,5 +173,18 @@ describe('learner-facing vocabulary', () => {
 
   it('passes the learner-facing quality audit', () => {
     expect(auditLearningVocabulary(learningVocabulary)).toEqual([]);
+  });
+
+  it('uses source-backed or individually curated sentences for the whole library', () => {
+    const generic = /article discusses|researchers examined how|report highlights the importance|during the discussion|survey asked students about|teachers used a real case|students may .* after regular practice|project asks volunteers|regular feedback helps learners|guide explains how to|group members decided to|people often .* circumstances/;
+    expect(learningVocabulary.filter((entry) => generic.test(entry.example.toLowerCase()))).toEqual([]);
+  });
+
+  it('contains no repeated atomic Chinese sense in any learner-facing entry', () => {
+    const repeated = learningVocabulary.flatMap((entry) => {
+      const senses = entry.meaningZh.split(/[；，、]/).map((item) => item.replace(/[^\u3400-\u9fff]/g, '')).filter(Boolean);
+      return new Set(senses).size === senses.length ? [] : [entry.word];
+    });
+    expect(repeated).toEqual([]);
   });
 });

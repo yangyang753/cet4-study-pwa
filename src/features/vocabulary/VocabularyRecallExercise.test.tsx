@@ -26,7 +26,7 @@ describe('VocabularyRecallExercise', () => {
     }));
   });
 
-  it('reports every missing meaning in a meaning recall', async () => {
+  it('accepts a common equivalent sense without requiring synonymous wording', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
     render(<VocabularyRecallExercise exercise={buildWordReinforcement(word, () => 0)} onSubmit={onSubmit} />);
 
@@ -34,7 +34,7 @@ describe('VocabularyRecallExercise', () => {
     await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
 
     expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({
-      grade: expect.objectContaining({ correct: false, missingMeanings: ['段落'] }),
+      grade: expect.objectContaining({ correct: true, missingMeanings: [] }),
     }));
   });
 

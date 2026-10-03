@@ -13,7 +13,7 @@ import { getQuestion } from '../../content/catalog';
 import { completeDailyTask, localStudyDate } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
 import { QuestionTranslationGate, questionNeedsTranslation } from '../translation/QuestionTranslationGate';
-import { cacheListeningAudio } from './cacheListeningAudio';
+import { cacheListeningAudio, clearCachedListeningAudio, listCachedListeningAudio } from './cacheListeningAudio';
 
 type PlayerStatus = 'loading' | 'ready' | 'playing' | 'paused' | 'buffering' | 'error';
 
@@ -48,6 +48,7 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
   const [translationUnlocked, setTranslationUnlocked] = useState(false);
   const [offlineState, setOfflineState] = useState<'idle' | 'downloading' | 'cached' | 'error'>('idle');
   const [offlineMessage, setOfflineMessage] = useState('');
+  const [cachedAudioCount, setCachedAudioCount] = useState(0);
   const [initialStartedAt] = useState(() => Date.now());
   const [initialAttemptId] = useState(() => createId());
   const questionStartedAt = useRef(initialStartedAt);
@@ -101,12 +102,19 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
     try {
       const result = await cacheListeningAudio(audio.src);
       setOfflineState('cached');
+      setCachedAudioCount((count) => Math.max(1, count + (result === 'cached' ? 1 : 0)));
       setOfflineMessage(result === 'already-cached' ? '本套已在离线缓存中' : '本套已可离线播放');
     } catch {
       setOfflineState('error');
       setOfflineMessage('离线下载失败，可能是网络中断或手机存储空间不足，请稍后重试。');
     }
   };
+
+  const clearOfflineAudio = async () => {
+    await clearCachedListeningAudio(); setCachedAudioCount(0); setOfflineState('idle'); setOfflineMessage('已清除全部离线听力音频。');
+  };
+
+  useEffect(() => { void listCachedListeningAudio().then((items) => setCachedAudioCount(items.length)).catch(() => undefined); }, []);
 
   const submit = async () => {
     if (!selected) { setAnswerError('请选择一个答案'); return; }
@@ -206,6 +214,7 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
         </div>
         <div className="offline-audio-row">
           <button disabled={offlineState === 'downloading' || offlineState === 'cached'} onClick={() => void downloadOffline()}>{offlineState === 'downloading' ? '正在下载…' : offlineState === 'cached' ? '本套已下载' : '下载本套离线'}</button>
+          {cachedAudioCount > 0 ? <button onClick={() => void clearOfflineAudio()}>清除离线音频（{cachedAudioCount} 套）</button> : null}
           <span>仅下载当前一套，避免一次占用约 98 MB 手机空间。</span>
         </div>
         {offlineMessage && <p className={`offline-audio-message ${offlineState === 'error' ? 'error' : ''}`} role={offlineState === 'error' ? 'alert' : 'status'}>{offlineMessage}</p>}

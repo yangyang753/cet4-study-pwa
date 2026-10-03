@@ -92,11 +92,11 @@ describe('DailyVocabularySession', () => {
     expect(learningRepository.upsertReviewCard).not.toHaveBeenCalled();
   });
 
-  it('adds a meaning review only when an old word meaning is incomplete', async () => {
+  it('adds a meaning review only when an old word meaning is wrong', async () => {
     const learningRepository = repository();
     render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0} onComplete={() => undefined} />);
 
-    await userEvent.type(await screen.findByLabelText('中文释义答案'), '文章');
+    await userEvent.type(await screen.findByLabelText('中文释义答案'), '道路');
     await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
     expect(await screen.findByRole('heading', { name: 'benefit' })).toBeVisible();
     expect(learningRepository.upsertReviewCard).toHaveBeenCalledTimes(1);
