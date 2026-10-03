@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type { StrictVocabularyGrade } from './strictVocabularyCheck';
-import { requiredMeanings } from './strictVocabularyCheck';
 import { gradeWordReinforcement, type WordReinforcement } from '../knowledge/wordReinforcement';
 
 export interface VocabularyRecallSubmission {
@@ -9,14 +8,7 @@ export interface VocabularyRecallSubmission {
 }
 
 export function forgottenWordReinforcementGrade(exercise: WordReinforcement): StrictVocabularyGrade {
-  const needsEnglish = exercise.kind !== 'meaning';
-  const needsChinese = exercise.kind === 'meaning';
-  return {
-    correct: false,
-    spellingCorrect: !needsEnglish,
-    missingMeanings: needsChinese ? requiredMeanings(exercise.word) : [],
-    unexpectedMeanings: [],
-  };
+  return { ...gradeWordReinforcement(exercise, { english: '', chinese: '' }), correct: false };
 }
 
 export function VocabularyRecallExercise({ exercise, result = null, feedback = '', submitLabel = '提交词汇复习', onSubmit, onForgotten }: {
@@ -52,8 +44,8 @@ export function VocabularyRecallExercise({ exercise, result = null, feedback = '
   }
 
   return <article className="warmup-card review-practice-panel vocabulary-recall-exercise">
-    <span className="review-kind">词汇 · {exercise.kind === 'meaning' ? '完整释义' : exercise.kind === 'spelling' ? '完整拼写' : '单处挖空'}</span>
-    {exercise.kind === 'meaning' && <><h2>{exercise.word.word}</h2><p>{exercise.word.phonetic}</p><p>请写出全部中文释义，不能漏译或多写。</p></>}
+    <span className="review-kind">词汇 · {exercise.kind === 'meaning' ? '核心词义' : exercise.kind === 'spelling' ? '完整拼写' : '单处挖空'}</span>
+    {exercise.kind === 'meaning' && <><h2>{exercise.word.word}</h2><p>{exercise.word.phonetic}</p><p>写出你认识的常见意思；近义表达也可以，核心义较多时答对约 3 个即可。</p></>}
     {exercise.kind === 'spelling' && <><h2>{exercise.word.meaningZh}</h2><p>根据中文写出完整英文单词。</p></>}
     {exercise.kind === 'cloze' && <><h2>{exercise.cloze}</h2><p>{exercise.word.meaningZh}</p><p>根据完整中文提示，补全英文中唯一的一处空白。</p></>}
     {needsEnglish && <label className="review-spelling-field">英文答案<input aria-label="英文答案" autoComplete="off" value={english} disabled={Boolean(result) || saving} onChange={(event) => setEnglish(event.target.value)} /></label>}

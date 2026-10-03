@@ -49,12 +49,12 @@ export function StrictVocabularyCheck({ repository, words, states, passedWordIds
       if (!grade.spellingCorrect) await repository.upsertReviewCard(vocabularyReviewCard(question.word.id, 'cloze', now));
       if (grade.missingMeanings.length || grade.unexpectedMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(question.word.id, 'meaning', now));
       if (!grade.correct) {
-        const details = [!grade.spellingCorrect ? `正确拼写：${question.word.word}` : '', grade.missingMeanings.length ? `漏译：${grade.missingMeanings.join('、')}` : '', grade.unexpectedMeanings.length ? `多写或误译：${grade.unexpectedMeanings.join('、')}` : ''].filter(Boolean).join('；');
+        const details = [!grade.spellingCorrect ? `正确拼写：${question.word.word}` : '', grade.requiredMeaningCount ? `已识别 ${grade.matchedMeaningCount}/${grade.requiredMeaningCount} 个达标核心义` : '', grade.missingMeanings.length ? `还可复习：${grade.missingMeanings.join('、')}` : ''].filter(Boolean).join('；');
         setFeedback(`本题未完全正确，已加入错题复习。${details}。请修改后重新提交。`);
         return;
       }
       await onWordPassed?.(question.word.id);
-      setFeedback('回答完整，已记录。');
+      setFeedback(grade.requiredMeaningCount ? `已识别 ${grade.matchedMeaningCount} 个核心义，达到掌握标准。` : '拼写正确，已记录。');
       if (index >= questions.length - 1) await onComplete();
       else {
         setIndex((value) => value + 1);
@@ -72,12 +72,12 @@ export function StrictVocabularyCheck({ repository, words, states, passedWordIds
   const needsEnglish = question.kind !== 'meaning';
   const needsChinese = question.kind !== 'spelling';
   return <section className="strict-vocabulary-check">
-    <header><span>掌握检测 · {position} / {allQuestions.length}</span><h1>严格检测今日新词</h1><p>拼写必须完全一致，中文词义不能遗漏或多写；请用顿号分隔每个释义。</p></header>
+    <header><span>掌握检测 · {position} / {allQuestions.length}</span><h1>检测今日新词</h1><p>英文拼写必须准确；中文可用近义表达，核心义较多时答对约 3 个即可。</p></header>
     <article className="warmup-card strict-check-card">
       {question.kind === 'spelling' && <><span className="check-type">看中文，默写英文</span><h2>{question.word.meaningZh}</h2></>}
-      {question.kind === 'meaning' && <><span className="check-type">看英文，写全中文词义</span><h2>{question.word.word}</h2></>}
+      {question.kind === 'meaning' && <><span className="check-type">看英文，写常见中文意思</span><h2>{question.word.word}</h2></>}
       {needsEnglish && <label>英文拼写<input aria-label="英文拼写" autoComplete="off" value={english} onChange={(event) => setEnglish(event.target.value)} /></label>}
-      {needsChinese && <label>完整中文词义<textarea aria-label="完整中文词义" value={chinese} onChange={(event) => setChinese(event.target.value)} /></label>}
+      {needsChinese && <label>常见中文词义<textarea aria-label="完整中文词义" value={chinese} onChange={(event) => setChinese(event.target.value)} /></label>}
       {feedback && <p className={feedback.startsWith('回答完整') ? 'strict-success' : 'strict-error'} role="alert">{feedback}</p>}
       <button className="primary-action" disabled={saving || (needsEnglish && !english.trim()) || (needsChinese && !chinese.trim())} onClick={() => void submit()}>{saving ? '正在保存…' : index >= questions.length - 1 ? '提交并完成检测' : '提交严格检测'}</button>
     </article>

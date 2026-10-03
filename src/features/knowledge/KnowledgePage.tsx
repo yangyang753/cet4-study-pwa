@@ -137,7 +137,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
       if (grade.missingMeanings.length || grade.unexpectedMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(exercise.word.id, 'meaning', now));
       setStates((items) => new Map(items).set(exercise.word.id, next));
       setAggregateSession((session) => session ? recordAggregateReviewResult(session, grade.correct) : session);
-      setExerciseResult(grade.correct ? '回答完全正确，已记录一次巩固。' : `本次未通过，已加入错题复习。${!grade.spellingCorrect ? `正确拼写：${exercise.word.word}。` : ''}${grade.missingMeanings.length ? `漏译：${grade.missingMeanings.join('、')}。` : ''}${grade.unexpectedMeanings.length ? `多写或误译：${grade.unexpectedMeanings.join('、')}。` : ''}`);
+      setExerciseResult(grade.correct ? `回答正确，已识别 ${grade.matchedMeaningCount || 1} 个关键点并记录巩固。` : `本次未通过，已加入错题复习。${!grade.spellingCorrect ? `正确拼写：${exercise.word.word}。` : ''}${grade.requiredMeaningCount ? `已识别 ${grade.matchedMeaningCount}/${grade.requiredMeaningCount} 个达标核心义。` : ''}${grade.missingMeanings.length ? `还可复习：${grade.missingMeanings.join('、')}。` : ''}`);
     } catch {
       setExerciseResult('巩固结果保存失败，答案已保留，请重新提交。');
     } finally {
@@ -161,12 +161,12 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
       {exercise && <section className="reinforcement-panel aggregate-session" aria-labelledby="reinforcement-title">
         <button className="reinforcement-close" aria-label="关闭巩固练习" onClick={() => setExercise(null)}>×</button>
         <span>NO-HINT REVIEW · 第 {Math.min((aggregateSession?.answeredCount ?? 0) + 1, aggregateSession?.queue.length ?? 1)} / {aggregateSession?.queue.length ?? 1} 题</span><h2 id="reinforcement-title">待复习单词总巩固</h2>
-        {exercise.kind === 'meaning' && <p className="reinforcement-prompt">看英文，写出全部中文释义：<strong>{exercise.word.word}</strong></p>}
+        {exercise.kind === 'meaning' && <p className="reinforcement-prompt">看英文，写出常见意思（近义表达可接受，核心义较多时约 3 个达标）：<strong>{exercise.word.word}</strong></p>}
         {exercise.kind === 'spelling' && <p className="reinforcement-prompt">根据中文写出完整英文：<strong>{exercise.word.meaningZh}</strong></p>}
         {exercise.kind === 'cloze' && <p className="reinforcement-prompt">根据完整中文提示补全唯一空白：<strong>{exercise.cloze}</strong><small>{exercise.word.meaningZh}</small></p>}
         {exercise.kind !== 'meaning' && <label>英文答案<input aria-label="英文答案" autoComplete="off" value={englishAnswer} onChange={(event) => setEnglishAnswer(event.target.value)} /></label>}
         {exercise.kind === 'meaning' && <label>中文释义<textarea aria-label="中文释义答案" value={chineseAnswer} onChange={(event) => setChineseAnswer(event.target.value)} rows={3} /></label>}
-        {exerciseResult && <p className={exerciseResult.startsWith('回答完全正确') ? 'reinforcement-success' : 'reinforcement-error'} role="status">{exerciseResult}</p>}
+        {exerciseResult && <p className={exerciseResult.startsWith('回答正确') ? 'reinforcement-success' : 'reinforcement-error'} role="status">{exerciseResult}</p>}
         {!exerciseResult && <button className="reinforcement-submit" disabled={exerciseSaving || (exercise.kind !== 'meaning' && !englishAnswer.trim()) || (exercise.kind === 'meaning' && !chineseAnswer.trim())} onClick={() => void submitExercise()}>{exerciseSaving ? '正在保存…' : '提交巩固结果'}</button>}
         {exerciseResult && <button className="reinforcement-again" onClick={continueAggregateReview}>{aggregateSession?.completed ? '查看本轮报告' : '下一道巩固'}</button>}
       </section>}

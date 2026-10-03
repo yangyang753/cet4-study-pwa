@@ -15,26 +15,53 @@ describe('strict vocabulary check', () => {
     expect(buildStrictVocabularyQuestions(words).map((item) => item.word.id)).toEqual(['v1', 'v2', 'v3']);
   });
 
-  it('requires exact spelling and every listed Chinese meaning', () => {
+  it('keeps spelling exact but accepts an equivalent Chinese expression', () => {
     const [spelling, meaning, nextSpelling] = buildStrictVocabularyQuestions(words);
     expect(gradeStrictVocabularyAnswer(spelling, { english: 'passage', chinese: '' }).correct).toBe(true);
     expect(gradeStrictVocabularyAnswer(spelling, { english: 'pasage', chinese: '' }).correct).toBe(false);
-    expect(gradeStrictVocabularyAnswer(meaning, { english: '', chinese: '好处' }).correct).toBe(false);
-    expect(gradeStrictVocabularyAnswer(meaning, { english: '', chinese: '好处和益处' }).correct).toBe(true);
-    expect(gradeStrictVocabularyAnswer(meaning, { english: '', chinese: '好处、益处、坏处' })).toMatchObject({
-      correct: false, unexpectedMeanings: ['坏处'],
+    expect(gradeStrictVocabularyAnswer(meaning, { english: '', chinese: '优势' })).toMatchObject({
+      correct: true,
+      matchedMeaningCount: 1,
+      requiredMeaningCount: 1,
+      missingMeanings: [],
     });
     expect(gradeStrictVocabularyAnswer(nextSpelling, { english: 'generate', chinese: '' }).correct).toBe(true);
   });
 
-  it('requires meaningful one-character Chinese senses instead of dropping them', () => {
+  it('passes after three distinct core meanings without requiring the whole dictionary entry', () => {
     const word: VocabularyEntry = {
-      id: 'v4', word: 'make', phonetic: '', partOfSpeech: 'v.', meaningZh: '使，做，制造',
+      id: 'v4', word: 'make', phonetic: '', partOfSpeech: 'v.', meaningZh: '使，做，制造，赚得，成为，组成',
       example: 'Make a plan.', derivatives: [], confusables: [],
     };
     const question = { ...buildStrictVocabularyQuestions([word])[0], kind: 'meaning' as const };
-    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '制造' }).missingMeanings).toEqual(['使', '做']);
-    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '使其完成并制造东西' }).correct).toBe(false);
-    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '使、做、制造' }).correct).toBe(true);
+    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '让；制作；挣到' })).toMatchObject({
+      correct: true,
+      matchedMeaningCount: 3,
+      requiredMeaningCount: 3,
+    });
+    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '让；制作' })).toMatchObject({
+      correct: false,
+      matchedMeaningCount: 2,
+      requiredMeaningCount: 3,
+    });
+  });
+
+  it('requires all meanings when an entry has fewer than three core concepts', () => {
+    const question = { ...buildStrictVocabularyQuestions([words[0]])[0], kind: 'meaning' as const };
+    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '短文' })).toMatchObject({
+      correct: false,
+      matchedMeaningCount: 1,
+      requiredMeaningCount: 2,
+      remainingMeanings: ['段落'],
+    });
+    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '篇章；段' }).correct).toBe(true);
+  });
+
+  it('does not accept unrelated text through a one-character overlap', () => {
+    const question = { ...buildStrictVocabularyQuestions([words[2]])[0], kind: 'meaning' as const };
+    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '学生生活很好' })).toMatchObject({
+      correct: false,
+      matchedMeaningCount: 0,
+    });
   });
 });

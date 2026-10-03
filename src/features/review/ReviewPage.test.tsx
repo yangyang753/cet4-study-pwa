@@ -136,7 +136,8 @@ describe('ReviewPage', () => {
     await userEvent.type(screen.getByRole('textbox', { name: '中文释义答案' }), '文章');
     await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
     expect(await screen.findByText('复习错误')).toBeVisible();
-    expect(screen.getByText(/^漏译：/)).toBeVisible();
+    expect(screen.getByText(/已识别 1\/3 个达标核心义/)).toBeVisible();
+    expect(screen.getByText(/还可复习：/)).toBeVisible();
   });
 
   it('migrates an old objective meaning card to complete free recall', async () => {

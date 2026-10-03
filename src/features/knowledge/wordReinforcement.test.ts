@@ -20,14 +20,19 @@ describe('word reinforcement', () => {
     expect(exercises.map((exercise) => exercise.kind)).not.toContain('dual');
   });
 
-  it('requires exact spelling and every listed meaning', () => {
+  it('requires exact spelling while accepting equivalent meaning wording', () => {
     const spelling = buildWordReinforcement(word, () => 0.4);
     expect(gradeWordReinforcement(spelling, { english: 'pasage', chinese: '' }).correct).toBe(false);
     expect(gradeWordReinforcement(spelling, { english: 'passage', chinese: '' }).correct).toBe(true);
 
     const meaning = buildWordReinforcement(word, () => 0);
-    expect(gradeWordReinforcement(meaning, { english: '', chinese: '文章' }).missingMeanings).toEqual(['段落']);
-    expect(gradeWordReinforcement(meaning, { english: '', chinese: '文章和段落' }).correct).toBe(true);
+    expect(gradeWordReinforcement(meaning, { english: '', chinese: '短文' })).toMatchObject({
+      correct: false,
+      matchedMeaningCount: 1,
+      requiredMeaningCount: 2,
+      remainingMeanings: ['段落'],
+    });
+    expect(gradeWordReinforcement(meaning, { english: '', chinese: '篇章和段' }).correct).toBe(true);
   });
 
   it('creates a usable random cloze without revealing the complete word', () => {

@@ -53,7 +53,7 @@ describe('DailyVocabularySession', () => {
       savePlan: vi.fn().mockResolvedValue(undefined),
     });
     render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
-    expect(await screen.findByRole('heading', { name: '严格检测今日新词' })).toBeVisible();
+    expect(await screen.findByRole('heading', { name: '检测今日新词' })).toBeVisible();
     expect(screen.getByText(/2 \/ 2/)).toBeVisible();
   });
   it('completes vocabulary without embedding the separate culture translation', async () => {

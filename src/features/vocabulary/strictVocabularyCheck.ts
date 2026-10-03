@@ -14,7 +14,41 @@ export interface StrictVocabularyGrade {
   spellingCorrect: boolean;
   missingMeanings: string[];
   unexpectedMeanings: string[];
+  matchedMeaningCount: number;
+  requiredMeaningCount: number;
+  recognizedMeanings: string[];
+  remainingMeanings: string[];
 }
+
+interface MeaningConcept {
+  label: string;
+  aliases: string[];
+}
+
+const equivalentMeaningGroups = [
+  ['文章', '篇章', '短文'],
+  ['段落', '段'],
+  ['好处', '益处', '优势', '利益'],
+  ['得到', '获得', '取得', '获取'],
+  ['使', '让'],
+  ['做', '制作', '制造'],
+  ['赚得', '赚到', '挣得', '挣到'],
+  ['产生', '生成', '形成'],
+  ['问题', '疑问'],
+  ['参加', '参与'],
+  ['重要', '关键'],
+  ['帮助', '协助'],
+  ['改变', '变化'],
+  ['开始', '起初'],
+  ['结束', '终止'],
+  ['选择', '挑选'],
+  ['提高', '提升', '改善'],
+  ['减少', '降低'],
+  ['增加', '增多'],
+  ['展示', '显示'],
+  ['购买', '买'],
+  ['需要', '需求'],
+] as const;
 
 function normalizeEnglish(value: string) {
   return value.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -34,6 +68,40 @@ export function requiredMeanings(word: VocabularyEntry) {
   return accepted.length ? accepted : [normalizeChinese(word.meaningZh)].filter(Boolean);
 }
 
+function aliasesFor(meaning: string) {
+  const normalized = normalizeChinese(meaning);
+  const group = equivalentMeaningGroups.find((items) => items.some((item) => normalizeChinese(item) === normalized));
+  return group ? [...group] : [normalized];
+}
+
+function requiredMeaningConcepts(word: VocabularyEntry): MeaningConcept[] {
+  const concepts: MeaningConcept[] = [];
+  requiredMeanings(word).forEach((meaning) => {
+    const aliases = aliasesFor(meaning).map(normalizeChinese).filter(Boolean);
+    const existing = concepts.find((concept) => concept.aliases.some((alias) => aliases.includes(alias)));
+    if (existing) {
+      existing.aliases = [...new Set([...existing.aliases, ...aliases])];
+      return;
+    }
+    concepts.push({ label: meaning, aliases });
+  });
+  return concepts;
+}
+
+function splitSubmittedMeanings(value: string) {
+  return value
+    .replace(/[\u005b【(（][^\u005d】)）]*[\u005d】)）]/g, '')
+    .split(/[;；,，、/]|(?:以及|或者|并且|和|或|及|并)/)
+    .map(normalizeChinese)
+    .filter(Boolean);
+}
+
+function fragmentMatchesAlias(fragment: string, alias: string) {
+  if (!fragment || !alias) return false;
+  if (alias.length === 1) return fragment === alias;
+  return fragment === alias || fragment.includes(alias);
+}
+
 export function buildStrictVocabularyQuestions(words: VocabularyEntry[]): StrictVocabularyQuestion[] {
   const kinds: StrictVocabularyQuestionKind[] = ['spelling', 'meaning'];
   return words.map((word, index) => ({
@@ -51,24 +119,27 @@ export function gradeStrictVocabularyAnswer(
   const needsEnglish = question.kind !== 'meaning';
   const needsChinese = question.kind !== 'spelling';
   const spellingCorrect = !needsEnglish || normalizeEnglish(answer.english) === normalizeEnglish(question.word.word);
-  const submittedChinese = normalizeChinese(answer.chinese);
-  const expected = requiredMeanings(question.word);
-  const missingMeanings = needsChinese
-    ? expected.filter((meaning) => !submittedChinese.includes(normalizeChinese(meaning)))
-    : [];
-  const submittedMeanings = needsChinese
-    ? answer.chinese
-      .replace(/[\u005b【(（][^\u005d】)）]*[\u005d】)）]/g, '')
-      .split(/[;；,，、/]|(?:以及|或者|并且|和|或|及|并)/)
-      .map(normalizeChinese)
-      .filter(Boolean)
-    : [];
-  const expectedNormalized = expected.map(normalizeChinese);
-  const unexpectedMeanings = submittedMeanings.filter((meaning) => !expectedNormalized.includes(meaning));
+  const concepts = needsChinese ? requiredMeaningConcepts(question.word) : [];
+  const submittedMeanings = needsChinese ? splitSubmittedMeanings(answer.chinese) : [];
+  const recognizedConcepts = concepts.filter((concept) => submittedMeanings.some((fragment) => (
+    concept.aliases.some((alias) => fragmentMatchesAlias(fragment, alias))
+  )));
+  const remainingMeanings = concepts.filter((concept) => !recognizedConcepts.includes(concept)).map((concept) => concept.label);
+  const requiredMeaningCount = needsChinese ? Math.min(3, concepts.length) : 0;
+  const matchedMeaningCount = recognizedConcepts.length;
+  const meaningCorrect = !needsChinese || matchedMeaningCount >= requiredMeaningCount;
+  const missingMeanings = meaningCorrect ? [] : remainingMeanings;
+  // Free-form Chinese answers commonly contain valid paraphrases that are not in a finite dictionary.
+  // They are ignored rather than penalized; only recognized core concepts contribute to mastery.
+  const unexpectedMeanings: string[] = [];
   return {
-    correct: spellingCorrect && missingMeanings.length === 0 && unexpectedMeanings.length === 0,
+    correct: spellingCorrect && meaningCorrect,
     spellingCorrect,
     missingMeanings,
     unexpectedMeanings,
+    matchedMeaningCount,
+    requiredMeaningCount,
+    recognizedMeanings: recognizedConcepts.map((concept) => concept.label),
+    remainingMeanings,
   };
 }
