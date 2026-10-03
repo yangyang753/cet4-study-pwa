@@ -42,4 +42,10 @@ describe('verifyDeployedSite', () => {
     await expect(verifyDeployedSite('https://example.test/app/', fetcher, { timeoutMs: 5 })).rejects.toThrow(/site root timed out after 5ms/);
     expect((fetcher.mock.calls[0][1]?.signal as AbortSignal).aborted).toBe(true);
   });
+
+  it('times out when headers arrive but the response body never starts', async () => {
+    const stalledBody = new ReadableStream<Uint8Array>({ start() { /* intentionally never enqueue */ } });
+    const fetcher = vi.fn(async () => new Response(stalledBody, { status: 200, headers: { 'content-type': 'text/html' } }));
+    await expect(verifyDeployedSite('https://example.test/app/', fetcher, { timeoutMs: 5 })).rejects.toThrow(/site root body timed out after 5ms/);
+  });
 });

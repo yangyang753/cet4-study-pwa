@@ -23,13 +23,21 @@ async function fetchWithTimeout(fetcher: Fetcher, url: URL, init: RequestInit, l
   }
 }
 
-async function responseHasBody(response: Response, bounded: boolean) {
-  if (!bounded || !response.body) return (await response.arrayBuffer()).byteLength > 0;
+async function responseHasBody(response: Response, label: string, timeoutMs: number) {
+  if (!response.body) return (await response.arrayBuffer()).byteLength > 0;
   const reader = response.body.getReader();
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_resolve, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new Error(`${label} body timed out after ${timeoutMs}ms`));
+      void reader.cancel().catch(() => undefined);
+    }, timeoutMs);
+  });
   try {
-    const first = await reader.read();
+    const first = await Promise.race([reader.read(), timeout]);
     return !first.done && Boolean(first.value?.byteLength);
   } finally {
+    if (timeoutId) clearTimeout(timeoutId);
     await reader.cancel().catch(() => undefined);
   }
 }
@@ -53,7 +61,7 @@ export async function verifyDeployedSite(baseUrl: string, fetcher: Fetcher = fet
     assert.ok(response.ok, `${check.path || 'site root'} returned ${response.status}`);
     const contentType = response.headers.get('content-type') ?? '';
     assert.match(contentType, check.contentType, `${check.path || 'site root'} returned unexpected content-type ${contentType}`);
-    assert.ok(await responseHasBody(response, audioProbe), `${check.path || 'site root'} returned an empty body`);
+    assert.ok(await responseHasBody(response, label, timeoutMs), `${check.path || 'site root'} returned an empty body`);
   }
 
   return { checked: checks.length };

@@ -138,7 +138,7 @@ test('keeps one vocabulary cohort and unlocks separate culture and collocation t
     await page.getByRole('button', { name: index === total - 1 ? '完成单词学习' : '下一个单词' }).click();
     if (index < total - 1) await expect(page.locator('.vocabulary-warmup > header span')).toContainText(`${index + 2}/${total}`);
   }
-  await expect(page.getByRole('heading', { level: 1, name: '严格检测今日新词' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: '检测今日新词' })).toBeVisible();
   for (let index = 0; index < learnedWords.length; index += 1) {
     const kind = (await page.locator('.check-type').textContent()) ?? '';
     const prompt = (await page.locator('.strict-check-card > h2').textContent()) ?? '';
@@ -148,7 +148,7 @@ test('keeps one vocabulary cohort and unlocks separate culture and collocation t
         ? learnedWords.find((item) => item.word === prompt)
         : learnedWords.find((item) => item.word.length === prompt.length && [...prompt].every((letter, position) => letter === '_' || letter === item.word[position]));
     expect(current, `strict question must reuse a word from today's cohort: ${prompt}`).toBeTruthy();
-    if (kind !== '看英文，写全中文词义') await page.getByRole('textbox', { name: '英文拼写' }).fill(current!.word);
+    if (kind !== '看英文，写常见中文意思') await page.getByRole('textbox', { name: '英文拼写' }).fill(current!.word);
     if (kind !== '看中文，默写英文') await page.getByRole('textbox', { name: '完整中文词义' }).fill(current!.meaning);
     await page.getByRole('button', { name: index === learnedWords.length - 1 ? '提交并完成检测' : '提交严格检测' }).click();
     const strictFeedback = page.getByRole('alert');
