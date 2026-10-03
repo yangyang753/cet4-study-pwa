@@ -4322,17 +4322,17 @@
   {
     "id": "v0289",
     "word": "project",
-    "phonetic": "/prə’dʒekt,‘prɔdʒekt/n.方案，工程vi.伸出prominent/‘prɔminənt/",
-    "partOfSpeech": "a.",
-    "meaningZh": "a.实起的;突出的",
-    "example": "In a campus survey, “project” is presented as an adjective meaning “实起的;突出的”.",
+    "phonetic": "/prəˈdʒekt; ˈprɒdʒekt/",
+    "partOfSpeech": "n./v.",
+    "meaningZh": "项目，工程；计划；投射；预计，规划",
+    "example": "Our class is working on a project about local culture.",
     "derivatives": [],
     "confusables": [],
     "frequency": 334,
     "category": "动作行为",
     "subcategory": "身体动作",
     "source": "exam-data/CETVocabulary + doupoa/CET-4-Auxiliary-Memory",
-    "exampleZh": "记忆提示：project 在此处表示“实起的;突出的”。"
+    "exampleZh": "我们班正在开展一个关于本地文化的项目。"
   },
   {
     "id": "v0290",
@@ -7547,17 +7547,17 @@
   {
     "id": "v0504",
     "word": "contact",
-    "phonetic": "/‘kɔntækt,kən’tækt/vt.使接触;与…联系contain/kən’tein/",
-    "partOfSpeech": "vt.",
-    "meaningZh": "vt.包含，容纳;等于",
-    "example": "In a volunteer project, “contact” is presented as a verb meaning “包含，容纳;等于”.",
+    "phonetic": "/ˈkɒntækt; kənˈtækt/",
+    "partOfSpeech": "n./v.",
+    "meaningZh": "接触；联系，联络；与……联系",
+    "example": "Please contact the school office if you need help.",
     "derivatives": [],
     "confusables": [],
     "frequency": 186,
     "category": "动作行为",
     "subcategory": "身体动作",
     "source": "exam-data/CETVocabulary + doupoa/CET-4-Auxiliary-Memory",
-    "exampleZh": "记忆提示：contact 在此处表示“包含，容纳;等于”。"
+    "exampleZh": "如果你需要帮助，请联系学校办公室。"
   },
   {
     "id": "v0505",
@@ -10412,17 +10412,17 @@
   {
     "id": "v0695",
     "word": "page",
-    "phonetic": "/peidʒ/n.页pain/pein/",
-    "partOfSpeech": "n.",
-    "meaningZh": "n.痛，疼痛;辛苦",
-    "example": "In the library report, “page” is presented as a noun meaning “痛，疼痛;辛苦”.",
+    "phonetic": "/peɪdʒ/",
+    "partOfSpeech": "n./v.",
+    "meaningZh": "页，页面；给……标页码；呼叫",
+    "example": "The answer is printed at the bottom of the page.",
     "derivatives": [],
     "confusables": [],
     "frequency": 129,
     "category": "教育学习",
     "subcategory": "",
     "source": "exam-data/CETVocabulary + doupoa/CET-4-Auxiliary-Memory",
-    "exampleZh": "记忆提示：page 在此处表示“痛，疼痛;辛苦”。"
+    "exampleZh": "答案印在这一页的底部。"
   },
   {
     "id": "v0696",

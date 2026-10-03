@@ -39,6 +39,56 @@ describe('learner-facing vocabulary', () => {
     expect(entry.exampleZh).toContain('样品');
   });
 
+  it('repairs source rows that accidentally swallowed the following headword', () => {
+    expect(learningVocabulary.find((entry) => entry.id === 'v0289')).toMatchObject({
+      word: 'project',
+      phonetic: '/prəˈdʒekt; ˈprɒdʒekt/',
+      partOfSpeech: 'n./v.',
+      example: 'Our class is working on a project about local culture.',
+      exampleZh: '我们班正在开展一个关于本地文化的项目。',
+    });
+    expect(learningVocabulary.find((entry) => entry.id === 'v0289')?.meaningZh).toContain('项目');
+    expect(learningVocabulary.find((entry) => entry.id === 'v0289')?.meaningZh).not.toContain('突出');
+
+    expect(learningVocabulary.find((entry) => entry.id === 'v0504')).toMatchObject({
+      word: 'contact',
+      phonetic: '/ˈkɒntækt; kənˈtækt/',
+      partOfSpeech: 'n./v.',
+      example: 'Please contact the school office if you need help.',
+      exampleZh: '如果你需要帮助，请联系学校办公室。',
+    });
+    expect(learningVocabulary.find((entry) => entry.id === 'v0504')?.meaningZh).not.toContain('包含');
+
+    expect(learningVocabulary.find((entry) => entry.id === 'v0695')).toMatchObject({
+      word: 'page',
+      phonetic: '/peɪdʒ/',
+      partOfSpeech: 'n./v.',
+      example: 'The answer is printed at the bottom of the page.',
+      exampleZh: '答案印在这一页的底部。',
+    });
+    expect(learningVocabulary.find((entry) => entry.id === 'v0695')?.meaningZh).not.toContain('疼痛');
+  });
+
+  it('removes technical dictionary noise from learner-facing common meanings', () => {
+    const noisy = /批处理命令|标准输出设备|文件分配表|磁盘操作系统|\[机\]/;
+    expect(learningVocabulary.filter((entry) => noisy.test(entry.meaningZh))).toEqual([]);
+    expect(Object.entries(commonMeaningData as Record<string, string>).filter(([, meaning]) => noisy.test(meaning))).toEqual([]);
+  });
+
+  it('flags cross-headword phonetics, technical noise and glued part-of-speech labels', () => {
+    const base = learningVocabulary[0];
+    const sample = [
+      { ...base, id: 'bad-phonetic', phonetic: '/peɪdʒ/n.页pain/pein/' },
+      { ...base, id: 'bad-noise', meaningZh: '寻找；输出到标准输出设备上' },
+      { ...base, id: 'bad-pos', meaningZh: '一pron.一个人' },
+    ];
+    expect(auditLearningVocabulary(sample)).toEqual(expect.arrayContaining([
+      expect.stringContaining('bad-phonetic: phonetic contains another dictionary headword'),
+      expect.stringContaining('bad-noise: meaning contains technical dictionary noise'),
+      expect.stringContaining('bad-pos: meaning contains a part-of-speech label'),
+    ]));
+  });
+
   it('combines the common meanings of polysemous CET-4 words', () => {
     const like = learningVocabulary.find((entry) => entry.word === 'like');
     expect(like?.meaningZh).toContain('像');

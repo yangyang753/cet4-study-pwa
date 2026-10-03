@@ -56,13 +56,34 @@ const reviewedCorrections: Record<string, Partial<VocabularyEntry>> = {
   v0470: { meaningZh: '地址；演说；处理，应对；向……讲话' },
   v0495: { meaningZh: '穿，戴；磨损；耐用，经受' },
   v0648: { meaningZh: '选择，挑选；采摘；捡起；接人' },
+  v0289: {
+    phonetic: '/prəˈdʒekt; ˈprɒdʒekt/', partOfSpeech: 'n./v.',
+    meaningZh: '项目，工程；计划；投射；预计，规划',
+    example: 'Our class is working on a project about local culture.',
+    exampleZh: '我们班正在开展一个关于本地文化的项目。',
+  },
+  v0504: {
+    phonetic: '/ˈkɒntækt; kənˈtækt/', partOfSpeech: 'n./v.',
+    meaningZh: '接触；联系，联络；与……联系',
+    example: 'Please contact the school office if you need help.',
+    exampleZh: '如果你需要帮助，请联系学校办公室。',
+  },
+  v0695: {
+    phonetic: '/peɪdʒ/', partOfSpeech: 'n./v.',
+    meaningZh: '页，页面；给……标页码；呼叫',
+    example: 'The answer is printed at the bottom of the page.',
+    exampleZh: '答案印在这一页的底部。',
+  },
 };
 
 const isSyntheticMetaExample = (example: string) => /\bis presented as\b/i.test(example);
 
 function normalizeMeaning(value: string) {
   const normalized = value
+    .replace(/\[(?:机|计算机|网络|医|化|经|法|地质|生物|农|物|数|电子|航|军)\][^；;]*/g, '')
+    .replace(/[^；;]*(?:标准输出设备|批处理命令|文件分配表|磁盘操作系统)[^；;]*/g, '')
     .replace(/(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./gi, '；')
+    .replace(/(?<=[\u3400-\u9fff])(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)(?=[\u3400-\u9fff])/gi, '；')
     .replace(/[;；]+/g, '；')
     .replace(/^；|；$/g, '')
     .trim();
@@ -149,6 +170,9 @@ export function auditLearningVocabulary(entries: VocabularyEntry[]): string[] {
     if (!entry.example.trim()) errors.push(`${entry.id}: example is missing`);
     if (!entry.example.toLowerCase().includes(entry.word.toLowerCase())) errors.push(`${entry.id}: example does not contain target word`);
     if (/(?:^|[\u3400-\u9fff])(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./i.test(entry.meaningZh)) errors.push(`${entry.id}: meaning contains a part-of-speech label`);
+    if (/(?<=[\u3400-\u9fff])(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)(?=[\u3400-\u9fff])/i.test(entry.meaningZh)) errors.push(`${entry.id}: meaning contains a part-of-speech label`);
+    if (/批处理命令|标准输出设备|文件分配表|磁盘操作系统|\[(?:机|计算机)\]/.test(entry.meaningZh)) errors.push(`${entry.id}: meaning contains technical dictionary noise`);
+    if (/\/(?:n|v|vt|vi|a|ad|adj|adv|pron|num)\.[^/]*[a-z]{3,}\//i.test(entry.phonetic)) errors.push(`${entry.id}: phonetic contains another dictionary headword`);
     if (/[‘’Λ]/.test(entry.phonetic)) errors.push(`${entry.id}: phonetic contains a nonstandard symbol`);
   }
   const passage = entries.find((entry) => entry.id === 'v0001');
