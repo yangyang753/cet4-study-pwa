@@ -62,7 +62,11 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     testTimeout: 20_000,
-    maxWorkers: 4,
+    // Keep jsdom suites within the memory/CPU budget of ordinary laptops.
+    // Fork startup can time out under load, while a small threads pool stays
+    // isolated per test file without spawning a large process tree.
+    pool: 'threads',
+    maxWorkers: 2,
     setupFiles: './src/test/setup.ts',
     include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts'],
     exclude: ['tests/**', 'node_modules/**'],
