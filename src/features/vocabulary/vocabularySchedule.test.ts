@@ -17,11 +17,14 @@ describe('vocabulary workload', () => {
   it('uses two acquisition days followed by a dedicated consolidation day', () => {
     const entries = Array.from({ length: 90 }, (_, i) => entry(i));
     const learned = [state(0, { status: 'review', nextReviewAt: '2026-12-30T00:00:00.000Z' })];
-    const acquisition = buildVocabularyWorkload(entries, learned, '2026-10-02', '2026-12-12');
-    const consolidation = buildVocabularyWorkload(entries, learned, '2026-10-03', '2026-12-12');
+    const firstAcquisition = buildVocabularyWorkload(entries, learned, '2026-10-02', '2026-12-12', 60, { completedVocabularySessions: 0 });
+    const secondAcquisition = buildVocabularyWorkload(entries, learned, '2026-10-08', '2026-12-12', 60, { completedVocabularySessions: 1 });
+    const consolidation = buildVocabularyWorkload(entries, learned, '2026-10-20', '2026-12-12', 60, { completedVocabularySessions: 2 });
 
-    expect(acquisition.reviewOnlyDay).toBe(false);
-    expect(acquisition.newWordQuota).toBeGreaterThan(0);
+    expect(firstAcquisition.reviewOnlyDay).toBe(false);
+    expect(firstAcquisition.newWordQuota).toBeGreaterThan(0);
+    expect(secondAcquisition.reviewOnlyDay).toBe(false);
+    expect(secondAcquisition.newWordQuota).toBeGreaterThan(0);
     expect(consolidation.reviewOnlyDay).toBe(true);
     expect(consolidation.newWordQuota).toBe(0);
     expect(consolidation.dueWords.map((word) => word.id)).toContain('v0');

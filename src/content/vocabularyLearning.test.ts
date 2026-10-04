@@ -170,6 +170,11 @@ describe('learner-facing vocabulary', () => {
     expect(auditLearningVocabulary(learningVocabulary).filter((error) => error.includes('example does not contain target word'))).toEqual([]);
   });
 
+  it('uses a complete punctuated sentence for every high-frequency word', () => {
+    expect(learningVocabulary.filter((entry) => !/[.!?][”’'"]?$/.test(entry.example.trim()))).toEqual([]);
+    expect(auditLearningVocabulary(learningVocabulary).filter((error) => error.includes('example is not a complete sentence'))).toEqual([]);
+  });
+
   it('uses varied deterministic contexts instead of repeating five sentences across the library', () => {
     const shapes = learningVocabulary.slice(0, 300).map((entry) => entry.example.toLowerCase().replaceAll(entry.word.toLowerCase(), '<word>'));
     expect(new Set(shapes).size).toBeGreaterThanOrEqual(20);

@@ -40,27 +40,23 @@ function studyDate(value: string): string {
   return new Date(dateMs(value)).toISOString().slice(0, 10);
 }
 
-function dayOrdinal(value: string): number {
-  return Math.floor(dateMs(value) / DAY_MS);
+function isReviewCycleSession(completedVocabularySessions: number): boolean {
+  return Math.max(0, completedVocabularySessions) % 3 === 2;
 }
 
-function isReviewCycleDay(value: string): boolean {
-  return ((dayOrdinal(value) % 3) + 3) % 3 === 2;
-}
-
-function acquisitionDayCount(start: string, days: number): number {
+function acquisitionDayCount(days: number, completedVocabularySessions: number): number {
   let total = 0;
   for (let offset = 0; offset < days; offset += 1) {
-    if (!isReviewCycleDay(studyDate(addDays(start, offset)))) total += 1;
+    if (!isReviewCycleSession(completedVocabularySessions + offset)) total += 1;
   }
   return Math.max(1, total);
 }
 
-function calendarDaysForAcquisitionSessions(start: string, sessions: number): number {
+function calendarDaysForAcquisitionSessions(sessions: number, completedVocabularySessions: number): number {
   let completed = 0;
   let offset = 0;
   while (completed < sessions) {
-    if (!isReviewCycleDay(studyDate(addDays(start, offset)))) completed += 1;
+    if (!isReviewCycleSession(completedVocabularySessions + offset)) completed += 1;
     offset += 1;
   }
   return offset;
@@ -72,7 +68,7 @@ export function buildVocabularyWorkload(
   today: string,
   examDate: string,
   dailyMinutes = 60,
-  options: { cultureWordIds?: string[] } = {},
+  options: { cultureWordIds?: string[]; completedVocabularySessions?: number } = {},
 ): VocabularyWorkload {
   const stateById = new Map(states.map((item) => [item.itemId, item]));
   const remainingWords = entries.filter((item) => stateById.get(item.id)?.status !== 'mastered').length;
@@ -86,10 +82,12 @@ export function buildVocabularyWorkload(
     daysRemaining >= 60 ? 35 : Math.max(STABLE_REVIEW_SPACING_DAYS, Math.floor(daysRemaining * 0.45)),
   ));
   const learningDays = Math.max(1, daysRemaining - consolidationDays);
-  const acquisitionDays = acquisitionDayCount(today, learningDays);
+  const completedVocabularySessions = Math.max(0, options.completedVocabularySessions ?? 0);
+  const acquisitionDays = acquisitionDayCount(learningDays, completedVocabularySessions);
   const firstPassTargetDate = studyDate(addDays(examDate, -consolidationDays));
   const dailyKnowledgeCapacity = Math.max(10, Math.min(45, Math.floor(dailyMinutes * 0.75)));
-  const reviewOnlyDay = states.length > 0 && isReviewCycleDay(today);
+  const hasLearnedVocabulary = entries.some((entry) => stateById.has(entry.id));
+  const reviewOnlyDay = hasLearnedVocabulary && isReviewCycleSession(completedVocabularySessions);
   const requiredDailyWords = unseen.length === 0 ? 0 : Math.ceil(unseen.length / acquisitionDays);
   const baseNewWordQuota = unseen.length === 0 ? 0 : Math.min(dailyKnowledgeCapacity, Math.max(10, requiredDailyWords));
   const dueAt = dateMs(`${today}T23:59:59.999Z`);
@@ -120,7 +118,7 @@ export function buildVocabularyWorkload(
   const newWordQuota = reviewOnlyDay || dueWords.length + cultureWords.length >= dailyKnowledgeCapacity ? 0 : Math.min(baseNewWordQuota, dailyKnowledgeCapacity - dueWords.length - cultureWords.length);
   const sustainableNewWordQuota = unseen.length === 0 ? 0 : Math.min(dailyKnowledgeCapacity, Math.max(10, requiredDailyWords));
   const studySessions = sustainableNewWordQuota === 0 ? 0 : Math.ceil(unseen.length / sustainableNewWordQuota);
-  const studyDays = calendarDaysForAcquisitionSessions(today, studySessions);
+  const studyDays = calendarDaysForAcquisitionSessions(studySessions, completedVocabularySessions);
   const projectedCompletionDate = studyDate(addDays(today, studyDays));
   const estimatedMinutes = Math.min(dailyMinutes, Math.max(10, Math.ceil(newWordQuota * 1.2 + dueWords.length * 0.5 + 5)));
   const remainingReviewStages = entries.reduce((total, item) => {

@@ -13,7 +13,7 @@ import { buildWordReinforcement, gradeWordReinforcement } from './wordReinforcem
 import { applyKnowledgeReviewResult } from '../mastery/knowledgeMastery';
 import { vocabularyReviewCard } from '../vocabulary/wordMastery';
 import { PronounceButton } from '../vocabulary/PronounceButton';
-import { createAggregateReviewSession, recordAggregateReviewResult, selectAggregateReviewIds, type AggregateReviewSession } from './aggregateReviewSession';
+import { createAggregateReviewSession, loadAggregateReviewSession, recordAggregateReviewResult, saveAggregateReviewSession, selectAggregateReviewIds, type AggregateReviewSession } from './aggregateReviewSession';
 
 type Tab = 'vocabulary' | 'collocations' | 'grammar';
 type StateView = 'unlearned' | 'active' | 'mastered';
@@ -56,7 +56,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
   const [chineseAnswer, setChineseAnswer] = useState('');
   const [exerciseResult, setExerciseResult] = useState('');
   const [exerciseSaving, setExerciseSaving] = useState(false);
-  const [aggregateSession, setAggregateSession] = useState<AggregateReviewSession | null>(null);
+  const [aggregateSession, setAggregateSession] = useState<AggregateReviewSession | null>(() => loadAggregateReviewSession());
   const [attemptId, setAttemptId] = useState('');
   useEffect(() => {
     let active = true;
@@ -105,6 +105,13 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
     const session = createAggregateReviewSession(reviewWords.map((word) => word.id), random);
     const word = vocabulary.find((item) => item.id === session.currentId);
     setAggregateSession(session);
+    saveAggregateReviewSession(session);
+    if (word) openExercise(word);
+  };
+
+  const resumeAggregateReview = () => {
+    if (!aggregateSession || aggregateSession.completed || !aggregateSession.currentId) return;
+    const word = vocabulary.find((item) => item.id === aggregateSession.currentId);
     if (word) openExercise(word);
   };
 
@@ -132,7 +139,11 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
       if (!grade.spellingCorrect) await repository.upsertReviewCard(vocabularyReviewCard(exercise.word.id, 'cloze', now));
       if (grade.missingMeanings.length || grade.unexpectedMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(exercise.word.id, 'meaning', now));
       setStates((items) => new Map(items).set(exercise.word.id, next));
-      setAggregateSession((session) => session ? recordAggregateReviewResult(session, grade.correct) : session);
+      if (aggregateSession) {
+        const nextSession = recordAggregateReviewResult(aggregateSession, grade.correct);
+        setAggregateSession(nextSession);
+        saveAggregateReviewSession(nextSession);
+      }
       setExerciseResult(grade.correct ? `回答正确，已识别 ${grade.matchedMeaningCount || 1} 个关键点并记录巩固。` : `本次未通过，已加入错题复习。${!grade.spellingCorrect ? `正确拼写：${exercise.word.word}。` : ''}${grade.requiredMeaningCount ? `已识别 ${grade.matchedMeaningCount}/${grade.requiredMeaningCount} 个达标核心义。` : ''}${grade.missingMeanings.length ? `还可复习：${grade.missingMeanings.join('、')}。` : ''}`);
     } catch {
       setExerciseResult('巩固结果保存失败，答案已保留，请重新提交。');
@@ -152,7 +163,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
     {tab === 'vocabulary' && <>
       <section className="aggregate-review" aria-labelledby="aggregate-review-title">
         <div><span>RECALL WITHOUT HINTS</span><h2 id="aggregate-review-title">无提示待复习总巩固</h2><p>从已经学过的单词中随机抽题，不显示目标词名。答错会自动降为待复习并进入错题复习。</p></div>
-        <div className="aggregate-review-stats"><strong>{reviewWords.length}</strong><span>本轮检测 · 共学过 {learnedWordCount} 个</span><button disabled={!reviewWords.length} aria-label={`开始待复习词总巩固，共 ${reviewWords.length} 个`} onClick={startAggregateReview}>{reviewWords.length ? '开始随机总巩固 →' : '先完成今日新词'}</button></div>
+        <div className="aggregate-review-stats"><strong>{aggregateSession && !aggregateSession.completed ? aggregateSession.queue.length - aggregateSession.answeredCount : reviewWords.length}</strong><span>{aggregateSession && !aggregateSession.completed ? `本轮剩余 · 已完成 ${aggregateSession.answeredCount} 个` : `本轮检测 · 共学过 ${learnedWordCount} 个`}</span><button disabled={!reviewWords.length && !aggregateSession?.currentId} aria-label={aggregateSession && !aggregateSession.completed ? '继续未完成的总巩固' : `开始待复习词总巩固，共 ${reviewWords.length} 个`} onClick={aggregateSession && !aggregateSession.completed ? resumeAggregateReview : startAggregateReview}>{aggregateSession && !aggregateSession.completed ? '继续本轮总巩固 →' : reviewWords.length ? '开始随机总巩固 →' : '先完成今日新词'}</button></div>
       </section>
       {exercise && <section className="reinforcement-panel aggregate-session" aria-labelledby="reinforcement-title">
         <button className="reinforcement-close" aria-label="关闭巩固练习" onClick={() => setExercise(null)}>×</button>

@@ -5,6 +5,7 @@ interface Segment { start: number; end: number; text: string; speaker?: string }
 interface ListeningSet { id: string; themeEn: string; transcript: string; segments: Segment[] }
 
 const target = path.join(process.cwd(), 'content/v1/listeningSets.json');
+const inventoryTarget = path.join(process.cwd(), 'content/v1/inventory.json');
 const sets = JSON.parse(await readFile(target, 'utf8')) as ListeningSet[];
 const uses = new Map<string, Array<{ set: ListeningSet; segment: Segment }>>();
 const normalize = (text: string) => text.toLowerCase().replace(/[^a-z]+/g, ' ').trim();
@@ -64,4 +65,7 @@ for (const occurrences of uses.values()) {
 for (const set of sets) set.transcript = set.segments.map((segment) => segment.text).join(' ');
 
 await writeFile(target, `${JSON.stringify(sets, null, 2)}\n`, 'utf8');
+const inventory = JSON.parse(await readFile(inventoryTarget, 'utf8')) as Record<string, unknown>;
+inventory.listeningSets = sets;
+await writeFile(inventoryTarget, `${JSON.stringify(inventory, null, 2)}\n`, 'utf8');
 console.log(`Diversified ${changed} repeated listening segments across ${sets.length} sets.`);

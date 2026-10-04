@@ -1,10 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { KnowledgePage } from './KnowledgePage';
 
 describe('KnowledgePage', () => {
+  beforeEach(() => localStorage.clear());
   it('presents the audited high-frequency inventory', () => {
     render(<KnowledgePage />);
     expect(screen.getByText('800')).toBeInTheDocument();
@@ -90,6 +91,65 @@ describe('KnowledgePage', () => {
     expect(screen.getByText('测试 1 个')).toBeVisible();
     expect(screen.getByText('完全正确 1 个')).toBeVisible();
     expect(screen.getByText('需要重学 0 个')).toBeVisible();
+  });
+
+  it('starts another aggregate round after a completed round', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: false, reviewStage: 0, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} random={() => 0.4} />);
+
+    await userEvent.click(await screen.findByRole('button', { name: /开始待复习词总巩固/ }));
+    await userEvent.type(screen.getByLabelText('英文答案'), 'passage');
+    await userEvent.click(screen.getByRole('button', { name: '提交巩固结果' }));
+    await userEvent.click(await screen.findByRole('button', { name: '查看本轮报告' }));
+    await userEvent.click(screen.getByRole('button', { name: '开始新一轮' }));
+
+    expect(screen.getByRole('heading', { name: '待复习单词总巩固' })).toBeVisible();
+    expect(screen.getByText(/第 1 \/ 1 题/)).toBeVisible();
+  });
+
+  it('restores a completed aggregate report after remounting the page', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: false, reviewStage: 0, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    const first = render(<KnowledgePage repository={repository} random={() => 0.4} />);
+    await userEvent.click(await screen.findByRole('button', { name: /开始待复习词总巩固/ }));
+    await userEvent.type(screen.getByLabelText('英文答案'), 'passage');
+    await userEvent.click(screen.getByRole('button', { name: '提交巩固结果' }));
+    await userEvent.click(await screen.findByRole('button', { name: '查看本轮报告' }));
+    first.unmount();
+
+    render(<KnowledgePage repository={repository} random={() => 0.4} />);
+
+    expect(screen.getByRole('heading', { name: '本轮巩固完成' })).toBeVisible();
+    expect(screen.getByText('测试 1 个')).toBeVisible();
+  });
+
+  it('offers to resume an unfinished aggregate round after remounting the page', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: false, reviewStage: 0, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
+    } as unknown as LearningRepository;
+    const first = render(<KnowledgePage repository={repository} random={() => 0.4} />);
+    await userEvent.click(await screen.findByRole('button', { name: /开始待复习词总巩固/ }));
+    first.unmount();
+
+    render(<KnowledgePage repository={repository} random={() => 0.4} />);
+    await userEvent.click(screen.getByRole('button', { name: '继续未完成的总巩固' }));
+
+    expect(screen.getByRole('heading', { name: '待复习单词总巩固' })).toBeVisible();
   });
 
   it('filters vocabulary by the learner query', async () => {

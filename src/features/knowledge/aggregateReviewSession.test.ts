@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { createAggregateReviewSession, recordAggregateReviewResult, selectAggregateReviewIds } from './aggregateReviewSession';
+import {
+  createAggregateReviewSession,
+  loadAggregateReviewSession,
+  recordAggregateReviewResult,
+  saveAggregateReviewSession,
+  selectAggregateReviewIds,
+} from './aggregateReviewSession';
 
 describe('aggregate review session', () => {
   it('tests every queued word once before completing', () => {
@@ -20,12 +26,26 @@ describe('aggregate review session', () => {
     expect(createAggregateReviewSession([], () => 0)).toMatchObject({ currentId: null, completed: true, answeredCount: 0 });
   });
 
-  it('includes learned words before they are due and prioritizes words learned today', () => {
+  it('includes learned words before they are due but rotates recently reviewed words behind older words', () => {
     const ids = selectAggregateReviewIds([
       { itemId: 'old', status: 'learning', updatedAt: '2026-09-20T08:00:00.000Z', nextReviewAt: '2026-12-01T00:00:00.000Z' },
       { itemId: 'today', status: 'learning', updatedAt: '2026-10-04T08:00:00.000Z', nextReviewAt: '2026-12-01T00:00:00.000Z' },
     ], '2026-10-04T12:00:00.000Z', 20);
-    expect(ids).toEqual(['today', 'old']);
+    expect(ids).toEqual(['old', 'today']);
+  });
+
+  it('persists and restores a completed report across refreshes', () => {
+    const storage = new Map<string, string>();
+    const adapter = {
+      getItem: (key: string) => storage.get(key) ?? null,
+      setItem: (key: string, value: string) => storage.set(key, value),
+      removeItem: (key: string) => storage.delete(key),
+    };
+    const complete = recordAggregateReviewResult(createAggregateReviewSession(['v1'], () => 0), true);
+
+    saveAggregateReviewSession(complete, adapter);
+
+    expect(loadAggregateReviewSession(adapter)).toEqual(complete);
   });
 
   it('caps one aggregate round at twenty unique learned words', () => {

@@ -72,7 +72,10 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
   const focusKind: StudyKind | undefined = rawFocusKind === 'grammar' ? 'collocation' : rawFocusKind;
   const unfinished = carryoverFromPlan(previousPlan?.tasks ?? [], metrics.completedTaskIds);
   const dailyCulturePrompt = selectDailyCultureTranslation(cultureTranslationBank as CultureTranslationPrompt[], today);
-  const vocabularyWorkload = snapshot ? buildVocabularyWorkload(learningVocabulary, snapshot.knowledgeStates, today, targetDate, dailyMinutes, { cultureWordIds: dailyCulturePrompt.targetWordIds }) : null;
+  const vocabularyWorkload = snapshot ? buildVocabularyWorkload(learningVocabulary, snapshot.knowledgeStates, today, targetDate, dailyMinutes, {
+    cultureWordIds: dailyCulturePrompt.targetWordIds,
+    completedVocabularySessions: (snapshot.completions ?? []).filter((item) => item.kind === 'vocabulary').length,
+  }) : null;
   const collocationWorkload = snapshot && vocabularyWorkload ? buildCollocationWorkload(collocationData as CollocationEntry[], snapshot.knowledgeStates, today, targetDate, vocabularyWorkload.reviewOnlyDay) : null;
   const vocabularySession = currentPlan?.vocabularySession;
   const dailyVocabularyCount = vocabularySession?.wordIds.length ?? vocabularyWorkload?.newWords.length ?? 0;

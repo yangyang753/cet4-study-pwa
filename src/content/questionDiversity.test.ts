@@ -21,6 +21,17 @@ describe('auditQuestionTemplateDiversity', () => {
     expect(auditQuestionTemplateDiversity(readingSets, 'reading')).toEqual([]);
   });
 
+  it('rejects passages that repeat an identical sentence inside one set', () => {
+    const repeated = [{
+      id: 'read-repeat', theme: 'campus project',
+      passage: 'Students recorded their progress. Students recorded their progress. The team discussed the results.',
+      questions: [{ prompt: 'What did the students record?', skillTag: 'detail', options: ['Progress', 'Tickets', 'Meals', 'Rooms'], answer: 0 }],
+    }];
+    expect(auditQuestionTemplateDiversity(repeated, 'reading')).toEqual(expect.arrayContaining([
+      expect.stringContaining('repeats a sentence'),
+    ]));
+  });
+
   it('rejects listening banks built from repeated stock transcript segments', () => {
     const repeated = Array.from({ length: 8 }, (_, index) => ({
       id: `listen-${index}`,

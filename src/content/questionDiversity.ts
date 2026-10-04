@@ -1,7 +1,7 @@
 import type { QuestionSkillTag } from '../domain/content';
 
 type CandidateQuestion = { prompt?: string; options?: string[]; answer?: number; skillTag?: string };
-type CandidateSet = { id?: string; theme?: string; themeEn?: string; segments?: Array<{ text?: string }>; questions?: CandidateQuestion[] };
+type CandidateSet = { id?: string; theme?: string; themeEn?: string; passage?: string; segments?: Array<{ text?: string }>; questions?: CandidateQuestion[] };
 
 const requiredSkills: Record<'listening' | 'reading', QuestionSkillTag[]> = {
   listening: ['detail', 'reason', 'purpose', 'action', 'attitude', 'inference', 'main-idea'],
@@ -40,6 +40,17 @@ export function auditQuestionTemplateDiversity(sets: CandidateSet[], kind: 'list
     }
     for (const [segment, ids] of segmentUses) {
       if (ids.size > 2) errors.push(`listening: repeated transcript segment appears in ${ids.size} sets: "${segment.slice(0, 80)}"`);
+    }
+  }
+
+  if (kind === 'reading') {
+    for (const set of sets) {
+      const sentences = (set.passage ?? '')
+        .split(/(?<=[.!?])\s+/)
+        .map((sentence) => sentence.toLocaleLowerCase().replace(/[^a-z]+/g, ' ').trim())
+        .filter(Boolean);
+      const repeated = sentences.find((sentence, index) => sentences.indexOf(sentence) !== index);
+      if (repeated) errors.push(`reading:${set.id ?? 'unknown'} repeats a sentence: "${repeated.slice(0, 80)}"`);
     }
   }
 

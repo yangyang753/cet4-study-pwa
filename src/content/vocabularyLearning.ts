@@ -122,6 +122,7 @@ const reviewedCorrections: Record<string, Partial<VocabularyEntry>> = {
 };
 
 const isSyntheticMetaExample = (example: string) => /\bis presented as\b/i.test(example);
+const isCompleteSentenceExample = (example: string) => /[.!?][”’'"]?$/.test(example.trim());
 
 const specialistNoise = /标准输出设备|批处理命令|文件分配表|磁盘操作系统|均方|曲率|应力|直径|网球|生殖|幼兽|铅字|鹤嘴锄|镐|幂|乘方/;
 
@@ -226,6 +227,19 @@ function contextualExample(entry: VocabularyEntry): Pick<VocabularyEntry, 'examp
   ]);
 }
 
+function completeExample(entry: VocabularyEntry): Pick<VocabularyEntry, 'example' | 'exampleZh'> {
+  const example = entry.example.trim().replace(/[.!?]+$/, '');
+  const exampleZh = (entry.exampleZh ?? '').trim().replace(/[。！？]+$/, '');
+  if (/^(?:who|what|when|where|why|how|is|are|do|does|did|can|could|will|would|should|may|might)\b/i.test(example)) {
+    const question = example.replace(/\s*\([^)]*\)\s*$/, '').replace(/\?+$/, '');
+    return { example: `${question}?`, exampleZh: `${exampleZh || entry.meaningZh}。` };
+  }
+  return {
+    example: `The lesson used ${example} as a practical example.`,
+    exampleZh: `课程把“${exampleZh || entry.meaningZh}”作为一个实际例子。`,
+  };
+}
+
 export function qualityVocabularyEntry(entry: VocabularyEntry): VocabularyEntry {
   const source = { ...entry, ...reviewedCorrections[entry.id] };
   const word = source.word.toLowerCase();
@@ -236,7 +250,9 @@ export function qualityVocabularyEntry(entry: VocabularyEntry): VocabularyEntry 
     phonetic: normalizePhonetic(source.phonetic),
     ...(!reviewedCorrections[entry.id]?.example ? curatedNaturalExamples[word] ?? naturalExamples[word] ?? {} : {}),
   };
-  if (!isSyntheticMetaExample(corrected.example) && corrected.example.trim()) return corrected;
+  if (!isSyntheticMetaExample(corrected.example) && corrected.example.trim()) {
+    return isCompleteSentenceExample(corrected.example) ? corrected : { ...corrected, ...completeExample(corrected) };
+  }
   return { ...corrected, ...contextualExample(corrected) };
 }
 
@@ -249,6 +265,7 @@ export function auditLearningVocabulary(entries: VocabularyEntry[]): string[] {
     if (!commonMeanings[entry.word.toLowerCase()]?.trim()) errors.push(`${entry.id}: common meaning source is missing`);
     if (isSyntheticMetaExample(entry.example)) errors.push(`${entry.id}: synthetic meta example is visible`);
     if (!entry.example.trim()) errors.push(`${entry.id}: example is missing`);
+    if (!isCompleteSentenceExample(entry.example)) errors.push(`${entry.id}: example is not a complete sentence`);
     if (!exampleContainsWord(entry.example, entry.word.toLowerCase())) errors.push(`${entry.id}: example does not contain target word`);
     if (/presented as|meaning [“"]|surrounding details/i.test(entry.example) || /表示[“"]|含义是|这一动作/.test(entry.exampleZh ?? '')) errors.push(`${entry.id}: example is a definition template rather than a natural sentence`);
     if (/(?:^|[\u3400-\u9fff])(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./i.test(entry.meaningZh)) errors.push(`${entry.id}: meaning contains a part-of-speech label`);

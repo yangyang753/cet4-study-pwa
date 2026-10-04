@@ -39,7 +39,10 @@ export function PrintPage({ repository = defaultRepository }: { repository?: Lea
   const today = studyDate();
   const dailyCulturePrompt = selectDailyCultureTranslation(cultureTranslationBank as CultureTranslationPrompt[], today);
   useEffect(() => { let active = true; void repository.getDashboardSnapshot().then((value) => { if (active) setSnapshot(value); }); return () => { active = false; }; }, [repository]);
-  const dailyWorkload = snapshot ? buildVocabularyWorkload(learningVocabulary, snapshot.knowledgeStates, today, snapshot.settings.examDate, snapshot.settings.dailyMinutes, { cultureWordIds: dailyCulturePrompt.targetWordIds }) : null;
+  const dailyWorkload = snapshot ? buildVocabularyWorkload(learningVocabulary, snapshot.knowledgeStates, today, snapshot.settings.examDate, snapshot.settings.dailyMinutes, {
+    cultureWordIds: dailyCulturePrompt.targetWordIds,
+    completedVocabularySessions: (snapshot.completions ?? []).filter((item) => item.kind === 'vocabulary').length,
+  }) : null;
   const packet = useMemo(() => buildPrintPacket({
     kind,
     sourceId: kind === 'mock' ? (sourceId.startsWith('mock-') ? sourceId : 'mock-1') : sourceId,

@@ -71,7 +71,10 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
         }
       }
       if (!active) return;
-      const next = buildVocabularyWorkload(entries, value.knowledgeStates ?? [], today, examDate ?? value.settings?.examDate ?? '2026-12-12', value.settings?.dailyMinutes ?? 60, { cultureWordIds: dailyCulturePrompt.targetWordIds });
+      const next = buildVocabularyWorkload(entries, value.knowledgeStates ?? [], today, examDate ?? value.settings?.examDate ?? '2026-12-12', value.settings?.dailyMinutes ?? 60, {
+        cultureWordIds: dailyCulturePrompt.targetWordIds,
+        completedVocabularySessions: (value.completions ?? []).filter((item) => item.kind === 'vocabulary').length,
+      });
       const nextCollocations = buildCollocationWorkload(collocationEntries, value.knowledgeStates ?? [], today, examDate ?? value.settings?.examDate ?? '2026-12-12', next.reviewOnlyDay);
       const byId = new Map(entries.map((word) => [word.id, word]));
       const collocationById = new Map(collocationEntries.map((item) => [item.id, item]));

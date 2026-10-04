@@ -8,6 +8,14 @@ export interface AggregateReviewSession {
   completed: boolean;
 }
 
+interface StorageAdapter {
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): unknown;
+  removeItem(key: string): unknown;
+}
+
+const aggregateReviewStorageKey = 'cet4:aggregate-review-session:v1';
+
 interface LearnedState {
   itemId: string;
   status: string;
@@ -18,22 +26,50 @@ interface LearnedState {
 
 export function selectAggregateReviewIds(states: LearnedState[], now: string, limit = 20): string[] {
   const nowTime = Date.parse(now);
-  const today = now.slice(0, 10);
   return [...states]
     .filter((state) => ['learning', 'review', 'mastered'].includes(state.status))
     .sort((left, right) => {
-      const leftToday = left.updatedAt.slice(0, 10) === today;
-      const rightToday = right.updatedAt.slice(0, 10) === today;
       const leftDue = !left.nextReviewAt || Date.parse(left.nextReviewAt) <= nowTime;
       const rightDue = !right.nextReviewAt || Date.parse(right.nextReviewAt) <= nowTime;
-      return Number(rightToday) - Number(leftToday)
-        || Number(rightDue) - Number(leftDue)
+      return Number(rightDue) - Number(leftDue)
         || (right.lapseCount ?? 0) - (left.lapseCount ?? 0)
         || Date.parse(left.updatedAt) - Date.parse(right.updatedAt);
     })
     .map((state) => state.itemId)
     .filter((id, index, all) => all.indexOf(id) === index)
     .slice(0, limit);
+}
+
+function isAggregateReviewSession(value: unknown): value is AggregateReviewSession {
+  if (!value || typeof value !== 'object') return false;
+  const candidate = value as Partial<AggregateReviewSession>;
+  return Array.isArray(candidate.queue)
+    && candidate.queue.every((id) => typeof id === 'string')
+    && typeof candidate.currentIndex === 'number'
+    && (typeof candidate.currentId === 'string' || candidate.currentId === null)
+    && typeof candidate.answeredCount === 'number'
+    && typeof candidate.correctCount === 'number'
+    && typeof candidate.missedCount === 'number'
+    && typeof candidate.completed === 'boolean';
+}
+
+export function loadAggregateReviewSession(storage: StorageAdapter = localStorage): AggregateReviewSession | null {
+  try {
+    const raw = storage.getItem(aggregateReviewStorageKey);
+    if (!raw) return null;
+    const value: unknown = JSON.parse(raw);
+    return isAggregateReviewSession(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveAggregateReviewSession(session: AggregateReviewSession, storage: StorageAdapter = localStorage): void {
+  try {
+    storage.setItem(aggregateReviewStorageKey, JSON.stringify(session));
+  } catch {
+    // The review still works in memory when private browsing blocks storage.
+  }
 }
 
 export function createAggregateReviewSession(ids: string[], random: () => number = Math.random): AggregateReviewSession {

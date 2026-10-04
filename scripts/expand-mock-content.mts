@@ -67,6 +67,62 @@ function extendEnglish(value: string, minimum: number, subject: string, seed: nu
   return result;
 }
 
+const readingAdditions = [
+  'The research team published the procedure before recruitment began so that expectations were clear.',
+  'Students could leave the study at any time without losing access to ordinary campus services.',
+  'Weekly records allowed the researchers to distinguish temporary enthusiasm from lasting changes in behavior.',
+  'Several participants suggested small adjustments that were adopted during the second half of the trial.',
+  'The organizers compared attendance figures with comments collected in confidential follow-up interviews.',
+  'Cost remained modest because the project relied mainly on existing rooms, staff, and digital tools.',
+  'New participants received a brief introduction, while experienced members were asked to support beginners.',
+  'The team checked whether busy schedules affected participation differently across the student population.',
+  'No single result was treated as decisive, and unusual cases were examined separately before conclusions were drawn.',
+  'Clear contact information helped participants report practical problems soon after they appeared.',
+  'The revised arrangement was tested under the same conditions so that the comparison would remain meaningful.',
+  'Researchers also noted that convenience alone could not explain every change in student behavior.',
+  'Feedback was summarized anonymously to encourage honest comments about both strengths and weaknesses.',
+  'A small advisory group reviewed the findings and questioned explanations that lacked direct evidence.',
+  'The university plans to repeat the measurement before deciding whether permanent funding is justified.',
+  'Participants generally valued improvements that saved time without adding complicated new rules.',
+  'The report separates observed results from suggestions that still require a larger and longer trial.',
+  'Staff monitored accessibility throughout the project and offered alternative formats when they were requested.',
+  'Comparisons with the previous term helped the team judge whether the observed pattern was unusual.',
+  'The final discussion emphasizes practical limits instead of claiming that one method will suit everyone.',
+  'Future research will include another campus to test whether the same approach works in a different setting.',
+  'The authors recommend gradual expansion because rapid growth could make careful support more difficult.',
+  'Students received a short summary explaining how their records contributed to the overall findings.',
+  'The evidence suggests that simple, consistent support can matter more than an expensive one-time campaign.',
+];
+
+function extendReadingEnglish(value: string, minimum: number, subject: string, seed: number) {
+  let result = value;
+  let offset = 0;
+  while (countWords(result) < minimum && offset < readingAdditions.length) {
+    const addition = readingAdditions[(seed + offset) % readingAdditions.length];
+    result += ` ${offset === 0 ? addition.replace('The research team', `The ${subject} research team`) : addition}`;
+    offset += 1;
+  }
+  return result;
+}
+
+function expandMatchingParagraph(paragraph: string, paragraphIndex: number, facts: readonly string[]) {
+  const [project, duration, participants, aid, challenge, response] = facts;
+  const support = [
+    [`The opening explains why ${project} deserved systematic attention.`, 'It also defines the everyday need that motivated the organizers.', 'The researchers avoided broad claims before collecting evidence.', 'Their first goal was to understand the problem from a student perspective.', 'This practical focus shaped every later decision in the report.', 'Readers therefore know from the beginning what the project was designed to improve.'],
+    [`A period of ${duration} covered several normal cycles of campus activity.`, 'That span reduced the influence of an unusually busy or quiet week.', 'Measurements were taken at regular intervals rather than only at the end.', 'The schedule gave participants time to become familiar with the new arrangement.', 'It also allowed early difficulties to be corrected and observed again.', 'The resulting pattern was more informative than a single-day snapshot.'],
+    [`The group of ${participants} included people with different routines and levels of experience.`, 'Recruitment took place through several campus channels.', 'Basic background information was recorded for comparison.', 'The team checked whether a few highly active members were dominating the results.', 'Responses from less active participants were retained in the analysis.', 'This variety strengthened the description of how the project worked in practice.'],
+    [`Many participants said that ${aid} removed a practical obstacle.`, 'They could use this support without learning a complicated new system.', 'Interview comments described when the feature was most useful.', 'Activity records showed whether those comments matched actual behavior.', 'The benefit was strongest when the support was available consistently.', 'This finding gave the organizers a clear feature to preserve.'],
+    ['Numbers showed how often people took part, while interviews explained why their behavior changed.', 'The two sources of evidence were reviewed separately before being compared.', 'Missing records were identified instead of being treated as negative results.', 'Researchers looked for agreement as well as conflict between the two sources.', 'This method prevented one striking comment from outweighing the broader pattern.', 'Together, the records and interviews produced a more balanced account.'],
+    [`The difficulty of ${challenge} did not affect every participant in the same way.`, 'Some people adapted quickly, while others reduced their involvement.', 'The team recorded when the obstacle appeared and how long it lasted.', 'Interviewers asked participants to describe its practical consequences.', 'These accounts showed why the original arrangement was not equally accessible.', 'Recognizing that difference became necessary before the trial could continue fairly.'],
+    [`The response, ${response}, targeted the identified obstacle rather than changing the entire project.`, 'Organizers explained the adjustment before putting it into practice.', 'Participants were invited to report any new difficulty it created.', 'The team then compared behavior before and after the change.', 'This sequence made it possible to judge the response with direct evidence.', 'The revision was kept only after the records showed a useful improvement.'],
+    ['Attendance became more regular after the adjustment, but individual results still varied.', 'Some participants improved immediately and others needed additional time.', 'Satisfaction comments were considered alongside the activity records.', 'The researchers did not count every positive comment as proof of success.', 'Instead, they described both the general trend and the remaining exceptions.', 'That cautious comparison gives a more realistic picture of the outcome.'],
+    ['The report concerns one campus and cannot automatically represent every student population.', 'Participation was voluntary, which may have attracted unusually motivated people.', 'The trial was also shorter than a permanent university program would be.', 'Researchers identify these limits before discussing wider use.', 'They recommend testing the method under different conditions.', 'This warning keeps the conclusion proportionate to the evidence collected.'],
+    ['The next trial will include new participants and a longer observation period.', 'Organizers will retain the successful adjustment while monitoring possible side effects.', 'The same measures will be used so that results can be compared directly.', 'Another campus may join to provide a different setting.', 'Researchers will publish an interim review before recommending permanent adoption.', 'The follow-up is therefore designed to test, not merely repeat, the first conclusion.'],
+  ][paragraphIndex];
+  const section = 'ABCDEFGHIJ'[paragraphIndex];
+  return [paragraph, ...support, `For this reason, section ${section} supplies evidence needed for the report's later comparison and conclusion.`].join(' ');
+}
+
 const listeningSets = (await readJson<SetItem[]>('listeningSets.json')).map((set, index) => {
   const scenario = listeningScenarios[index];
   if (!scenario) throw new Error(`Missing listening scenario ${index + 1}`);
@@ -191,7 +247,7 @@ const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, in
   const sentences = [`Researchers examined the issue through ${project} lasting ${duration}.`, `The project involved ${participants} and collected both activity records and short interviews.`, `Participants said ${aid} helped them make consistent progress.`, `The main difficulty was ${challenge}, which reduced the benefit for some people.`, `Organizers responded by introducing ${response} instead of abandoning the project.`, endings[index % endings.length]];
   if (set.type === 'cloze') {
     const clozeWords = ['researchers', 'project', 'involved', 'records', 'interviews', 'participants', 'consistent', 'difficulty', 'responded', 'evidence'];
-    const clozePassage = extendEnglish(`Researchers began a campus project that involved ${participants}. They compared activity records with short interviews. Participants reported more consistent progress when ${aid} was available. The main difficulty was ${challenge}, so organizers responded with ${response}. The team will collect further evidence before expanding the program.`, 200, project, index);
+    const clozePassage = extendReadingEnglish(`Researchers began a campus project that involved ${participants}. They compared activity records with short interviews. Participants reported more consistent progress when they could use ${aid}. The main difficulty was ${challenge}, so organizers responded with ${response}. The team will collect further evidence before expanding the program.`, 200, project, index);
     const distractorPool = ['although', 'briefly', 'declined', 'external', 'frequent', 'gradually', 'however', 'independent', 'limited', 'normally', 'previous', 'rarely', 'separate', 'temporary', 'widely'];
     const clozePromptStems = [
       `At the opening of the report on ${project}, choose the word for the people conducting the study.`,
@@ -227,16 +283,16 @@ const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, in
       `A larger follow-up is planned for the next term, when the revised method will be tested for longer and with new participants.`,
     ];
     const statements = [
-      'This paragraph introduces the project as a response to an ordinary campus need.',
-      'This paragraph explains why the study lasted long enough to reveal patterns.',
-      'This paragraph identifies the size and variety of the participant group.',
-      'This paragraph names the resource participants considered most helpful.',
-      'This paragraph describes the two kinds of evidence used by the researchers.',
-      'This paragraph presents the chief barrier to equal benefits.',
-      'This paragraph explains the practical change made after a problem appeared.',
-      'This paragraph reports improvement while noting that results were not identical.',
-      'This paragraph states a limitation that prevents an overconfident conclusion.',
-      'This paragraph describes how the research will continue in the future.',
+      `In the report on ${project}, which paragraph introduces the project as a response to an ordinary campus need?`,
+      `Which paragraph explains why ${duration} was long enough to reveal patterns?`,
+      `Which paragraph identifies the size and variety of the group of ${participants}?`,
+      `Which paragraph names ${aid} as the resource participants considered most helpful?`,
+      `Which paragraph in the ${project} report describes the two kinds of evidence used?`,
+      `Which paragraph presents ${challenge} as the chief barrier to equal benefits?`,
+      `Which paragraph explains why the team introduced ${response}?`,
+      `Which paragraph reports improvement while noting that results in ${project} were not identical?`,
+      `Which paragraph states a limitation of the evidence from ${project}?`,
+      `Which paragraph describes how the research on ${project} will continue?`,
     ];
     const paragraphOptions = 'ABCDEFGHIJ'.split('');
     const questions = statements.map((prompt, questionIndex) => ({
@@ -246,7 +302,7 @@ const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, in
       answer: questionIndex,
       explanationZh: `应匹配段落 ${paragraphOptions[questionIndex]}：${paragraphs[questionIndex]}`,
     }));
-    const expandedParagraphs = paragraphs.map((paragraph, paragraphIndex) => extendEnglish(paragraph, 95, `${project} paragraph ${paragraphIndex + 1}`, index + paragraphIndex));
+    const expandedParagraphs = paragraphs.map((paragraph, paragraphIndex) => expandMatchingParagraph(paragraph, paragraphIndex, readingFacts[index]));
     return { ...set, passage: expandedParagraphs.join('\n\n'), questions };
   }
   const finalSkill: QuestionSkillTag = index % 2 === 0 ? 'paragraph-role' : 'structure';
@@ -279,7 +335,7 @@ const readingSets = (await readJson<SetItem[]>('readingSets.json')).map((set, in
   const evidence = [sentences[0], sentences[0], sentences[1], sentences[2], sentences[3], `${sentences[3]} ${sentences[4]}`, sentences[4], `${sentences[3]} ${sentences[4]}`, sentences[5], sentences[5]];
   const questionLimit = set.type === 'reading' ? 10 : 6;
   const questions = prompts.slice(0, questionLimit).map((prompt, questionIndex) => ({ prompt, skillTag: skillTags[questionIndex], ...choices(answers[questionIndex], genericDistractors[questionIndex], (index * 2 + questionIndex) % 4), explanationZh: `原文依据：${evidence[questionIndex]}` }));
-  return { ...set, passage: extendEnglish(sentences.join(' '), 300, project, index), questions };
+  return { ...set, passage: extendReadingEnglish(sentences.join(' '), 300, project, index), questions };
 });
 
 const writingOpenings = [
