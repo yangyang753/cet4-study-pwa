@@ -48,6 +48,10 @@ describe('learner-facing vocabulary', () => {
     expect(mean?.meaningZh.match(/平均的/g)).toHaveLength(1);
     expect(like?.meaningZh.startsWith('喜欢，喜爱；像，如同')).toBe(true);
     expect(like?.meaningZh.match(/喜欢/g)).toHaveLength(1);
+    expect(like?.meaningZh).not.toContain('像要');
+    expect(learningVocabulary.find((entry) => entry.word === 'power')?.meaningZh).not.toContain('幂');
+    expect(learningVocabulary.find((entry) => entry.word === 'pick')?.meaningZh).not.toMatch(/镐|鹤嘴锄/);
+    expect(Math.max(...learningVocabulary.map((entry) => entry.meaningZh.split('；').length))).toBeLessThanOrEqual(4);
   });
 
   it('uses a natural bilingual sentence instead of a definition template', () => {
@@ -115,7 +119,7 @@ describe('learner-facing vocabulary', () => {
     expect(like?.meaningZh).toContain('赞同');
     expect(learningVocabulary.find((entry) => entry.word === 'wear')?.meaningZh).toContain('穿');
     expect(learningVocabulary.find((entry) => entry.word === 'pick')?.meaningZh).toContain('选择');
-    expect(learningVocabulary.find((entry) => entry.word === 'pick')?.meaningZh).toContain('镐');
+    expect(learningVocabulary.find((entry) => entry.word === 'pick')?.meaningZh).not.toMatch(/镐|鹤嘴锄/);
     expect(learningVocabulary.find((entry) => entry.word === 'long')?.meaningZh).toContain('渴望');
     expect(learningVocabulary.find((entry) => entry.word === 'address')?.meaningZh).toContain('处理');
     expect(learningVocabulary.find((entry) => entry.word === 'sound')?.meaningZh).toEqual(expect.stringMatching(/声音|听起来/));

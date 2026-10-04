@@ -209,7 +209,7 @@ describe('ExerciseRunner', () => {
       completeTask: vi.fn().mockResolvedValue(undefined),
       getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [] }),
       upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
-      getPlan: vi.fn().mockResolvedValue({ id: 'plan:2026-09-22', date: '2026-09-22', tasks: [], vocabularySession: { wordIds: ['v0001'], learnedWordIds: [], phase: 'learning' }, updatedAt: '2026-09-22T00:00:00.000Z' }),
+      getPlan: vi.fn().mockResolvedValue({ id: 'plan:2026-09-22', date: '2026-09-22', tasks: [], vocabularySession: { wordIds: ['v0001'], collocationIds: [], learnedWordIds: [], phase: 'learning' }, updatedAt: '2026-09-22T00:00:00.000Z' }),
       savePlan: vi.fn().mockResolvedValue(undefined),
     } as unknown as LearningRepository;
     render(<ExerciseRunner kind="vocabulary" limit={1} repository={repository} today="2026-09-22" />);
@@ -217,7 +217,7 @@ describe('ExerciseRunner', () => {
     await user.click(screen.getByRole('button', { name: '完成单词学习' }));
     await user.type(await screen.findByLabelText('英文拼写'), 'passage');
     await user.click(screen.getByRole('button', { name: '提交并完成检测' }));
-    expect(await screen.findByRole('heading', { name: '今日词汇训练已完成' })).toBeVisible();
+    expect(await screen.findByRole('heading', { name: '今日词汇与搭配训练已完成' })).toBeVisible();
     expect(repository.completeTask).toHaveBeenCalledWith(expect.objectContaining({
       id: '2026-09-22:vocabulary', taskId: '2026-09-22:vocabulary', kind: 'vocabulary',
     }));

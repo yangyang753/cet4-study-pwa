@@ -6,6 +6,7 @@ import { applyVocabularyReviewResult } from './vocabularySchedule';
 import { vocabularyReviewCard } from './wordMastery';
 import { buildStrictVocabularyQuestions, gradeStrictVocabularyAnswer } from './strictVocabularyCheck';
 import { studyDate } from '../../lib/studyDate';
+import { learningVocabulary } from '../../content/vocabularyLearning';
 
 export function StrictVocabularyCheck({ repository, words, states, passedWordIds = [], now: fixedNow, onWordPassed, onComplete }: {
   repository: LearningRepository;
@@ -31,7 +32,7 @@ export function StrictVocabularyCheck({ repository, words, states, passedWordIds
 
   async function submit() {
     if (!question || saving) return;
-    const grade = gradeStrictVocabularyAnswer(question, { english, chinese });
+    const grade = gradeStrictVocabularyAnswer(question, { english, chinese }, learningVocabulary);
     const now = fixedNow ?? new Date().toISOString();
     const current = stateById.get(question.word.id);
     setSaving(true);

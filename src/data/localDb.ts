@@ -15,6 +15,7 @@ export interface VocabularySessionProgress {
   cultureDraft?: string;
   culturePassed?: boolean;
   passedCollocationIds?: string[];
+  collocationIds?: string[];
   phase: VocabularySessionPhase;
 }
 export interface CachedPlan {

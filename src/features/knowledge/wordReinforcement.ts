@@ -1,5 +1,6 @@
 import type { VocabularyEntry } from '../../domain/content';
 import { gradeStrictVocabularyAnswer, type StrictVocabularyGrade } from '../vocabulary/strictVocabularyCheck';
+import { learningVocabulary } from '../../content/vocabularyLearning';
 
 export type WordReinforcementKind = 'meaning' | 'spelling' | 'cloze';
 
@@ -29,5 +30,5 @@ export function buildWordReinforcement(word: VocabularyEntry, random: () => numb
 
 export function gradeWordReinforcement(exercise: WordReinforcement, answer: { english: string; chinese: string }): StrictVocabularyGrade {
   const kind = exercise.kind === 'meaning' ? 'meaning' : 'spelling';
-  return gradeStrictVocabularyAnswer({ id: exercise.id, kind, word: exercise.word, cloze: exercise.cloze }, answer);
+  return gradeStrictVocabularyAnswer({ id: exercise.id, kind, word: exercise.word, cloze: exercise.cloze }, answer, learningVocabulary);
 }

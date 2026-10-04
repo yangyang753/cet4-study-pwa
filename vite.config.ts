@@ -18,6 +18,9 @@ export default defineConfig({
           if (id.includes('node_modules/@supabase')) return 'vendor-supabase';
           if (id.includes('content/v1/listeningSets.json')) return 'content-listening';
           if (id.includes('content/v1/readingSets.json')) return 'content-reading';
+          if (id.includes('content/v1/vocabulary.json')) return 'content-vocabulary-core';
+          if (id.includes('content/v1/vocabulary-common-meanings.json')) return 'content-vocabulary-meanings';
+          if (id.includes('content/v1/vocabulary-examples.json')) return 'content-vocabulary-examples';
           if (id.includes('content/v1/translations.json') || id.includes('content/v1/writingPrompts.json') || id.includes('content/v1/mockExams.json')) return 'content-mock-subjective';
         },
       },

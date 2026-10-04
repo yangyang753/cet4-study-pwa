@@ -9,6 +9,7 @@ import type { LearningRepository } from '../../data/repositories/LearningReposit
 import { PwaInstallHelp } from '../../components/PwaInstallHelp';
 import { ExamReadiness } from '../dashboard/ExamReadiness';
 import type { UserSettings } from '../../domain/learning';
+import { studyDate } from '../../lib/studyDate';
 
 function AccountReadiness({ repository }: { repository: LearningRepository }) {
   const [settings, setSettings] = useState<UserSettings | null>(null);
@@ -22,7 +23,7 @@ function AccountReadiness({ repository }: { repository: LearningRepository }) {
   }, [repository]);
   if (error) return <p role="alert">{error}</p>;
   if (!settings) return <p role="status">正在读取考试准备状态…</p>;
-  return <ExamReadiness settings={settings} today={new Date().toISOString().slice(0, 10)} repository={repository} />;
+  return <ExamReadiness settings={settings} today={studyDate()} repository={repository} />;
 }
 
 export function AccountPage({ cloudConfigured, repository }: { cloudConfigured: boolean; repository?: LearningRepository }) {

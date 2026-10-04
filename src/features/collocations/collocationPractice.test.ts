@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { KnowledgeState } from '../../domain/learning';
-import { buildCollocationRecallExercise, collocationReviewCard, gradeCollocationRecall, selectDailyCollocations, type CollocationEntry } from './collocationPractice';
+import { buildCollocationRecallExercise, buildCollocationWorkload, collocationReviewCard, gradeCollocationRecall, selectDailyCollocations, type CollocationEntry } from './collocationPractice';
 
 const entries: CollocationEntry[] = [
   { id: 'c1', phrase: 'take part in', meaningZh: '参加', example: 'We take part in it.', exampleZh: '我们参加。' },
@@ -20,8 +20,21 @@ describe('collocation practice', () => {
     expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0), 'take part in')).toBe(true);
     expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0), 'take part')).toBe(false);
     expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0.4), '参加')).toBe(true);
+    expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0.4), '参与')).toBe(true);
     expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0.9), 'in')).toBe(true);
     expect(gradeCollocationRecall(buildCollocationRecallExercise(entries[0], () => 0.9), 'take part in')).toBe(false);
+  });
+
+  it('adds new collocations on acquisition days and switches to learned items on review-only days', () => {
+    const larger = Array.from({ length: 30 }, (_, index) => ({ ...entries[index % entries.length], id: `c${index}`, phrase: `phrase ${index}` }));
+    const states: KnowledgeState[] = [{ id: 'knowledge:c0', itemId: 'c0', status: 'review', favorite: false, updatedAt: '2026-09-20T00:00:00.000Z', nextReviewAt: '2026-12-30T00:00:00.000Z' }];
+    const acquisition = buildCollocationWorkload(larger, states, '2026-10-02', '2026-12-12', false);
+    const review = buildCollocationWorkload(larger, states, '2026-10-03', '2026-12-12', true);
+
+    expect(acquisition.newEntries.length).toBeGreaterThan(0);
+    expect(acquisition.entries.length).toBeGreaterThan(0);
+    expect(review.newEntries).toEqual([]);
+    expect(review.entries.map((item) => item.id)).toContain('c0');
   });
 
   it('selects due collocations before unseen collocations and excludes future mastered items', () => {

@@ -68,7 +68,7 @@ export function ExerciseRunner({ setId, kind, limit = 5, mode = 'practice', repo
 
   if (kind === 'collocation' && mode === 'practice') return <DailyCollocationTask repository={repository} today={today} />;
   if (!warmupComplete) return <DailyVocabularySession repository={repository} today={today} onComplete={handleVocabularyComplete} />;
-  if (kind === 'vocabulary' && mode === 'practice') return <section className="practice-summary"><h1>今日词汇训练已完成</h1><p>今日新词已学习并通过严格检测。</p><p>中国文化中译英现已解锁，请回到今日学习单独完成；答错内容已自动加入错题复习。</p></section>;
+  if (kind === 'vocabulary' && mode === 'practice') return <section className="practice-summary"><h1>今日词汇与搭配训练已完成</h1><p>今日高频词和重点搭配已完成学习与主动回忆检测。</p><p>中国文化中译英现已解锁，请回到今日学习单独完成；答错内容已自动加入错题复习。</p></section>;
   if (questions === null) return <p role="status">正在根据学习记录选题…</p>;
   if (!question) return <p>未找到这组练习。</p>;
   const questionCount = questions.length;

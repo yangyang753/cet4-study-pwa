@@ -40,7 +40,7 @@ describe('KnowledgePage', () => {
     expect(screen.getByLabelText('英文答案')).toBeVisible();
   });
 
-  it('excludes learned words whose next review time has not arrived', async () => {
+  it('includes learned words even when the next scheduled review has not arrived', async () => {
     const repository = {
       getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
         { id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: false, reviewStage: 1, nextReviewAt: '2999-09-24T08:00:00.000Z', updatedAt: '2026-09-24T08:00:00.000Z' },
@@ -48,7 +48,7 @@ describe('KnowledgePage', () => {
       ] }),
     } as unknown as LearningRepository;
     render(<KnowledgePage repository={repository} />);
-    expect(await screen.findByRole('button', { name: '开始待复习词总巩固，共 1 个' })).toBeVisible();
+    expect(await screen.findByRole('button', { name: '开始待复习词总巩固，共 2 个' })).toBeVisible();
   });
 
   it('records an incorrect aggregate reinforcement as an attempt and mistake', async () => {

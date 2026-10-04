@@ -124,6 +124,7 @@ export function buildStrictVocabularyQuestions(words: VocabularyEntry[]): Strict
 export function gradeStrictVocabularyAnswer(
   question: StrictVocabularyQuestion,
   answer: { english: string; chinese: string },
+  knownWords: VocabularyEntry[] = [],
 ): StrictVocabularyGrade {
   const needsEnglish = question.kind !== 'meaning';
   const needsChinese = question.kind !== 'spelling';
@@ -138,11 +139,18 @@ export function gradeStrictVocabularyAnswer(
   const matchedMeaningCount = recognizedConcepts.length;
   const meaningCorrect = !needsChinese || matchedMeaningCount >= requiredMeaningCount;
   const missingMeanings = meaningCorrect ? [] : remainingMeanings;
-  // Free-form Chinese answers commonly contain valid paraphrases that are not in a finite dictionary.
-  // They are ignored rather than penalized; only recognized core concepts contribute to mastery.
-  const unexpectedMeanings: string[] = [];
+  // Unknown free-form paraphrases are not punished. A fragment is rejected only when it
+  // clearly matches a listed meaning of another word and none of this word's concepts.
+  const otherConcepts = knownWords
+    .filter((word) => word.id !== question.word.id)
+    .flatMap(requiredMeaningConcepts);
+  const unexpectedMeanings = submittedMeanings.filter((fragment) => {
+    const belongsHere = concepts.some((concept) => concept.aliases.some((alias) => fragmentMatchesAlias(fragment, alias)));
+    if (belongsHere) return false;
+    return otherConcepts.some((concept) => concept.aliases.some((alias) => fragmentMatchesAlias(fragment, alias)));
+  }).filter((fragment, index, all) => all.indexOf(fragment) === index);
   return {
-    correct: spellingCorrect && meaningCorrect,
+    correct: spellingCorrect && meaningCorrect && unexpectedMeanings.length === 0,
     spellingCorrect,
     missingMeanings,
     unexpectedMeanings,

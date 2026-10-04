@@ -52,7 +52,7 @@ try {
   const page = await browser.newPage();
   await page.goto(`http://127.0.0.1:4189${repositoryBase}#/today`);
   await page.getByRole('heading', { name: /向目标 425 分前进/ }).waitFor();
-  await page.getByRole('link', { name: /先学高频词/ }).click();
+  await page.getByRole('link', { name: /学习高频词与搭配|开始集中巩固/ }).click();
   await page.waitForURL(`**${repositoryBase}#/practice/vocabulary`);
   await page.getByRole('heading', { name: '先学单词，再开始做题' }).waitFor();
   await page.goto(`http://127.0.0.1:4189${repositoryBase}#/listen`);

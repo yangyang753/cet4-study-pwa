@@ -24,6 +24,8 @@ export interface VocabularyWorkload {
   projectedMasteryDate: string;
   dailyKnowledgeCapacity: number;
   masteryAtRisk: boolean;
+  reviewOnlyDay: boolean;
+  acquisitionDays: number;
 }
 
 function dateMs(value: string): number {
@@ -36,6 +38,32 @@ function addDays(value: string, days: number): string {
 
 function studyDate(value: string): string {
   return new Date(dateMs(value)).toISOString().slice(0, 10);
+}
+
+function dayOrdinal(value: string): number {
+  return Math.floor(dateMs(value) / DAY_MS);
+}
+
+function isReviewCycleDay(value: string): boolean {
+  return ((dayOrdinal(value) % 3) + 3) % 3 === 2;
+}
+
+function acquisitionDayCount(start: string, days: number): number {
+  let total = 0;
+  for (let offset = 0; offset < days; offset += 1) {
+    if (!isReviewCycleDay(studyDate(addDays(start, offset)))) total += 1;
+  }
+  return Math.max(1, total);
+}
+
+function calendarDaysForAcquisitionSessions(start: string, sessions: number): number {
+  let completed = 0;
+  let offset = 0;
+  while (completed < sessions) {
+    if (!isReviewCycleDay(studyDate(addDays(start, offset)))) completed += 1;
+    offset += 1;
+  }
+  return offset;
 }
 
 export function buildVocabularyWorkload(
@@ -58,9 +86,11 @@ export function buildVocabularyWorkload(
     daysRemaining >= 60 ? 35 : Math.max(STABLE_REVIEW_SPACING_DAYS, Math.floor(daysRemaining * 0.45)),
   ));
   const learningDays = Math.max(1, daysRemaining - consolidationDays);
+  const acquisitionDays = acquisitionDayCount(today, learningDays);
   const firstPassTargetDate = studyDate(addDays(examDate, -consolidationDays));
   const dailyKnowledgeCapacity = Math.max(10, Math.min(45, Math.floor(dailyMinutes * 0.75)));
-  const requiredDailyWords = unseen.length === 0 ? 0 : Math.ceil(unseen.length / learningDays);
+  const reviewOnlyDay = states.length > 0 && isReviewCycleDay(today);
+  const requiredDailyWords = unseen.length === 0 ? 0 : Math.ceil(unseen.length / acquisitionDays);
   const baseNewWordQuota = unseen.length === 0 ? 0 : Math.min(dailyKnowledgeCapacity, Math.max(10, requiredDailyWords));
   const dueAt = dateMs(`${today}T23:59:59.999Z`);
   const allDueWords = entries
@@ -74,14 +104,23 @@ export function buildVocabularyWorkload(
     })
     .map(({ word }) => word);
   const unseenCultureWordCount = unseen.filter((word) => cultureWordIds.has(word.id)).length;
-  const dueWords = allDueWords.slice(0, Math.max(0, dailyKnowledgeCapacity - unseenCultureWordCount));
+  const learnedNotDue = entries
+    .map((word) => ({ word, state: stateById.get(word.id) }))
+    .filter((item): item is { word: VocabularyEntry; state: KnowledgeState } => Boolean(item.state) && !allDueWords.some((word) => word.id === item.word.id))
+    .sort((left, right) => (right.state.lapseCount ?? 0) - (left.state.lapseCount ?? 0) || dateMs(left.state.updatedAt) - dateMs(right.state.updatedAt))
+    .map(({ word }) => word);
+  const reviewPool = reviewOnlyDay ? [...allDueWords, ...learnedNotDue] : allDueWords;
+  const acquisitionReviewCap = Math.max(8, Math.min(Math.floor(dailyKnowledgeCapacity * 0.4), dailyKnowledgeCapacity - baseNewWordQuota));
+  const reviewCapacity = reviewOnlyDay ? dailyKnowledgeCapacity : Math.max(0, acquisitionReviewCap);
+  const dueWords = reviewPool.slice(0, Math.max(0, reviewCapacity - unseenCultureWordCount));
   const occupied = new Set(dueWords.map((word) => word.id));
   const cultureWords = entries.filter((word) => cultureWordIds.has(word.id) && stateById.has(word.id) && !occupied.has(word.id));
   const dueWordCount = allDueWords.length;
-  const reviewBacklog = Math.max(0, dueWordCount - dueWords.length);
-  const newWordQuota = dueWords.length + cultureWords.length >= dailyKnowledgeCapacity ? 0 : Math.min(baseNewWordQuota, dailyKnowledgeCapacity - dueWords.length - cultureWords.length);
+  const reviewBacklog = Math.max(0, dueWordCount - dueWords.filter((word) => allDueWords.some((due) => due.id === word.id)).length);
+  const newWordQuota = reviewOnlyDay || dueWords.length + cultureWords.length >= dailyKnowledgeCapacity ? 0 : Math.min(baseNewWordQuota, dailyKnowledgeCapacity - dueWords.length - cultureWords.length);
   const sustainableNewWordQuota = unseen.length === 0 ? 0 : Math.min(dailyKnowledgeCapacity, Math.max(10, requiredDailyWords));
-  const studyDays = sustainableNewWordQuota === 0 ? 0 : Math.ceil(unseen.length / sustainableNewWordQuota);
+  const studySessions = sustainableNewWordQuota === 0 ? 0 : Math.ceil(unseen.length / sustainableNewWordQuota);
+  const studyDays = calendarDaysForAcquisitionSessions(today, studySessions);
   const projectedCompletionDate = studyDate(addDays(today, studyDays));
   const estimatedMinutes = Math.min(dailyMinutes, Math.max(10, Math.ceil(newWordQuota * 1.2 + dueWords.length * 0.5 + 5)));
   const remainingReviewStages = entries.reduce((total, item) => {
@@ -118,6 +157,8 @@ export function buildVocabularyWorkload(
     projectedMasteryDate,
     dailyKnowledgeCapacity,
     masteryAtRisk,
+    reviewOnlyDay,
+    acquisitionDays,
   };
 }
 

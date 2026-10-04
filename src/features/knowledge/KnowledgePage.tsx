@@ -13,7 +13,7 @@ import { buildWordReinforcement, gradeWordReinforcement } from './wordReinforcem
 import { applyKnowledgeReviewResult } from '../mastery/knowledgeMastery';
 import { vocabularyReviewCard } from '../vocabulary/wordMastery';
 import { PronounceButton } from '../vocabulary/PronounceButton';
-import { createAggregateReviewSession, recordAggregateReviewResult, type AggregateReviewSession } from './aggregateReviewSession';
+import { createAggregateReviewSession, recordAggregateReviewResult, selectAggregateReviewIds, type AggregateReviewSession } from './aggregateReviewSession';
 
 type Tab = 'vocabulary' | 'collocations' | 'grammar';
 type StateView = 'unlearned' | 'active' | 'mastered';
@@ -85,17 +85,13 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
   const words = filteredWords.slice(0, visibleCount);
   const counts = useMemo(() => statusCounts(vocabulary, states), [states]);
   const collocationCounts = useMemo(() => statusCounts(collocations, states), [states]);
-  const reviewWords = useMemo(() => vocabulary.filter((item) => {
-    const state = states.get(item.id);
-    if (!state) return false;
-    if (!state.nextReviewAt) return state.status !== 'mastered';
-    return Date.parse(state.nextReviewAt) <= Date.parse(reviewReferenceTime);
-  }).sort((left, right) => {
-    const leftState = states.get(left.id)!;
-    const rightState = states.get(right.id)!;
-    return Number(rightState.status === 'review') - Number(leftState.status === 'review')
-      || (rightState.lapseCount ?? 0) - (leftState.lapseCount ?? 0);
-  }), [reviewReferenceTime, states]);
+  const learnedWordCount = useMemo(() => vocabulary.filter((item) => states.has(item.id)).length, [states]);
+  const reviewWords = useMemo(() => {
+    const vocabularyIds = new Set(vocabulary.map((item) => item.id));
+    const orderedIds = selectAggregateReviewIds([...states.values()].filter((state) => vocabularyIds.has(state.itemId)), reviewReferenceTime, 20);
+    const order = new Map(orderedIds.map((id, index) => [id, index]));
+    return vocabulary.filter((item) => order.has(item.id)).sort((left, right) => order.get(left.id)! - order.get(right.id)!);
+  }, [reviewReferenceTime, states]);
   const filteredCollocations = useMemo(() => collocations.filter((item) => inView(item.id, stateView, states)), [stateView, states]);
   const changeTab = (next: Tab) => { setTab(next); setStateView('unlearned'); setVisibleCount(18); setQuery(''); };
 
@@ -156,7 +152,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
     {tab === 'vocabulary' && <>
       <section className="aggregate-review" aria-labelledby="aggregate-review-title">
         <div><span>RECALL WITHOUT HINTS</span><h2 id="aggregate-review-title">无提示待复习总巩固</h2><p>从已经学过的单词中随机抽题，不显示目标词名。答错会自动降为待复习并进入错题复习。</p></div>
-        <div className="aggregate-review-stats"><strong>{reviewWords.length}</strong><span>个已学单词可检测</span><button disabled={!reviewWords.length} aria-label={`开始待复习词总巩固，共 ${reviewWords.length} 个`} onClick={startAggregateReview}>{reviewWords.length ? '开始随机总巩固 →' : '先完成今日新词'}</button></div>
+        <div className="aggregate-review-stats"><strong>{reviewWords.length}</strong><span>本轮检测 · 共学过 {learnedWordCount} 个</span><button disabled={!reviewWords.length} aria-label={`开始待复习词总巩固，共 ${reviewWords.length} 个`} onClick={startAggregateReview}>{reviewWords.length ? '开始随机总巩固 →' : '先完成今日新词'}</button></div>
       </section>
       {exercise && <section className="reinforcement-panel aggregate-session" aria-labelledby="reinforcement-title">
         <button className="reinforcement-close" aria-label="关闭巩固练习" onClick={() => setExercise(null)}>×</button>

@@ -121,7 +121,7 @@ test('exposes installable PWA metadata', async ({ page, request }) => {
   await expect(page.getByRole('heading', { name: '安装到手机桌面' })).toBeVisible();
 });
 
-test('keeps one vocabulary cohort and unlocks separate culture and collocation tasks', async ({ page }) => {
+test('keeps one vocabulary cohort, continues into collocations, and unlocks culture', async ({ page }) => {
   test.setTimeout(60_000);
   await page.goto('#/practice/vocabulary');
   await expect(page.getByRole('heading', { level: 1, name: '先学单词，再开始做题' })).toBeVisible();
@@ -160,7 +160,28 @@ test('keeps one vocabulary cohort and unlocks separate culture and collocation t
       if (await strictFeedback.isVisible()) throw new Error(`strict answer unexpectedly failed: ${await strictFeedback.textContent()}`);
     }
   }
-  await expect(page.getByRole('heading', { level: 1, name: '今日词汇训练已完成' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: '单词之后学习重点搭配' })).toBeVisible();
+  const collocationProgress = await page.locator('.collocation-warmup header span').textContent();
+  const collocationTotal = Number(collocationProgress?.match(/\/(\d+)/)?.[1]);
+  expect(collocationTotal).toBeGreaterThan(0);
+  for (let index = 0; index < collocationTotal; index += 1) {
+    const phrase = (await page.locator('.collocation-warmup .warmup-card > h2').textContent()) ?? '';
+    await page.getByRole('button', { name: '显示搭配释义' }).click();
+    const meaning = (await page.locator('.collocation-warmup .warmup-answer > strong').textContent()) ?? '';
+    await page.getByRole('button', { name: '开始搭配测试' }).click();
+    const prompt = (await page.locator('.recall-card > strong').textContent()) ?? '';
+    let answer = prompt === phrase ? meaning : phrase;
+    if (prompt.includes('_')) {
+      const promptParts = prompt.split(/\s+/);
+      const phraseParts = phrase.split(/\s+/);
+      answer = phraseParts[promptParts.findIndex((part) => part.includes('_'))];
+    }
+    await page.getByRole('textbox', { name: '填写重点搭配' }).fill(answer);
+    await page.getByRole('button', { name: '提交搭配答案' }).click();
+    await expect(page.getByText('本次检测通过，已进入间隔巩固。')).toBeVisible();
+    await page.getByRole('button', { name: index === collocationTotal - 1 ? '完成重点搭配' : '下一个重点搭配' }).click();
+  }
+  await expect(page.getByRole('heading', { level: 1, name: '今日词汇与搭配训练已完成' })).toBeVisible();
   await page.goto('#/practice/culture');
   await expect(page.getByRole('heading', { level: 1, name: '中国文化翻译' })).toBeVisible();
   await page.getByRole('textbox', { name: '我的英文翻译' }).fill('Chinese culture has a long history and remains important in modern society.');
@@ -174,11 +195,7 @@ test('keeps one vocabulary cohort and unlocks separate culture and collocation t
   await page.getByRole('button', { name: '完成今日文化翻译' }).click();
   await expect(page.getByRole('heading', { level: 1, name: '今日中国文化翻译已完成' })).toBeVisible();
   await page.goto('#/practice/collocation');
-  await expect(page.getByRole('heading', { level: 1, name: '单词之后学习重点搭配' })).toBeVisible();
-  await page.getByRole('button', { name: '显示搭配释义' }).click();
-  await page.getByRole('button', { name: '开始搭配测试' }).click();
-  await expect(page.getByRole('textbox', { name: '填写重点搭配' })).toBeVisible();
-  await expect(page.getByRole('radio')).toHaveCount(0);
+  await expect(page.getByRole('heading', { level: 1, name: '今日重点搭配已完成' })).toBeVisible();
 });
 
 test('starts the no-repeat vocabulary review beside its launcher on desktop and phone', async ({ page }) => {

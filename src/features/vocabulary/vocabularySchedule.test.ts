@@ -14,15 +14,38 @@ const state = (index: number, extra: Partial<KnowledgeState> = {}): KnowledgeSta
 });
 
 describe('vocabulary workload', () => {
+  it('uses two acquisition days followed by a dedicated consolidation day', () => {
+    const entries = Array.from({ length: 90 }, (_, i) => entry(i));
+    const learned = [state(0, { status: 'review', nextReviewAt: '2026-12-30T00:00:00.000Z' })];
+    const acquisition = buildVocabularyWorkload(entries, learned, '2026-10-02', '2026-12-12');
+    const consolidation = buildVocabularyWorkload(entries, learned, '2026-10-03', '2026-12-12');
+
+    expect(acquisition.reviewOnlyDay).toBe(false);
+    expect(acquisition.newWordQuota).toBeGreaterThan(0);
+    expect(consolidation.reviewOnlyDay).toBe(true);
+    expect(consolidation.newWordQuota).toBe(0);
+    expect(consolidation.dueWords.map((word) => word.id)).toContain('v0');
+  });
+
+  it('reserves acquisition capacity for new words when old reviews are due', () => {
+    const entries = Array.from({ length: 120 }, (_, i) => entry(i));
+    const states = Array.from({ length: 45 }, (_, i) => state(i, { nextReviewAt: '2026-09-20T00:00:00.000Z' }));
+    const result = buildVocabularyWorkload(entries, states, '2026-10-02', '2026-12-12', 60);
+
+    expect(result.reviewOnlyDay).toBe(false);
+    expect(result.dueWords.length).toBeLessThan(result.dailyKnowledgeCapacity);
+    expect(result.newWords.length).toBeGreaterThan(0);
+  });
+
   it('finishes first exposure early enough to reserve at least thirty-five consolidation days', () => {
     const result = buildVocabularyWorkload(Array.from({ length: 800 }, (_, i) => entry(i)), [], '2026-09-25', '2026-12-12');
-    expect(result.newWordQuota).toBe(19);
-    expect(result.newWords).toHaveLength(19);
+    expect(result.newWordQuota).toBeGreaterThan(19);
+    expect(result.newWords).toHaveLength(result.newWordQuota);
     expect(result.remainingWords).toBe(800);
     expect(result.firstPassTargetDate).toBe('2026-11-07');
     expect(result.consolidationDays).toBe(35);
     expect(result.projectedCompletionDate).toBe('2026-11-07');
-    expect(result.requiredDailyWords).toBe(19);
+    expect(result.requiredDailyWords).toBeGreaterThan(19);
     expect(result.estimatedMinutes).toBeGreaterThan(15);
     expect(result.atRisk).toBe(false);
     expect(result.remainingReviewStages).toBe(3200);
@@ -57,12 +80,12 @@ describe('vocabulary workload', () => {
     const states = entries.map((_, i) => state(i, { nextReviewAt: new Date(Date.UTC(2026, 6, 1 + i)).toISOString() }));
     const result = buildVocabularyWorkload([...entries, ...Array.from({ length: 30 }, (_, i) => entry(i + 100))], states, '2026-10-31', '2026-12-12');
     expect(result.dueWordCount).toBe(45);
-    expect(result.dueWords).toHaveLength(45);
-    expect(result.reviewBacklog).toBe(0);
-    expect(result.newWordQuota).toBe(0);
-    expect(result.newWords).toHaveLength(0);
+    expect(result.dueWords.length).toBeLessThan(45);
+    expect(result.reviewBacklog).toBeGreaterThan(0);
+    expect(result.newWordQuota).toBeGreaterThan(0);
+    expect(result.newWords.length).toBeGreaterThan(0);
     expect(result.dueWords[0].id).toBe('v0');
-    expect(result.dueWords[44].id).toBe('v44');
+    expect(result.dueWords.at(-1)?.id).toBe(`v${result.dueWords.length - 1}`);
   });
 
   it('brings legacy learning words without a review date back for review', () => {

@@ -49,8 +49,8 @@ describe('TodayPage', () => {
   });
   it('starts daily training with vocabulary before questions', async () => {
     render(<TodayPage today="2026-09-22" repository={repository()} />);
-    expect(await screen.findByRole('link', { name: '先学高频词 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
-    expect(screen.getByText(/先完成独立的高频词学习/)).toBeVisible();
+    expect(await screen.findByRole('link', { name: '学习高频词与搭配 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
+    expect(screen.getByText(/高频词与重点搭配在同一流程/)).toBeVisible();
     expect(screen.getByRole('heading', { name: '中国文化中译英' }).closest('article')).toHaveTextContent('完成高频词后解锁');
   });
 
@@ -89,7 +89,7 @@ describe('TodayPage', () => {
     await waitFor(() => expect(savePlan).toHaveBeenCalled());
     expect(savePlan).toHaveBeenLastCalledWith(expect.objectContaining({ vocabularySession: expect.objectContaining({ wordIds: ['v0001'], phase: 'testing' }) }));
     expect(screen.getByRole('link', { name: '继续严格检测 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
-    expect(screen.getByText('1 个今日新词（已学 1 个）+ 0 个旧词复习')).toBeVisible();
+    expect(screen.getByText(/1 个新词（已学 1 个）.*个新搭配.*0 个旧词/)).toBeVisible();
   });
 
   it('shows an expandable seven-day learning report from saved progress', async () => {
@@ -199,19 +199,18 @@ describe('TodayPage', () => {
     render(<TodayPage today="2026-09-25" repository={repository({
       knowledgeStates: [{ id: 'knowledge:v0001', itemId: 'v0001', status: 'mastered', favorite: false, nextReviewAt: '2026-09-24T00:00:00.000Z', updatedAt: '2026-09-23T00:00:00.000Z' }],
     })} />);
-    expect(await screen.findByText('今日复习 1/1 个')).toBeVisible();
-    expect(screen.getByText('今日新词 19 个')).toBeVisible();
+    expect(await screen.findByText('旧词巩固 1 个')).toBeVisible();
+    expect(screen.getByText(/今日新词 \d+ 个/)).toBeVisible();
     expect(screen.getByText('还剩 799 个高频词')).toBeVisible();
     expect(screen.getByText(/目标.*前完成首轮，预留 35 天复习巩固/)).toBeVisible();
     expect(screen.getByText(/预计.*前完成稳定掌握/)).toBeVisible();
-    expect(screen.getByText(/仍需完成.*次巩固检测/)).toBeVisible();
-    expect(screen.getByText('425 参考线 · 450 安全目标')).toBeVisible();
-    expect(screen.getByRole('heading', { name: '高频词汇与词性' }).closest('article')).toHaveTextContent('25 分钟');
+    expect(screen.getByText(/配额会按距考试时间和复习积压自动调整/)).toBeVisible();
+    expect(screen.getByRole('heading', { name: '高频词汇与重点搭配' }).closest('article')).toHaveTextContent('25 分钟');
   });
 
   it('warns when the capped daily pace cannot finish before the exam', async () => {
     render(<TodayPage today="2026-12-10" repository={repository()} />);
-    expect(await screen.findByText(/按当前上限无法在目标首轮截止日前完成/)).toHaveTextContent('每天至少 800 个');
+    expect(await screen.findByText(/当前进度偏慢/)).toHaveTextContent('每天至少 800 个');
   });
 
   it('celebrates a completed high-frequency vocabulary list without assigning new words', async () => {

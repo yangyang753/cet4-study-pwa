@@ -26,6 +26,22 @@ function repository() {
 }
 
 describe('DailyVocabularySession', () => {
+  it('continues the saved combined session with its assigned重点搭配 cohort', async () => {
+    const learningRepository = repository();
+    Object.assign(learningRepository, {
+      getPlan: vi.fn().mockResolvedValue({
+        id: 'plan:2026-09-25', date: '2026-09-25', tasks: [],
+        vocabularySession: { wordIds: [], learnedWordIds: [], collocationIds: ['c-test'], passedCollocationIds: [], phase: 'collocations' },
+        updatedAt: '2026-09-25T08:00:00.000Z',
+      }),
+    });
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} collocationEntries={[
+      { id: 'c-test', phrase: 'take part in', meaningZh: '参加', example: 'Students take part in the activity.', exampleZh: '学生参加这项活动。' },
+    ]} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
+    expect(await screen.findByRole('heading', { name: '单词之后学习重点搭配' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'take part in' })).toBeVisible();
+  });
+
   it('migrates a saved legacy post-vocabulary phase to completed vocabulary', async () => {
     const learningRepository = repository();
     vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({
@@ -36,8 +52,8 @@ describe('DailyVocabularySession', () => {
       getPlan: vi.fn().mockResolvedValue({ id: 'plan:2026-09-25', date: '2026-09-25', tasks: [], vocabularySession: { wordIds: [], learnedWordIds: [], strictPassedWordIds: [], passedCultureReviewWordIds: ['v1'], phase: 'culture-review' }, updatedAt: '2026-09-25T08:00:00.000Z' }),
       savePlan: vi.fn().mockResolvedValue(undefined),
     });
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
-    expect(await screen.findByRole('heading', { name: '今日词汇训练已完成' })).toBeVisible();
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} collocationEntries={[]} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
+    expect(await screen.findByRole('heading', { name: '今日词汇与搭配训练已完成' })).toBeVisible();
     expect(screen.queryByRole('heading', { name: '中国文化翻译' })).not.toBeInTheDocument();
     await waitFor(() => expect(learningRepository.completeTask).toHaveBeenCalledWith(expect.objectContaining({ taskId: '2026-09-25:vocabulary' })));
     expect(learningRepository.savePlan).toHaveBeenCalledWith(expect.objectContaining({ vocabularySession: expect.objectContaining({ phase: 'complete' }) }));
@@ -52,7 +68,7 @@ describe('DailyVocabularySession', () => {
       getPlan: vi.fn().mockResolvedValue({ id: 'plan:2026-09-25', date: '2026-09-25', tasks: [], vocabularySession: { wordIds: ['v1', 'v2'], learnedWordIds: ['v1', 'v2'], strictPassedWordIds: ['v1'], phase: 'testing' }, updatedAt: '2026-09-25T08:00:00.000Z' }),
       savePlan: vi.fn().mockResolvedValue(undefined),
     });
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} collocationEntries={[]} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
     expect(await screen.findByRole('heading', { name: '检测今日新词' })).toBeVisible();
     expect(screen.getByText(/2 \/ 2/)).toBeVisible();
   });
@@ -63,15 +79,15 @@ describe('DailyVocabularySession', () => {
       settings: { id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-20T00:00:00.000Z' },
       attempts: [], dueReviews: [], completions: [],
     });
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} collocationEntries={[]} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
     await userEvent.click(await screen.findByRole('button', { name: '完成今日词汇学习' }));
-    expect(await screen.findByRole('heading', { name: '今日词汇训练已完成' })).toBeVisible();
+    expect(await screen.findByRole('heading', { name: '今日词汇与搭配训练已完成' })).toBeVisible();
     expect(screen.queryByLabelText('我的英文翻译')).not.toBeInTheDocument();
   });
 
   it('tests due old words before showing a new word', async () => {
     const learningRepository = repository();
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} collocationEntries={[]} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
     expect(await screen.findByRole('heading', { name: '先复习今天要用的单词' })).toBeVisible();
     expect(screen.getByText('文章，段落')).toBeVisible();
     expect(screen.queryByRole('heading', { name: 'benefit' })).not.toBeInTheDocument();
@@ -84,7 +100,7 @@ describe('DailyVocabularySession', () => {
 
   it('does not add a correctly recalled old word to mistake review', async () => {
     const learningRepository = repository();
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} collocationEntries={[]} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
 
     await userEvent.type(await screen.findByLabelText('英文答案'), 'passage');
     await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
@@ -94,7 +110,7 @@ describe('DailyVocabularySession', () => {
 
   it('adds a meaning review only when an old word meaning is wrong', async () => {
     const learningRepository = repository();
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0} onComplete={() => undefined} />);
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} collocationEntries={[]} today="2026-09-25" examDate="2026-12-12" random={() => 0} onComplete={() => undefined} />);
 
     await userEvent.type(await screen.findByLabelText('中文释义答案'), '道路');
     await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
@@ -106,7 +122,7 @@ describe('DailyVocabularySession', () => {
   it('does not advance an old word when saving fails', async () => {
     const learningRepository = repository();
     vi.mocked(learningRepository.upsertKnowledgeState).mockRejectedValueOnce(new Error('storage'));
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} collocationEntries={[]} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
     await userEvent.type(await screen.findByLabelText('英文答案'), 'passage');
     await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('保存失败');
@@ -115,7 +131,7 @@ describe('DailyVocabularySession', () => {
 
   it('allows a forgotten word to be sent directly to review', async () => {
     const learningRepository = repository();
-    render(<DailyVocabularySession repository={learningRepository} entries={entries} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
+    render(<DailyVocabularySession repository={learningRepository} entries={entries} collocationEntries={[]} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
     await userEvent.click(await screen.findByRole('button', { name: '想不起来' }));
     expect(await screen.findByRole('heading', { name: 'benefit' })).toBeVisible();
     expect(learningRepository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'v1:spelling', format: 'word-cloze' }));

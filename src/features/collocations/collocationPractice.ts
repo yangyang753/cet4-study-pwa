@@ -22,6 +22,16 @@ function normalizeRecall(value: string) {
   return value.toLowerCase().replace(/[，。；、,.!?！？…\s]/g, '').trim();
 }
 
+const chineseEquivalents = [
+  ['参加', '参与'], ['专注', '集中'], ['导致', '造成', '引起'], ['帮助', '有助于', '促进'],
+  ['负责', '承担责任'], ['受益', '得到好处'], ['处理', '应对'], ['依靠', '依赖'],
+] as const;
+
+function equivalentChinese(left: string, right: string) {
+  if (left === right || left.includes(right) || right.includes(left)) return true;
+  return chineseEquivalents.some((group) => group.some((item) => left.includes(item)) && group.some((item) => right.includes(item)));
+}
+
 export function buildCollocationRecallExercise(item: CollocationEntry, random: () => number = Math.random): CollocationRecallExercise {
   const value = random();
   if (value < 1 / 3) return { itemId: item.id, mode: 'zh-to-en', prompt: item.meaningZh, answer: item.phrase, instruction: '根据中文写出完整重点搭配' };
@@ -34,7 +44,38 @@ export function buildCollocationRecallExercise(item: CollocationEntry, random: (
 }
 
 export function gradeCollocationRecall(exercise: CollocationRecallExercise, response: string) {
-  return normalizeRecall(response) === normalizeRecall(exercise.answer);
+  const submitted = normalizeRecall(response);
+  const expected = normalizeRecall(exercise.answer);
+  return exercise.mode === 'en-to-zh' ? equivalentChinese(submitted, expected) : submitted === expected;
+}
+
+export interface CollocationWorkload {
+  entries: CollocationEntry[];
+  newEntries: CollocationEntry[];
+  reviewEntries: CollocationEntry[];
+  newQuota: number;
+  remaining: number;
+}
+
+export function buildCollocationWorkload(
+  entries: CollocationEntry[], states: KnowledgeState[], today: string, examDate: string, reviewOnlyDay: boolean,
+): CollocationWorkload {
+  const stateById = new Map(states.map((state) => [state.itemId, state]));
+  const dueAt = Date.parse(`${today}T23:59:59.999Z`);
+  const daysRemaining = Math.max(1, Math.ceil((Date.parse(`${examDate}T00:00:00.000Z`) - Date.parse(`${today}T00:00:00.000Z`)) / 86_400_000));
+  const acquisitionDays = Math.max(1, Math.ceil(Math.max(1, daysRemaining - 35) * 2 / 3));
+  const unseen = entries.filter((entry) => !stateById.has(entry.id));
+  const learned = entries.filter((entry) => stateById.has(entry.id)).sort((left, right) => {
+    const leftState = stateById.get(left.id)!;
+    const rightState = stateById.get(right.id)!;
+    const leftDue = !leftState.nextReviewAt || Date.parse(leftState.nextReviewAt) <= dueAt;
+    const rightDue = !rightState.nextReviewAt || Date.parse(rightState.nextReviewAt) <= dueAt;
+    return Number(rightDue) - Number(leftDue) || (rightState.lapseCount ?? 0) - (leftState.lapseCount ?? 0) || Date.parse(leftState.updatedAt) - Date.parse(rightState.updatedAt);
+  });
+  const newQuota = reviewOnlyDay || unseen.length === 0 ? 0 : Math.min(6, Math.max(2, Math.ceil(unseen.length / acquisitionDays)));
+  const reviewEntries = learned.slice(0, reviewOnlyDay ? 12 : 3);
+  const newEntries = unseen.slice(0, newQuota);
+  return { entries: [...reviewEntries, ...newEntries], newEntries, reviewEntries, newQuota, remaining: unseen.length };
 }
 
 const optionId = (index: number) => String.fromCharCode(65 + index);

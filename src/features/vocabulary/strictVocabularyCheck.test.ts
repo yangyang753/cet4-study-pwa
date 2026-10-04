@@ -81,4 +81,14 @@ describe('strict vocabulary check', () => {
       matchedMeaningCount: 0,
     });
   });
+
+  it('rejects a recognized unrelated dictionary meaning appended to an otherwise correct answer', () => {
+    const like: VocabularyEntry = { id: 'like', word: 'like', phonetic: '', partOfSpeech: 'v.', meaningZh: '喜欢；像；赞同', example: '', derivatives: [], confusables: [] };
+    const bank: VocabularyEntry = { id: 'bank', word: 'bank', phonetic: '', partOfSpeech: 'n.', meaningZh: '银行；岸', example: '', derivatives: [], confusables: [] };
+    const question = { ...buildStrictVocabularyQuestions([like])[0], kind: 'meaning' as const };
+    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '喜欢；像；赞同；银行' }, [like, bank])).toMatchObject({
+      correct: false,
+      unexpectedMeanings: ['银行'],
+    });
+  });
 });

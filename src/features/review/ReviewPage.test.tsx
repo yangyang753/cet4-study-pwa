@@ -123,6 +123,22 @@ describe('ReviewPage', () => {
     expect(screen.queryByText('请选择 passage 的正确含义。')).not.toBeInTheDocument();
   });
 
+  it('regenerates the recall mode when the same vocabulary card is reopened', async () => {
+    const repository = await setupRepository();
+    await repository.upsertReviewCard({
+      id: 'review:v0001:meaning', questionId: 'v0001:meaning', wordId: 'v0001', format: 'word-meaning',
+      stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+    let roll = 0;
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => roll} />);
+    await userEvent.click(await screen.findByRole('button', { name: '重新练习 passage' }));
+    expect(screen.getByRole('textbox', { name: '中文释义答案' })).toBeVisible();
+    await userEvent.click(screen.getByRole('button', { name: '← 返回复习列表' }));
+    roll = 0.4;
+    await userEvent.click(screen.getByRole('button', { name: '重新练习 passage' }));
+    expect(screen.getByRole('textbox', { name: '英文答案' })).toBeVisible();
+  });
+
   it('reviews a missed vocabulary meaning by complete free recall', async () => {
     const repository = await setupRepository();
     await repository.upsertReviewCard({

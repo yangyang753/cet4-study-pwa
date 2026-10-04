@@ -73,6 +73,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
   const [submitError, setSubmitError] = useState('');
   const [attemptId, setAttemptId] = useState('');
   const [meaningFeedback, setMeaningFeedback] = useState('');
+  const [exerciseNonce, setExerciseNonce] = useState(0);
 
   useEffect(() => {
     let current = true;
@@ -97,8 +98,14 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
   const activeWord = activeCard?.wordId ? learningVocabulary.find((word) => word.id === activeCard.wordId) : null;
   const activeQuestion = activeCard ? reviewQuestion(activeCard) : null;
   const activeCollocation = activeCard?.knowledgeKind === 'collocation' ? (collocationData as CollocationEntry[]).find((item) => item.id === activeCard.knowledgeItemId) ?? null : null;
-  const activeWordExercise = useMemo(() => activeWord ? buildWordReinforcement(activeWord, random) : null, [activeWord, random]);
-  const activeCollocationExercise = useMemo(() => activeCollocation ? buildCollocationRecallExercise(activeCollocation, random) : null, [activeCollocation, random]);
+  const activeWordExercise = useMemo(() => {
+    void exerciseNonce;
+    return activeWord ? buildWordReinforcement(activeWord, random) : null;
+  }, [activeWord, exerciseNonce, random]);
+  const activeCollocationExercise = useMemo(() => {
+    void exerciseNonce;
+    return activeCollocation ? buildCollocationRecallExercise(activeCollocation, random) : null;
+  }, [activeCollocation, exerciseNonce, random]);
   const translationRequired = Boolean(activeQuestion && 'options' in activeQuestion && questionNeedsTranslation(activeQuestion as ObjectiveQuestion));
 
   const submit = async () => {
@@ -258,7 +265,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
         <h2>{word ? `${word.word} · ${word.meaningZh}` : question?.prompt ?? '题目内容暂不可用'}</h2>
         <p className="review-stage-label">掌握进度 · 第 {Math.min(card.stage + 1, 4)} 阶段</p>
         <div className="review-stage-dots" role="progressbar" aria-label="掌握进度" aria-valuemin={0} aria-valuemax={4} aria-valuenow={progress}>{[0, 1, 2, 3].map((stage) => <span className={stage < card.stage ? 'is-complete' : ''} key={stage} />)}</div>
-        <footer><small>{due ? '下次检测：现在' : `未到复习时间 · ${new Intl.DateTimeFormat('zh-CN', { month: 'numeric', day: 'numeric' }).format(new Date(card.nextReviewAt))}`}</small><button className="review-action-button" aria-label={actionLabel} disabled={!available || !due} onClick={() => { setActiveId(card.id); setResponse(''); setResult(null); setTranslationUnlocked(false); setSubmitError(''); setAttemptId(''); setMeaningFeedback(''); }}>重新练习 <span aria-hidden="true">→</span></button></footer>
+        <footer><small>{due ? '下次检测：现在' : `未到复习时间 · ${new Intl.DateTimeFormat('zh-CN', { month: 'numeric', day: 'numeric' }).format(new Date(card.nextReviewAt))}`}</small><button className="review-action-button" aria-label={actionLabel} disabled={!available || !due} onClick={() => { setExerciseNonce((value) => value + 1); setActiveId(card.id); setResponse(''); setResult(null); setTranslationUnlocked(false); setSubmitError(''); setAttemptId(''); setMeaningFeedback(''); }}>重新练习 <span aria-hidden="true">→</span></button></footer>
       </article>;
     })}</div>
   </section>;

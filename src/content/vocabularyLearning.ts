@@ -63,14 +63,14 @@ const reviewedCommonSenses: Record<string, string> = {
   course: '课程；过程；路线；一道菜', offer: '提供；提议；报价', experience: '经历；经验；体验',
   care: '关心；照料；小心', program: '程序；节目；计划', market: '市场；推销',
   kind: '种类；友善的', form: '形式；表格；形成', face: '脸；面对；表面',
-  process: '过程；处理', rate: '比率；评价；费率', power: '力量；权力；电力；幂',
+  process: '过程；处理', rate: '比率；评价；费率', power: '力量；权力；电力',
   lot: '许多；一批；地块；命运', control: '控制；管理；对照', hold: '拿住；持有；举办；容纳；认为',
   value: '价值；重视；数值', hand: '手；帮助；指针；递给', open: '打开；开放的；公开的；空缺的',
   fall: '落下；下降；秋天；陷入', sound: '声音；听起来；健康的；可靠的',
   light: '光；灯；点燃；轻的；浅色的', fine: '好的，优质的；细小的；罚款；处以罚款',
-  present: '现在的；目前；礼物；提出；呈现；出席的', address: '地址；演说；处理，应对；向……讲话',
+  present: '现在的，目前；礼物；提出，呈现；出席', address: '地址；演说；处理，应对；向……讲话',
   like: '喜欢，喜爱；像，如同；赞同；希望，想要',
-  lead: '带领，引导；导致；领先；铅',
+  lead: '带领，引导；导致；领先',
   long: '长的；长时间的，长期地；渴望',
 };
 
@@ -123,7 +123,7 @@ const reviewedCorrections: Record<string, Partial<VocabularyEntry>> = {
 
 const isSyntheticMetaExample = (example: string) => /\bis presented as\b/i.test(example);
 
-const specialistNoise = /标准输出设备|批处理命令|文件分配表|磁盘操作系统|均方|曲率|应力|直径|网球|生殖|幼兽|铅字/;
+const specialistNoise = /标准输出设备|批处理命令|文件分配表|磁盘操作系统|均方|曲率|应力|直径|网球|生殖|幼兽|铅字|鹤嘴锄|镐|幂|乘方/;
 
 function meaningGroups(value: string) {
   const normalized = value
@@ -156,10 +156,10 @@ function mergeMeanings(...sources: string[]) {
         if (!key || specialistNoise.test(sense) || seen.has(key)) continue;
         seen.add(key);
         atoms.push(sense);
-        if (atoms.length === 3) break;
+        if (atoms.length === 2) break;
       }
       if (atoms.length) groups.push(atoms.join('，'));
-      if (groups.length === 8) return groups.join('；');
+      if (groups.length === 4) return groups.join('；');
     }
   }
   return groups.join('；');
