@@ -76,6 +76,22 @@ describe('vocabulary workload', () => {
     expect(result.newWordQuota).toBe(0);
     expect(result.newWords).toEqual([]);
     expect(result.remainingWords).toBe(0);
+    expect(result.unseenWordCount).toBe(0);
+    expect(result.unstableWordCount).toBe(0);
+  });
+
+  it('separates first-pass exposure from stable mastery progress', () => {
+    const entries = Array.from({ length: 20 }, (_, i) => entry(i));
+    const introduced = entries.map((_, i) => state(i, {
+      status: 'review', reviewStage: 1, nextReviewAt: '2026-12-30T00:00:00.000Z',
+    }));
+
+    const result = buildVocabularyWorkload(entries, introduced, '2026-10-04', '2026-12-12');
+
+    expect(result.unseenWordCount).toBe(0);
+    expect(result.unstableWordCount).toBe(20);
+    expect(result.remainingWords).toBe(0);
+    expect(result.projectedCompletionDate).toBe('2026-10-04');
   });
 
   it('reports the full due backlog and pauses new words when review fills the daily capacity', () => {

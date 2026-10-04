@@ -1,4 +1,7 @@
 export interface AggregateReviewSession {
+  schemaVersion: 2;
+  contentVersion: 'v1';
+  ownerId: string;
   queue: string[];
   currentIndex: number;
   currentId: string | null;
@@ -15,6 +18,8 @@ interface StorageAdapter {
 }
 
 const aggregateReviewStorageKey = 'cet4:aggregate-review-session:v1';
+const aggregateReviewStoragePrefix = 'cet4:aggregate-review-session:v2';
+const defaultContentVersion = 'v1' as const;
 
 interface LearnedState {
   itemId: string;
@@ -40,7 +45,9 @@ export function selectAggregateReviewIds(states: LearnedState[], now: string, li
     .slice(0, limit);
 }
 
-function isAggregateReviewSession(value: unknown): value is AggregateReviewSession {
+type StoredAggregateReviewSession = Partial<AggregateReviewSession> & Pick<AggregateReviewSession, 'queue' | 'currentIndex' | 'currentId' | 'answeredCount' | 'correctCount' | 'missedCount' | 'completed'>;
+
+function isAggregateReviewSession(value: unknown): value is StoredAggregateReviewSession {
   if (!value || typeof value !== 'object') return false;
   const candidate = value as Partial<AggregateReviewSession>;
   return Array.isArray(candidate.queue)
@@ -53,32 +60,85 @@ function isAggregateReviewSession(value: unknown): value is AggregateReviewSessi
     && typeof candidate.completed === 'boolean';
 }
 
-export function loadAggregateReviewSession(storage: StorageAdapter = localStorage): AggregateReviewSession | null {
+function storageKey(ownerId: string) {
+  return `${aggregateReviewStoragePrefix}:${encodeURIComponent(ownerId || 'local')}`;
+}
+
+interface ReviewStorageOptions {
+  storage?: StorageAdapter;
+  ownerId?: string;
+  contentVersion?: 'v1';
+}
+
+interface ReviewLoadOptions extends ReviewStorageOptions {
+  validItemIds: Set<string>;
+}
+
+function repairSession(candidate: StoredAggregateReviewSession, validItemIds: Set<string>, ownerId: string, contentVersion: 'v1'): AggregateReviewSession | null {
+  if (candidate.schemaVersion !== undefined && candidate.schemaVersion !== 2) return null;
+  if (candidate.contentVersion !== undefined && candidate.contentVersion !== contentVersion) return null;
+  if (candidate.ownerId !== undefined && candidate.ownerId !== ownerId) return null;
+  const queue = candidate.queue.filter((id, index, all) => validItemIds.has(id) && all.indexOf(id) === index);
+  if (!queue.length) return null;
+  const answeredCount = Math.min(queue.length, Math.max(0, Math.floor(candidate.answeredCount)));
+  const currentIndex = Math.min(queue.length, answeredCount);
+  const completed = Boolean(candidate.completed) || currentIndex >= queue.length;
+  const correctCount = Math.min(answeredCount, Math.max(0, Math.floor(candidate.correctCount)));
+  const missedCount = Math.min(answeredCount - correctCount, Math.max(0, Math.floor(candidate.missedCount)));
+  return {
+    schemaVersion: 2,
+    contentVersion,
+    ownerId,
+    queue,
+    currentIndex,
+    currentId: completed ? null : queue[currentIndex] ?? null,
+    answeredCount,
+    correctCount,
+    missedCount,
+    completed,
+  };
+}
+
+export function loadAggregateReviewSession(options: ReviewLoadOptions): AggregateReviewSession | null {
+  const storage = options.storage ?? localStorage;
+  const ownerId = options.ownerId ?? 'local';
+  const contentVersion = options.contentVersion ?? defaultContentVersion;
+  const key = storageKey(ownerId);
   try {
-    const raw = storage.getItem(aggregateReviewStorageKey);
+    const raw = storage.getItem(key) ?? (ownerId === 'local' ? storage.getItem(aggregateReviewStorageKey) : null);
     if (!raw) return null;
     const value: unknown = JSON.parse(raw);
-    return isAggregateReviewSession(value) ? value : null;
+    if (!isAggregateReviewSession(value)) { storage.removeItem(key); return null; }
+    const repaired = repairSession(value, options.validItemIds, ownerId, contentVersion);
+    if (!repaired) { storage.removeItem(key); return null; }
+    storage.setItem(key, JSON.stringify(repaired));
+    if (ownerId === 'local') storage.removeItem(aggregateReviewStorageKey);
+    return repaired;
   } catch {
     return null;
   }
 }
 
-export function saveAggregateReviewSession(session: AggregateReviewSession, storage: StorageAdapter = localStorage): void {
+export function saveAggregateReviewSession(session: AggregateReviewSession, options: ReviewStorageOptions = {}): void {
+  const storage = options.storage ?? localStorage;
+  const ownerId = options.ownerId ?? session.ownerId ?? 'local';
   try {
-    storage.setItem(aggregateReviewStorageKey, JSON.stringify(session));
+    storage.setItem(storageKey(ownerId), JSON.stringify({ ...session, schemaVersion: 2, contentVersion: options.contentVersion ?? defaultContentVersion, ownerId }));
   } catch {
     // The review still works in memory when private browsing blocks storage.
   }
 }
 
-export function createAggregateReviewSession(ids: string[], random: () => number = Math.random): AggregateReviewSession {
+export function createAggregateReviewSession(ids: string[], random: () => number = Math.random, options: { ownerId?: string; contentVersion?: 'v1' } = {}): AggregateReviewSession {
   const queue = [...new Set(ids)];
   for (let index = queue.length - 1; index > 0; index -= 1) {
     const target = Math.floor(random() * (index + 1));
     [queue[index], queue[target]] = [queue[target], queue[index]];
   }
   return {
+    schemaVersion: 2,
+    contentVersion: options.contentVersion ?? defaultContentVersion,
+    ownerId: options.ownerId ?? 'local',
     queue,
     currentIndex: 0,
     currentId: queue[0] ?? null,

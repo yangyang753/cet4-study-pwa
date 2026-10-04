@@ -18,6 +18,8 @@ import { createAggregateReviewSession, loadAggregateReviewSession, recordAggrega
 type Tab = 'vocabulary' | 'collocations' | 'grammar';
 type StateView = 'unlearned' | 'active' | 'mastered';
 const defaultRepository = new DexieLearningRepository();
+const vocabularyIds = new Set(vocabulary.map((item) => item.id));
+const reviewOwnerId = () => typeof localStorage === 'undefined' ? 'local' : localStorage.getItem('cet4:local-profile-owner') ?? 'local';
 
 function statusCounts(items: Array<{ id: string }>, states: Map<string, KnowledgeState>) {
   return items.reduce((result, item) => {
@@ -56,7 +58,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
   const [chineseAnswer, setChineseAnswer] = useState('');
   const [exerciseResult, setExerciseResult] = useState('');
   const [exerciseSaving, setExerciseSaving] = useState(false);
-  const [aggregateSession, setAggregateSession] = useState<AggregateReviewSession | null>(() => loadAggregateReviewSession());
+  const [aggregateSession, setAggregateSession] = useState<AggregateReviewSession | null>(() => loadAggregateReviewSession({ validItemIds: vocabularyIds, ownerId: reviewOwnerId() }));
   const [attemptId, setAttemptId] = useState('');
   useEffect(() => {
     let active = true;
@@ -102,10 +104,10 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
 
   const startAggregateReview = () => {
     if (!reviewWords.length) return;
-    const session = createAggregateReviewSession(reviewWords.map((word) => word.id), random);
+    const session = createAggregateReviewSession(reviewWords.map((word) => word.id), random, { ownerId: reviewOwnerId() });
     const word = vocabulary.find((item) => item.id === session.currentId);
     setAggregateSession(session);
-    saveAggregateReviewSession(session);
+    saveAggregateReviewSession(session, { ownerId: session.ownerId });
     if (word) openExercise(word);
   };
 
@@ -142,7 +144,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
       if (aggregateSession) {
         const nextSession = recordAggregateReviewResult(aggregateSession, grade.correct);
         setAggregateSession(nextSession);
-        saveAggregateReviewSession(nextSession);
+        saveAggregateReviewSession(nextSession, { ownerId: nextSession.ownerId });
       }
       setExerciseResult(grade.correct ? `回答正确，已识别 ${grade.matchedMeaningCount || 1} 个关键点并记录巩固。` : `本次未通过，已加入错题复习。${!grade.spellingCorrect ? `正确拼写：${exercise.word.word}。` : ''}${grade.requiredMeaningCount ? `已识别 ${grade.matchedMeaningCount}/${grade.requiredMeaningCount} 个达标核心义。` : ''}${grade.missingMeanings.length ? `还可复习：${grade.missingMeanings.join('、')}。` : ''}`);
     } catch {

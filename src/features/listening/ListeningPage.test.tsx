@@ -8,6 +8,7 @@ import { DexieLearningRepository } from '../../data/repositories/DexieLearningRe
 import { ListeningPage } from './ListeningPage';
 import { learningVocabulary } from '../../content/vocabularyLearning';
 import listeningSets from '../../../content/v1/listeningSets.json';
+import type { LearningRepository } from '../../data/repositories/LearningRepository';
 
 const databases: string[] = [];
 const optionName = (text: string) => new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
@@ -39,6 +40,25 @@ describe('ListeningPage', () => {
     const { container } = render(<ListeningPage />);
     expect(container.querySelector('audio')).toHaveAttribute('src', '/cet4-study-pwa/audio/v1/listen-01.wav');
     expect(screen.getByText(/合成语音训练材料/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '三遍听懂一套' })).toBeVisible();
+    expect(screen.getByText('第 1 遍 · 不看原文抓场景与转折')).toBeVisible();
+    expect(screen.getByText('第 2 遍 · 逐句循环完成听写')).toBeVisible();
+    expect(screen.getByText('第 3 遍 · 对照原文跟读复盘')).toBeVisible();
+  });
+
+  it('opens the least recently attempted listening set instead of always returning to the first set', async () => {
+    const learningRepository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ settings: { playbackRate: 1 } }),
+      listAttempts: vi.fn().mockResolvedValue([
+        { id: 'a1', questionId: 'listen-01:q1', kind: 'listening', createdAt: '2026-10-04T08:00:00.000Z' },
+        { id: 'a2', questionId: 'listen-03:q1', kind: 'listening', createdAt: '2026-10-03T08:00:00.000Z' },
+      ]),
+    } as unknown as LearningRepository;
+
+    const { container } = render(<ListeningPage repository={learningRepository} today="2026-10-04" />);
+
+    await waitFor(() => expect(container.querySelector('audio')).toHaveAttribute('src', '/audio/v1/listen-02.wav'));
+    expect(screen.getByText('第 2 / 24 套')).toBeVisible();
   });
 
   it('downloads only the current listening set for offline use and reports completion', async () => {

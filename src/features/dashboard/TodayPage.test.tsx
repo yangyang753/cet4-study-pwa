@@ -201,7 +201,8 @@ describe('TodayPage', () => {
     })} />);
     expect(await screen.findByText('旧词巩固 1 个')).toBeVisible();
     expect(screen.getByText(/今日新词 \d+ 个/)).toBeVisible();
-    expect(screen.getByText('还剩 799 个高频词')).toBeVisible();
+    expect(screen.getByText('未首轮学习 799 个高频词')).toBeVisible();
+    expect(screen.getByText('尚未稳定掌握 799 个')).toBeVisible();
     expect(screen.getByText(/目标.*前完成首轮，预留 35 天复习巩固/)).toBeVisible();
     expect(screen.getByText(/预计.*前完成稳定掌握/)).toBeVisible();
     expect(screen.getByText(/配额会按距考试时间和复习积压自动调整/)).toBeVisible();
@@ -218,6 +219,7 @@ describe('TodayPage', () => {
       knowledgeStates: learningVocabulary.map((word) => ({ id: `knowledge:${word.id}`, itemId: word.id, status: 'mastered', favorite: false, nextReviewAt: '2026-12-30T00:00:00.000Z', updatedAt: '2026-09-25T00:00:00.000Z' })),
     })} />);
     expect(await screen.findByText('今日新词 0 个')).toBeVisible();
-    expect(screen.getByText('800 个高频词已进入巩固复习')).toBeVisible();
+    expect(screen.getByText('800 个高频词已完成首轮接触')).toBeVisible();
+    expect(screen.getByText('尚未稳定掌握 0 个')).toBeVisible();
   });
 });

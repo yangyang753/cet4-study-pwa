@@ -13,6 +13,8 @@ export interface VocabularyWorkload {
   reviewBacklog: number;
   newWordQuota: number;
   remainingWords: number;
+  unseenWordCount: number;
+  unstableWordCount: number;
   projectedCompletionDate: string;
   firstPassTargetDate: string;
   consolidationDays: number;
@@ -71,11 +73,13 @@ export function buildVocabularyWorkload(
   options: { cultureWordIds?: string[]; completedVocabularySessions?: number } = {},
 ): VocabularyWorkload {
   const stateById = new Map(states.map((item) => [item.itemId, item]));
-  const remainingWords = entries.filter((item) => stateById.get(item.id)?.status !== 'mastered').length;
+  const unstableWordCount = entries.filter((item) => stateById.get(item.id)?.status !== 'mastered').length;
   const cultureWordIds = new Set(options.cultureWordIds ?? []);
   const unseen = entries
     .filter((item) => !stateById.has(item.id))
     .sort((left, right) => Number(cultureWordIds.has(right.id)) - Number(cultureWordIds.has(left.id)) || (right.frequency ?? 0) - (left.frequency ?? 0));
+  const unseenWordCount = unseen.length;
+  const remainingWords = unseenWordCount;
   const daysRemaining = Math.max(0, Math.ceil((dateMs(examDate) - dateMs(today)) / DAY_MS));
   const consolidationDays = Math.max(0, Math.min(
     Math.max(0, daysRemaining - 1),
@@ -144,6 +148,8 @@ export function buildVocabularyWorkload(
     reviewBacklog,
     newWordQuota,
     remainingWords,
+    unseenWordCount,
+    unstableWordCount,
     projectedCompletionDate,
     firstPassTargetDate,
     consolidationDays,

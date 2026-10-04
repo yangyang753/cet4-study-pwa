@@ -126,3 +126,16 @@
   .controls label { width: 100%; justify-content: space-between; }
   .controls select { flex: 1; }
 }
+.three-pass-listening { display:grid; grid-template-columns:minmax(220px,.75fr) 2fr; gap:24px; padding:24px 28px; margin:18px 0; border:1px solid rgba(27,104,82,.2); border-radius:24px; background:linear-gradient(135deg,#f7ead8,#eef7f1); }
+.three-pass-listening span { color:#b24f1c; font-size:.72rem; font-weight:800; letter-spacing:.14em; }
+.three-pass-listening h2 { margin:6px 0; font-size:1.45rem; }
+.three-pass-listening p { margin:0; color:#52645d; }
+.three-pass-listening ol { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:0; padding:0; list-style:none; counter-reset:passes; }
+.three-pass-listening li { padding:16px; border-radius:16px; background:rgba(255,255,255,.72); counter-increment:passes; }
+.three-pass-listening li b,.three-pass-listening li small { display:block; }
+.three-pass-listening li small { margin-top:8px; line-height:1.55; color:#52645d; }
+
+@media (max-width: 760px) {
+  .three-pass-listening { grid-template-columns:1fr; padding:20px; }
+  .three-pass-listening ol { grid-template-columns:1fr; }
+}

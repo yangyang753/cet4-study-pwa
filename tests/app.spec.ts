@@ -225,8 +225,39 @@ test('starts the no-repeat vocabulary review beside its launcher on desktop and 
   await expect(page.getByText(/第 1 \/ 1 题/)).toBeVisible();
   expect(await launcher.evaluate((node, target) => Boolean(node.compareDocumentPosition(target as Node) & Node.DOCUMENT_POSITION_FOLLOWING), await exercise.elementHandle())).toBeTruthy();
 
+  const submitCurrentWord = async () => {
+    const meaning = page.getByRole('textbox', { name: '中文释义答案' });
+    if (await meaning.count()) await meaning.fill('文章，段落，通道，道路');
+    else await page.getByRole('textbox', { name: '英文答案' }).fill('passage');
+    await page.getByRole('button', { name: '提交巩固结果' }).click();
+    await expect(page.getByRole('region', { name: '待复习单词总巩固' }).getByRole('status')).toContainText(/回答正确|本次未通过/);
+  };
+
+  await submitCurrentWord();
+  await page.getByRole('button', { name: '查看本轮报告' }).click();
+  await expect(page.getByRole('heading', { name: '本轮巩固完成' })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('heading', { name: '本轮巩固完成' })).toBeVisible();
+  await page.getByRole('button', { name: '开始新一轮' }).click();
+  await expect(page.getByRole('heading', { name: '待复习单词总巩固' })).toBeVisible();
+  await page.reload();
+  await page.getByRole('button', { name: '继续未完成的总巩固' }).click();
+  await expect(page.getByRole('heading', { name: '待复习单词总巩固' })).toBeVisible();
+
   await page.setViewportSize({ width: 360, height: 800 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+});
+
+test('discards a corrupted aggregate review session instead of leaving a dead continue button', async ({ page }) => {
+  await page.goto('#/knowledge');
+  await page.evaluate(() => localStorage.setItem('cet4:aggregate-review-session:v2:local', JSON.stringify({
+    schemaVersion: 2, contentVersion: 'v1', ownerId: 'local', queue: ['removed-word'],
+    currentIndex: 99, currentId: 'removed-word', answeredCount: 99, correctCount: 98, missedCount: 1, completed: false,
+  })));
+  await page.reload();
+
+  await expect(page.getByRole('button', { name: /开始待复习词总巩固/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: '继续未完成的总巩固' })).toHaveCount(0);
 });
 
 test('reopens the visited study dashboard while offline', async ({ page, context }) => {

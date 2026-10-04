@@ -14,6 +14,7 @@ import { completeDailyTask, localStudyDate } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
 import { QuestionTranslationGate, questionNeedsTranslation } from '../translation/QuestionTranslationGate';
 import { cacheListeningAudio, clearCachedListeningAudio, listCachedListeningAudio } from './cacheListeningAudio';
+import { selectListeningSetIndex } from './selectListeningSet';
 
 type PlayerStatus = 'loading' | 'ready' | 'playing' | 'paused' | 'buffering' | 'error';
 
@@ -182,6 +183,10 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
     <nav className="listening-stages" aria-label="听力训练步骤" tabIndex={0}>
       {['01 精听定位', '02 翻译解锁', '03 选择答案', '04 听写复盘'].map((stage, index) => <span key={stage} className={currentStage >= index + 1 ? 'active' : ''}>{stage}</span>)}
     </nav>
+    <section className="three-pass-listening" aria-labelledby="three-pass-listening-title">
+      <div><span>THREE-PASS METHOD</span><h2 id="three-pass-listening-title">三遍听懂一套</h2><p>基础薄弱时不要反复盲猜答案，每一遍只完成一个目标。</p></div>
+      <ol><li><b>第 1 遍 · 不看原文抓场景与转折</b><small>只记人物、地点、时间，以及 but、however、actually 后的信息。</small></li><li><b>第 2 遍 · 逐句循环完成听写</b><small>使用 0.75× 和单句循环，补出没听清的实词与连读。</small></li><li><b>第 3 遍 · 对照原文跟读复盘</b><small>展开原文核对，再用正常速度跟读并重新回答题目。</small></li></ol>
+    </section>
     <div className="listening-grid">
       <section className="audio-player">
         <div className="player-kicker"><span>{typeCopy[listeningSet.type as keyof typeof typeCopy]}</span><span>合成语音训练材料 · 原创仿真内容</span></div>
@@ -241,8 +246,13 @@ export function ListeningPage({ repository = defaultRepository, today = localStu
   const [playbackRate, setPlaybackRate] = useState(1);
   useEffect(() => {
     let active = true;
-    void repository.getDashboardSnapshot().then((snapshot) => { if (active) setPlaybackRate(snapshot.settings.playbackRate); }).catch(() => undefined);
+    const attemptsRequest = repository.listAttempts?.() ?? Promise.resolve([]);
+    void Promise.all([repository.getDashboardSnapshot(), attemptsRequest]).then(([snapshot, attempts]) => {
+      if (!active) return;
+      setPlaybackRate(snapshot.settings.playbackRate);
+      setSetIndex(selectListeningSetIndex(listeningSets, attempts, today));
+    }).catch(() => undefined);
     return () => { active = false; };
-  }, [repository]);
+  }, [repository, today]);
   return <ListeningExercise key={listeningSets[setIndex].id} setIndex={setIndex} onSetIndexChange={setSetIndex} repository={repository} today={today} playbackRate={playbackRate} />;
 }

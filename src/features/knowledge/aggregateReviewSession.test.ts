@@ -43,9 +43,51 @@ describe('aggregate review session', () => {
     };
     const complete = recordAggregateReviewResult(createAggregateReviewSession(['v1'], () => 0), true);
 
-    saveAggregateReviewSession(complete, adapter);
+    saveAggregateReviewSession(complete, { storage: adapter, ownerId: 'local' });
 
-    expect(loadAggregateReviewSession(adapter)).toEqual(complete);
+    expect(loadAggregateReviewSession({ storage: adapter, ownerId: 'local', validItemIds: new Set(['v1']) })).toEqual(complete);
+  });
+
+  it('repairs a stale current word and removes IDs that no longer exist', () => {
+    const storage = new Map<string, string>();
+    const adapter = {
+      getItem: (key: string) => storage.get(key) ?? null,
+      setItem: (key: string, value: string) => storage.set(key, value),
+      removeItem: (key: string) => storage.delete(key),
+    };
+    const session = createAggregateReviewSession(['v1', 'removed', 'v2'], () => 0, { ownerId: 'local' });
+    saveAggregateReviewSession({ ...session, currentIndex: 1, currentId: 'removed', answeredCount: 1 }, { storage: adapter, ownerId: 'local' });
+
+    expect(loadAggregateReviewSession({ storage: adapter, ownerId: 'local', validItemIds: new Set(['v1', 'v2']) })).toMatchObject({
+      queue: ['v2', 'v1'], currentIndex: 1, currentId: 'v1', answeredCount: 1, completed: false,
+    });
+  });
+
+  it('isolates saved review rounds by local profile owner', () => {
+    const storage = new Map<string, string>();
+    const adapter = {
+      getItem: (key: string) => storage.get(key) ?? null,
+      setItem: (key: string, value: string) => storage.set(key, value),
+      removeItem: (key: string) => storage.delete(key),
+    };
+    const session = createAggregateReviewSession(['v1'], () => 0, { ownerId: 'learner-a' });
+    saveAggregateReviewSession(session, { storage: adapter, ownerId: 'learner-a' });
+
+    expect(loadAggregateReviewSession({ storage: adapter, ownerId: 'learner-b', validItemIds: new Set(['v1']) })).toBeNull();
+    expect(loadAggregateReviewSession({ storage: adapter, ownerId: 'learner-a', validItemIds: new Set(['v1']) })).toEqual(session);
+  });
+
+  it('discards a session when none of its queued words exist anymore', () => {
+    const storage = new Map<string, string>();
+    const adapter = {
+      getItem: (key: string) => storage.get(key) ?? null,
+      setItem: (key: string, value: string) => storage.set(key, value),
+      removeItem: (key: string) => storage.delete(key),
+    };
+    const session = createAggregateReviewSession(['removed'], () => 0, { ownerId: 'local' });
+    saveAggregateReviewSession(session, { storage: adapter, ownerId: 'local' });
+
+    expect(loadAggregateReviewSession({ storage: adapter, ownerId: 'local', validItemIds: new Set(['v1']) })).toBeNull();
   });
 
   it('caps one aggregate round at twenty unique learned words', () => {
