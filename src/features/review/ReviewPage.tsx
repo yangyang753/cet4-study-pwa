@@ -18,6 +18,7 @@ import type { SubjectiveFeedback } from '../composition/evaluateSubjective';
 import { applyKnowledgeReviewResult } from '../mastery/knowledgeMastery';
 import type { StrictVocabularyGrade } from '../vocabulary/strictVocabularyCheck';
 import { buildWordReinforcement } from '../knowledge/wordReinforcement';
+import { buildLearnedWordTranslation, gradeLearnedWordTranslation } from '../knowledge/learnedWordTranslation';
 import { VocabularyRecallExercise } from '../vocabulary/VocabularyRecallExercise';
 import { vocabularyReviewCard } from '../vocabulary/wordMastery';
 import collocationData from '../../../content/v1/collocations.json';
@@ -100,8 +101,14 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
   const activeCollocation = activeCard?.knowledgeKind === 'collocation' ? (collocationData as CollocationEntry[]).find((item) => item.id === activeCard.knowledgeItemId) ?? null : null;
   const activeWordExercise = useMemo(() => {
     void exerciseNonce;
-    return activeWord ? buildWordReinforcement(activeWord, random) : null;
-  }, [activeWord, exerciseNonce, random]);
+    return activeWord && activeCard?.format !== 'word-translation' ? buildWordReinforcement(activeWord, random) : null;
+  }, [activeCard?.format, activeWord, exerciseNonce, random]);
+  const activeWordTranslation = useMemo(() => {
+    void exerciseNonce;
+    return activeWord && activeCard?.format === 'word-translation'
+      ? buildLearnedWordTranslation([activeWord], 'single', random)
+      : null;
+  }, [activeCard?.format, activeWord, exerciseNonce, random]);
   const activeCollocationExercise = useMemo(() => {
     void exerciseNonce;
     return activeCollocation ? buildCollocationRecallExercise(activeCollocation, random) : null;
@@ -168,13 +175,51 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
       const spellingCard = vocabularyReviewCard(activeWord.id, 'cloze', now);
       const meaningCard = vocabularyReviewCard(activeWord.id, 'meaning', now);
       if (!grade.spellingCorrect && activeCard.id !== spellingCard.id) await repository.upsertReviewCard(spellingCard);
-      if ((grade.missingMeanings.length || grade.unexpectedMeanings.length) && activeCard.id !== meaningCard.id) await repository.upsertReviewCard(meaningCard);
+      if (grade.missingMeanings.length && activeCard.id !== meaningCard.id) await repository.upsertReviewCard(meaningCard);
       await completeDailyTask(repository, 'review', currentStudyDate);
       setCards((items) => items.map((item) => item.id === updated.id ? updated : item));
       const details = [grade.requiredMeaningCount ? `已识别 ${grade.matchedMeaningCount}/${grade.requiredMeaningCount} 个达标核心义` : '', grade.missingMeanings.length ? `还可复习：${grade.missingMeanings.join('、')}` : ''].filter(Boolean).join('；');
       setMeaningFeedback(grade.correct ? `${grade.requiredMeaningCount ? `已识别 ${grade.matchedMeaningCount} 个核心义，` : ''}本次通过，不会新增错题。` : `${!grade.spellingCorrect ? `正确拼写：${activeWord.word}` : ''}${!grade.spellingCorrect && details ? '；' : ''}${details || '该词已重新加入待复习。'}`);
       setResult(grade.correct ? 'correct' : 'incorrect');
     } finally { setSubmitting(false); }
+  };
+
+  const submitWordTranslation = async () => {
+    if (!activeCard || !activeWord || !activeWordTranslation || !response.trim() || submitting) return;
+    const grade = gradeLearnedWordTranslation(activeWordTranslation, response);
+    const currentStudyDate = studyDate(new Date(now));
+    const stableAttemptId = attemptId || createId();
+    if (!attemptId) setAttemptId(stableAttemptId);
+    setSubmitting(true); setSubmitError('');
+    try {
+      const snapshot = await repository.getDashboardSnapshot(now);
+      const current = snapshot.knowledgeStates.find((state) => state.itemId === activeWord.id);
+      const next = applyKnowledgeReviewResult(current, activeWord.id, grade.correct, now);
+      const updated = {
+        ...activeCard,
+        knowledgeItemId: activeWord.id,
+        knowledgeKind: 'vocabulary' as const,
+        stage: next.reviewStage ?? 0,
+        nextReviewAt: grade.correct ? next.nextReviewAt ?? now : now,
+        lastCorrect: grade.correct,
+        updatedAt: now,
+      };
+      await repository.saveAttemptOnce({
+        id: stableAttemptId, userId: 'local-learner', questionId: activeCard.questionId,
+        response, correct: grade.correct, score: grade.correct ? 1 : 0, durationSeconds: 0,
+        contentVersion: 'v1', kind: 'vocabulary', mode: 'review',
+        deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device', createdAt: now,
+      });
+      await repository.upsertKnowledgeState(next);
+      await repository.upsertReviewCard(updated);
+      await completeDailyTask(repository, 'review', currentStudyDate);
+      setCards((items) => items.map((item) => item.id === updated.id ? updated : item));
+      setResult(grade.correct ? 'correct' : 'incorrect');
+    } catch {
+      setSubmitError('中译英复习保存失败，答案已保留，请重新保存。');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const submitCollocation = async () => {
@@ -229,6 +274,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
 
   if (loading) return <section className="review-state-panel" role="status"><span className="review-state-icon">↻</span><h1>正在整理复习计划</h1><p>正在读取你的错题与掌握记录…</p></section>;
   if (loadError) return <section className="review-state-panel"><span className="review-state-icon">!</span><h1>复习安排暂时无法读取</h1><p role="alert">{loadError}</p><button className="review-primary-button" onClick={() => { setLoading(true); setLoadError(''); setReloadKey((value) => value + 1); }}>重新读取</button></section>;
+  if (activeCard && activeWord && activeWordTranslation) return <section className="review-detail-page"><button className="review-back-button" onClick={closeActive}>← 返回复习列表</button><header className="review-detail-header"><span>CHINESE TO ENGLISH · ACTIVE USE</span><h1>中译英错题复习</h1><p>根据中文写出完整英文短句。系统只检查本题目标词是否正确运用，不提供单词提示。</p></header><div className="review-practice-panel word-translation-review"><span className="review-kind">{activeWordTranslation.theme}</span><h2>{activeWordTranslation.promptZh}</h2><label className="review-spelling-field">中译英答案<textarea aria-label="中译英答案" rows={4} value={response} disabled={Boolean(result) || submitting} placeholder="写出完整英文短句" onChange={(event) => setResponse(event.target.value)} /></label>{submitError && <p role="alert">{submitError}</p>}{!result && <button className="review-primary-button" disabled={!response.trim() || submitting} onClick={() => void submitWordTranslation()}>{submitError ? '重新保存中译英复习' : submitting ? '正在保存…' : '提交中译英复习'}</button>}{result && <div className={`review-result review-result-${result}`} role="status"><strong>{result === 'correct' ? '中译英复习正确' : '中译英复习错误'}</strong><p>{result === 'correct' ? '目标词已正确用于完整短句，系统已安排下一次巩固。' : `本题目标词没有正确运用，继续保留在错题复习中。参考表达：${activeWordTranslation.referenceAnswer}`}</p></div>}</div></section>;
   if (activeCard && activeWord && activeWordExercise) return <section className="review-detail-page"><button className="review-back-button" onClick={closeActive}>← 返回复习列表</button><header className="review-detail-header"><span>VOCABULARY REVIEW</span><h1>随机主动回忆</h1><p>题型会在核心词义、完整拼写和单处挖空之间变化；中文近义表达可接受，核心义较多时答对约 3 个即可。</p></header><VocabularyRecallExercise key={`${activeCard.id}:${activeWordExercise.id}:${activeWordExercise.cloze}`} exercise={activeWordExercise} result={result} feedback={meaningFeedback} onSubmit={({ answer, grade }) => submitVocabulary(answer, grade)} /></section>;
   if (activeCard && activeCollocation && activeCollocationExercise) return <section className="review-detail-page"><button className="review-back-button" onClick={closeActive}>← 返回复习列表</button><header className="review-detail-header"><span>COLLOCATION RECALL</span><h1>重点搭配随机巩固</h1><p>随机中英互译或单处挖空；每题只隐藏一个目标，不提供选项。</p></header><div className="review-practice-panel"><strong>{activeCollocationExercise.prompt}</strong>{activeCollocationExercise.hint && <p>中文提示：{activeCollocationExercise.hint}</p>}<label>填写唯一答案<input aria-label="填写重点搭配" value={response} disabled={Boolean(result) || submitting} onChange={(event) => setResponse(event.target.value)} /></label>{submitError && <p role="alert">{submitError}</p>}{!result && <button className="review-primary-button" disabled={!response.trim() || submitting} onClick={() => void submitCollocation()}>提交搭配复习</button>}{result && <div className={`review-result review-result-${result}`} role="status"><strong>{result === 'correct' ? '复习正确' : '复习错误'}</strong>{result === 'incorrect' && <p>正确答案：{activeCollocationExercise.answer}</p>}</div>}</div></section>;
   if (activeCard && activeQuestion && 'options' in activeQuestion) return <section className="review-detail-page"><button className="review-back-button" onClick={closeActive}>← 返回复习列表</button><header className="review-detail-header"><span>FOCUSED PRACTICE</span><h1>重新练习</h1><p>完成当前检测后，系统会自动更新掌握阶段和下次复习日期。</p></header><div className="review-practice-panel">{translationRequired && <QuestionTranslationGate key={activeQuestion.id} question={activeQuestion as ObjectiveQuestion} repository={repository} onUnlocked={() => setTranslationUnlocked(true)} />}<ObjectiveQuestionView question={activeQuestion as ObjectiveQuestion} value={response} disabled={Boolean(result) || submitting || (translationRequired && !translationUnlocked)} onChange={setResponse} />{submitError && <p role="alert">{submitError}</p>}{!result && <button className="review-primary-button" onClick={() => void submit()} disabled={!response || submitting || (translationRequired && !translationUnlocked)}>{submitError ? '重新保存复习结果' : submitting ? '正在保存…' : '提交复习答案'}</button>}{result && <div className={`review-result review-result-${result}`} role="status"><strong>{result === 'correct' ? '复习正确' : '复习错误'}</strong><p>{activeQuestion.explanationZh}</p><MasteryCheck kind="review" taskId={`${studyDate(new Date(now))}:review`} repository={repository} now={now} sourceQuestionIds={[activeQuestion.id]} /></div>}</div></section>;

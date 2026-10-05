@@ -182,6 +182,52 @@ describe('ReviewPage', () => {
     expect(await repository.listAllReviews()).toHaveLength(before.length);
   });
 
+  it('retests a Chinese-to-English vocabulary mistake without revealing the target word', async () => {
+    const repository = await setupRepository();
+    await repository.upsertReviewCard({
+      id: 'review:v0001:translation', questionId: 'v0001:translation', wordId: 'v0001', format: 'word-translation',
+      stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => 0} />);
+    await userEvent.click(await screen.findByRole('button', { name: '重新练习 passage' }));
+
+    expect(screen.getByRole('heading', { name: '中译英错题复习' })).toBeVisible();
+    expect(screen.getByText('回答问题前请仔细阅读这篇文章。')).toBeVisible();
+    expect(screen.queryByText(/^passage$/i)).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: '中译英答案' })).toBeVisible();
+  });
+
+  it('advances a Chinese-to-English vocabulary card only after the target word is used', async () => {
+    const repository = await setupRepository();
+    await repository.upsertReviewCard({
+      id: 'review:v0001:translation', questionId: 'v0001:translation', wordId: 'v0001', format: 'word-translation',
+      stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => 0} />);
+    await userEvent.click(await screen.findByRole('button', { name: '重新练习 passage' }));
+    await userEvent.type(screen.getByRole('textbox', { name: '中译英答案' }), 'Read the passage carefully before answering the questions.');
+    await userEvent.click(screen.getByRole('button', { name: '提交中译英复习' }));
+
+    expect(await screen.findByText('中译英复习正确')).toBeVisible();
+    expect(await repository.getReviewCard('review:v0001:translation')).toMatchObject({ stage: 1, lastCorrect: true });
+    expect((await repository.listAttempts()).filter((attempt) => attempt.questionId === 'v0001:translation')).toHaveLength(1);
+  });
+
+  it('keeps a missed Chinese-to-English target due for another review', async () => {
+    const repository = await setupRepository();
+    await repository.upsertReviewCard({
+      id: 'review:v0001:translation', questionId: 'v0001:translation', wordId: 'v0001', format: 'word-translation',
+      stage: 2, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: true, updatedAt: '2026-09-23T08:00:00.000Z',
+    });
+    render(<ReviewPage repository={repository} now="2026-09-23T12:00:00.000Z" random={() => 0} />);
+    await userEvent.click(await screen.findByRole('button', { name: '重新练习 passage' }));
+    await userEvent.type(screen.getByRole('textbox', { name: '中译英答案' }), 'I do not remember this word.');
+    await userEvent.click(screen.getByRole('button', { name: '提交中译英复习' }));
+
+    expect(await screen.findByText('中译英复习错误')).toBeVisible();
+    expect(await repository.getReviewCard('review:v0001:translation')).toMatchObject({ stage: 0, lastCorrect: false, nextReviewAt: '2026-09-23T12:00:00.000Z' });
+  });
+
   it('retries a collocation review without duplicating the attempt and completes review', async () => {
     const name = `review-test-${crypto.randomUUID()}`;
     names.push(name);

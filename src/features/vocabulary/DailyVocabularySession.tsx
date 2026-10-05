@@ -137,7 +137,7 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
     const now = new Date().toISOString();
     await repository.upsertKnowledgeState(applyVocabularyReviewResult(reviewState, grade.correct, now));
     if (!grade.spellingCorrect) await repository.upsertReviewCard(vocabularyReviewCard(reviewWord.id, 'cloze', now));
-    if (grade.missingMeanings.length || grade.unexpectedMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(reviewWord.id, 'meaning', now));
+    if (grade.missingMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(reviewWord.id, 'meaning', now));
     if (reviewIndex < reviewWords.length - 1) setReviewIndex((value) => value + 1);
     else setPhase('learning');
   }

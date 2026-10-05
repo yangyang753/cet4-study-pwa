@@ -48,7 +48,7 @@ export function StrictVocabularyCheck({ repository, words, states, passedWordIds
       await repository.upsertKnowledgeState(nextState);
       setStateById((currentStates) => new Map(currentStates).set(question.word.id, nextState));
       if (!grade.spellingCorrect) await repository.upsertReviewCard(vocabularyReviewCard(question.word.id, 'cloze', now));
-      if (grade.missingMeanings.length || grade.unexpectedMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(question.word.id, 'meaning', now));
+      if (grade.missingMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(question.word.id, 'meaning', now));
       if (!grade.correct) {
         const details = [!grade.spellingCorrect ? `正确拼写：${question.word.word}` : '', grade.requiredMeaningCount ? `已识别 ${grade.matchedMeaningCount}/${grade.requiredMeaningCount} 个达标核心义` : '', grade.missingMeanings.length ? `还可复习：${grade.missingMeanings.join('、')}` : ''].filter(Boolean).join('；');
         setFeedback(`本题未完全正确，已加入错题复习。${details}。请修改后重新提交。`);

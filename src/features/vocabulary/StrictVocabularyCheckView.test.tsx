@@ -73,4 +73,23 @@ describe('StrictVocabularyCheck', () => {
     await userEvent.click(screen.getByRole('button', { name: '提交并完成检测' }));
     expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ reviewStage: 2, lastStrictPassedDate: '2026-10-01' }));
   });
+
+  it('does not add a meaning mistake after the learner reaches the three-sense threshold', async () => {
+    const repository = {
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    const give = {
+      ...words[0], id: 'give-test', word: 'give', meaningZh: '给；提供；举办；让步', example: 'They give a party.',
+    };
+    const onComplete = vi.fn();
+    render(<StrictVocabularyCheck repository={repository} words={[words[0], give]} states={[]}
+      passedWordIds={['v1']} onComplete={onComplete} />);
+
+    await userEvent.type(screen.getByLabelText('完整中文词义'), '给；举办；让步；通过');
+    await userEvent.click(screen.getByRole('button', { name: '提交并完成检测' }));
+
+    expect(onComplete).toHaveBeenCalledOnce();
+    expect(repository.upsertReviewCard).not.toHaveBeenCalled();
+  });
 });
