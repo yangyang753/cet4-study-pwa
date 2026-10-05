@@ -44,6 +44,8 @@ const curatedNaturalExamples: Record<string, Pick<VocabularyEntry, 'example' | '
 // High-frequency polysemous words whose most common CET reading/listening senses
 // are split across dictionary entries or absent from the imported source.
 const reviewedCommonSenses: Record<string, string> = {
+  passage: '文章，段落；通道，通路；通过', question: '问题；疑问；询问', people: '人；人民，民众；民族',
+  section: '部分；章节；部门，科室', choice: '选择；选择权；供选择的事物',
   one: '一，一个；一个人；唯一的', make: '做，制造；使，让；成为；赚得', say: '说，讲；说明；比如说；大约',
   part: '部分；零件；角色；分开', follow: '跟随；遵循；理解；接着发生', mark: '标记；分数；迹象；给分',
   read: '阅读；读懂；显示；写着', hear: '听见；听说；审理', give: '给；提供；举办；让步',
@@ -69,6 +71,10 @@ const reviewedCommonSenses: Record<string, string> = {
   fall: '落下；下降；秋天；陷入', sound: '声音；听起来；健康的；可靠的',
   light: '光；灯；点燃；轻的；浅色的', fine: '好的，优质的；细小的；罚款；处以罚款',
   present: '现在的，目前；礼物；提出，呈现；出席', address: '地址；演说；处理，应对；向……讲话',
+  minute: '分钟；片刻，一会儿；微小的；详细的', even: '甚至；平坦的，均匀的；偶数的；相等的',
+  problem: '问题；难题；习题', want: '想要；需要；缺少', age: '年龄；时代；变老',
+  case: '情况；案例；案件；病例', issue: '问题；发布，发行；期刊；议题',
+  order: '顺序；命令；订购；秩序', cover: '覆盖；包括；封面；保护',
   like: '喜欢，喜爱；像，如同；赞同；希望，想要',
   lead: '带领，引导；导致；领先',
   long: '长的；长时间的，长期地；渴望',
@@ -124,7 +130,7 @@ const reviewedCorrections: Record<string, Partial<VocabularyEntry>> = {
 const isSyntheticMetaExample = (example: string) => /\bis presented as\b/i.test(example);
 const isCompleteSentenceExample = (example: string) => /[.!?][”’'"]?$/.test(example.trim());
 
-const specialistNoise = /标准输出设备|批处理命令|文件分配表|磁盘操作系统|均方|曲率|应力|直径|网球|生殖|幼兽|铅字|鹤嘴锄|镐|幂|乘方/;
+const specialistNoise = /标准输出设备|批处理命令|批处理文件|该命令用于|文件分配表|磁盘操作系统|均方|曲率|应力|直径|网球|生殖|幼兽|铅字|鹤嘴锄|镐|幂|乘方/;
 
 function meaningGroups(value: string) {
   const normalized = value
@@ -270,7 +276,7 @@ export function auditLearningVocabulary(entries: VocabularyEntry[]): string[] {
     if (/presented as|meaning [“"]|surrounding details/i.test(entry.example) || /表示[“"]|含义是|这一动作/.test(entry.exampleZh ?? '')) errors.push(`${entry.id}: example is a definition template rather than a natural sentence`);
     if (/(?:^|[\u3400-\u9fff])(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)\./i.test(entry.meaningZh)) errors.push(`${entry.id}: meaning contains a part-of-speech label`);
     if (/(?<=[\u3400-\u9fff])(?:n|v|vt|vi|a|ad|adj|adv|pron|num|art|prep|conj|aux|modal)(?=[\u3400-\u9fff])/i.test(entry.meaningZh)) errors.push(`${entry.id}: meaning contains a part-of-speech label`);
-    if (/批处理命令|标准输出设备|文件分配表|磁盘操作系统|\[(?:机|计算机)\]/.test(entry.meaningZh)) errors.push(`${entry.id}: meaning contains technical dictionary noise`);
+    if (/批处理命令|批处理文件|该命令用于|标准输出设备|文件分配表|磁盘操作系统|\[(?:机|计算机)\]/.test(entry.meaningZh)) errors.push(`${entry.id}: meaning contains technical dictionary noise`);
     if (/\/(?:n|v|vt|vi|a|ad|adj|adv|pron|num)\.[^/]*[a-z]{3,}\//i.test(entry.phonetic)) errors.push(`${entry.id}: phonetic contains another dictionary headword`);
     if (/[‘’Λ]/.test(entry.phonetic)) errors.push(`${entry.id}: phonetic contains a nonstandard symbol`);
     const senses = entry.meaningZh.split(/[；，、]/).map((sense) => sense.replace(/[^\u3400-\u9fff]/g, '')).filter(Boolean);

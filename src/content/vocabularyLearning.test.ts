@@ -153,6 +153,46 @@ describe('learner-facing vocabulary', () => {
     }
   });
 
+  it('prioritizes CET reading and listening senses over rare dictionary senses', () => {
+    const expected: Record<string, string[]> = {
+      passage: ['文章', '段落', '通道'],
+      question: ['问题', '疑问', '询问'],
+      people: ['人', '人民', '民族'],
+      section: ['部分', '章节', '部门'],
+      minute: ['分钟', '片刻', '微小'],
+      even: ['甚至', '平坦', '偶数'],
+      problem: ['问题', '难题'],
+      want: ['想要', '需要', '缺少'],
+      age: ['年龄', '时代', '变老'],
+      case: ['情况', '案例', '案件'],
+      issue: ['问题', '发布', '期刊'],
+      order: ['顺序', '命令', '订购'],
+      cover: ['覆盖', '包括', '封面'],
+    };
+    for (const [word, senses] of Object.entries(expected)) {
+      const meaning = learningVocabulary.find((entry) => entry.word === word)?.meaningZh ?? '';
+      expect(meaning, word).toEqual(expect.stringContaining(senses[0]));
+      expect(meaning.indexOf(senses[0]), `${word}: primary sense order`).toBeLessThanOrEqual(1);
+      for (const sense of senses.slice(1)) expect(meaning, `${word}: ${sense}`).toContain(sense);
+    }
+  });
+
+  it('removes rare and import-only senses that distract from CET usage', () => {
+    const forbidden: Record<string, RegExp> = {
+      passage: /移居|航行|横渡|斜横步/,
+      question: /审问/,
+      people: /使住满人/,
+      choice: /批处理|该命令/,
+      problem: /成问题的|难处理的/,
+      case: /箱|盒|套/,
+      cover: /藉口/,
+      issue: /后果|流出/,
+    };
+    for (const [word, pattern] of Object.entries(forbidden)) {
+      expect(learningVocabulary.find((entry) => entry.word === word)?.meaningZh ?? '', word).not.toMatch(pattern);
+    }
+  });
+
   it('removes duplicated part-of-speech labels and normalizes phonetic symbols', () => {
     const entry = qualityVocabularyEntry({
       id: 'v-clean', word: 'one', phonetic: '/wΛn/', partOfSpeech: 'num./pron.', meaningZh: 'num.一pron.一个人',
