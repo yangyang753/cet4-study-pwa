@@ -188,7 +188,7 @@ describe('learning backup', () => {
     const db = database();
     await db.attempts.put({ id: 'a-1', userId: 'local', questionId: 'q1', response: 'B', correct: true, score: 1, durationSeconds: 10, createdAt: '2026-09-23T10:00:00.000Z' });
     const brokenStorage: StorageAdapter = {
-      get length() { throw new Error('blocked'); },
+      get length(): number { throw new Error('blocked'); },
       key() { throw new Error('blocked'); }, getItem() { throw new Error('blocked'); },
       setItem() { throw new Error('blocked'); }, removeItem() { throw new Error('blocked'); },
     };
