@@ -90,6 +90,46 @@ describe('KnowledgePage', () => {
     expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ correct: true }));
   });
 
+  it('records a passed learned-word translation without creating a mistake card', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0164', itemId: 'v0164', status: 'review', favorite: false, reviewStage: 1, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} random={() => 0} />);
+
+    await userEvent.click(await screen.findByRole('button', { name: '开始单词短句' }));
+    await userEvent.type(screen.getByRole('textbox', { name: '英文短句答案' }), 'Chinese culture attracts many young people.');
+    await userEvent.click(screen.getByRole('button', { name: '提交中译英' }));
+
+    expect(await screen.findByText(/本题通过/)).toBeVisible();
+    expect(repository.upsertReviewCard).not.toHaveBeenCalled();
+    expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ kind: 'vocabulary', mode: 'review', correct: true }));
+  });
+
+  it('adds only a missed translation target as a Chinese-to-English review card', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0164', itemId: 'v0164', status: 'mastered', favorite: false, reviewStage: 4, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} random={() => 0} />);
+
+    await userEvent.click(await screen.findByRole('button', { name: '开始单词短句' }));
+    await userEvent.type(screen.getByRole('textbox', { name: '英文短句答案' }), 'I cannot answer this sentence.');
+    await userEvent.click(screen.getByRole('button', { name: '提交中译英' }));
+
+    expect(await screen.findByText(/已加入中译英错题复习/)).toBeVisible();
+    expect(repository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ wordId: 'v0164', format: 'word-translation' }));
+    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v0164', status: 'review' }));
+  });
+
   it('finishes a one-word aggregate round with a visible summary instead of repeating it', async () => {
     const repository = {
       getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [

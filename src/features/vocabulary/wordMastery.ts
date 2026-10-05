@@ -56,3 +56,17 @@ export function vocabularyReviewCard(
     updatedAt: now,
   };
 }
+
+export function vocabularyTranslationReviewCard(wordId: string, now: string): ReviewCard {
+  return {
+    id: `review:${wordId}:translation`,
+    questionId: `${wordId}:translation`,
+    wordId,
+    format: 'word-translation',
+    stage: 0,
+    priority: 7,
+    nextReviewAt: now,
+    lastCorrect: false,
+    updatedAt: now,
+  };
+}

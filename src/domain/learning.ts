@@ -12,7 +12,7 @@ export interface ReviewCard {
   lastCorrect: boolean;
   priority?: number;
   reason?: MistakeReason;
-  format?: 'objective' | 'word-cloze' | 'word-meaning';
+  format?: 'objective' | 'word-cloze' | 'word-meaning' | 'word-translation';
   wordId?: string;
   knowledgeItemId?: string;
   knowledgeKind?: 'vocabulary' | 'collocation' | 'grammar';

@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { KnowledgeState } from '../../domain/learning';
-import { recordMeaningResult, recordSpellingResult, recordTranslationResult, vocabularyReviewCard } from './wordMastery';
+import {
+  recordMeaningResult,
+  recordSpellingResult,
+  recordTranslationResult,
+  vocabularyReviewCard,
+  vocabularyTranslationReviewCard,
+} from './wordMastery';
 
 const now = '2026-09-25T08:00:00.000Z';
 const mastered: KnowledgeState = {
@@ -28,6 +34,12 @@ describe('word mastery state machine', () => {
   it('creates a dedicated spelling review card', () => {
     expect(vocabularyReviewCard('v1', 'cloze', now)).toMatchObject({
       questionId: 'v1:spelling', wordId: 'v1', format: 'word-cloze', lastCorrect: false,
+    });
+  });
+
+  it('creates a dedicated Chinese-to-English review card', () => {
+    expect(vocabularyTranslationReviewCard('v1', now)).toMatchObject({
+      questionId: 'v1:translation', wordId: 'v1', format: 'word-translation', lastCorrect: false,
     });
   });
 

@@ -11,9 +11,10 @@ import { createId } from '../../lib/createId';
 import type { WordReinforcement } from './wordReinforcement';
 import { buildWordReinforcement, gradeWordReinforcement } from './wordReinforcement';
 import { applyKnowledgeReviewResult } from '../mastery/knowledgeMastery';
-import { vocabularyReviewCard } from '../vocabulary/wordMastery';
+import { vocabularyReviewCard, vocabularyTranslationReviewCard } from '../vocabulary/wordMastery';
 import { PronounceButton } from '../vocabulary/PronounceButton';
 import { createAggregateReviewSession, loadAggregateReviewSession, recordAggregateReviewResult, saveAggregateReviewSession, selectAggregateReviewIds, type AggregateReviewSession } from './aggregateReviewSession';
+import { LearnedWordTranslationPanel, type LearnedWordTranslationSubmission } from './LearnedWordTranslationPanel';
 
 type Tab = 'vocabulary' | 'collocations' | 'grammar';
 type StateView = 'unlearned' | 'active' | 'mastered';
@@ -88,6 +89,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
   const counts = useMemo(() => statusCounts(vocabulary, states), [states]);
   const collocationCounts = useMemo(() => statusCounts(collocations, states), [states]);
   const learnedWordCount = useMemo(() => vocabulary.filter((item) => states.has(item.id)).length, [states]);
+  const learnedWords = useMemo(() => vocabulary.filter((item) => states.has(item.id)), [states]);
   const reviewWords = useMemo(() => {
     const vocabularyIds = new Set(vocabulary.map((item) => item.id));
     const orderedIds = selectAggregateReviewIds([...states.values()].filter((state) => vocabularyIds.has(state.itemId)), reviewReferenceTime, 20);
@@ -154,6 +156,26 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
     }
   };
 
+  const submitLearnedTranslation = async ({ attemptId: translationAttemptId, exercise: translationExercise, answer, grade }: LearnedWordTranslationSubmission) => {
+    const now = new Date().toISOString();
+    const failedIds = new Set(grade.sentenceComplete ? grade.missingWordIds : translationExercise.targets.map((target) => target.wordId));
+    await repository.saveAttemptOnce({
+      id: translationAttemptId, userId: 'local-learner', questionId: translationExercise.id,
+      response: answer, correct: grade.correct, score: grade.correct ? 1 : 0, durationSeconds: 0,
+      contentVersion: 'v1', kind: 'vocabulary', mode: 'review',
+      deviceId: localStorage.getItem('cet4:device-id') ?? 'local-device', createdAt: now,
+    });
+    const nextStates = new Map(states);
+    for (const target of translationExercise.targets) {
+      const passed = !failedIds.has(target.wordId);
+      const next = applyKnowledgeReviewResult(nextStates.get(target.wordId), target.wordId, passed, now);
+      await repository.upsertKnowledgeState(next);
+      if (!passed) await repository.upsertReviewCard(vocabularyTranslationReviewCard(target.wordId, now));
+      nextStates.set(target.wordId, next);
+    }
+    setStates(nextStates);
+  };
+
   return <section className="knowledge-page">
     <header className="knowledge-heading"><div><span>HIGH-FREQUENCY LIBRARY</span><h1>四级高频知识库</h1><p>按公开词频数据与四级题型整理；练习均为原创仿真内容，不是历年官方真题。</p></div><a href={appHref('print')}>打印今日练习 →</a></header>
     <div className="inventory" aria-label="内容规模"><article><strong>800</strong><span>高频词</span></article><article><strong>126</strong><span>重点搭配</span></article><article><strong>15</strong><span>语法专题</span></article></div>
@@ -163,10 +185,10 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
       <button role="tab" aria-selected={tab === 'grammar'} onClick={() => changeTab('grammar')}>语法专题</button>
     </div>
     {tab === 'vocabulary' && <>
-      <section className="aggregate-review" aria-labelledby="aggregate-review-title">
+      <div className="knowledge-training-grid"><section className="aggregate-review" aria-labelledby="aggregate-review-title">
         <div><span>RECALL WITHOUT HINTS</span><h2 id="aggregate-review-title">无提示待复习总巩固</h2><p>从已经学过的单词中随机抽题，不显示目标词名。答错会自动降为待复习并进入错题复习。</p></div>
         <div className="aggregate-review-stats"><strong>{aggregateSession && !aggregateSession.completed ? aggregateSession.queue.length - aggregateSession.answeredCount : reviewWords.length}</strong><span>{aggregateSession && !aggregateSession.completed ? `本轮剩余 · 已完成 ${aggregateSession.answeredCount} 个` : `本轮检测 · 共学过 ${learnedWordCount} 个`}</span><button disabled={!reviewWords.length && !aggregateSession?.currentId} aria-label={aggregateSession && !aggregateSession.completed ? '继续未完成的总巩固' : `开始待复习词总巩固，共 ${reviewWords.length} 个`} onClick={aggregateSession && !aggregateSession.completed ? resumeAggregateReview : startAggregateReview}>{aggregateSession && !aggregateSession.completed ? '继续本轮总巩固 →' : reviewWords.length ? '开始随机总巩固 →' : '先完成今日新词'}</button></div>
-      </section>
+      </section><LearnedWordTranslationPanel learnedWords={learnedWords} random={random} onSubmit={submitLearnedTranslation} /></div>
       {exercise && <section className="reinforcement-panel aggregate-session" aria-labelledby="reinforcement-title">
         <button className="reinforcement-close" aria-label="关闭巩固练习" onClick={() => setExercise(null)}>×</button>
         <span>NO-HINT REVIEW · 第 {Math.min((aggregateSession?.answeredCount ?? 0) + 1, aggregateSession?.queue.length ?? 1)} / {aggregateSession?.queue.length ?? 1} 题</span><h2 id="reinforcement-title">待复习单词总巩固</h2>
