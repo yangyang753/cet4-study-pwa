@@ -245,7 +245,7 @@ describe('ListeningPage', () => {
     await waitFor(async () => expect(await learningRepository.listDueReviews('9999-12-31T23:59:59.999Z')).toHaveLength(1));
   });
 
-  it('automatically completes listening after the whole set and offers mastery questions', async () => {
+  it('waits for the mastery check before completing the listening task', async () => {
     const user = userEvent.setup();
     const learningRepository = repository();
     render(<ListeningPage repository={learningRepository} today="2026-09-22" />);
@@ -258,9 +258,8 @@ describe('ListeningPage', () => {
       if (index < correctAnswers.length - 1) await user.click(screen.getByRole('button', { name: '下一题' }));
     }
     expect(await screen.findByText('掌握度检测')).toBeVisible();
-    await waitFor(async () => expect((await learningRepository.getDashboardSnapshot()).completions).toEqual([
-      expect.objectContaining({ taskId: '2026-09-22:listening' }),
-    ]));
+    await waitFor(async () => expect((await learningRepository.getDashboardSnapshot()).completions).toEqual([]));
+    expect(screen.getByText('选择题已完成，请通过下面的掌握检测后自动记录今日听力任务。')).toBeVisible();
   });
 });
   it('locks listening choices until the question and options are translated', async () => {

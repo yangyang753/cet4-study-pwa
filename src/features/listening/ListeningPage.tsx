@@ -10,7 +10,7 @@ import './listening.css';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import { getQuestion } from '../../content/catalog';
-import { completeDailyTask, localStudyDate } from '../mastery/taskProgress';
+import { localStudyDate } from '../mastery/taskProgress';
 import { MasteryCheck } from '../mastery/MasteryCheck';
 import { QuestionTranslationGate, questionNeedsTranslation } from '../translation/QuestionTranslationGate';
 import { cacheListeningAudio, clearCachedListeningAudio, listCachedListeningAudio } from './cacheListeningAudio';
@@ -139,7 +139,6 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
         questionId: catalogQuestion?.id ?? `${listeningSet.id}:q${questionIndex + 1}`,
         stage: 0, nextReviewAt: now.toISOString(), lastCorrect: false, updatedAt: now.toISOString(),
       });
-      if (questionIndex === listeningSet.questions.length - 1) await completeDailyTask(repository, 'listening', today);
       setResult(correct ? 'correct' : 'incorrect');
       setSubmissionState('saved');
     } catch {
@@ -231,7 +230,7 @@ function ListeningExercise({ setIndex, onSetIndexChange, repository, today, play
       <div className="answer-options">{question.options.map((option, index) => { const optionId = String.fromCharCode(65 + index); return <label key={optionId} className={selected === optionId ? 'selected' : ''}><input type="radio" name={`${listeningSet.id}:${questionIndex}`} checked={selected === optionId} disabled={Boolean(result) || (translationRequired && !translationUnlocked)} onChange={() => setSelected(optionId)} /><strong>{optionId}</strong><span>{option}</span></label>; })}</div>
       {!result && <button className="submit-listening-answer" disabled={submissionState === 'saving' || (translationRequired && !translationUnlocked)} onClick={() => void submit()}>{submissionState === 'saving' ? '正在保存…' : translationRequired && !translationUnlocked ? '完成翻译后作答' : '提交答案'}</button>}
       {answerError && <p role="alert" className="answer-error">{answerError}</p>}
-      {result && <div className={`answer-result ${result}`} role="status"><strong>{result === 'correct' ? '回答正确' : '回答错误'}</strong><p>正确答案：{String.fromCharCode(65 + question.answer)}</p><p>解析：{question.explanationZh}</p>{questionIndex < listeningSet.questions.length - 1 ? <button onClick={nextQuestion}>下一题</button> : <><p>本套完成，今日听力任务已自动记录。</p><MasteryCheck kind="listening" taskId={`${today}:listening`} repository={repository} sourceQuestionIds={listeningSet.questions.map((_, index) => `${listeningSet.id}:q${index + 1}`)} /></>}</div>}
+      {result && <div className={`answer-result ${result}`} role="status"><strong>{result === 'correct' ? '回答正确' : '回答错误'}</strong><p>正确答案：{String.fromCharCode(65 + question.answer)}</p><p>解析：{question.explanationZh}</p>{questionIndex < listeningSet.questions.length - 1 ? <button onClick={nextQuestion}>下一题</button> : <><p>选择题已完成，请通过下面的掌握检测后自动记录今日听力任务。</p><MasteryCheck kind="listening" taskId={`${today}:listening`} repository={repository} sourceQuestionIds={listeningSet.questions.map((_, index) => `${listeningSet.id}:q${index + 1}`)} /></>}</div>}
       {submissionState === 'error' && <p role="alert">保存失败，答案仍保留，请再次提交。</p>}
       </aside>
       <ListeningFoundationDrill segments={audio.segments} repository={repository} onPlaySegment={playSegment} />

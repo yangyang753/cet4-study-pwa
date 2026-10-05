@@ -53,6 +53,27 @@ describe('learned-word Chinese-to-English translation', () => {
     });
   });
 
+  it('rejects a grammatical-length answer that contains the target word but not the prompt meaning', () => {
+    const exercise = buildLearnedWordTranslation(learned.slice(0, 1), 'single', () => 0)!;
+
+    expect(gradeLearnedWordTranslation(exercise, 'Culture banana table.')).toMatchObject({
+      correct: false,
+      sentenceComplete: true,
+      meaningComplete: false,
+      missingWordIds: [],
+    });
+  });
+
+  it('accepts a natural paraphrase that keeps the target word and most prompt meaning', () => {
+    const exercise = buildLearnedWordTranslation(learned.slice(0, 1), 'single', () => 0)!;
+
+    expect(gradeLearnedWordTranslation(exercise, 'Chinese culture is popular with young people.')).toMatchObject({
+      correct: true,
+      meaningComplete: true,
+      missingWordIds: [],
+    });
+  });
+
   it('rejects misspelled pseudo-inflections instead of treating them as valid forms', () => {
     const city = word('city', 'city', '城市', 'This city has a long history.', '这座城市有悠久的历史。');
     const exercise = buildLearnedWordTranslation([city], 'single', () => 0)!;

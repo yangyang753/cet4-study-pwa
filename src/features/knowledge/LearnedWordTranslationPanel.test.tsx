@@ -51,4 +51,14 @@ describe('LearnedWordTranslationPanel', () => {
     expect(await screen.findByText(/本题通过/)).toBeVisible();
     expect(onSubmit).toHaveBeenCalledTimes(2);
   });
+
+  it('rotates to a different learned-word prompt before repeating one', async () => {
+    render(<LearnedWordTranslationPanel learnedWords={learned} random={() => 0} onSubmit={vi.fn()} />);
+    await userEvent.click(screen.getByRole('button', { name: '开始单词短句' }));
+    expect(screen.getByText('中国文化吸引了许多年轻人。')).toBeVisible();
+    await userEvent.type(screen.getByRole('textbox', { name: '英文短句答案' }), 'Chinese culture attracts many young people.');
+    await userEvent.click(screen.getByRole('button', { name: '提交中译英' }));
+    await userEvent.click(await screen.findByRole('button', { name: '再来一道' }));
+    expect(screen.queryByText('中国文化吸引了许多年轻人。')).not.toBeInTheDocument();
+  });
 });

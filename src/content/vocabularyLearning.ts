@@ -78,6 +78,9 @@ const reviewedCommonSenses: Record<string, string> = {
   like: '喜欢，喜爱；像，如同；赞同；希望，想要',
   lead: '带领，引导；导致；领先',
   long: '长的；长时间的，长期地；渴望',
+  choose: '选择，挑选；决定；宁愿',
+  impact: '影响；冲击',
+  repair: '修理，修补；修复，补救',
 };
 
 const reviewedCorrections: Record<string, Partial<VocabularyEntry>> = {
@@ -233,16 +236,38 @@ function contextualExample(entry: VocabularyEntry): Pick<VocabularyEntry, 'examp
   ]);
 }
 
+function cleanImportedExample(value: string) {
+  return value
+    .replace(/\s*\(\s*=\s*[^)]*\)\s*/gi, ' ')
+    .replace(/\s+([,.!?])/g, '$1')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
 function completeExample(entry: VocabularyEntry): Pick<VocabularyEntry, 'example' | 'exampleZh'> {
-  const example = entry.example.trim().replace(/[.!?]+$/, '');
+  const example = cleanImportedExample(entry.example).replace(/[.!?]+$/, '');
   const exampleZh = (entry.exampleZh ?? '').trim().replace(/[。！？]+$/, '');
   if (/^(?:who|what|when|where|why|how|is|are|do|does|did|can|could|will|would|should|may|might)\b/i.test(example)) {
     const question = example.replace(/\s*\([^)]*\)\s*$/, '').replace(/\?+$/, '');
     return { example: `${question}?`, exampleZh: `${exampleZh || entry.meaningZh}。` };
   }
+  if (/^(?:v|vt|vi)/i.test(entry.partOfSpeech) && new RegExp(`^${entry.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(example)) {
+    return {
+      example: `${example.charAt(0).toUpperCase()}${example.slice(1)}.`,
+      exampleZh: `${exampleZh || entry.meaningZh}。`,
+    };
+  }
+  const seed = [...entry.id].reduce((sum, character) => sum + character.charCodeAt(0), 0);
+  const frames = [
+    { en: 'The report mentioned', zh: '报告提到了' },
+    { en: 'The article described', zh: '文章描述了' },
+    { en: 'The group discussed', zh: '小组讨论了' },
+    { en: 'The survey included questions about', zh: '调查包含了关于' },
+  ];
+  const frame = frames[seed % frames.length];
   return {
-    example: `The lesson used ${example} as a practical example.`,
-    exampleZh: `课程把“${exampleZh || entry.meaningZh}”作为一个实际例子。`,
+    example: `${frame.en} ${example}.`,
+    exampleZh: `${frame.zh}${exampleZh || entry.meaningZh}的内容。`,
   };
 }
 
@@ -256,10 +281,11 @@ export function qualityVocabularyEntry(entry: VocabularyEntry): VocabularyEntry 
     phonetic: normalizePhonetic(source.phonetic),
     ...(!reviewedCorrections[entry.id]?.example ? curatedNaturalExamples[word] ?? naturalExamples[word] ?? {} : {}),
   };
-  if (!isSyntheticMetaExample(corrected.example) && corrected.example.trim()) {
-    return isCompleteSentenceExample(corrected.example) ? corrected : { ...corrected, ...completeExample(corrected) };
+  const cleaned = { ...corrected, example: cleanImportedExample(corrected.example) };
+  if (!isSyntheticMetaExample(cleaned.example) && cleaned.example.trim()) {
+    return isCompleteSentenceExample(cleaned.example) ? cleaned : { ...cleaned, ...completeExample(cleaned) };
   }
-  return { ...corrected, ...contextualExample(corrected) };
+  return { ...cleaned, ...contextualExample(cleaned) };
 }
 
 export const learningVocabulary: VocabularyEntry[] = (rawVocabulary as VocabularyEntry[]).map(qualityVocabularyEntry);
@@ -270,6 +296,7 @@ export function auditLearningVocabulary(entries: VocabularyEntry[]): string[] {
   for (const entry of entries) {
     if (!commonMeanings[entry.word.toLowerCase()]?.trim()) errors.push(`${entry.id}: common meaning source is missing`);
     if (isSyntheticMetaExample(entry.example)) errors.push(`${entry.id}: synthetic meta example is visible`);
+    if (/The lesson used|\(\s*=/i.test(entry.example)) errors.push(`${entry.id}: imported example contains dictionary scaffolding`);
     if (!entry.example.trim()) errors.push(`${entry.id}: example is missing`);
     if (!isCompleteSentenceExample(entry.example)) errors.push(`${entry.id}: example is not a complete sentence`);
     if (!exampleContainsWord(entry.example, entry.word.toLowerCase())) errors.push(`${entry.id}: example does not contain target word`);

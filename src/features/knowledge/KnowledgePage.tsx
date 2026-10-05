@@ -88,11 +88,14 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
   const words = filteredWords.slice(0, visibleCount);
   const counts = useMemo(() => statusCounts(vocabulary, states), [states]);
   const collocationCounts = useMemo(() => statusCounts(collocations, states), [states]);
-  const learnedWordCount = useMemo(() => vocabulary.filter((item) => states.has(item.id)).length, [states]);
-  const learnedWords = useMemo(() => vocabulary.filter((item) => states.has(item.id)), [states]);
+  const strictlyLearnedWordIds = useMemo(() => new Set([...states.values()]
+    .filter((state) => state.status === 'review' || state.status === 'mastered')
+    .map((state) => state.itemId)), [states]);
+  const learnedWordCount = useMemo(() => vocabulary.filter((item) => strictlyLearnedWordIds.has(item.id)).length, [strictlyLearnedWordIds]);
+  const learnedWords = useMemo(() => vocabulary.filter((item) => strictlyLearnedWordIds.has(item.id)), [strictlyLearnedWordIds]);
   const reviewWords = useMemo(() => {
     const vocabularyIds = new Set(vocabulary.map((item) => item.id));
-    const orderedIds = selectAggregateReviewIds([...states.values()].filter((state) => vocabularyIds.has(state.itemId)), reviewReferenceTime, 20);
+    const orderedIds = selectAggregateReviewIds([...states.values()].filter((state) => vocabularyIds.has(state.itemId) && (state.status === 'review' || state.status === 'mastered')), reviewReferenceTime, 20);
     const order = new Map(orderedIds.map((id, index) => [id, index]));
     return vocabulary.filter((item) => order.has(item.id)).sort((left, right) => order.get(left.id)! - order.get(right.id)!);
   }, [reviewReferenceTime, states]);
@@ -158,7 +161,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
 
   const submitLearnedTranslation = async ({ attemptId: translationAttemptId, exercise: translationExercise, answer, grade }: LearnedWordTranslationSubmission) => {
     const now = new Date().toISOString();
-    const failedIds = new Set(grade.sentenceComplete ? grade.missingWordIds : translationExercise.targets.map((target) => target.wordId));
+    const failedIds = new Set(grade.sentenceComplete && grade.meaningComplete ? grade.missingWordIds : translationExercise.targets.map((target) => target.wordId));
     await repository.saveAttemptOnce({
       id: translationAttemptId, userId: 'local-learner', questionId: translationExercise.id,
       response: answer, correct: grade.correct, score: grade.correct ? 1 : 0, durationSeconds: 0,

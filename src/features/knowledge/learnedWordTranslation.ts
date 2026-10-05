@@ -20,6 +20,7 @@ export interface LearnedWordTranslationExercise {
 export interface LearnedWordTranslationGrade {
   correct: boolean;
   sentenceComplete: boolean;
+  meaningComplete: boolean;
   coveredWordIds: string[];
   missingWordIds: string[];
 }
@@ -107,6 +108,7 @@ export function buildLearnedWordTranslation(
   learnedWords: VocabularyEntry[],
   mode: LearnedWordTranslationMode,
   random: () => number = Math.random,
+  excludedExerciseIds: string[] = [],
 ): LearnedWordTranslationExercise | null {
   const unique = learnedWords.filter((entry, index, all) => all.findIndex((item) => item.id === entry.id) === index);
   if (!unique.length || (mode === 'multi' && unique.length < 2)) return null;
@@ -115,7 +117,11 @@ export function buildLearnedWordTranslation(
     const sizeMatches = mode === 'single' ? template.words.length === 1 : template.words.length >= 2 && template.words.length <= 3;
     return sizeMatches && template.words.every((word) => entriesByWord.has(word));
   });
-  if (candidates.length) return fromTemplate(candidates[selectIndex(candidates.length, random)], entriesByWord, mode);
+  if (candidates.length) {
+    const available = candidates.filter((template) => !excludedExerciseIds.includes(fromTemplate(template, entriesByWord, mode).id));
+    const pool = available.length ? available : candidates;
+    return fromTemplate(pool[selectIndex(pool.length, random)], entriesByWord, mode);
+  }
 
   const start = selectIndex(unique.length, random);
   const selected = mode === 'single' ? [unique[start]] : [unique[start], unique[(start + 1) % unique.length]];
@@ -135,11 +141,44 @@ function includesForm(answer: string, forms: string[]) {
   return forms.some((form) => new RegExp(`(^|[^a-z])${form.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^a-z]|$)`, 'i').test(answer));
 }
 
+const semanticStopWords = new Set([
+  'a', 'an', 'and', 'are', 'as', 'at', 'be', 'been', 'being', 'by', 'for', 'from', 'has', 'have', 'had',
+  'he', 'her', 'his', 'i', 'in', 'is', 'it', 'its', 'many', 'of', 'on', 'our', 'she', 'should', 'that', 'the',
+  'their', 'them', 'they', 'this', 'those', 'to', 'us', 'was', 'we', 'were', 'will', 'with', 'you', 'your',
+]);
+
+function semanticRoot(token: string) {
+  if (token.length > 5 && token.endsWith('ies')) return `${token.slice(0, -3)}y`;
+  if (token.length > 5 && token.endsWith('ing')) return token.slice(0, -3).replace(/(.)\1$/, '$1');
+  if (token.length > 4 && token.endsWith('ed')) return token.slice(0, -2).replace(/(.)\1$/, '$1');
+  if (token.length > 4 && token.endsWith('es')) return token.slice(0, -2);
+  if (token.length > 3 && token.endsWith('s')) return token.slice(0, -1);
+  return token;
+}
+
+function semanticTokens(value: string) {
+  return (value.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) ?? [])
+    .map(semanticRoot)
+    .filter((token) => token.length > 1 && !semanticStopWords.has(token));
+}
+
 export function gradeLearnedWordTranslation(exercise: LearnedWordTranslationExercise, answer: string): LearnedWordTranslationGrade {
   const normalized = answer.trim().toLowerCase();
   const coveredWordIds = exercise.targets.filter((target) => includesForm(normalized, target.acceptedForms)).map((target) => target.wordId);
   const missingWordIds = exercise.targets.filter((target) => !coveredWordIds.includes(target.wordId)).map((target) => target.wordId);
   const tokenCount = normalized.match(/[a-z]+(?:'[a-z]+)?/g)?.length ?? 0;
   const sentenceComplete = tokenCount >= exercise.targets.length + 2;
-  return { correct: sentenceComplete && missingWordIds.length === 0, sentenceComplete, coveredWordIds, missingWordIds };
+  const targetForms = new Set(exercise.targets.flatMap((target) => target.acceptedForms.map(semanticRoot)));
+  const referenceTokens = [...new Set(semanticTokens(exercise.referenceAnswer).filter((token) => !targetForms.has(token)))];
+  const answerTokens = new Set(semanticTokens(normalized));
+  const matchedReferenceTokens = referenceTokens.filter((token) => answerTokens.has(token));
+  const requiredReferenceTokens = Math.min(3, Math.max(1, Math.ceil(referenceTokens.length * 0.6)));
+  const meaningComplete = referenceTokens.length === 0 || matchedReferenceTokens.length >= requiredReferenceTokens;
+  return {
+    correct: sentenceComplete && meaningComplete && missingWordIds.length === 0,
+    sentenceComplete,
+    meaningComplete,
+    coveredWordIds,
+    missingWordIds,
+  };
 }

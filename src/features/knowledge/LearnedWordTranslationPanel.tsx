@@ -22,10 +22,12 @@ export function LearnedWordTranslationPanel({ learnedWords, random = Math.random
   const [attemptId, setAttemptId] = useState('');
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
+  const [recentExerciseIds, setRecentExerciseIds] = useState<string[]>([]);
 
   const start = (nextMode: LearnedWordTranslationMode) => {
-    const next = buildLearnedWordTranslation(learnedWords, nextMode, random);
+    const next = buildLearnedWordTranslation(learnedWords, nextMode, random, recentExerciseIds);
     if (!next) return;
+    setRecentExerciseIds((current) => [...current.filter((id) => id !== next.id), next.id].slice(-12));
     setMode(nextMode);
     setExercise(next);
     setAnswer('');
@@ -65,8 +67,9 @@ export function LearnedWordTranslationPanel({ learnedWords, random = Math.random
       <label>你的英文短句<textarea aria-label="英文短句答案" rows={3} value={answer} disabled={saving || result !== null} onChange={(event) => setAnswer(event.target.value)} placeholder="写出完整英文短句" /></label>
       {saveError && <p role="alert" className="learned-translation-error">{saveError}</p>}
       {result && <div className={result.correct ? 'learned-translation-success' : 'learned-translation-error'} role="status">
-        <b>{result.correct ? '本题通过，已记录主动运用。' : `${result.missingWordIds.length || exercise.targets.length} 个目标词已加入中译英错题复习。`}</b>
+        <b>{result.correct ? '本题通过，已记录主动运用。' : `${result.sentenceComplete && result.meaningComplete ? result.missingWordIds.length : exercise.targets.length} 个目标词已加入中译英错题复习。`}</b>
         {!result.sentenceComplete && <p>请写成一个完整英文短句，不要只罗列单词。</p>}
+        {result.sentenceComplete && !result.meaningComplete && <p>目标词虽然出现了，但句意与中文题目不符，请按完整意思重新学习。</p>}
         <p>参考表达：{exercise.referenceAnswer}</p>
       </div>}
       {!result ? <button className="learned-translation-submit" disabled={!answer.trim() || saving} onClick={() => void submit()}>{saveError ? '重新保存中译英' : saving ? '正在保存…' : '提交中译英'}</button> : <button className="learned-translation-next" onClick={() => start(mode)}>再来一道</button>}

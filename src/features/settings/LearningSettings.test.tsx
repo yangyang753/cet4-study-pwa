@@ -45,6 +45,16 @@ describe('LearningSettings', () => {
   it('explains that browser reminders require the app to be open', async () => {
     render(<LearningSettings repository={repository()} />);
     expect(await screen.findByText(/需要打开应用.*检查学习提醒/)).toBeVisible();
+    expect(screen.getByRole('button', { name: '导出到手机日历' })).toBeDisabled();
+  });
+
+  it('offers a phone-calendar reminder when a daily reminder time is saved', async () => {
+    const learningRepository = repository();
+    vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({ settings: { ...savedSettings, reminderTime: '20:30' } } as never);
+    render(<LearningSettings repository={learningRepository} />);
+
+    expect(await screen.findByRole('button', { name: '导出到手机日历' })).toBeEnabled();
+    expect(screen.getByText(/网页未打开.*手机日历/)).toBeVisible();
   });
 
   it('preserves confirmation when the exam date does not change', async () => {

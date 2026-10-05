@@ -62,6 +62,26 @@ describe('learner-facing vocabulary', () => {
     expect(mean?.exampleZh).toMatch(/[。！？]$/);
   });
 
+  it('removes imported dictionary glosses and lesson-wrapper examples from all 800 words', () => {
+    expect(learningVocabulary.filter((entry) => /The lesson used|\(\s*=/i.test(entry.example))).toEqual([]);
+    expect(learningVocabulary.filter((entry) => /课程把.+作为一个实际例子/.test(entry.exampleZh ?? ''))).toEqual([]);
+  });
+
+  it('turns an imported verb phrase into a natural imperative example', () => {
+    const entry = qualityVocabularyEntry({
+      id: 'v-verb-phrase', word: 'mend', phonetic: '', partOfSpeech: 'v.', meaningZh: '修补',
+      example: 'mend the broken chair', exampleZh: '修补坏掉的椅子', derivatives: [], confusables: [],
+    });
+    expect(entry.example).toBe('Mend the broken chair.');
+    expect(entry.exampleZh).toBe('修补坏掉的椅子。');
+  });
+
+  it('keeps only the common CET senses for reviewed noisy headwords', () => {
+    expect(learningVocabulary.find((entry) => entry.word === 'choose')?.meaningZh).toBe('选择，挑选；决定；宁愿');
+    expect(learningVocabulary.find((entry) => entry.word === 'impact')?.meaningZh).toBe('影响；冲击');
+    expect(learningVocabulary.find((entry) => entry.word === 'repair')?.meaningZh).toBe('修理，修补；修复，补救');
+  });
+
   it('repairs source rows that accidentally swallowed the following headword', () => {
     expect(learningVocabulary.find((entry) => entry.id === 'v0289')).toMatchObject({
       word: 'project',

@@ -3,6 +3,8 @@ import { DexieLearningRepository } from '../../data/repositories/DexieLearningRe
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { normalizeUserSettings, type UserSettings } from '../../domain/learning';
 import { reminderCapability } from '../../components/StudyReminder';
+import { studyDate } from '../../lib/studyDate';
+import { downloadStudyCalendar } from './studyCalendar';
 
 const defaultRepository = new DexieLearningRepository();
 
@@ -65,6 +67,19 @@ export function LearningSettings({ repository = defaultRepository, configuredClo
     }
   }
 
+  function exportCalendar() {
+    if (!reminderTime || !examDate) return;
+    try {
+      const studyUrl = `${window.location.href.split('#')[0]}#/today`;
+      downloadStudyCalendar({ startDate: studyDate(), examDate, reminderTime, studyUrl });
+      setError('');
+      setMessage('手机日历文件已导出，请打开文件并添加重复日程。');
+    } catch {
+      setError('日历导出失败，请先检查考试日期和提醒时间。');
+      setMessage('');
+    }
+  }
+
   if (!settings && !error) return <p role="status">正在读取学习设置…</p>;
   const permission: NotificationPermission = typeof Notification === 'undefined' ? 'denied' : Notification.permission;
   const capability = reminderCapability(configuredCloud, permission);
@@ -79,6 +94,8 @@ export function LearningSettings({ repository = defaultRepository, configuredClo
       <label>默认听力速度<select aria-label="默认听力速度" value={playbackRate} onChange={(event) => setPlaybackRate(event.target.value)}>{[0.75, 1, 1.25, 1.5].map((rate) => <option key={rate} value={rate}>{rate}×</option>)}</select></label>
       <label>每日提醒时间<input aria-label="每日提醒时间" type="time" value={reminderTime} onChange={(event) => setReminderTime(event.target.value)} /></label>
       <p><small>{capability.message} 留空表示关闭。</small></p>
+      <p><small>导出到手机日历后，即使网页未打开，手机日历也可以按时提醒。</small></p>
+      <button type="button" disabled={!reminderTime || !examDate} onClick={exportCalendar}>导出到手机日历</button>
       {'Notification' in window && Notification.permission === 'default' && <button type="button" onClick={() => void Notification.requestPermission().then((permission) => setMessage(permission === 'granted' ? '浏览器通知已开启' : '未开启浏览器通知，应用内提醒仍可使用'))}>开启浏览器通知</button>}
       <button type="submit">保存学习设置</button>
     </form>
