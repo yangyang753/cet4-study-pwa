@@ -13,6 +13,7 @@
 ## Global Constraints
 
 - Correct answers never create review cards or demote a word.
+- Failed short-translation targets create `word-translation` cards and are retested as Chinese-to-English in the mistake center.
 - Translation prompts use learned words only and never reveal target English before submission.
 - Learner-facing meanings contain at most four CET-relevant sense groups.
 - No new runtime dependency and no unsupported cloud/AI claim.
@@ -81,6 +82,7 @@
 - Modify: `src/features/knowledge/KnowledgePage.tsx`
 - Modify: `src/features/knowledge/KnowledgePage.test.tsx`
 - Modify: `src/features/knowledge/knowledge.css`
+- Modify: `src/domain/learning.ts`
 
 **Interfaces:**
 - Consumes: Task 3 translation builders/graders and existing repository/mastery APIs.
@@ -90,7 +92,24 @@
 - [ ] Implement the panel, persistence callbacks, responsive styles, and accessible status text.
 - [ ] Run targeted tests and browser-level smoke coverage; commit.
 
-### Task 5: Release verification and deployment
+### Task 5: Chinese-to-English mistake recovery
+
+**Files:**
+- Modify: `src/features/review/ReviewPage.tsx`
+- Modify: `src/features/review/ReviewPage.test.tsx`
+- Modify: `src/features/knowledge/learnedWordTranslation.ts`
+- Modify: `src/features/vocabulary/wordMastery.ts`
+
+**Interfaces:**
+- Consumes: Task 3 translation builder/grader and Task 4 `word-translation` review-card format.
+- Produces: review detail behavior that retests a failed word with a short Chinese-to-English sentence.
+
+- [ ] Add failing review-page tests for translation-card rendering, correct recovery, and repeated miss.
+- [ ] Run targeted tests and confirm the card is currently unsupported.
+- [ ] Implement translation-card generation, grading, mastery update, and review scheduling.
+- [ ] Run review and vocabulary suites; commit.
+
+### Task 6: Release verification and deployment
 
 **Files:**
 - Modify if required by a failing check: tests nearest the defect and corresponding production file, with RED→GREEN evidence.

@@ -28,6 +28,8 @@ Make vocabulary review trustworthy for a beginner: an answer that reaches the di
 - Each prompt has a Chinese sentence, reference English, target word ids, and accepted English forms/phrases. The visible prompt never exposes the target English.
 - A translation passes only when every target group is represented and the answer contains a minimal sentence signal. It is intentionally auditable keyword coverage, not open-ended AI evaluation; the reference answer and missing targets appear after submission.
 - On pass, every target receives a correct review result. On failure, only missing target words are demoted and added to review; covered targets are not punished.
+- A failed target is saved as a dedicated `word-translation` review card. The mistake center renders that card as a short Chinese-to-English sentence, so recovery proves active use rather than falling back to recognition-only questions.
+- Vocabulary mistake review rotates among meaning recall, spelling/cloze, and learned-word Chinese-to-English. A translation card is cleared or advanced only after its target expression is present in the English answer.
 
 ## Error handling and persistence
 
@@ -41,6 +43,7 @@ Make vocabulary review trustworthy for a beginner: an answer that reaches the di
 - Content tests audit all 800 learner-facing meanings for duplicate/noisy groups and representative high-risk words for CET-priority order.
 - Pure-function tests cover one/multi prompt selection, learned-only input, hidden targets, inflections, and partial failure.
 - Component tests cover mode switching, success, failure, repository write failure, and responsive-accessible controls.
+- Review-page tests cover reopening a failed target as Chinese-to-English, a correct recovery without duplicate mistake creation, and another miss remaining due.
 - Full unit, content audit, typecheck, lint, build, and targeted browser checks must pass before deployment.
 
 ## Out of scope / external requirements
