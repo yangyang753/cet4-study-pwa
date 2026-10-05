@@ -52,18 +52,33 @@ const irregularForms: Record<string, string[]> = {
   build: ['built', 'builds', 'building'],
   come: ['came', 'comes', 'coming'],
   give: ['gave', 'given', 'gives', 'giving'],
+  get: ['got', 'gotten', 'gets', 'getting'],
   have: ['has', 'had', 'having'],
   make: ['made', 'makes', 'making'],
+  begin: ['began', 'begun', 'begins', 'beginning'],
+  plan: ['plans', 'planned', 'planning'],
+  put: ['puts', 'put', 'putting'],
+  run: ['ran', 'runs', 'running'],
+  sit: ['sat', 'sits', 'sitting'],
+  stop: ['stops', 'stopped', 'stopping'],
   write: ['wrote', 'written', 'writes', 'writing'],
 };
 
 function acceptedForms(word: string) {
   const value = word.toLowerCase();
-  const forms = new Set([value, `${value}s`, `${value}es`, `${value}ed`, `${value}ing`, ...(irregularForms[value] ?? [])]);
-  if (value.endsWith('y') && !/[aeiou]y$/.test(value)) forms.add(`${value.slice(0, -1)}ies`);
-  if (value.endsWith('e')) {
+  const forms = new Set([value, ...(irregularForms[value] ?? [])]);
+  if (value.endsWith('y') && !/[aeiou]y$/.test(value)) {
+    forms.add(`${value.slice(0, -1)}ies`);
+    forms.add(`${value.slice(0, -1)}ied`);
+    forms.add(`${value}ing`);
+  } else if (value.endsWith('e')) {
+    forms.add(`${value}s`);
     forms.add(`${value}d`);
     forms.add(`${value.slice(0, -1)}ing`);
+  } else {
+    forms.add(`${value}${/(?:s|x|z|ch|sh|o)$/.test(value) ? 'es' : 's'}`);
+    forms.add(`${value}ed`);
+    forms.add(`${value}ing`);
   }
   return [...forms];
 }

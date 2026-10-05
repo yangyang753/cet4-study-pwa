@@ -52,4 +52,13 @@ describe('learned-word Chinese-to-English translation', () => {
       sentenceComplete: false,
     });
   });
+
+  it('rejects misspelled pseudo-inflections instead of treating them as valid forms', () => {
+    const city = word('city', 'city', '城市', 'This city has a long history.', '这座城市有悠久的历史。');
+    const exercise = buildLearnedWordTranslation([city], 'single', () => 0)!;
+    expect(gradeLearnedWordTranslation(exercise, 'This citys has a long history.')).toMatchObject({
+      correct: false,
+      missingWordIds: ['city'],
+    });
+  });
 });
