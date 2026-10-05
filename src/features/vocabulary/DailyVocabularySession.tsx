@@ -166,10 +166,29 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
   if (phase === 'loading') return <p role={error ? 'alert' : 'status'}>{error || '正在准备今日词汇计划…'}</p>;
   if (!workload || !snapshot) return <p role="alert">今日词汇计划暂不可用。</p>;
 
-  if (phase === 'review' && reviewWord && reviewExercise) return <section className="daily-word-review">
-    <header><span>旧词与翻译目标词复习 · {reviewIndex + 1}/{reviewWords.length}</span><h1>先复习今天要用的单词</h1><p>题型与挖空位置会随机变化；只有答错、拼写错误或漏译才进入错题复习。</p></header>
-    <VocabularyRecallExercise key={`${reviewWord.id}:${reviewIndex}`} exercise={reviewExercise} onSubmit={({ grade }) => submitReview(grade)} onForgotten={submitReview} />
-  </section>;
+  if (phase === 'review' && reviewWord && reviewExercise) {
+    const completedReviews = reviewIndex;
+    const remainingReviews = reviewWords.length - reviewIndex;
+    const reviewProgress = Math.round((completedReviews / reviewWords.length) * 100);
+    return <section className="daily-word-review">
+      <header className="daily-review-hero">
+        <div><span className="review-eyebrow">RECALL FIRST · 旧词唤醒</span><h1>先复习今天要用的单词</h1><p>不看答案主动回忆；题型与挖空位置会随机变化，答对后继续，答错会重新安排巩固。</p></div>
+        <div className="daily-review-counter" aria-label={`第 ${reviewIndex + 1} 题，共 ${reviewWords.length} 题`}><strong>{String(reviewIndex + 1).padStart(2, '0')}</strong><span>/ {String(reviewWords.length).padStart(2, '0')}</span></div>
+      </header>
+      <section className="daily-review-progress" aria-label="旧词复习概览">
+        <div><span>已完成 {completedReviews}</span><span>剩余 {remainingReviews}</span></div>
+        <div role="progressbar" aria-label="旧词复习进度" aria-valuemin={0} aria-valuemax={reviewWords.length} aria-valuenow={completedReviews}><i style={{ width: `${reviewProgress}%` }} /></div>
+      </section>
+      <div className="daily-review-layout">
+        <VocabularyRecallExercise key={`${reviewWord.id}:${reviewIndex}`} exercise={reviewExercise} onSubmit={({ grade }) => submitReview(grade)} onForgotten={submitReview} />
+        <aside className="daily-review-guide" aria-labelledby="daily-review-guide-title">
+          <span>ACTIVE RECALL</span><h2 id="daily-review-guide-title">这一题怎么做</h2>
+          <ol><li><b>先独立回想</b><small>只填写当前唯一的空白，不需要猜两项。</small></li><li><b>按记得的意思作答</b><small>中文近义表达可以接受，不必逐字一致。</small></li><li><b>诚实记录遗忘</b><small>答错或想不起来，会自动加入错题复习。</small></li></ol>
+          <p>本题不会提前显示目标答案；提交后系统会保存真实掌握情况。</p>
+        </aside>
+      </div>
+    </section>;
+  }
 
   if (phase === 'learning') {
     if (!dailyWords.length) return <section className="vocabulary-warmup complete"><h1>{workload.reviewOnlyDay ? '今日是集中巩固日' : '今日没有新词'}</h1><p>旧词复习已经完成，接着巩固重点搭配。</p>{error && <p role="alert">{error}</p>}<button className="primary-action" onClick={() => void beginCollocations()}>{dailyCollocations.length ? '继续重点搭配' : '完成今日词汇学习'}</button></section>;

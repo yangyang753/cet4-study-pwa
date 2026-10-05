@@ -35,16 +35,72 @@ const tombstoneSchema = z.object({ id: z.string(), kind: syncEntityKindSchema, e
 const backupSchema = z.object({
   schemaVersion: z.literal(1), contentVersion: z.string(), exportedAt: z.iso.datetime(),
   data: z.object({ attempts: z.array(attemptSchema), drafts: z.array(draftSchema), plans: z.array(planSchema), syncQueue: z.array(operationSchema), reviewCards: z.array(reviewSchema), taskCompletions: z.array(completionSchema), knowledgeStates: z.array(knowledgeSchema), settings: z.array(settingsSchema), examSessions: z.array(examSchema), tombstones: z.array(tombstoneSchema) }),
+  browserState: z.record(z.string(), z.string()).optional(),
 });
+
+export interface StorageAdapter {
+  readonly length: number;
+  key(index: number): string | null;
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): void;
+  removeItem(key: string): void;
+}
 
 export interface LearningBackupV1 {
   schemaVersion: 1; contentVersion: 'v1'; exportedAt: string;
   data: { attempts: Attempt[]; drafts: DraftRecord[]; plans: CachedPlan[]; syncQueue: PendingOperation[]; reviewCards: ReviewCard[]; taskCompletions: StudyTaskCompletion[]; knowledgeStates: KnowledgeState[]; settings: UserSettings[]; examSessions: ExamSessionRecord[]; tombstones: TombstoneRecord[] };
+  browserState?: Record<string, string>;
 }
 
-export async function exportLearningData(db: LearningDatabase = learningDb): Promise<LearningBackupV1> {
+const learningStorageKeys = ['cet4:diagnostic-session:v2', 'cet4:aggregate-review-session:v1'];
+const learningStoragePrefixes = ['draft:', 'dictation:', 'cet4:aggregate-review-session:v2:'];
+const clearOnlyStorageKeys = ['cet4:last-study-reminder'];
+const defaultStorage = (): StorageAdapter | undefined => typeof localStorage === 'undefined' ? undefined : localStorage;
+const isLearningStorageKey = (key: string) => learningStorageKeys.includes(key) || learningStoragePrefixes.some((prefix) => key.startsWith(prefix));
+
+function readBrowserState(storage: StorageAdapter | undefined): Record<string, string> | undefined {
+  if (!storage) return undefined;
+  try {
+    const state: Record<string, string> = {};
+    for (let index = 0; index < storage.length; index += 1) {
+      const key = storage.key(index);
+      if (!key || !isLearningStorageKey(key)) continue;
+      const value = storage.getItem(key);
+      if (value !== null) state[key] = value;
+    }
+    return Object.keys(state).length ? state : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function restoreBrowserState(state: Record<string, string> | undefined, storage: StorageAdapter | undefined) {
+  if (!state || !storage) return;
+  try {
+    for (const [key, value] of Object.entries(state)) if (isLearningStorageKey(key)) storage.setItem(key, value);
+  } catch {
+    // IndexedDB remains the authoritative backup even when browser storage is blocked.
+  }
+}
+
+function clearBrowserState(storage: StorageAdapter | undefined) {
+  if (!storage) return;
+  try {
+    const keys: string[] = [];
+    for (let index = 0; index < storage.length; index += 1) {
+      const key = storage.key(index);
+      if (key && (isLearningStorageKey(key) || clearOnlyStorageKeys.includes(key))) keys.push(key);
+    }
+    keys.forEach((key) => storage.removeItem(key));
+  } catch {
+    // Do not prevent IndexedDB cleanup when browser storage is unavailable.
+  }
+}
+
+export async function exportLearningData(db: LearningDatabase = learningDb, storage: StorageAdapter | undefined = defaultStorage()): Promise<LearningBackupV1> {
   const [attempts, drafts, plans, syncQueue, reviewCards, taskCompletions, knowledgeStates, settings, examSessions, tombstones] = await Promise.all([db.attempts.toArray(), db.drafts.toArray(), db.plans.toArray(), db.syncQueue.toArray(), db.reviewCards.toArray(), db.taskCompletions.toArray(), db.knowledgeStates.toArray(), db.settings.toArray(), db.examSessions.toArray(), db.tombstones.toArray()]);
-  return { schemaVersion: 1, contentVersion: 'v1', exportedAt: new Date().toISOString(), data: { attempts, drafts, plans, syncQueue, reviewCards, taskCompletions, knowledgeStates, settings, examSessions, tombstones } };
+  const browserState = readBrowserState(storage);
+  return { schemaVersion: 1, contentVersion: 'v1', exportedAt: new Date().toISOString(), data: { attempts, drafts, plans, syncQueue, reviewCards, taskCompletions, knowledgeStates, settings, examSessions, tombstones }, ...(browserState ? { browserState } : {}) };
 }
 
 function parseInput(input: unknown): LearningBackupV1 {
@@ -81,7 +137,7 @@ function regeneratedOperations(backup: LearningBackupV1): PendingOperation[] {
   }));
 }
 
-export async function importLearningData(db: LearningDatabase = learningDb, input: unknown): Promise<void> {
+export async function importLearningData(db: LearningDatabase = learningDb, input: unknown, storage: StorageAdapter | undefined = defaultStorage()): Promise<void> {
   const backup = parseInput(input);
   const tables = [db.attempts, db.drafts, db.plans, db.syncQueue, db.reviewCards, db.taskCompletions, db.knowledgeStates, db.settings, db.examSessions, db.tombstones];
   await db.transaction('rw', tables, async () => {
@@ -99,9 +155,11 @@ export async function importLearningData(db: LearningDatabase = learningDb, inpu
     await merge(db.examSessions, backup.data.examSessions);
     await merge(db.tombstones, backup.data.tombstones);
   });
+  restoreBrowserState(backup.browserState, storage);
 }
 
-export async function clearLocalLearningData(db: LearningDatabase = learningDb): Promise<void> {
+export async function clearLocalLearningData(db: LearningDatabase = learningDb, storage: StorageAdapter | undefined = defaultStorage()): Promise<void> {
   const tables = [db.attempts, db.drafts, db.plans, db.syncQueue, db.reviewCards, db.taskCompletions, db.knowledgeStates, db.settings, db.examSessions, db.tombstones, db.syncCursors];
   await db.transaction('rw', tables, async () => { await Promise.all(tables.map((table) => table.clear())); });
+  clearBrowserState(storage);
 }

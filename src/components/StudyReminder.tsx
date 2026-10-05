@@ -37,7 +37,10 @@ export function StudyReminder({ repository = defaultRepository, now = () => new 
         const snapshot = await repository.getDashboardSnapshot();
         const current = now();
         const currentDate = dateKey(current);
-        const alreadyStudied = snapshot.completions.some((completion) => completion.date === currentDate);
+        const plan = typeof repository.getPlan === 'function' ? await repository.getPlan(currentDate).catch(() => null) : null;
+        const completedTaskIds = new Set(snapshot.completions.filter((completion) => completion.date === currentDate).map((completion) => completion.taskId));
+        const remainingTasks = plan?.tasks.filter((task) => !completedTaskIds.has(task.id)) ?? [];
+        const alreadyStudied = Boolean(plan?.tasks.length) && remainingTasks.length === 0;
         const lastShownDate = localStorage.getItem(reminderStorageKey) ?? '';
         const missedYesterday = snapshot.completions.length > 0 && !snapshot.completions.some((completion) => completion.date === previousDateKey(current));
         const regularReminderDue = isStudyReminderDue(current, snapshot.settings.reminderTime ?? '', lastShownDate);
@@ -45,6 +48,8 @@ export function StudyReminder({ repository = defaultRepository, now = () => new 
         localStorage.setItem(reminderStorageKey, currentDate);
         const copy = missedYesterday
           ? '昨天没有学习记录。今天先清旧词和错题，再继续新内容。'
+          : plan?.tasks.length && remainingTasks.length < plan.tasks.length
+            ? `今日计划还剩 ${remainingTasks.length} 项，继续完成后系统会自动记录。`
           : `今天的 ${snapshot.settings.dailyMinutes} 分钟训练还没有开始。`;
         setDestination(missedYesterday ? 'review' : 'practice/vocabulary');
         setMessage(copy);

@@ -41,6 +41,49 @@ describe('SubjectiveEditor', () => {
     expect(repository.saveDraft).toHaveBeenCalledWith(expect.objectContaining({ questionId: 'write-1', body: 'A synced draft.' }));
   });
 
+  it('hydrates an imported or synced repository draft when this browser has no local copy', async () => {
+    const repository = {
+      getDrafts: vi.fn().mockResolvedValue([
+        { id: 'older', questionId: 'write-1', body: 'Older synced draft.', deviceId: 'phone', updatedAt: '2026-10-01T08:00:00.000Z' },
+        { id: 'newer', questionId: 'write-1', body: 'Newest synced draft.', deviceId: 'phone', updatedAt: '2026-10-02T08:00:00.000Z' },
+      ]),
+      saveDraft: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+
+    render(<SubjectiveEditor question={question} kind="writing" repository={repository} />);
+
+    expect(await screen.findByDisplayValue('Newest synced draft.')).toBeVisible();
+  });
+
+  it('keeps the current browser draft instead of overwriting it with an older synced copy', async () => {
+    localStorage.setItem('draft:write-1', 'Current browser draft.');
+    const repository = {
+      getDrafts: vi.fn().mockResolvedValue([{ id: 'remote', questionId: 'write-1', body: 'Remote draft.', deviceId: 'phone', updatedAt: '2026-10-02T08:00:00.000Z' }]),
+      saveDraft: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+
+    render(<SubjectiveEditor question={question} kind="writing" repository={repository} />);
+
+    expect(screen.getByLabelText('写作答题区')).toHaveValue('Current browser draft.');
+    await act(async () => { await Promise.resolve(); });
+    expect(screen.getByLabelText('写作答题区')).toHaveValue('Current browser draft.');
+  });
+
+  it('does not save an empty draft before repository hydration finishes', async () => {
+    vi.useFakeTimers();
+    let resolveDrafts!: (value: Array<{ id: string; questionId: string; body: string; deviceId: string; updatedAt: string }>) => void;
+    const repository = {
+      getDrafts: vi.fn(() => new Promise((resolve) => { resolveDrafts = resolve; })),
+      saveDraft: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<SubjectiveEditor question={question} kind="writing" repository={repository} />);
+
+    await act(() => vi.advanceTimersByTimeAsync(2500));
+    expect(repository.saveDraft).not.toHaveBeenCalled();
+    await act(async () => resolveDrafts([{ id: 'remote', questionId: 'write-1', body: 'Recovered after import.', deviceId: 'phone', updatedAt: '2026-10-02T08:00:00.000Z' }]));
+    expect(screen.getByLabelText('写作答题区')).toHaveValue('Recovered after import.');
+  });
+
   it('counts the English words produced for a translation answer', async () => {
     const user = userEvent.setup();
     render(<SubjectiveEditor question={{ ...question, type: 'translation' }} kind="translation" />);

@@ -22,7 +22,15 @@ export function DataManagement({ actions = defaultActions, now = () => new Date(
   const protect = async () => setProtection(await requestPersistentStorage(storageManager));
   const download = async () => { try { const data = await actions.exportData(); const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })); const anchor = document.createElement('a'); anchor.href = url; anchor.download = `cet4-study-backup-${studyDate()}.json`; anchor.click(); URL.revokeObjectURL(url); const exportedAt = now().toISOString(); localStorage.setItem(backupStorageKey, exportedAt); setLastBackupAt(exportedAt); setMessage('备份已导出。'); } catch { setMessage('备份导出失败，请释放浏览器存储空间后重试。'); } };
   const restore = async (event: ChangeEvent<HTMLInputElement>) => { const file = event.target.files?.[0]; if (!file) return; try { await actions.importData(await file.text()); setMessage('备份导入成功。'); } catch (error) { setMessage(error instanceof Error ? error.message : '导入失败。'); } event.target.value = ''; };
-  const clear = async () => { await actions.clearData(); setConfirmation(''); setMessage('本机学习数据已清空。'); };
+  const clear = async () => {
+    try {
+      await actions.clearData();
+      setConfirmation('');
+      setMessage('本机学习数据已清空。');
+    } catch {
+      setMessage('清空失败，本机学习数据没有被完整删除，请重试。');
+    }
+  };
   return <section className="data-management">
     <h2>数据备份与恢复</h2><p>手动换设备：先在旧设备导出 JSON 备份，再在新设备导入 JSON。导入前会检查文件结构和版本。</p>
     <section className="storage-protection" aria-label="本机记录保护"><h3>防止浏览器自动清理</h3><p role="status">{storageCopy[protection.status]}</p>{protection.quota ? <p>当前已使用约 {Math.max(1, Math.round((protection.usage ?? 0) / 1024 / 1024))} MB，本网站可用空间约 {Math.max(1, Math.round(protection.quota / 1024 / 1024))} MB。</p> : null}{protection.status !== 'granted' && protection.status !== 'unsupported' ? <button onClick={() => void protect()}>保护本机学习记录</button> : null}</section>

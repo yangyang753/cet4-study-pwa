@@ -3,10 +3,18 @@ import Dexie from 'dexie';
 import { afterEach, describe, expect, it } from 'vitest';
 import { LearningDatabase } from '../localDb';
 import { DexieLearningRepository } from '../repositories/DexieLearningRepository';
-import { exportLearningData, importLearningData } from './learningBackup';
+import { clearLocalLearningData, exportLearningData, importLearningData, type StorageAdapter } from './learningBackup';
 
 const names: string[] = [];
 const database = () => { const name = `backup-test-${crypto.randomUUID()}`; names.push(name); return new LearningDatabase(name); };
+class MemoryStorage implements StorageAdapter {
+  private readonly values = new Map<string, string>();
+  get length() { return this.values.size; }
+  key(index: number) { return [...this.values.keys()][index] ?? null; }
+  getItem(key: string) { return this.values.get(key) ?? null; }
+  setItem(key: string, value: string) { this.values.set(key, value); }
+  removeItem(key: string) { this.values.delete(key); }
+}
 afterEach(async () => Promise.all(names.splice(0).map((name) => Dexie.delete(name))));
 
 describe('learning backup', () => {
@@ -115,5 +123,79 @@ describe('learning backup', () => {
     await expect(importLearningData(target, backup)).resolves.toBeUndefined();
     expect(await target.knowledgeStates.get('knowledge:v0001')).toMatchObject({ itemId: 'v0001', status: 'mastered' });
     source.close(); target.close();
+  });
+
+  it('backs up and restores whitelisted browser learning sessions without copying device identity', async () => {
+    const source = database();
+    const sourceStorage = new MemoryStorage();
+    sourceStorage.setItem('draft:translation-1', '草稿内容');
+    sourceStorage.setItem('dictation:listening-1', 'dictation answer');
+    sourceStorage.setItem('cet4:diagnostic-session:v2', '{"step":2}');
+    sourceStorage.setItem('cet4:aggregate-review-session:v2:local', '{"answered":3}');
+    sourceStorage.setItem('cet4:device-id', 'do-not-export');
+    sourceStorage.setItem('cet4:local-profile-owner', 'do-not-export');
+    sourceStorage.setItem('cet4:last-backup-at', 'do-not-export');
+
+    const backup = await exportLearningData(source, sourceStorage);
+    expect(backup.browserState).toEqual({
+      'draft:translation-1': '草稿内容',
+      'dictation:listening-1': 'dictation answer',
+      'cet4:diagnostic-session:v2': '{"step":2}',
+      'cet4:aggregate-review-session:v2:local': '{"answered":3}',
+    });
+
+    const target = database();
+    const targetStorage = new MemoryStorage();
+    await importLearningData(target, backup, targetStorage);
+    expect(targetStorage.getItem('draft:translation-1')).toBe('草稿内容');
+    expect(targetStorage.getItem('cet4:device-id')).toBeNull();
+    source.close(); target.close();
+  });
+
+  it('still imports an older backup that has no browserState field', async () => {
+    const source = database();
+    const backup = await exportLearningData(source, new MemoryStorage());
+    delete backup.browserState;
+    const target = database();
+    await expect(importLearningData(target, backup, new MemoryStorage())).resolves.toBeUndefined();
+    source.close(); target.close();
+  });
+
+  it('clears database learning records and browser learning sessions while preserving device identity', async () => {
+    const db = database();
+    await db.attempts.put({ id: 'a-1', userId: 'local', questionId: 'q1', response: 'B', correct: true, score: 1, durationSeconds: 10, createdAt: '2026-09-23T10:00:00.000Z' });
+    const storage = new MemoryStorage();
+    storage.setItem('draft:translation-1', '草稿内容');
+    storage.setItem('dictation:listening-1', 'answer');
+    storage.setItem('cet4:diagnostic-session:v2', '{}');
+    storage.setItem('cet4:last-study-reminder', '2026-10-05');
+    storage.setItem('cet4:device-id', 'keep-device');
+    storage.setItem('cet4:local-profile-owner', 'keep-owner');
+
+    await clearLocalLearningData(db, storage);
+
+    expect(await db.attempts.count()).toBe(0);
+    expect(storage.getItem('draft:translation-1')).toBeNull();
+    expect(storage.getItem('dictation:listening-1')).toBeNull();
+    expect(storage.getItem('cet4:diagnostic-session:v2')).toBeNull();
+    expect(storage.getItem('cet4:last-study-reminder')).toBeNull();
+    expect(storage.getItem('cet4:device-id')).toBe('keep-device');
+    expect(storage.getItem('cet4:local-profile-owner')).toBe('keep-owner');
+    db.close();
+  });
+
+  it('keeps IndexedDB backup operations usable when browser storage is unavailable', async () => {
+    const db = database();
+    await db.attempts.put({ id: 'a-1', userId: 'local', questionId: 'q1', response: 'B', correct: true, score: 1, durationSeconds: 10, createdAt: '2026-09-23T10:00:00.000Z' });
+    const brokenStorage: StorageAdapter = {
+      get length() { throw new Error('blocked'); },
+      key() { throw new Error('blocked'); }, getItem() { throw new Error('blocked'); },
+      setItem() { throw new Error('blocked'); }, removeItem() { throw new Error('blocked'); },
+    };
+
+    const backup = await exportLearningData(db, brokenStorage);
+    expect(backup.data.attempts).toHaveLength(1);
+    await expect(clearLocalLearningData(db, brokenStorage)).resolves.toBeUndefined();
+    db.close();
   });
 });

@@ -18,22 +18,43 @@ function persistentId(key: string) {
 export function SubjectiveEditor({ question, kind, repository = defaultRepository, onSubmit, revealFeedback = true }: { question: SubjectiveQuestion; kind: 'writing' | 'translation'; repository?: LearningRepository; onSubmit?: (body: string, feedback: SubjectiveFeedback) => void; revealFeedback?: boolean }) {
   const storageKey = `draft:${question.id}`;
   const [body, setBody] = useState(() => localStorage.getItem(storageKey) ?? '');
+  const [hydrated, setHydrated] = useState(false);
+  const [edited, setEdited] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [validationError, setValidationError] = useState('');
   useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const drafts = typeof repository.getDrafts === 'function' ? await repository.getDrafts() : [];
+        const latest = drafts
+          .filter((draft) => draft.questionId === question.id && draft.body.trim())
+          .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0];
+        if (!cancelled && latest) setBody((current) => current.trim() ? current : latest.body);
+      } catch {
+        // A local browser draft remains usable when synced drafts cannot be loaded.
+      } finally {
+        if (!cancelled) setHydrated(true);
+      }
+    };
+    void load();
+    return () => { cancelled = true; };
+  }, [question.id, repository]);
+  useEffect(() => {
+    if (!hydrated || (!body.trim() && !edited)) return;
     const timer = window.setTimeout(() => {
       localStorage.setItem(storageKey, body);
       void repository.saveDraft({ id: persistentId(`${storageKey}:id`), questionId: question.id, body, deviceId: persistentId('cet4:device-id'), updatedAt: new Date().toISOString() }).catch(() => undefined);
     }, 2000);
     return () => window.clearTimeout(timer);
-  }, [body, question.id, repository, storageKey]);
+  }, [body, edited, hydrated, question.id, repository, storageKey]);
   const count = useMemo(() => countEnglishWords(body), [body]);
   const keywords = useMemo(() => [...new Set(question.referenceAnswer.toLowerCase().match(/[a-z]{5,}/g) ?? [])].slice(0, 4), [question.referenceAnswer]);
   const feedback = useMemo(() => evaluateSubjective(kind, body, keywords, question), [body, kind, keywords, question]);
   return <section className="subjective-editor">
     <header><h1>{kind === 'writing' ? '写作练习' : '翻译练习'}</h1><span>{count} 词</span></header>
     <p>{question.prompt}</p>
-    <label>{kind === 'writing' ? '写作答题区' : '翻译答题区'}<textarea aria-label={kind === 'writing' ? '写作答题区' : '翻译答题区'} value={body} onChange={(event) => { setBody(event.target.value); setValidationError(''); }} /></label>
+    <label>{kind === 'writing' ? '写作答题区' : '翻译答题区'}<textarea aria-label={kind === 'writing' ? '写作答题区' : '翻译答题区'} value={body} onChange={(event) => { setBody(event.target.value); setEdited(true); setValidationError(''); }} /></label>
     <p>{kind === 'writing' ? '按四级要求完成 120～180 个英文单词后才会记录任务完成。' : '至少完成 15 个英文单词并添加结尾标点后才会记录任务完成。'}</p>
     <button onClick={() => { const validation = validateSubjectiveSubmission(kind, body); if (!validation.valid) { setValidationError(validation.message); return; } setValidationError(''); setSubmitted(true); onSubmit?.(body, feedback); }}>提交自查</button>
     {validationError && <p role="alert">{validationError}</p>}

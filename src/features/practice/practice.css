@@ -37,6 +37,35 @@
 .daily-word-review,
 .vocabulary-translation-check,
 .strict-vocabulary-check { max-width: 820px; margin: 0 auto; }
+.daily-word-review { max-width: 1120px; }
+.daily-review-hero { display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; margin-bottom:1.25rem; }
+.daily-review-hero h1 { margin:.45rem 0; font-size:clamp(2rem,4vw,3.45rem); letter-spacing:-.035em; }
+.daily-review-hero p { max-width:740px; margin:0; color:#53645d; line-height:1.7; }
+.review-eyebrow,.daily-review-guide>span { color:#b24f1c; font-size:.75rem; font-weight:900; letter-spacing:.14em; }
+.daily-review-counter { display:flex; align-items:baseline; flex:0 0 auto; padding:1rem 1.2rem; border:1px solid #d9e1dc; border-radius:20px; background:#fffdf8; box-shadow:0 12px 30px rgba(31,54,45,.07); }
+.daily-review-counter strong { color:#1c6c55; font-family:Georgia,serif; font-size:2.2rem; }
+.daily-review-counter span { color:#6b7974; font-weight:800; }
+.daily-review-progress { margin-bottom:1.2rem; padding:1rem 1.25rem; border:1px solid #dfe5e1; border-radius:18px; background:rgba(255,253,248,.78); }
+.daily-review-progress>div:first-child { display:flex; justify-content:space-between; gap:1rem; margin-bottom:.65rem; color:#3f534b; font-weight:800; }
+.daily-review-progress [role="progressbar"] { height:8px; overflow:hidden; border-radius:999px; background:#e2e8e4; }
+.daily-review-progress i { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#1f735a,#f2bd52); transition:width .25s ease; }
+.daily-review-layout { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(260px,.75fr); gap:1.25rem; align-items:start; }
+.daily-review-layout .vocabulary-recall-exercise { min-height:420px; display:flex; flex-direction:column; justify-content:center; border:1px solid rgba(27,104,82,.12); }
+.daily-review-layout .vocabulary-recall-exercise h2 { line-height:1.18; overflow-wrap:anywhere; }
+.daily-review-guide { padding:1.4rem; border-radius:24px; color:#f7f4e9; background:linear-gradient(150deg,#123f34,#1f6b55); box-shadow:0 18px 42px rgba(19,63,52,.18); }
+.daily-review-guide h2 { margin:.45rem 0 1rem; color:#fff; }
+.daily-review-guide ol { display:grid; gap:.75rem; margin:0; padding:0; list-style:none; counter-reset:review-guide; }
+.daily-review-guide li { position:relative; padding:.9rem .9rem .9rem 3rem; border-radius:15px; background:rgba(255,255,255,.08); counter-increment:review-guide; }
+.daily-review-guide li::before { content:counter(review-guide,decimal-leading-zero); position:absolute; left:.9rem; top:.85rem; color:#f5c664; font-weight:900; }
+.daily-review-guide b,.daily-review-guide small { display:block; }
+.daily-review-guide small { margin-top:.25rem; color:#dce9e3; line-height:1.5; }
+.daily-review-guide p { margin:1rem 0 0; color:#dce9e3; font-size:.9rem; line-height:1.6; }
+.vocabulary-recall-actions { display:flex; justify-content:flex-end; gap:.75rem; margin-top:1rem; }
+.vocabulary-recall-actions button { min-height:48px; padding:.75rem 1rem; border-radius:13px; }
+.review-forgotten-button { border:1px solid #b7c4be; background:transparent; color:#334940; }
+.review-primary-button { border:0; background:#f4bf58; color:#173d32; font-weight:900; }
+.review-primary-button:disabled { opacity:.55; cursor:not-allowed; }
+.review-forgotten-note { display:block; margin-top:.65rem; color:#6a7772; text-align:right; }
 .daily-word-review input,
 .vocabulary-translation-check textarea,
 .strict-vocabulary-check input,
@@ -53,3 +82,12 @@
 .translation-result { display: grid; gap: .75rem; margin-top: 1rem; }
 .translation-result div { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem; border-radius: 12px; background: #fff4df; }
 @media (max-width: 640px) { .translation-result div { align-items: stretch; flex-direction: column; } }
+@media (max-width: 760px) {
+  .daily-review-hero { align-items:stretch; flex-direction:column; gap:1rem; }
+  .daily-review-counter { align-self:flex-start; }
+  .daily-review-layout { grid-template-columns:1fr; }
+  .daily-review-layout .vocabulary-recall-exercise { min-height:0; }
+  .vocabulary-recall-actions { flex-direction:column-reverse; }
+  .vocabulary-recall-actions button { width:100%; }
+  .review-forgotten-note { text-align:left; }
+}

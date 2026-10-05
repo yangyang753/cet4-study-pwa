@@ -32,6 +32,15 @@ describe('DataManagement', () => {
     expect(clear).toHaveBeenCalledTimes(1);
   });
 
+  it('reports a clear failure instead of falsely claiming the data was removed', async () => {
+    const clear = vi.fn().mockRejectedValue(new Error('storage blocked'));
+    render(<DataManagement actions={{ exportData: vi.fn(), importData: vi.fn(), clearData: clear }} />);
+    await userEvent.type(screen.getByLabelText('清空确认'), '清空本机数据');
+    await userEvent.click(screen.getByRole('button', { name: '清空本机数据' }));
+    expect(await screen.findByText(/清空失败/)).toBeVisible();
+    expect(screen.getByLabelText('清空确认')).toHaveValue('清空本机数据');
+  });
+
   it('lets the learner request protection from automatic browser cleanup', async () => {
     const manager = { persisted: vi.fn(async () => false), persist: vi.fn(async () => true), estimate: vi.fn(async () => ({ usage: 1024, quota: 4096 })) };
     render(<DataManagement storageManager={manager} actions={{ exportData: vi.fn(), importData: vi.fn(), clearData: vi.fn() }} />);

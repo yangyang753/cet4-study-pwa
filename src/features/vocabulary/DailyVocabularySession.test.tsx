@@ -89,6 +89,10 @@ describe('DailyVocabularySession', () => {
     const learningRepository = repository();
     render(<DailyVocabularySession repository={learningRepository} entries={entries} collocationEntries={[]} today="2026-09-25" examDate="2026-12-12" random={() => 0.4} onComplete={() => undefined} />);
     expect(await screen.findByRole('heading', { name: '先复习今天要用的单词' })).toBeVisible();
+    expect(screen.getByRole('progressbar', { name: '旧词复习进度' })).toHaveAttribute('aria-valuenow', '0');
+    expect(screen.getByText('已完成 0')).toBeVisible();
+    expect(screen.getByText('剩余 1')).toBeVisible();
+    expect(screen.getByText(/答错或想不起来，会自动加入错题复习/)).toBeVisible();
     expect(screen.getByText('文章，段落')).toBeVisible();
     expect(screen.queryByRole('heading', { name: 'benefit' })).not.toBeInTheDocument();
 
