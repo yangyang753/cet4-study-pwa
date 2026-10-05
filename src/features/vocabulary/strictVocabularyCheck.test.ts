@@ -82,13 +82,26 @@ describe('strict vocabulary check', () => {
     });
   });
 
-  it('rejects a recognized unrelated dictionary meaning appended to an otherwise correct answer', () => {
+  it('does not turn a threshold-passing answer into a failure because of extra text', () => {
     const like: VocabularyEntry = { id: 'like', word: 'like', phonetic: '', partOfSpeech: 'v.', meaningZh: '喜欢；像；赞同', example: '', derivatives: [], confusables: [] };
     const bank: VocabularyEntry = { id: 'bank', word: 'bank', phonetic: '', partOfSpeech: 'n.', meaningZh: '银行；岸', example: '', derivatives: [], confusables: [] };
     const question = { ...buildStrictVocabularyQuestions([like])[0], kind: 'meaning' as const };
     expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '喜欢；像；赞同；银行' }, [like, bank])).toMatchObject({
-      correct: false,
+      correct: true,
+      matchedMeaningCount: 3,
+      requiredMeaningCount: 3,
       unexpectedMeanings: ['银行'],
+    });
+  });
+
+  it('passes the reported three-out-of-three give answer even when another word shares extra text', () => {
+    const give: VocabularyEntry = { id: 'give', word: 'give', phonetic: '', partOfSpeech: 'v.', meaningZh: '给；提供；举办；让步', example: '', derivatives: [], confusables: [] };
+    const passage: VocabularyEntry = { id: 'passage', word: 'passage', phonetic: '', partOfSpeech: 'n.', meaningZh: '文章；通过', example: '', derivatives: [], confusables: [] };
+    const question = { ...buildStrictVocabularyQuestions([give])[0], kind: 'meaning' as const };
+    expect(gradeStrictVocabularyAnswer(question, { english: '', chinese: '给；通过；举办；让步' }, [give, passage])).toMatchObject({
+      correct: true,
+      matchedMeaningCount: 3,
+      requiredMeaningCount: 3,
     });
   });
 });

@@ -139,7 +139,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
       });
       await repository.upsertKnowledgeState(next);
       if (!grade.spellingCorrect) await repository.upsertReviewCard(vocabularyReviewCard(exercise.word.id, 'cloze', now));
-      if (grade.missingMeanings.length || grade.unexpectedMeanings.length) await repository.upsertReviewCard(vocabularyReviewCard(exercise.word.id, 'meaning', now));
+      if (!grade.correct && (grade.missingMeanings.length || grade.unexpectedMeanings.length)) await repository.upsertReviewCard(vocabularyReviewCard(exercise.word.id, 'meaning', now));
       setStates((items) => new Map(items).set(exercise.word.id, next));
       if (aggregateSession) {
         const nextSession = recordAggregateReviewResult(aggregateSession, grade.correct);

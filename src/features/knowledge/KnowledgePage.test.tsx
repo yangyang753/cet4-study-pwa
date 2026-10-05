@@ -70,6 +70,26 @@ describe('KnowledgePage', () => {
     expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ kind: 'vocabulary', mode: 'review', correct: false }));
   });
 
+  it('does not create a mistake when a meaning answer reaches the displayed threshold', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0018', itemId: 'v0018', status: 'review', favorite: false, reviewStage: 0, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} random={() => 0.1} />);
+
+    await userEvent.click(await screen.findByRole('button', { name: /开始待复习词总巩固/ }));
+    await userEvent.type(screen.getByLabelText('中文释义答案'), '给；通过；举办；让步');
+    await userEvent.click(screen.getByRole('button', { name: '提交巩固结果' }));
+
+    expect(await screen.findByText(/回答正确，已识别 3 个关键点/)).toBeVisible();
+    expect(repository.upsertReviewCard).not.toHaveBeenCalled();
+    expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ correct: true }));
+  });
+
   it('finishes a one-word aggregate round with a visible summary instead of repeating it', async () => {
     const repository = {
       getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [

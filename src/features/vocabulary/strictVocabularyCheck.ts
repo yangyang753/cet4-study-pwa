@@ -139,8 +139,8 @@ export function gradeStrictVocabularyAnswer(
   const matchedMeaningCount = recognizedConcepts.length;
   const meaningCorrect = !needsChinese || matchedMeaningCount >= requiredMeaningCount;
   const missingMeanings = meaningCorrect ? [] : remainingMeanings;
-  // Unknown free-form paraphrases are not punished. A fragment is rejected only when it
-  // clearly matches a listed meaning of another word and none of this word's concepts.
+  // Keep unfamiliar fragments as diagnostic feedback, but never let them overturn a
+  // threshold-passing answer: a learner may know a valid sense that this compact list omits.
   const otherConcepts = knownWords
     .filter((word) => word.id !== question.word.id)
     .flatMap(requiredMeaningConcepts);
@@ -150,7 +150,7 @@ export function gradeStrictVocabularyAnswer(
     return otherConcepts.some((concept) => concept.aliases.some((alias) => fragmentMatchesAlias(fragment, alias)));
   }).filter((fragment, index, all) => all.indexOf(fragment) === index);
   return {
-    correct: spellingCorrect && meaningCorrect && unexpectedMeanings.length === 0,
+    correct: spellingCorrect && meaningCorrect,
     spellingCorrect,
     missingMeanings,
     unexpectedMeanings,
