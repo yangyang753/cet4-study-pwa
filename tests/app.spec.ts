@@ -1,5 +1,10 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { readFileSync } from 'node:fs';
+
+const e2eVocabulary = JSON.parse(readFileSync(new URL('../content/v1/vocabulary.json', import.meta.url), 'utf8')) as Array<{ id: string; word: string }>;
+const e2eEnrichment = JSON.parse(readFileSync(new URL('../content/v1/vocabularyEnrichment.json', import.meta.url), 'utf8')) as Array<{ vocabularyId: string; family: Array<{ word: string }>; confusables: Array<{ word: string }> }>;
+const e2eEnrichmentById = new Map(e2eEnrichment.map((item) => [item.vocabularyId, item]));
 
 test('preserves legacy deep-link queries when migrating to Hash routing', async ({ page }) => {
   await page.goto('review?source=reminder');
@@ -169,6 +174,24 @@ test('keeps one vocabulary cohort, continues into collocations, and unlocks cult
       ]);
       if (await strictFeedback.isVisible()) throw new Error(`strict answer unexpectedly failed: ${await strictFeedback.textContent()}`);
     }
+  }
+  for (const learned of learnedWords) {
+    const vocabularyId = e2eVocabulary.find((word) => word.word === learned.word)?.id;
+    const enrichment = vocabularyId ? e2eEnrichmentById.get(vocabularyId) : null;
+    if (!enrichment) continue;
+    const enrichmentInput = page.locator('.enrichment-recall-exercise input');
+    await expect(enrichmentInput).toBeVisible();
+    const currentEnrichmentInput = await enrichmentInput.elementHandle();
+    const familyAnswer = page.getByRole('textbox', { name: '词族答案' });
+    const confusableAnswer = page.getByRole('textbox', { name: '易混词答案' });
+    if (await familyAnswer.count()) {
+      await familyAnswer.fill(enrichment.family[0].word);
+      await page.getByRole('button', { name: '提交词族巩固' }).click();
+    } else {
+      await confusableAnswer.fill(enrichment.confusables[0].word);
+      await page.getByRole('button', { name: '提交易混词巩固' }).click();
+    }
+    await currentEnrichmentInput?.waitForElementState('hidden', { timeout: 10_000 });
   }
   await expect(page.getByRole('heading', { level: 1, name: '单词之后学习重点搭配' })).toBeVisible();
   const collocationProgress = await page.locator('.collocation-warmup header span').textContent();
