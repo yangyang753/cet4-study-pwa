@@ -37,6 +37,18 @@ describe('collocation practice', () => {
     expect(review.entries.map((item) => item.id)).toContain('c0');
   });
 
+  it('reviews collocations learned on the preceding day first', () => {
+    const states: KnowledgeState[] = [
+      { id: 'knowledge:c1', itemId: 'c1', status: 'review', favorite: false, updatedAt: '2026-09-20T00:00:00.000Z', nextReviewAt: '2026-12-30T00:00:00.000Z' },
+      { id: 'knowledge:c2', itemId: 'c2', status: 'review', favorite: false, updatedAt: '2026-10-01T08:00:00.000Z', nextReviewAt: '2026-12-30T00:00:00.000Z' },
+    ];
+
+    const review = buildCollocationWorkload(entries, states, '2026-10-02', '2026-12-12', true);
+
+    expect(review.reviewEntries[0].id).toBe('c2');
+    expect(review.newEntries).toEqual([]);
+  });
+
   it('selects due collocations before unseen collocations and excludes future mastered items', () => {
     const states: KnowledgeState[] = [
       { id: 'knowledge:c1', itemId: 'c1', status: 'review', favorite: false, nextReviewAt: '2026-09-25T00:00:00.000Z', updatedAt: '2026-09-20T00:00:00.000Z' },
