@@ -42,7 +42,7 @@ export function PrintPage({ repository = defaultRepository }: { repository?: Lea
   useEffect(() => { let active = true; void repository.getDashboardSnapshot().then((value) => { if (active) setSnapshot(value); }); return () => { active = false; }; }, [repository]);
   const dailyWorkload = snapshot ? buildVocabularyWorkload(learningVocabulary, snapshot.knowledgeStates, today, snapshot.settings.examDate, snapshot.settings.dailyMinutes, {
     cultureWordIds: dailyCulturePrompt.targetWordIds,
-    completedVocabularySessions: (snapshot.completions ?? []).filter((item) => item.kind === 'vocabulary').length,
+    completedVocabularySessions: (snapshot.completions ?? []).filter((item) => item.taskId.endsWith(':vocabulary') && !item.taskId.endsWith(':foundation-vocabulary')).length,
   }) : null;
   const foundationWorkload = snapshot ? buildVocabularyWorkload(foundationVocabulary, snapshot.knowledgeStates, today, snapshot.settings.examDate, Math.max(10, Math.round(snapshot.settings.dailyMinutes * 0.35)), {
     layer: 'foundation',

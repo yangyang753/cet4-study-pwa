@@ -68,6 +68,15 @@ describe('TodayPage', () => {
     expect(core.closest('article')).toHaveTextContent(/799 个未首轮学习/);
   });
 
+  it('does not use a foundation completion to flip the core vocabulary review cycle', async () => {
+    render(<TodayPage today="2026-09-23" repository={repository({
+      completions: [{ id: '2026-09-22:foundation-vocabulary', date: '2026-09-22', taskId: '2026-09-22:foundation-vocabulary', kind: 'vocabulary', completedAt: '2026-09-22T08:00:00.000Z' }],
+      knowledgeStates: [{ id: 'knowledge:v0001', itemId: 'v0001', status: 'learning', favorite: false, nextReviewAt: '2026-12-30T00:00:00.000Z', updatedAt: '2026-09-22T08:00:00.000Z' }],
+    })} />);
+    expect(await screen.findByText(/今日高频新词 \d+ 个/)).toBeVisible();
+    expect(screen.queryByText('高频词隔日集中巩固')).not.toBeInTheDocument();
+  });
+
   it('preserves the saved foundation cohort when refreshing the daily plan', async () => {
     const learningRepository = repository();
     const savePlan = vi.fn().mockResolvedValue(undefined);

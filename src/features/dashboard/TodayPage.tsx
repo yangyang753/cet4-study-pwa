@@ -76,7 +76,7 @@ export function TodayPage({ today = studyDate(), examDate, repository = defaultR
   const dailyCulturePrompt = selectDailyCultureTranslation(cultureTranslationBank as CultureTranslationPrompt[], today);
   const vocabularyWorkload = snapshot ? buildVocabularyWorkload(learningVocabulary, snapshot.knowledgeStates, today, targetDate, dailyMinutes, {
     cultureWordIds: dailyCulturePrompt.targetWordIds,
-    completedVocabularySessions: (snapshot.completions ?? []).filter((item) => item.kind === 'vocabulary').length,
+    completedVocabularySessions: (snapshot.completions ?? []).filter((item) => item.taskId.endsWith(':vocabulary') && !item.taskId.endsWith(':foundation-vocabulary')).length,
   }) : null;
   const foundationVocabularyWorkload = snapshot ? buildVocabularyWorkload(foundationVocabulary, snapshot.knowledgeStates, today, targetDate, Math.max(10, Math.round(dailyMinutes * 0.35)), {
     layer: 'foundation',
