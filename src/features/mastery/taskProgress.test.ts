@@ -21,6 +21,7 @@ describe('recordMasteryOutcome', () => {
     const learningRepository = repository();
     expect(await recordMasteryOutcome(learningRepository, '2026-09-24:reading', 3, 5, '2026-09-24T09:00:00.000Z')).toBe('remediation');
     expect(learningRepository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ status: 'review' }));
+    expect(learningRepository.completeTask).not.toHaveBeenCalled();
   });
 
   it('does not persist an unsupported kind from a malformed task id', async () => {

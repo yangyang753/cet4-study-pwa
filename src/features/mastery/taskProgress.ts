@@ -18,7 +18,7 @@ export async function recordMasteryOutcome(repository: LearningRepository, taskI
   const kind: StudyKind = supportedKinds.includes(rawKind as StudyKind) ? rawKind as StudyKind : 'review';
   const date = /^\d{4}-\d{2}-\d{2}:/.test(taskId) ? taskId.slice(0, 10) : localStudyDate(new Date(now));
   const outcome: MasteryOutcome = total > 0 && correct / total >= 0.8 ? 'mastered' : 'remediation';
-  await repository.completeTask({ id: taskId, date, taskId, kind, completedAt: now });
+  if (outcome === 'mastered') await repository.completeTask({ id: taskId, date, taskId, kind, completedAt: now });
   await repository.upsertKnowledgeState({
     id: `mastery:${taskId}`,
     itemId: taskId,

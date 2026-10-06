@@ -37,6 +37,15 @@ describe('MasteryCheck', () => {
     expect(selectMasteryQuestions('listening', sourceIds)).toHaveLength(3);
   });
 
+  it('rotates away from the three most recently used mastery questions', () => {
+    const first = selectMasteryQuestions('vocabulary');
+    const next = selectMasteryQuestions('vocabulary', [], first.map((question) => question.id));
+
+    expect(next).toHaveLength(3);
+    expect(next.map((question) => question.id)).not.toEqual(first.map((question) => question.id));
+    expect(next.every((question) => !first.some((recent) => recent.id === question.id))).toBe(true);
+  });
+
   it('uses collocation questions for a collocation mastery check', () => {
     const sourceIds = getPracticeItems('collocation').slice(2, 4).map((question) => question.id);
     expect(selectMasteryQuestions('collocation', sourceIds).map((question) => question.id)).toEqual(expect.arrayContaining(sourceIds));
