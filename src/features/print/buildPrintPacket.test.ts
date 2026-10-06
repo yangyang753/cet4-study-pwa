@@ -16,6 +16,15 @@ describe('buildPrintPacket', () => {
     expect(answers.some((block) => block.questionId.startsWith('culture-day') && block.answer === culturePrompt.referenceAnswer)).toBe(true);
   });
 
+  it('prints foundation and core daily words as visibly separate groups', () => {
+    const foundation: VocabularyEntry = { id: 'f0001', word: 'the', phonetic: '/ðə/', partOfSpeech: 'art.', meaningZh: '这，那', example: 'The book is here.', derivatives: [], confusables: [], layer: 'foundation' };
+    const core: VocabularyEntry = { id: 'v0001', word: 'passage', phonetic: '/ˈpæsɪdʒ/', partOfSpeech: 'n.', meaningZh: '文章', example: 'Read the passage.', derivatives: [], confusables: [], layer: 'core' };
+    const packet = buildPrintPacket({ kind: 'daily', foundationVocabulary: [foundation], dailyVocabulary: [core] });
+    const blocks = packet.questionPages.flatMap((page) => page.blocks);
+    expect(blocks.find((block) => block.questionId === 'daily-foundation-word:f0001')?.text).toContain('基础必会词');
+    expect(blocks.find((block) => block.questionId === 'daily-word:v0001')?.text).toContain('高频词');
+  });
+
   it('numbers every calculated page and includes full answer explanations', () => {
     const questions = getPracticeItems('listening').slice(0, 10);
     const packet = buildPrintPacket({ kind: 'practice', questions, pageCapacity: 8 });

@@ -18,6 +18,32 @@ class MemoryStorage implements StorageAdapter {
 afterEach(async () => Promise.all(names.splice(0).map((name) => Dexie.delete(name))));
 
 describe('learning backup', () => {
+  it('round-trips foundation knowledge, mistakes, and the independent daily cohort', async () => {
+    const source = database();
+    const now = '2026-10-06T09:00:00.000Z';
+    await source.knowledgeStates.put({ id: 'knowledge:f0001', itemId: 'f0001', status: 'review', favorite: false, updatedAt: now });
+    await source.reviewCards.put({ id: 'review:f0001:meaning', questionId: 'f0001:meaning', wordId: 'f0001', vocabularyLayer: 'foundation', format: 'word-meaning', stage: 0, nextReviewAt: now, lastCorrect: false, updatedAt: now });
+    await source.plans.put({ id: 'plan:2026-10-06', date: '2026-10-06', tasks: [], foundationVocabularySession: { wordIds: ['f0001'], learnedWordIds: ['f0001'], phase: 'testing' }, updatedAt: now });
+
+    const target = database();
+    await importLearningData(target, await exportLearningData(source));
+
+    expect(await target.knowledgeStates.get('knowledge:f0001')).toMatchObject({ itemId: 'f0001', status: 'review' });
+    expect(await target.reviewCards.get('review:f0001:meaning')).toMatchObject({ wordId: 'f0001', vocabularyLayer: 'foundation' });
+    expect((await target.plans.get('plan:2026-10-06'))?.foundationVocabularySession).toMatchObject({ wordIds: ['f0001'], phase: 'testing' });
+    source.close(); target.close();
+  });
+
+  it('imports a legacy foundation mistake that relies only on its stable f id', async () => {
+    const source = database();
+    const backup = await exportLearningData(source);
+    backup.data.reviewCards.push({ id: 'review:f0002:meaning', questionId: 'f0002:meaning', wordId: 'f0002', format: 'word-meaning', stage: 0, nextReviewAt: backup.exportedAt, lastCorrect: false, updatedAt: backup.exportedAt });
+    const target = database();
+    await expect(importLearningData(target, backup)).resolves.toBeUndefined();
+    expect(await target.reviewCards.get('review:f0002:meaning')).toMatchObject({ wordId: 'f0002' });
+    source.close(); target.close();
+  });
+
   it('exports a versioned snapshot and restores its learning records', async () => {
     const source = database();
     await source.attempts.put({ id: 'a-1', userId: 'local', questionId: 'q1', response: 'B', correct: true, score: 1, durationSeconds: 10, createdAt: '2026-09-23T10:00:00.000Z' });

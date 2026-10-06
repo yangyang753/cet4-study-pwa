@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { contentCatalog } from '../../content/catalog';
 import { learningVocabulary } from '../../content/vocabularyLearning';
+import { foundationVocabulary } from '../../content/foundationVocabulary';
 import { cultureTranslationBank } from '../../content/cultureTranslations';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
@@ -43,14 +44,19 @@ export function PrintPage({ repository = defaultRepository }: { repository?: Lea
     cultureWordIds: dailyCulturePrompt.targetWordIds,
     completedVocabularySessions: (snapshot.completions ?? []).filter((item) => item.kind === 'vocabulary').length,
   }) : null;
+  const foundationWorkload = snapshot ? buildVocabularyWorkload(foundationVocabulary, snapshot.knowledgeStates, today, snapshot.settings.examDate, Math.max(10, Math.round(snapshot.settings.dailyMinutes * 0.35)), {
+    layer: 'foundation',
+    completedVocabularySessions: (snapshot.completions ?? []).filter((item) => item.taskId.endsWith(':foundation-vocabulary')).length,
+  }) : null;
   const packet = useMemo(() => buildPrintPacket({
     kind,
     sourceId: kind === 'mock' ? (sourceId.startsWith('mock-') ? sourceId : 'mock-1') : sourceId,
     includeKnowledge,
     pageCapacity: 8,
+    foundationVocabulary: kind === 'daily' && foundationWorkload ? [...foundationWorkload.dueWords, ...foundationWorkload.newWords] : undefined,
     dailyVocabulary: kind === 'daily' && dailyWorkload ? [...dailyWorkload.dueWords, ...dailyWorkload.newWords, ...dailyWorkload.cultureWords] : undefined,
     dailyCulturePrompt: kind === 'daily' ? dailyCulturePrompt : undefined,
-  }), [dailyCulturePrompt, dailyWorkload, includeKnowledge, kind, sourceId]);
+  }), [dailyCulturePrompt, dailyWorkload, foundationWorkload, includeKnowledge, kind, sourceId]);
   const changeKind = (next: PrintPacketKind) => { setKind(next); setSourceId(next === 'mock' ? 'mock-1' : 'reading'); };
 
   return <section className="print-center">

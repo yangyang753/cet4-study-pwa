@@ -271,12 +271,25 @@ test('discards a corrupted aggregate review session instead of leaving a dead co
 });
 
 test('reopens the visited study dashboard while offline', async ({ page, context }) => {
-  await page.goto('#/today');
+  await page.goto('#/foundation-vocabulary');
   await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.evaluate(async () => {
+    const database = await new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open('cet4-study'); request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error);
+    });
+    await new Promise<void>((resolve, reject) => {
+      const transaction = database.transaction('knowledgeStates', 'readwrite');
+      transaction.objectStore('knowledgeStates').put({ id: 'knowledge:f0001', itemId: 'f0001', status: 'mastered', favorite: false, updatedAt: new Date().toISOString() });
+      transaction.oncomplete = () => resolve(); transaction.onerror = () => reject(transaction.error);
+    });
+    database.close();
+  });
   await page.reload();
+  await expect(page.getByRole('button', { name: '已掌握（1）' })).toBeVisible();
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('heading', { name: /向目标 425 分前进/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '基础必会词' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '已掌握（1）' })).toBeVisible();
 });
 
 test('continues a full mock into the next locked section', async ({ page, request }) => {

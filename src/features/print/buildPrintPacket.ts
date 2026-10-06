@@ -7,7 +7,7 @@ import { buildWordCloze } from '../vocabulary/vocabularySchedule';
 import { publicAssetUrl } from '../../lib/publicAssetUrl';
 
 export type PrintPacketKind = 'daily' | 'practice' | 'mock';
-export interface PrintPacketOptions { kind: PrintPacketKind; sourceId?: string; questions?: CatalogQuestion[]; includeKnowledge?: boolean; pageCapacity?: number; dailyVocabulary?: VocabularyEntry[]; dailyCulturePrompt?: CultureTranslationPrompt }
+export interface PrintPacketOptions { kind: PrintPacketKind; sourceId?: string; questions?: CatalogQuestion[]; includeKnowledge?: boolean; pageCapacity?: number; foundationVocabulary?: VocabularyEntry[]; dailyVocabulary?: VocabularyEntry[]; dailyCulturePrompt?: CultureTranslationPrompt }
 export interface PrintBlock { kind: 'context' | 'question' | 'writing-space' | 'answer' | 'knowledge'; questionId: string; title?: string; text: string; href?: string; options?: string[]; answer?: string; explanation?: string; weight: number }
 export interface PrintPage { title: string; blocks: PrintBlock[]; pageNumber: number; totalPages: number }
 export interface PrintPacket { pages: PrintPage[]; questionPages: PrintPage[]; answerPages: PrintPage[]; questionCount: number }
@@ -21,7 +21,13 @@ function resolveQuestions(options: PrintPacketOptions): CatalogQuestion[] {
     const kind = practiceKinds.includes(options.sourceId as PracticeKind) ? options.sourceId as PracticeKind : 'reading';
     return getPracticeItems(kind).slice(0, kind === 'vocabulary' ? 20 : 12);
   }
-  if (options.dailyVocabulary?.length || options.dailyCulturePrompt) {
+  if (options.foundationVocabulary?.length || options.dailyVocabulary?.length || options.dailyCulturePrompt) {
+    const foundationQuestions = (options.foundationVocabulary ?? []).map((word) => ({
+      id: `daily-foundation-word:${word.id}`, version: 1, type: 'translation' as const, difficulty: 'foundation' as const,
+      prompt: `补全基础必会词：${buildWordCloze(word.word, 0)}（${word.meaningZh}） 答案：____________`,
+      knowledgePointIds: [`vocabulary:${word.id}`], explanationZh: `${word.word}：${word.meaningZh}。例句：${word.example}`,
+      sourceNote: '今日基础必会词安排', rubric: ['拼写完整'], referenceAnswer: word.word, groupId: word.id,
+    }));
     const wordQuestions = (options.dailyVocabulary ?? []).map((word) => ({
       id: `daily-word:${word.id}`, version: 1, type: 'translation' as const, difficulty: 'foundation' as const,
       prompt: `补全高频词：${buildWordCloze(word.word, 0)}（${word.meaningZh}） 答案：____________`,
@@ -35,7 +41,7 @@ function resolveQuestions(options: PrintPacketOptions): CatalogQuestion[] {
       sourceNote: '今日中国文化原创仿真翻译', rubric: options.dailyCulturePrompt.keyPoints,
       referenceAnswer: options.dailyCulturePrompt.referenceAnswer, groupId: options.dailyCulturePrompt.id,
     }] : [];
-    return [...wordQuestions, ...cultureQuestion] as CatalogQuestion[];
+    return [...foundationQuestions, ...wordQuestions, ...cultureQuestion] as CatalogQuestion[];
   }
   return [
     ...getPracticeItems('vocabulary').slice(0, 5),
@@ -88,7 +94,7 @@ export function buildPrintPacket(options: PrintPacketOptions): PrintPacket {
       printedContexts.add(question.groupId);
     }
     questionBlocks.push({ kind: 'question', questionId: question.id, title: number, text: question.prompt, options: 'options' in question ? question.options.map((option) => `${option.id}. ${option.text}`) : undefined, weight: Math.min(capacity, 'options' in question ? 2 : 1) });
-    if (!('options' in question)) questionBlocks.push({ kind: 'writing-space', questionId: question.id, text: '', weight: Math.min(capacity, question.id.startsWith('daily-word:') ? 1 : question.type === 'writing' ? 5 : 4) });
+    if (!('options' in question)) questionBlocks.push({ kind: 'writing-space', questionId: question.id, text: '', weight: Math.min(capacity, question.id.startsWith('daily-word:') || question.id.startsWith('daily-foundation-word:') ? 1 : question.type === 'writing' ? 5 : 4) });
     const answer = 'correctAnswer' in question ? (Array.isArray(question.correctAnswer) ? question.correctAnswer.join(', ') : question.correctAnswer) : question.referenceAnswer;
     splitExplanation(question.explanationZh, capacity).forEach((explanation, partIndex) => answerBlocks.push({ kind: 'answer', questionId: `${question.id}:${partIndex}`, title: partIndex === 0 ? number : `${number}（解析续）`, text: question.prompt, answer: partIndex === 0 ? answer : undefined, explanation, weight: Math.min(capacity, Math.max(1, Math.ceil(explanation.length / 150))) }));
   });

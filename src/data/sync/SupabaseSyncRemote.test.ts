@@ -48,4 +48,14 @@ describe('SupabaseSyncRemote', () => {
     const restored = (remote as unknown as { fromRow(kind: string, row: Record<string, unknown>): { payload: Record<string, unknown> } }).fromRow('knowledgeState', { id: state.id, item_id: 'v1', status: 'review', favorite: false, payload: state, updated_at: state.updatedAt });
     expect(restored.payload).toMatchObject({ reviewStage: 2, lapseCount: 3, nextReviewAt: state.nextReviewAt });
   });
+
+  it('preserves foundation ids and layer metadata across sync', async () => {
+    const fake = clientDouble();
+    const remote = new SupabaseSyncRemote(fake.client, 'user-1');
+    const review = { id: 'review:f0001:meaning', questionId: 'f0001:meaning', wordId: 'f0001', vocabularyLayer: 'foundation', format: 'word-meaning', stage: 0, nextReviewAt: '2026-10-06T09:00:00.000Z', lastCorrect: false, updatedAt: '2026-10-06T09:00:00.000Z' };
+    await remote.upsertOperation('reviewCard', review);
+    expect(fake.upsert).toHaveBeenLastCalledWith(expect.objectContaining({ payload: review }));
+    const restored = (remote as unknown as { fromRow(kind: string, row: Record<string, unknown>): { payload: Record<string, unknown> } }).fromRow('reviewCard', { id: review.id, question_id: review.questionId, stage: 0, priority: 1, reason: null, next_review_at: review.nextReviewAt, last_correct: false, payload: review, updated_at: review.updatedAt });
+    expect(restored.payload).toMatchObject({ wordId: 'f0001', vocabularyLayer: 'foundation' });
+  });
 });
