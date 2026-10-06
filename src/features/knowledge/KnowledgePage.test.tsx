@@ -23,6 +23,18 @@ describe('KnowledgePage', () => {
     expect(screen.queryByText('一个人')).not.toBeInTheDocument();
   });
 
+  it('shows and hides every currently visible meaning with one control', async () => {
+    render(<KnowledgePage />);
+
+    await userEvent.click(screen.getByRole('button', { name: '显示当前全部释义' }));
+    expect(screen.getByText(/^文章，段落.*通过/)).toBeVisible();
+    expect(screen.getByText(/一个人/)).toBeVisible();
+
+    await userEvent.click(screen.getByRole('button', { name: '隐藏当前全部释义' }));
+    expect(screen.queryByText(/^文章，段落.*通过/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/一个人/)).not.toBeInTheDocument();
+  });
+
   it('offers one aggregate review without per-word hint buttons', async () => {
     const repository = {
       getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
