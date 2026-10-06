@@ -82,6 +82,27 @@ describe('learner-facing vocabulary', () => {
     expect(learningVocabulary.find((entry) => entry.word === 'repair')?.meaningZh).toBe('修理，修补；修复，补救');
   });
 
+  it('keeps confirmed CET senses and natural examples for noisy everyday words', () => {
+    const expected: Record<string, string> = {
+      buy: '买，购买；获得',
+      half: '一半；一半的；部分地',
+      miss: '错过；想念；未听到，未看到',
+      oil: '油；石油；给……加油',
+      party: '聚会；政党；一方，当事人',
+      billion: '十亿',
+      medicine: '药；医学',
+      consume: '消耗，消费；吃完，喝光',
+      debt: '债，债务；欠债',
+      mail: '邮件；邮寄；邮政',
+    };
+    for (const [word, meaning] of Object.entries(expected)) {
+      expect(learningVocabulary.find((entry) => entry.word === word)?.meaningZh, word).toBe(meaning);
+    }
+    expect(learningVocabulary.find((entry) => entry.word === 'half')?.example).toBe('Half of the students chose the online course.');
+    expect(learningVocabulary.find((entry) => entry.word === 'miss')?.example).toBe('Do not miss the deadline for registration.');
+    expect(learningVocabulary.find((entry) => entry.word === 'party')?.exampleZh).toBe('我们为国际学生举办了一场欢迎会。');
+  });
+
   it('repairs source rows that accidentally swallowed the following headword', () => {
     expect(learningVocabulary.find((entry) => entry.id === 'v0289')).toMatchObject({
       word: 'project',

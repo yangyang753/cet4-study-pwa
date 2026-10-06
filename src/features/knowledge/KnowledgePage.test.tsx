@@ -23,6 +23,18 @@ describe('KnowledgePage', () => {
     expect(screen.queryByText('一个人')).not.toBeInTheDocument();
   });
 
+  it('shows and hides every currently visible meaning with one control', async () => {
+    render(<KnowledgePage />);
+
+    await userEvent.click(screen.getByRole('button', { name: '显示当前全部释义' }));
+    expect(screen.getByText(/^文章，段落.*通过/)).toBeVisible();
+    expect(screen.getByText(/一个人/)).toBeVisible();
+
+    await userEvent.click(screen.getByRole('button', { name: '隐藏当前全部释义' }));
+    expect(screen.queryByText(/^文章，段落.*通过/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/一个人/)).not.toBeInTheDocument();
+  });
+
   it('offers one aggregate review without per-word hint buttons', async () => {
     const repository = {
       getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
@@ -162,6 +174,29 @@ describe('KnowledgePage', () => {
     expect(await screen.findByText(/已加入中译英错题复习/)).toBeVisible();
     expect(repository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ wordId: 'v0164', format: 'word-translation' }));
     expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ correct: false }));
+  });
+
+  it('adds only the wrong learned word from a multi-target translation', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0164', itemId: 'v0164', status: 'review', favorite: false, reviewStage: 1, updatedAt: '2026-09-24T08:00:00.000Z' },
+        { id: 'knowledge:v0218', itemId: 'v0218', status: 'review', favorite: false, reviewStage: 1, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} random={() => 0} />);
+
+    await userEvent.click(await screen.findByRole('button', { name: '开始多词短句' }));
+    await userEvent.type(screen.getByRole('textbox', { name: '英文短句答案' }), 'Chinese culture has a long story.');
+    await userEvent.click(screen.getByRole('button', { name: '提交中译英' }));
+
+    expect(await screen.findByText(/1 个目标词已加入中译英错题复习/)).toBeVisible();
+    expect(repository.upsertReviewCard).toHaveBeenCalledTimes(1);
+    expect(repository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ wordId: 'v0218', format: 'word-translation' }));
+    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v0164', status: 'review', reviewStage: 2 }));
+    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v0218', status: 'review', reviewStage: 0 }));
   });
 
   it('finishes a one-word aggregate round with a visible summary instead of repeating it', async () => {

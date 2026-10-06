@@ -43,7 +43,7 @@ function studyDate(value: string): string {
 }
 
 function isReviewCycleSession(completedVocabularySessions: number): boolean {
-  return Math.max(0, completedVocabularySessions) % 3 === 2;
+  return Math.max(0, completedVocabularySessions) % 2 === 1;
 }
 
 function acquisitionDayCount(days: number, completedVocabularySessions: number): number {
@@ -111,7 +111,14 @@ export function buildVocabularyWorkload(
     .filter((item): item is { word: VocabularyEntry; state: KnowledgeState } => Boolean(item.state) && !allDueWords.some((word) => word.id === item.word.id))
     .sort((left, right) => (right.state.lapseCount ?? 0) - (left.state.lapseCount ?? 0) || dateMs(left.state.updatedAt) - dateMs(right.state.updatedAt))
     .map(({ word }) => word);
-  const reviewPool = reviewOnlyDay ? [...allDueWords, ...learnedNotDue] : allDueWords;
+  const precedingDate = studyDate(addDays(today, -1));
+  const precedingDayWords = entries.filter((word) => {
+    const updatedAt = stateById.get(word.id)?.updatedAt;
+    return Boolean(updatedAt && studyDate(updatedAt) === precedingDate);
+  });
+  const reviewPool = reviewOnlyDay
+    ? [...new Map([...precedingDayWords, ...allDueWords, ...learnedNotDue].map((word) => [word.id, word])).values()]
+    : allDueWords;
   const acquisitionReviewCap = Math.max(8, Math.min(Math.floor(dailyKnowledgeCapacity * 0.4), dailyKnowledgeCapacity - baseNewWordQuota));
   const reviewCapacity = reviewOnlyDay ? dailyKnowledgeCapacity : Math.max(0, acquisitionReviewCap);
   const dueWords = reviewPool.slice(0, Math.max(0, reviewCapacity - unseenCultureWordCount));

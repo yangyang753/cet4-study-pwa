@@ -14,20 +14,33 @@ const state = (index: number, extra: Partial<KnowledgeState> = {}): KnowledgeSta
 });
 
 describe('vocabulary workload', () => {
-  it('uses two acquisition days followed by a dedicated consolidation day', () => {
+  it('alternates one acquisition day with one dedicated consolidation day', () => {
     const entries = Array.from({ length: 90 }, (_, i) => entry(i));
     const learned = [state(0, { status: 'review', nextReviewAt: '2026-12-30T00:00:00.000Z' })];
     const firstAcquisition = buildVocabularyWorkload(entries, learned, '2026-10-02', '2026-12-12', 60, { completedVocabularySessions: 0 });
-    const secondAcquisition = buildVocabularyWorkload(entries, learned, '2026-10-08', '2026-12-12', 60, { completedVocabularySessions: 1 });
-    const consolidation = buildVocabularyWorkload(entries, learned, '2026-10-20', '2026-12-12', 60, { completedVocabularySessions: 2 });
+    const consolidation = buildVocabularyWorkload(entries, learned, '2026-10-03', '2026-12-12', 60, { completedVocabularySessions: 1 });
+    const nextAcquisition = buildVocabularyWorkload(entries, learned, '2026-10-04', '2026-12-12', 60, { completedVocabularySessions: 2 });
 
     expect(firstAcquisition.reviewOnlyDay).toBe(false);
     expect(firstAcquisition.newWordQuota).toBeGreaterThan(0);
-    expect(secondAcquisition.reviewOnlyDay).toBe(false);
-    expect(secondAcquisition.newWordQuota).toBeGreaterThan(0);
     expect(consolidation.reviewOnlyDay).toBe(true);
     expect(consolidation.newWordQuota).toBe(0);
     expect(consolidation.dueWords.map((word) => word.id)).toContain('v0');
+    expect(nextAcquisition.reviewOnlyDay).toBe(false);
+    expect(nextAcquisition.newWordQuota).toBeGreaterThan(0);
+  });
+
+  it('prioritizes words learned on the preceding day during consolidation', () => {
+    const entries = Array.from({ length: 5 }, (_, i) => entry(i));
+    const learned = [
+      state(0, { updatedAt: '2026-09-20T00:00:00.000Z', nextReviewAt: '2026-12-30T00:00:00.000Z' }),
+      state(1, { updatedAt: '2026-10-01T08:00:00.000Z', nextReviewAt: '2026-12-30T00:00:00.000Z' }),
+    ];
+
+    const result = buildVocabularyWorkload(entries, learned, '2026-10-02', '2026-12-12', 60, { completedVocabularySessions: 1 });
+
+    expect(result.reviewOnlyDay).toBe(true);
+    expect(result.dueWords[0].id).toBe('v1');
   });
 
   it('reserves acquisition capacity for new words when old reviews are due', () => {

@@ -23,6 +23,7 @@ export interface LearnedWordTranslationGrade {
   meaningComplete: boolean;
   coveredWordIds: string[];
   missingWordIds: string[];
+  failedWordIds: string[];
 }
 
 interface CultureTemplate {
@@ -147,6 +148,11 @@ const semanticStopWords = new Set([
   'their', 'them', 'they', 'this', 'those', 'to', 'us', 'was', 'we', 'were', 'will', 'with', 'you', 'your',
 ]);
 
+const semanticSynonyms: Record<string, string[]> = {
+  appeal: ['attract'], attractive: ['attract'], draw: ['attract'], popular: ['attract'],
+  youth: ['young', 'people'],
+};
+
 function semanticRoot(token: string) {
   if (token.length > 5 && token.endsWith('ies')) return `${token.slice(0, -3)}y`;
   if (token.length > 5 && token.endsWith('ing')) return token.slice(0, -3).replace(/(.)\1$/, '$1');
@@ -162,6 +168,22 @@ function semanticTokens(value: string) {
     .filter((token) => token.length > 1 && !semanticStopWords.has(token));
 }
 
+function canonicalSemanticTokens(value: string) {
+  return semanticTokens(value).flatMap((token) => semanticSynonyms[token] ?? [token]);
+}
+
+function orderedCoverage(reference: string[], answer: string[]) {
+  const rows = Array.from({ length: reference.length + 1 }, () => Array(answer.length + 1).fill(0) as number[]);
+  for (let left = 1; left <= reference.length; left += 1) {
+    for (let right = 1; right <= answer.length; right += 1) {
+      rows[left][right] = reference[left - 1] === answer[right - 1]
+        ? rows[left - 1][right - 1] + 1
+        : Math.max(rows[left - 1][right], rows[left][right - 1]);
+    }
+  }
+  return reference.length ? rows[reference.length][answer.length] / reference.length : 1;
+}
+
 export function gradeLearnedWordTranslation(exercise: LearnedWordTranslationExercise, answer: string): LearnedWordTranslationGrade {
   const normalized = answer.trim().toLowerCase();
   const coveredWordIds = exercise.targets.filter((target) => includesForm(normalized, target.acceptedForms)).map((target) => target.wordId);
@@ -169,16 +191,26 @@ export function gradeLearnedWordTranslation(exercise: LearnedWordTranslationExer
   const tokenCount = normalized.match(/[a-z]+(?:'[a-z]+)?/g)?.length ?? 0;
   const sentenceComplete = tokenCount >= exercise.targets.length + 2;
   const targetForms = new Set(exercise.targets.flatMap((target) => target.acceptedForms.map(semanticRoot)));
-  const referenceTokens = [...new Set(semanticTokens(exercise.referenceAnswer).filter((token) => !targetForms.has(token)))];
-  const answerTokens = new Set(semanticTokens(normalized));
+  const referenceSequence = canonicalSemanticTokens(exercise.referenceAnswer);
+  const answerSequence = canonicalSemanticTokens(normalized);
+  const referenceTokens = [...new Set(referenceSequence.filter((token) => !targetForms.has(token)))];
+  const answerTokens = new Set(answerSequence);
   const matchedReferenceTokens = referenceTokens.filter((token) => answerTokens.has(token));
   const requiredReferenceTokens = Math.min(3, Math.max(1, Math.ceil(referenceTokens.length * 0.6)));
-  const meaningComplete = referenceTokens.length === 0 || matchedReferenceTokens.length >= requiredReferenceTokens;
+  const allReferenceTokensPresent = [...new Set(referenceSequence)].every((token) => answerTokens.has(token));
+  const preservesOrder = !allReferenceTokensPresent || orderedCoverage(referenceSequence, answerSequence) > 0.8;
+  const meaningComplete = (referenceTokens.length === 0 || matchedReferenceTokens.length >= requiredReferenceTokens) && preservesOrder;
+  const failedWordIds = missingWordIds.length > 0
+    ? [...missingWordIds]
+    : sentenceComplete && meaningComplete
+      ? []
+      : exercise.targets.map((target) => target.wordId);
   return {
-    correct: sentenceComplete && meaningComplete && missingWordIds.length === 0,
+    correct: sentenceComplete && meaningComplete && failedWordIds.length === 0,
     sentenceComplete,
     meaningComplete,
     coveredWordIds,
     missingWordIds,
+    failedWordIds,
   };
 }

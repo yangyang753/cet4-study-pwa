@@ -81,6 +81,16 @@ const reviewedCommonSenses: Record<string, string> = {
   choose: '选择，挑选；决定；宁愿',
   impact: '影响；冲击',
   repair: '修理，修补；修复，补救',
+  buy: '买，购买；获得',
+  half: '一半；一半的；部分地',
+  miss: '错过；想念；未听到，未看到',
+  oil: '油；石油；给……加油',
+  party: '聚会；政党；一方，当事人',
+  billion: '十亿',
+  medicine: '药；医学',
+  consume: '消耗，消费；吃完，喝光',
+  debt: '债，债务；欠债',
+  mail: '邮件；邮寄；邮政',
 };
 
 const reviewedCorrections: Record<string, Partial<VocabularyEntry>> = {
@@ -128,6 +138,15 @@ const reviewedCorrections: Record<string, Partial<VocabularyEntry>> = {
     example: 'What do you mean by this sentence?',
     exampleZh: '你说的这句话是什么意思？',
   },
+  v0128: { example: 'Many students buy second-hand books to save money.', exampleZh: '许多学生购买二手书来省钱。' },
+  v0206: { example: 'Half of the students chose the online course.', exampleZh: '一半的学生选择了在线课程。' },
+  v0284: { example: 'Do not miss the deadline for registration.', exampleZh: '不要错过报名截止日期。' },
+  v0362: { example: 'The country imports most of its oil.', exampleZh: '这个国家的大部分石油依靠进口。' },
+  v0401: { example: 'We held a welcome party for international students.', exampleZh: '我们为国际学生举办了一场欢迎会。' },
+  v0440: { example: 'The project may cost one billion dollars.', exampleZh: '这个项目可能耗资十亿美元。' },
+  v0479: { example: 'Modern medicine has saved many lives.', exampleZh: '现代医学挽救了许多人的生命。' },
+  v0635: { example: 'Public buildings consume a large amount of energy.', exampleZh: '公共建筑消耗大量能源。' },
+  v0674: { example: 'She worked hard to pay off her debt.', exampleZh: '她努力工作以还清债务。' },
 };
 
 const isSyntheticMetaExample = (example: string) => /\bis presented as\b/i.test(example);

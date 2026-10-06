@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { getPracticeItems, getQuestion } from '../../content/catalog';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
@@ -20,7 +20,7 @@ const masteryQuestionKind: Record<StudyKind, PracticeKind> = {
   translation: 'grammar', writing: 'grammar', review: 'vocabulary', mock: 'reading',
 };
 
-export function selectMasteryQuestions(kind: StudyKind, sourceQuestionIds: string[] = []) {
+export function selectMasteryQuestions(kind: StudyKind, sourceQuestionIds: string[] = [], recentQuestionIds: string[] = []) {
   if (kind === 'writing' || kind === 'translation' || kind === 'culture') return [];
   const sourceQuestions = sourceQuestionIds.map(getQuestion).filter((question): question is CatalogQuestion => Boolean(question));
   const knowledgePointIds = new Set(sourceQuestions.flatMap((question) => question.knowledgePointIds));
@@ -28,12 +28,30 @@ export function selectMasteryQuestions(kind: StudyKind, sourceQuestionIds: strin
   const catalog = getPracticeItems(masteryQuestionKind[kind]).filter((question) => 'options' in question) as Array<CatalogQuestion & ObjectiveQuestionType>;
   const related = catalog.filter((question) => question.knowledgePointIds.some((id) => knowledgePointIds.has(id)));
   const unique = [...objectiveSource, ...related, ...catalog].filter((question, index, items) => items.findIndex((item) => item.id === question.id) === index);
-  return unique.slice(0, 3);
+  const recent = new Set(recentQuestionIds);
+  return [...unique.filter((question) => !recent.has(question.id)), ...unique.filter((question) => recent.has(question.id))].slice(0, 3);
 }
 
 function ObjectiveMasteryCheck({ kind, taskId, repository, now, sourceQuestionIds }: { kind: StudyKind; taskId: string; repository: LearningRepository; now: string; sourceQuestionIds: string[] }) {
   const questionIdsKey = sourceQuestionIds.join('|');
-  const questions = useMemo(() => selectMasteryQuestions(kind, questionIdsKey ? questionIdsKey.split('|') : []), [kind, questionIdsKey]);
+  const canLoadAttempts = typeof repository.listAttempts === 'function';
+  const [recentQuestionIds, setRecentQuestionIds] = useState<string[] | null>(() => canLoadAttempts ? null : []);
+  useEffect(() => {
+    if (!canLoadAttempts) return;
+    let active = true;
+    void repository.listAttempts().then((attempts) => {
+      if (!active) return;
+      const ids = attempts
+        .filter((attempt) => attempt.mode === 'mastery' && attempt.kind === kind)
+        .sort((left, right) => Date.parse(right.createdAt) - Date.parse(left.createdAt))
+        .map((attempt) => attempt.questionId)
+        .filter((id, index, items) => items.indexOf(id) === index)
+        .slice(0, 6);
+      setRecentQuestionIds(ids);
+    }).catch(() => { if (active) setRecentQuestionIds([]); });
+    return () => { active = false; };
+  }, [canLoadAttempts, kind, repository]);
+  const questions = useMemo(() => selectMasteryQuestions(kind, questionIdsKey ? questionIdsKey.split('|') : [], recentQuestionIds ?? []), [kind, questionIdsKey, recentQuestionIds]);
   const [index, setIndex] = useState(0);
   const [response, setResponse] = useState('');
   const [results, setResults] = useState<boolean[]>([]);
@@ -75,6 +93,7 @@ function ObjectiveMasteryCheck({ kind, taskId, repository, now, sourceQuestionId
     }
   };
 
+  if (recentQuestionIds === null) return <p role="status">正在轮换掌握检测题…</p>;
   if (!question) return <p>暂时无法生成掌握检测题。</p>;
   if (finished) return <section className={`mastery-result ${finished}`}><h1>{finished === 'mastered' ? '已完全掌握' : '需要继续复习'}</h1><p>{finished === 'mastered' ? '检测正确率达到 80%，今日任务已真正掌握。' : '检测中还有薄弱点，错题已自动加入复习安排。'}</p><a href={appHref('today')}>返回今日计划</a></section>;
 

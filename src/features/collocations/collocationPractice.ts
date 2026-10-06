@@ -63,14 +63,17 @@ export function buildCollocationWorkload(
   const stateById = new Map(states.map((state) => [state.itemId, state]));
   const dueAt = Date.parse(`${today}T23:59:59.999Z`);
   const daysRemaining = Math.max(1, Math.ceil((Date.parse(`${examDate}T00:00:00.000Z`) - Date.parse(`${today}T00:00:00.000Z`)) / 86_400_000));
-  const acquisitionDays = Math.max(1, Math.ceil(Math.max(1, daysRemaining - 35) * 2 / 3));
+  const acquisitionDays = Math.max(1, Math.ceil(Math.max(1, daysRemaining - 35) / 2));
   const unseen = entries.filter((entry) => !stateById.has(entry.id));
   const learned = entries.filter((entry) => stateById.has(entry.id)).sort((left, right) => {
     const leftState = stateById.get(left.id)!;
     const rightState = stateById.get(right.id)!;
     const leftDue = !leftState.nextReviewAt || Date.parse(leftState.nextReviewAt) <= dueAt;
     const rightDue = !rightState.nextReviewAt || Date.parse(rightState.nextReviewAt) <= dueAt;
-    return Number(rightDue) - Number(leftDue) || (rightState.lapseCount ?? 0) - (leftState.lapseCount ?? 0) || Date.parse(leftState.updatedAt) - Date.parse(rightState.updatedAt);
+    const precedingDate = new Date(Date.parse(`${today}T00:00:00.000Z`) - 86_400_000).toISOString().slice(0, 10);
+    const leftFromPrecedingDay = leftState.updatedAt.slice(0, 10) === precedingDate;
+    const rightFromPrecedingDay = rightState.updatedAt.slice(0, 10) === precedingDate;
+    return Number(rightFromPrecedingDay) - Number(leftFromPrecedingDay) || Number(rightDue) - Number(leftDue) || (rightState.lapseCount ?? 0) - (leftState.lapseCount ?? 0) || Date.parse(leftState.updatedAt) - Date.parse(rightState.updatedAt);
   });
   const newQuota = reviewOnlyDay || unseen.length === 0 ? 0 : Math.min(6, Math.max(2, Math.ceil(unseen.length / acquisitionDays)));
   const reviewEntries = learned.slice(0, reviewOnlyDay ? 12 : 3);

@@ -74,6 +74,28 @@ describe('learned-word Chinese-to-English translation', () => {
     });
   });
 
+  it('accepts common synonyms while rejecting a reordered keyword string', () => {
+    const exercise = buildLearnedWordTranslation(learned.slice(0, 1), 'single', () => 0)!;
+
+    expect(gradeLearnedWordTranslation(exercise, 'Chinese culture appeals to youth.')).toMatchObject({
+      correct: true,
+      meaningComplete: true,
+    });
+    expect(gradeLearnedWordTranslation(exercise, 'Chinese culture young people attract.')).toMatchObject({
+      correct: false,
+      meaningComplete: false,
+    });
+  });
+
+  it('reports only the missing learned target in a multi-word sentence', () => {
+    const exercise = buildLearnedWordTranslation(learned.slice(0, 2), 'multi', () => 0)!;
+    const grade = gradeLearnedWordTranslation(exercise, 'Chinese culture has a long story.');
+
+    expect(grade.correct).toBe(false);
+    expect(grade.coveredWordIds).toEqual(['culture']);
+    expect(grade.failedWordIds).toEqual(['history']);
+  });
+
   it('rejects misspelled pseudo-inflections instead of treating them as valid forms', () => {
     const city = word('city', 'city', '城市', 'This city has a long history.', '这座城市有悠久的历史。');
     const exercise = buildLearnedWordTranslation([city], 'single', () => 0)!;
