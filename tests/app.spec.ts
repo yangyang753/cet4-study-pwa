@@ -45,7 +45,7 @@ test('keeps the core navigation usable on a phone', async ({ page }) => {
 
 test('keeps every primary page within a 360px viewport without serious accessibility violations', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
-  for (const route of ['today', 'listen', 'practice', 'review', 'exam', 'knowledge', 'account', 'print']) {
+  for (const route of ['today', 'listen', 'practice', 'review', 'exam', 'knowledge', 'foundation-vocabulary', 'account', 'print']) {
     await page.goto(`#/${route}`);
     await expect(page.locator('main')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), `${route} must not scroll horizontally`).toBeTruthy();
@@ -63,7 +63,7 @@ test('keeps mobile secondary navigation operable at 200% text size with reduced 
   await trigger.click();
   await page.getByRole('button', { name: '关闭更多学习功能' }).click();
   await expect(trigger).toBeFocused();
-  for (const [label, route] of [['限时模拟', 'exam'], ['高频知识', 'knowledge'], ['账户同步', 'account'], ['A4 打印', 'print']] as const) {
+  for (const [label, route] of [['基础必会词', 'foundation-vocabulary'], ['限时模拟', 'exam'], ['高频知识', 'knowledge'], ['账户同步', 'account'], ['A4 打印', 'print']] as const) {
     await trigger.click();
     await page.getByRole('navigation', { name: '移动端更多导航' }).getByRole('link', { name: new RegExp(label) }).click();
     await expect(page).toHaveURL(new RegExp(`#/${route}$`));

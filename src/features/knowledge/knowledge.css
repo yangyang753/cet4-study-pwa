@@ -4,6 +4,9 @@
 .knowledge-heading h1 { margin: 7px 0; font-size: clamp(30px, 4vw, 48px); }
 .knowledge-heading p, .word-card small, .phrase-list small { color: var(--color-muted); }
 .knowledge-heading a { padding: 12px 16px; border-radius: 12px; color: white; background: var(--color-green); font-weight: 800; white-space: nowrap; }
+.knowledge-heading-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.knowledge-heading-actions a.secondary { color: var(--color-green-dark); border: 1px solid var(--color-green); background: transparent; }
+.foundation-library .automatic-mastery-note { margin: 0; padding: 16px 18px; border-radius: 14px; background: linear-gradient(135deg, #e1f2e9, #fff8e8); }
 .inventory { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .inventory article { padding: 18px 22px; border: 1px solid var(--color-line); border-radius: 18px; background: var(--color-panel); }
 .inventory strong { display: block; color: var(--color-green); font: 800 34px/1 Georgia, serif; }

@@ -49,9 +49,41 @@ describe('TodayPage', () => {
   });
   it('starts daily training with vocabulary before questions', async () => {
     render(<TodayPage today="2026-09-22" repository={repository()} />);
+    expect(await screen.findByRole('link', { name: '开始基础必会词' })).toHaveAttribute('href', expect.stringContaining('practice/foundation-vocabulary'));
     expect(await screen.findByRole('link', { name: '学习高频词与搭配 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
-    expect(screen.getByText(/高频词与重点搭配在同一流程/)).toBeVisible();
+    expect(screen.getByText(/基础必会词与 800 个高频词分层学习/)).toBeVisible();
     expect(screen.getByRole('heading', { name: '中国文化中译英' }).closest('article')).toHaveTextContent('完成高频词后解锁');
+  });
+
+  it('keeps foundation and core vocabulary progress visibly separate', async () => {
+    render(<TodayPage today="2026-09-22" repository={repository({
+      knowledgeStates: [
+        { id: 'knowledge:f0001', itemId: 'f0001', status: 'mastered', favorite: false, updatedAt: '2026-09-22T08:00:00.000Z' },
+        { id: 'knowledge:v0001', itemId: 'v0001', status: 'review', favorite: false, updatedAt: '2026-09-22T08:00:00.000Z' },
+      ],
+    })} />);
+    const foundation = await screen.findByRole('heading', { name: '基础必会词' });
+    expect(foundation.closest('article')).toHaveTextContent(/179 个未首轮学习/);
+    const core = screen.getByRole('heading', { name: '高频词汇与重点搭配' });
+    expect(core.closest('article')).toHaveTextContent(/799 个未首轮学习/);
+  });
+
+  it('preserves the saved foundation cohort when refreshing the daily plan', async () => {
+    const learningRepository = repository();
+    const savePlan = vi.fn().mockResolvedValue(undefined);
+    Object.assign(learningRepository, {
+      getPlan: vi.fn().mockImplementation(async (date: string) => date === '2026-09-22' ? {
+        id: 'plan:2026-09-22', date, tasks: [],
+        foundationVocabularySession: { wordIds: ['f0001'], learnedWordIds: ['f0001'], phase: 'testing' },
+        updatedAt: '2026-09-22T08:00:00.000Z',
+      } : null),
+      savePlan,
+    });
+    render(<TodayPage today="2026-09-22" repository={learningRepository} />);
+    await waitFor(() => expect(savePlan).toHaveBeenCalled());
+    expect(savePlan).toHaveBeenLastCalledWith(expect.objectContaining({
+      foundationVocabularySession: expect.objectContaining({ wordIds: ['f0001'], phase: 'testing' }),
+    }));
   });
 
   it('presents the day as a structured premium learning cockpit', async () => {
@@ -89,7 +121,7 @@ describe('TodayPage', () => {
     await waitFor(() => expect(savePlan).toHaveBeenCalled());
     expect(savePlan).toHaveBeenLastCalledWith(expect.objectContaining({ vocabularySession: expect.objectContaining({ wordIds: ['v0001'], phase: 'testing' }) }));
     expect(screen.getByRole('link', { name: '继续严格检测 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
-    expect(screen.getByText(/1 个新词（已学 1 个）.*个新搭配.*0 个旧词/)).toBeVisible();
+    expect(screen.getByRole('heading', { name: '高频词汇与重点搭配' }).closest('article')).toHaveTextContent(/1 个高频新词（已学 1 个）.*个新搭配.*0 个旧词/);
   });
 
   it('shows an expandable seven-day learning report from saved progress', async () => {
@@ -119,13 +151,13 @@ describe('TodayPage', () => {
     expect(screen.getByText('81')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: '今日学习路线' })).toBeInTheDocument();
     expect(screen.getByText('60 分钟 · 按顺序完成效果更稳')).toBeVisible();
-    expect(screen.getAllByRole('article')).toHaveLength(5);
+    expect(screen.getAllByRole('article')).toHaveLength(6);
     expect(screen.getByText('正在积累数据')).toBeVisible();
   });
 
   it('does not offer manual completion controls', async () => {
     render(<TodayPage today="2026-09-22" repository={repository()} />);
-    expect(await screen.findAllByText(/未完成|待解锁/)).toHaveLength(5);
+    expect(await screen.findAllByText(/未完成|待解锁/)).toHaveLength(6);
     expect(screen.queryByRole('button', { name: '标记完成' })).not.toBeInTheDocument();
   });
 
@@ -199,14 +231,14 @@ describe('TodayPage', () => {
     render(<TodayPage today="2026-09-25" repository={repository({
       knowledgeStates: [{ id: 'knowledge:v0001', itemId: 'v0001', status: 'mastered', favorite: false, nextReviewAt: '2026-09-24T00:00:00.000Z', updatedAt: '2026-09-23T00:00:00.000Z' }],
     })} />);
-    expect(await screen.findByText('旧词巩固 1 个')).toBeVisible();
-    expect(screen.getByText(/今日新词 \d+ 个/)).toBeVisible();
-    expect(screen.getByText('未首轮学习 799 个高频词')).toBeVisible();
-    expect(screen.getByText('尚未稳定掌握 799 个')).toBeVisible();
-    expect(screen.getByText(/目标.*前完成首轮，预留 35 天复习巩固/)).toBeVisible();
-    expect(screen.getByText(/预计.*前完成稳定掌握/)).toBeVisible();
-    expect(screen.getByText(/配额会按距考试时间和复习积压自动调整/)).toBeVisible();
-    expect(screen.getByRole('heading', { name: '高频词汇与重点搭配' }).closest('article')).toHaveTextContent('25 分钟');
+    expect(await screen.findByText('高频旧词巩固 1 个')).toBeVisible();
+    expect(screen.getByText(/今日高频新词 \d+ 个/)).toBeVisible();
+    expect(screen.getByText('高频词未首轮学习 799 个')).toBeVisible();
+    expect(screen.getByText('高频词尚未稳定掌握 799 个')).toBeVisible();
+    expect(screen.getByText(/学习一天、第二天优先复习/)).toBeVisible();
+    const vocabularyMinutes = Number(screen.getByRole('heading', { name: '高频词汇与重点搭配' }).closest('article')?.querySelector(':scope > b')?.textContent?.match(/\d+/)?.[0]);
+    const foundationMinutes = Number(screen.getByRole('heading', { name: '基础必会词' }).closest('article')?.querySelector(':scope > b')?.textContent?.match(/\d+/)?.[0]);
+    expect(vocabularyMinutes + foundationMinutes).toBe(25);
   });
 
   it('warns when the capped daily pace cannot finish before the exam', async () => {
@@ -218,8 +250,8 @@ describe('TodayPage', () => {
     render(<TodayPage today="2026-09-25" repository={repository({
       knowledgeStates: learningVocabulary.map((word) => ({ id: `knowledge:${word.id}`, itemId: word.id, status: 'mastered', favorite: false, nextReviewAt: '2026-12-30T00:00:00.000Z', updatedAt: '2026-09-25T00:00:00.000Z' })),
     })} />);
-    expect(await screen.findByText('今日新词 0 个')).toBeVisible();
+    expect(await screen.findByText('今日高频新词 0 个')).toBeVisible();
     expect(screen.getByText('800 个高频词已完成首轮接触')).toBeVisible();
-    expect(screen.getByText('尚未稳定掌握 0 个')).toBeVisible();
+    expect(screen.getByText('高频词尚未稳定掌握 0 个')).toBeVisible();
   });
 });

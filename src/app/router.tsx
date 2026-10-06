@@ -16,6 +16,8 @@ const MasteryRoute = lazy(() => import('../features/mastery/MasteryCheck').then(
 const DiagnosticPage = lazy(() => import('../features/diagnostic/DiagnosticPage').then((module) => ({ default: module.DiagnosticPage })));
 const PasswordRecoveryPage = lazy(() => import('../features/auth/PasswordRecoveryPage').then((module) => ({ default: module.PasswordRecoveryPage })));
 const KnowledgePage = lazy(() => import('../features/knowledge/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
+const FoundationVocabularyPage = lazy(() => import('../features/vocabulary/FoundationVocabularyPage').then((module) => ({ default: module.FoundationVocabularyPage })));
+const FoundationVocabularyPracticeRoute = lazy(() => import('../features/vocabulary/FoundationVocabularyPage').then((module) => ({ default: module.FoundationVocabularyPracticeRoute })));
 const PrintPage = lazy(() => import('../features/print/PrintPage').then((module) => ({ default: module.PrintPage })));
 const DailyCultureRoute = lazy(() => import('../features/translation/DailyCultureTask').then((module) => ({ default: module.DailyCultureRoute })));
 const loading = (message: string, element: ReactNode) => <Suspense fallback={<p role="status">{message}</p>}>{element}</Suspense>;
@@ -31,6 +33,7 @@ export const router = createHashRouter([
       { path: 'listen', element: loading('正在加载听力训练…', <ListeningPage />) },
       { path: 'practice', element: loading('正在加载专项练习…', <PracticeHub />) },
       { path: 'practice/culture', element: loading('正在加载中国文化翻译…', <DailyCultureRoute />) },
+      { path: 'practice/foundation-vocabulary', element: loading('正在加载基础必会词训练…', <FoundationVocabularyPracticeRoute />) },
       { path: 'practice/:kind', element: loading('正在加载练习题…', <PracticeRoute />) },
       { path: 'culture', element: <Navigate replace to="/practice/culture" /> },
       { path: 'review', element: loading('正在加载错题复习…', <ReviewPage />) },
@@ -41,6 +44,7 @@ export const router = createHashRouter([
       { path: 'exam', element: loading('正在加载模拟考试…', <ExamPicker />) },
       { path: 'exam/:mockId', element: <ExamRoute /> },
       { path: 'knowledge', element: <Suspense fallback={<p>正在加载高频知识库…</p>}><KnowledgePage /></Suspense> },
+      { path: 'foundation-vocabulary', element: loading('正在加载基础必会词…', <FoundationVocabularyPage />) },
       { path: 'account', element: loading('正在加载账户信息…', <AccountPage cloudConfigured={Boolean(supabaseClient)} />) },
       { path: 'recover', element: loading('正在验证密码重置链接…', <PasswordRecoveryPage />) },
     ],

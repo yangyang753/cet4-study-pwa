@@ -14,6 +14,7 @@ const navGroups = [
     { to: '/practice', label: '专项练习', icon: '✎' },
   ] },
   { label: '巩固提升', links: [
+    { to: '/foundation-vocabulary', label: '基础必会词', icon: 'Ab' },
     { to: '/review', label: '错题复习', icon: '↻' },
     { to: '/exam', label: '限时模拟', icon: '✓' },
     { to: '/knowledge', label: '高频知识', icon: 'Aa' },

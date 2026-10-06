@@ -13,6 +13,7 @@ describe('KnowledgePage', () => {
     expect(screen.getByText('15')).toBeInTheDocument();
     expect(screen.getByText(/原创仿真内容，不是历年官方真题/)).toBeInTheDocument();
     expect(screen.queryByText(/^文章，段落.*通过/)).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '进入基础必会词' })).toHaveAttribute('href', expect.stringContaining('foundation-vocabulary'));
   });
 
   it('hides each meaning until that word is explicitly revealed', async () => {

@@ -181,7 +181,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
   };
 
   return <section className="knowledge-page">
-    <header className="knowledge-heading"><div><span>HIGH-FREQUENCY LIBRARY</span><h1>四级高频知识库</h1><p>按公开词频数据与四级题型整理；练习均为原创仿真内容，不是历年官方真题。</p></div><a href={appHref('print')}>打印今日练习 →</a></header>
+    <header className="knowledge-heading"><div><span>HIGH-FREQUENCY LIBRARY</span><h1>四级高频知识库</h1><p>按公开词频数据与四级题型整理；练习均为原创仿真内容，不是历年官方真题。</p></div><div className="knowledge-heading-actions"><a href={appHref('foundation-vocabulary')}>进入基础必会词</a><a className="secondary" href={appHref('print')}>打印今日练习 →</a></div></header>
     <div className="inventory" aria-label="内容规模"><article><strong>800</strong><span>高频词</span></article><article><strong>126</strong><span>重点搭配</span></article><article><strong>15</strong><span>语法专题</span></article></div>
     <div className="knowledge-tabs" role="tablist" aria-label="知识类型">
       <button role="tab" aria-selected={tab === 'vocabulary'} onClick={() => changeTab('vocabulary')}>高频词汇</button>

@@ -10,6 +10,15 @@ function repository() {
 }
 
 describe('recordMasteryOutcome', () => {
+  it('records foundation vocabulary completion independently from core vocabulary', async () => {
+    const learningRepository = repository();
+    await recordMasteryOutcome(learningRepository, '2026-09-24:foundation-vocabulary', 4, 5, '2026-09-24T09:00:00.000Z');
+    expect(learningRepository.completeTask).toHaveBeenCalledWith(expect.objectContaining({
+      taskId: '2026-09-24:foundation-vocabulary', kind: 'foundation-vocabulary',
+    }));
+    expect(learningRepository.completeTask).not.toHaveBeenCalledWith(expect.objectContaining({ taskId: '2026-09-24:vocabulary' }));
+  });
+
   it('marks four of five correct answers as mastered with stable ids', async () => {
     const learningRepository = repository();
     expect(await recordMasteryOutcome(learningRepository, '2026-09-24:listening', 4, 5, '2026-09-24T09:00:00.000Z')).toBe('mastered');

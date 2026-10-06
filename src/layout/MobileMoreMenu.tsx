@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const moreLinks = [
+  { to: '/foundation-vocabulary', label: '基础必会词', icon: 'Ab' },
   { to: '/exam', label: '限时模拟', icon: '✓' },
   { to: '/knowledge', label: '高频知识', icon: 'Aa' },
   { to: '/account', label: '账户同步', icon: '◎' },

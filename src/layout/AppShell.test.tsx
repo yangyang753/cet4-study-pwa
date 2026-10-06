@@ -32,7 +32,7 @@ describe('AppShell', () => {
     await user.click(screen.getByRole('button', { name: '更多' }));
     const dialog = screen.getByRole('dialog', { name: '更多学习功能' });
     expect(dialog).toBeInTheDocument();
-    for (const label of ['限时模拟', '高频知识', '账户同步', 'A4 打印']) expect(within(dialog).getByRole('link', { name: label })).toBeInTheDocument();
+    for (const label of ['基础必会词', '限时模拟', '高频知识', '账户同步', 'A4 打印']) expect(within(dialog).getByRole('link', { name: label })).toBeInTheDocument();
     expect(screen.getByText('学习内容')).toBeInTheDocument();
   });
 
