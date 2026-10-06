@@ -9,6 +9,7 @@ import { DexieLearningRepository } from '../../data/repositories/DexieLearningRe
 import { ReviewPage } from './ReviewPage';
 import { getQuestion } from '../../content/catalog';
 import { learningVocabulary } from '../../content/vocabularyLearning';
+import { foundationVocabulary } from '../../content/foundationVocabulary';
 
 const names: string[] = [];
 const queuedListeningPrompt = getQuestion('listen-01:q1')?.prompt;
@@ -33,6 +34,26 @@ async function unlockReviewQuestion() {
 }
 
 describe('ReviewPage', () => {
+  it('keeps foundation and core vocabulary mistake views separate', async () => {
+    const name = `review-test-${crypto.randomUUID()}`;
+    names.push(name);
+    const repository = new DexieLearningRepository(new LearningDatabase(name));
+    const common = { stage: 0, nextReviewAt: '2026-09-23T08:00:00.000Z', lastCorrect: false, updatedAt: '2026-09-23T08:00:00.000Z' };
+    await repository.upsertReviewCard({ ...common, id: 'review:v0001:spelling', questionId: 'v0001:spelling', wordId: 'v0001', format: 'word-cloze' });
+    await repository.upsertReviewCard({ ...common, id: 'review:f0001:spelling', questionId: 'f0001:spelling', wordId: 'f0001', format: 'word-cloze' });
+
+    const { unmount } = render(<ReviewPage repository={repository} vocabularyLayer="foundation" now="2026-09-23T12:00:00.000Z" />);
+    expect(await screen.findByRole('heading', { name: '基础必会词错题复习' })).toBeVisible();
+    expect(screen.getByRole('button', { name: `重新练习 ${foundationVocabulary[0].word}` })).toBeVisible();
+    expect(screen.queryByRole('button', { name: `重新练习 ${learningVocabulary[0].word}` })).not.toBeInTheDocument();
+    unmount();
+
+    render(<ReviewPage repository={repository} vocabularyLayer="core" now="2026-09-23T12:00:00.000Z" />);
+    expect(await screen.findByRole('heading', { name: '错题复习中心' })).toBeVisible();
+    expect(screen.getByRole('button', { name: `重新练习 ${learningVocabulary[0].word}` })).toBeVisible();
+    expect(screen.queryByRole('button', { name: `重新练习 ${foundationVocabulary[0].word}` })).not.toBeInTheDocument();
+  });
+
   it('presents the review queue as a structured study dashboard', async () => {
     render(<ReviewPage repository={await setupRepository()} now="2026-09-23T12:00:00.000Z" />);
     expect(await screen.findByRole('heading', { name: '错题复习中心' })).toBeVisible();

@@ -1,6 +1,7 @@
 import type { KnowledgeState, ReviewCard } from '../../domain/learning';
 import { applyVocabularyReviewResult } from './vocabularySchedule';
 import { initialKnowledgeState } from '../mastery/knowledgeMastery';
+import { vocabularyLayerOf } from './vocabularyLayer';
 
 function baseState(current: KnowledgeState | undefined, wordId: string, now: string): KnowledgeState {
   return current ?? initialKnowledgeState(wordId, now);
@@ -48,6 +49,7 @@ export function vocabularyReviewCard(
     id: `review:${wordId}:${kind === 'cloze' ? 'spelling' : 'meaning'}`,
     questionId: `${wordId}:${kind === 'cloze' ? 'spelling' : 'meaning'}`,
     wordId,
+    vocabularyLayer: vocabularyLayerOf(wordId),
     format: kind === 'cloze' ? 'word-cloze' : 'word-meaning',
     stage: 0,
     priority: 6,
@@ -62,6 +64,7 @@ export function vocabularyTranslationReviewCard(wordId: string, now: string): Re
     id: `review:${wordId}:translation`,
     questionId: `${wordId}:translation`,
     wordId,
+    vocabularyLayer: vocabularyLayerOf(wordId),
     format: 'word-translation',
     stage: 0,
     priority: 7,

@@ -9,6 +9,16 @@ test('preserves legacy deep-link queries when migrating to Hash routing', async 
   await expect(page.getByRole('heading', { name: '错题复习' })).toBeVisible();
 });
 
+test('opens the separate foundation vocabulary review route on desktop and phone', async ({ page }) => {
+  for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto('#/review/foundation');
+    await expect(page.getByRole('heading', { name: '基础必会词错题复习' })).toBeVisible();
+    await expect(page.getByText('这里只显示基础必会词错题，与高频词队列完全分开')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+  }
+});
+
 test('supports the daily learning journey on desktop', async ({ page }) => {
   await page.goto('#/today');
   await expect(page.getByRole('heading', { name: /向目标 425 分前进/ })).toBeVisible();

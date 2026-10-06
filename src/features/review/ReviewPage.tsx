@@ -3,7 +3,7 @@ import { getQuestion } from '../../content/catalog';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import { DexieLearningRepository } from '../../data/repositories/DexieLearningRepository';
 import type { ReviewCard } from '../../domain/learning';
-import type { ObjectiveQuestion, SubjectiveQuestion } from '../../domain/content';
+import type { ObjectiveQuestion, SubjectiveQuestion, VocabularyLayer } from '../../domain/content';
 import { gradeAnswer } from '../practice/gradeAnswer';
 import { ObjectiveQuestion as ObjectiveQuestionView } from '../practice/ObjectiveQuestion';
 import { scheduleReviewStage } from './scheduleReview';
@@ -12,7 +12,6 @@ import { MasteryCheck } from '../mastery/MasteryCheck';
 import { studyDate } from '../../lib/studyDate';
 import { createId } from '../../lib/createId';
 import { QuestionTranslationGate, questionNeedsTranslation } from '../translation/QuestionTranslationGate';
-import { learningVocabulary } from '../../content/vocabularyLearning';
 import { SubjectiveEditor } from '../composition/SubjectiveEditor';
 import type { SubjectiveFeedback } from '../composition/evaluateSubjective';
 import { applyKnowledgeReviewResult } from '../mastery/knowledgeMastery';
@@ -24,12 +23,17 @@ import { vocabularyReviewCard } from '../vocabulary/wordMastery';
 import collocationData from '../../../content/v1/collocations.json';
 import { buildCollocationRecallExercise, gradeCollocationRecall, type CollocationEntry } from '../collocations/collocationPractice';
 import './review.css';
+import { vocabularyById, vocabularyLayerOf } from '../vocabulary/vocabularyLayer';
 
 const defaultRepository = new DexieLearningRepository();
-const normalizeLegacyVocabularyCard = (card: ReviewCard): ReviewCard =>
-  card.wordId && card.format === 'objective' && card.questionId.endsWith(':meaning')
-    ? { ...card, format: 'word-meaning' }
+const normalizeLegacyVocabularyCard = (card: ReviewCard): ReviewCard => {
+  const normalized = card.wordId && card.format === 'objective' && card.questionId.endsWith(':meaning')
+    ? { ...card, format: 'word-meaning' as const }
     : card;
+  return normalized.wordId && !normalized.vocabularyLayer
+    ? { ...normalized, vocabularyLayer: vocabularyLayerOf(normalized.wordId) }
+    : normalized;
+};
 const reviewQuestion = (card: ReviewCard) => {
   if (card.wordId) return null;
   const stored = getQuestion(card.questionId);
@@ -59,7 +63,7 @@ const knowledgeIdentity = (card: ReviewCard, question: ReturnType<typeof reviewQ
   return { itemId, kind: kind as 'vocabulary' | 'collocation' | 'grammar' };
 };
 
-export function ReviewPage({ repository = defaultRepository, now = new Date().toISOString(), examDate, random = Math.random }: { repository?: LearningRepository; now?: string; examDate?: string; random?: () => number }) {
+export function ReviewPage({ repository = defaultRepository, now = new Date().toISOString(), examDate, random = Math.random, vocabularyLayer = 'core' }: { repository?: LearningRepository; now?: string; examDate?: string; random?: () => number; vocabularyLayer?: VocabularyLayer }) {
   const [cards, setCards] = useState<ReviewCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('今日到期');
@@ -87,16 +91,20 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
     return () => { current = false; };
   }, [examDate, now, repository, reloadKey]);
 
-  const shown = useMemo(() => cards.filter((card) => {
+  const scopedCards = useMemo(() => cards.filter((card) => {
+    const cardLayer = card.wordId ? card.vocabularyLayer ?? vocabularyLayerOf(card.wordId) : null;
+    return vocabularyLayer === 'foundation' ? cardLayer === 'foundation' : cardLayer !== 'foundation';
+  }), [cards, vocabularyLayer]);
+  const shown = useMemo(() => scopedCards.filter((card) => {
     if (filter === '今日到期') return Date.parse(card.nextReviewAt) <= Date.parse(now);
     if (filter === '已掌握') return card.stage >= 4;
     return filterKind(card) === filter;
-  }), [cards, filter, now]);
-  const dueCount = cards.filter((card) => Date.parse(card.nextReviewAt) <= Date.parse(now)).length;
-  const masteredCount = cards.filter((card) => card.stage >= 4).length;
-  const learningCount = cards.length - masteredCount;
-  const activeCard = cards.find((card) => card.id === activeId) ?? null;
-  const activeWord = activeCard?.wordId ? learningVocabulary.find((word) => word.id === activeCard.wordId) : null;
+  }), [filter, now, scopedCards]);
+  const dueCount = scopedCards.filter((card) => Date.parse(card.nextReviewAt) <= Date.parse(now)).length;
+  const masteredCount = scopedCards.filter((card) => card.stage >= 4).length;
+  const learningCount = scopedCards.length - masteredCount;
+  const activeCard = scopedCards.find((card) => card.id === activeId) ?? null;
+  const activeWord = activeCard?.wordId ? vocabularyById(activeCard.wordId) : null;
   const activeQuestion = activeCard ? reviewQuestion(activeCard) : null;
   const activeCollocation = activeCard?.knowledgeKind === 'collocation' ? (collocationData as CollocationEntry[]).find((item) => item.id === activeCard.knowledgeItemId) ?? null : null;
   const activeWordExercise = useMemo(() => {
@@ -281,10 +289,10 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
 
   if (activeCard && activeQuestion && !('options' in activeQuestion)) return <section className="review-detail-page"><button className="review-back-button" onClick={closeActive}>← 返回复习列表</button><header className="review-detail-header"><span>SUBJECTIVE REVIEW</span><h1>{activeQuestion.type === 'writing' ? '写作错题重练' : '翻译错题重练'}</h1><p>根据反馈重新完成表达，系统会自动保存并安排后续巩固。</p></header><div className="review-practice-panel">{!result && <SubjectiveEditor question={activeQuestion as SubjectiveQuestion} kind={activeQuestion.type} repository={repository} onSubmit={(body, feedback) => void submitSubjective(body, feedback)} />}{submitError && <p role="alert">{submitError}</p>}{result && <div className={`review-result review-result-${result}`} role="status"><strong>主观题复习已保存</strong><p>{result === 'correct' ? '规则化检查通过，已安排下一次巩固。' : '仍有关键项未通过，已重新加入待复习。'}</p></div>}</div></section>;
 
-  const filters = ['今日到期', '听力', '阅读', '词汇', '重点搭配', '语法', '写作', '翻译', '已掌握'];
+  const filters = vocabularyLayer === 'foundation' ? ['今日到期', '词汇', '已掌握'] : ['今日到期', '听力', '阅读', '词汇', '重点搭配', '语法', '写作', '翻译', '已掌握'];
   return <section className="review-page">
     <header className="review-hero">
-      <div><span className="review-eyebrow">SMART REVIEW</span><h1>错题复习中心</h1><p>系统按照遗忘规律安排复习。测试通过自动升级，答错则回到待掌握队列。</p></div>
+      <div><span className="review-eyebrow">SMART REVIEW</span><h1>{vocabularyLayer === 'foundation' ? '基础必会词错题复习' : '错题复习中心'}</h1><p>{vocabularyLayer === 'foundation' ? '这里只显示基础必会词错题，与高频词队列完全分开；通过检测自动升级，遗忘后自动降级。' : '系统按照遗忘规律安排复习。测试通过自动升级，答错则回到待掌握队列。'}</p></div>
       <div className="review-hero-badge" aria-label={`${dueCount} 项今日待复习`}><strong>{dueCount}</strong><span>今日待复习</span></div>
     </header>
     <section className="review-overview" aria-label="复习概览">
@@ -300,7 +308,7 @@ export function ReviewPage({ repository = defaultRepository, now = new Date().to
     {shown.length === 0 && <div className="review-empty"><span>✓</span><h2>这一组已经清空</h2><p>当前没有需要复习的题目。</p><small>可以切换分类查看其他内容。</small></div>}
     <div className="review-grid">{shown.map((card) => {
       const question = reviewQuestion(card);
-      const word = card.wordId ? learningVocabulary.find((item) => item.id === card.wordId) : null;
+      const word = card.wordId ? vocabularyById(card.wordId) : null;
       const available = Boolean(question || word);
       const actionLabel = word ? `重新练习 ${word.word}` : undefined;
       const kind = filterKind(card);

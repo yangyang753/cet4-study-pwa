@@ -34,4 +34,12 @@ describe('evidence-based knowledge mastery', () => {
       status: 'review', reviewStage: 0, lapseCount: 2, favorite: true,
     });
   });
+
+  it('demotes only the failed foundation word and leaves an unrelated mastered word unchanged', () => {
+    const failed: KnowledgeState = { id: 'knowledge:f0001', itemId: 'f0001', status: 'mastered', favorite: false, reviewStage: 4, updatedAt: now };
+    const unrelated: KnowledgeState = { id: 'knowledge:f0002', itemId: 'f0002', status: 'mastered', favorite: false, reviewStage: 4, updatedAt: now };
+    const next = applyKnowledgeReviewResult(failed, 'f0001', false, '2026-10-27T08:00:00.000Z');
+    expect(next).toMatchObject({ itemId: 'f0001', status: 'review', reviewStage: 0 });
+    expect(unrelated).toMatchObject({ itemId: 'f0002', status: 'mastered', reviewStage: 4 });
+  });
 });

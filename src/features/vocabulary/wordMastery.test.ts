@@ -37,6 +37,13 @@ describe('word mastery state machine', () => {
     });
   });
 
+  it('tags foundation review cards without changing their stable ids', () => {
+    expect(vocabularyReviewCard('f0001', 'cloze', now)).toMatchObject({
+      id: 'review:f0001:spelling', wordId: 'f0001', vocabularyLayer: 'foundation',
+    });
+    expect(vocabularyReviewCard('v0001', 'meaning', now)).toMatchObject({ vocabularyLayer: 'core' });
+  });
+
   it('creates a dedicated Chinese-to-English review card', () => {
     expect(vocabularyTranslationReviewCard('v1', now)).toMatchObject({
       questionId: 'v1:translation', wordId: 'v1', format: 'word-translation', lastCorrect: false,

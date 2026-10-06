@@ -3,6 +3,7 @@ import type { MistakeReason } from './attempt';
 import type { StudyKind } from '../features/planner/planDay';
 import type { CoreStudyKind } from '../features/dashboard/learningEvidence';
 import type { ExamSessionRecord } from './exam';
+import type { VocabularyLayer } from './content';
 
 export interface ReviewCard {
   id: string;
@@ -16,6 +17,7 @@ export interface ReviewCard {
   wordId?: string;
   knowledgeItemId?: string;
   knowledgeKind?: 'vocabulary' | 'collocation' | 'grammar';
+  vocabularyLayer?: VocabularyLayer;
   updatedAt: string;
 }
 

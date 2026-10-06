@@ -34,6 +34,7 @@ export const router = createHashRouter([
       { path: 'practice/:kind', element: loading('正在加载练习题…', <PracticeRoute />) },
       { path: 'culture', element: <Navigate replace to="/practice/culture" /> },
       { path: 'review', element: loading('正在加载错题复习…', <ReviewPage />) },
+      { path: 'review/foundation', element: loading('正在加载基础必会词错题复习…', <ReviewPage vocabularyLayer="foundation" />) },
       { path: 'mastery/:kind', element: loading('正在生成掌握检测…', <MasteryRoute />) },
       { path: 'diagnostic', element: loading('正在加载基础诊断…', <DiagnosticPage />) },
       { path: 'print', element: <Suspense fallback={<p>正在生成 A4 练习册…</p>}><PrintPage /></Suspense> },
