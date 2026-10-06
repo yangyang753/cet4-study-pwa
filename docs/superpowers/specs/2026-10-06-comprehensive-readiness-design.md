@@ -40,6 +40,8 @@ The vocabulary catalog gains an explicit layer:
 
 Foundation and core words remain visually and statistically separate. Search may cover both, but filters, counts, daily quotas, mastery states, and progress summaries identify their layer. Existing learner state continues to resolve the original 800 IDs unchanged.
 
+Foundation words follow the same evidence-based mastery contract as core high-frequency words. A learner cannot manually mark a foundation word as mastered. The app first teaches the word, then uses no-hint recall to test meaning, spelling, contextual use, and—when available—word-family or confusable knowledge. Only a passed test advances the mastery state. A later failed review automatically demotes the word to learning/review, records only the failed target as a mistake, and schedules it again. Foundation mastery and core mastery remain separate in counts and filters even though they share the same testing engine.
+
 Foundation entries use the same learner-facing standards as core entries: word, phonetic, concise CET-relevant meanings, part of speech, natural example, Chinese example translation, and a stable ID. Meanings exclude archaic, technical, and very rare senses.
 
 ### 2.2 Word families and confusables
@@ -96,6 +98,8 @@ Vocabulary recall randomly rotates among unambiguous formats:
 Only one target dimension is hidden in a question. The prompt must not hide both the identifying word and its meaning. Correct answers do not create mistakes. Wrong spelling, missed target meaning, wrong family form, wrong confusable choice, or failed target use creates review evidence for the affected item only.
 
 Foundation/core vocabulary and collocations use the same mastery evidence rules but retain distinct content types and progress counters.
+
+The foundation library therefore provides the same automatic learning loop as the core library: learn → no-hint test → automatic mastery decision → spaced review → automatic demotion after a failed review. No manual “已掌握” control is rendered anywhere in this loop.
 
 ## 4. Diagnostics and subjective work
 
@@ -182,9 +186,10 @@ Development follows red-green-refactor tests for each behavior. Required verific
 The change is ready only when:
 
 1. the existing 800 core words remain intact and a separate foundation layer is available;
-2. required audited missing words are represented with concise CET-relevant meanings;
-3. high-value word-family/confusable content is tested and participates in recall;
-4. review scheduling and mistake routing preserve correct answers and demote only failed targets;
-5. diagnostic, subjective grading, pronunciation, reminder, and sync limitations are explicit;
-6. legacy learner data and backups remain usable;
-7. the full release verification passes and the clean commit is pushed to `main` for GitHub Pages deployment.
+2. foundation words cannot be manually marked mastered and use the same tested, automatic mastery and demotion rules as core words;
+3. required audited missing words are represented with concise CET-relevant meanings;
+4. high-value word-family/confusable content is tested and participates in recall;
+5. review scheduling and mistake routing preserve correct answers and demote only failed targets;
+6. diagnostic, subjective grading, pronunciation, reminder, and sync limitations are explicit;
+7. legacy learner data and backups remain usable;
+8. the full release verification passes and the clean commit is pushed to `main` for GitHub Pages deployment.
