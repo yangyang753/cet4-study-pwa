@@ -40,7 +40,9 @@ The vocabulary catalog gains an explicit layer:
 
 Foundation and core words remain visually and statistically separate. Search may cover both, but filters, counts, daily quotas, mastery states, and progress summaries identify their layer. Existing learner state continues to resolve the original 800 IDs unchanged.
 
-Foundation words follow the same evidence-based mastery contract as core high-frequency words. A learner cannot manually mark a foundation word as mastered. The app first teaches the word, then uses no-hint recall to test meaning, spelling, contextual use, and—when available—word-family or confusable knowledge. Only a passed test advances the mastery state. A later failed review automatically demotes the word to learning/review, records only the failed target as a mistake, and schedules it again. Foundation mastery and core mastery remain separate in counts and filters even though they share the same testing engine.
+Foundation words follow every learner-facing requirement already applied to core high-frequency words: hidden meanings during recall, varied no-hint question formats, automatic progress, automatic mastery decisions, later retention checks, item-level mistake routing, and automatic demotion after forgetting. A learner cannot manually mark a foundation word as mastered. The app first teaches the word, then tests meaning, spelling, contextual use, and—when available—word-family or confusable knowledge. Only a passed test advances the mastery state.
+
+Foundation vocabulary is a complete independent learning channel rather than a filter that mixes with core vocabulary. It has its own new-word queue, previous-day recall queue, mistake queue, learning/mastered counts, review stage, due date, and completion status. A foundation mistake appears in a dedicated **基础必会词错题复习** view and does not appear inside the core high-frequency-word mistake list. Core mistakes likewise do not appear in the foundation view. Both channels may reuse the same tested engine internally, but their learner-facing sessions and statistics remain separate.
 
 Foundation entries use the same learner-facing standards as core entries: word, phonetic, concise CET-relevant meanings, part of speech, natural example, Chinese example translation, and a stable ID. Meanings exclude archaic, technical, and very rare senses.
 
@@ -78,11 +80,13 @@ Automated tests assert representative required words rather than treating one fr
 
 Daily planning calculates quotas from remaining days, unmastered counts, recent accuracy, and the learner's configured minutes. It schedules small foundation and core allocations without exceeding the existing time budget. Review due today remains higher priority than new material.
 
-The established alternating rhythm remains:
+Each vocabulary channel follows the established alternating rhythm independently:
 
-- new-learning day: foundation/core vocabulary plus a small collocation allocation;
-- next day: recall of the previous day's new words and collocations before any new items;
+- new-learning day: learn that channel's scheduled new words; the core channel may also include its small collocation allocation;
+- next day: that channel first recalls all words learned by the learner on the previous day before it offers new words;
 - urgent overdue review can convert a planned new-learning slot into review-only work.
+
+Finishing core vocabulary never marks foundation vocabulary complete, and finishing foundation vocabulary never marks the core task complete. The Today page records each route from its own evidence. When time is limited, due review comes first in both routes, followed by foundation essentials and then new core vocabulary.
 
 ### 3.2 Recall formats
 
@@ -99,7 +103,7 @@ Only one target dimension is hidden in a question. The prompt must not hide both
 
 Foundation/core vocabulary and collocations use the same mastery evidence rules but retain distinct content types and progress counters.
 
-The foundation library therefore provides the same automatic learning loop as the core library: learn → no-hint test → automatic mastery decision → spaced review → automatic demotion after a failed review. No manual “已掌握” control is rendered anywhere in this loop.
+The foundation library therefore provides the same automatic learning loop as the core library: learn → next-day no-hint recall → automatic mastery decision → spaced review → automatic demotion after a failed review. No manual “已掌握” control is rendered anywhere in this loop. Its wrong answers are stored and reopened through the dedicated foundation mistake route, while correct answers remain outside both mistake queues.
 
 ## 4. Diagnostics and subjective work
 
@@ -151,7 +155,7 @@ When variables are present, existing login and sync behavior remains authoritati
 
 ## 6. User interface
 
-The Today page summarizes foundation and core quotas separately without adding another dense dashboard card. The vocabulary library gets a layer filter and compact progress counts. Word-family/confusable training appears inside the existing learning/review runners, not as a new top-level navigation destination.
+The Today page presents foundation and core vocabulary as separate tasks with separate quotas and completion evidence, without adding another dense dashboard card. The vocabulary library gets distinct foundation/core entry points and compact progress counts. Each entry point opens only its own learning, previous-day recall, and mistake sessions. Word-family/confusable training appears inside the relevant learning/review runner, not as a new top-level navigation destination.
 
 On small screens:
 
@@ -187,9 +191,10 @@ The change is ready only when:
 
 1. the existing 800 core words remain intact and a separate foundation layer is available;
 2. foundation words cannot be manually marked mastered and use the same tested, automatic mastery and demotion rules as core words;
-3. required audited missing words are represented with concise CET-relevant meanings;
-4. high-value word-family/confusable content is tested and participates in recall;
-5. review scheduling and mistake routing preserve correct answers and demote only failed targets;
-6. diagnostic, subjective grading, pronunciation, reminder, and sync limitations are explicit;
-7. legacy learner data and backups remain usable;
-8. the full release verification passes and the clean commit is pushed to `main` for GitHub Pages deployment.
+3. foundation new learning, previous-day recall, mistakes, mastery counts, and completion evidence remain separate from the core channel;
+4. required audited missing words are represented with concise CET-relevant meanings;
+5. high-value word-family/confusable content is tested and participates in recall;
+6. review scheduling and mistake routing preserve correct answers and demote only failed targets;
+7. diagnostic, subjective grading, pronunciation, reminder, and sync limitations are explicit;
+8. legacy learner data and backups remain usable;
+9. the full release verification passes and the clean commit is pushed to `main` for GitHub Pages deployment.
