@@ -1,6 +1,7 @@
 export type Difficulty = 'foundation' | 'standard' | 'challenge';
 export type QuestionType = 'vocabulary' | 'collocation' | 'grammar' | 'news' | 'conversation' | 'passage' | 'cloze' | 'matching' | 'reading' | 'translation' | 'writing';
 export type QuestionSkillTag = 'detail' | 'reason' | 'purpose' | 'action' | 'attitude' | 'inference' | 'main-idea' | 'paraphrase' | 'vocabulary-in-context' | 'reference' | 'paragraph-role' | 'structure';
+export type VocabularyLayer = 'foundation' | 'core';
 
 export interface KnowledgePoint {
   id: string;
@@ -22,7 +23,12 @@ export interface VocabularyEntry {
   frequency?: number;
   category?: string;
   subcategory?: string;
+  layer?: VocabularyLayer;
 }
+
+export interface VocabularyFamilyMember { word: string; partOfSpeech: string; meaningZh: string }
+export interface VocabularyConfusable { word: string; distinctionZh: string; example: string }
+export interface VocabularyEnrichment { vocabularyId: string; family: VocabularyFamilyMember[]; confusables: VocabularyConfusable[] }
 
 export interface QuestionOption { id: string; text: string }
 

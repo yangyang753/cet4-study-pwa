@@ -3,8 +3,15 @@ import { auditContentDiversity, auditContentInventory, auditContentShapes, audit
 import { getPracticeItems } from './catalog';
 import inventory from '../../content/v1/inventory.json';
 import { auditQuestionTemplateDiversity } from './questionDiversity';
+import { foundationVocabulary } from './foundationVocabulary';
+import { learningVocabulary } from './vocabularyLearning';
+import { auditVocabularyEnrichment, vocabularyEnrichment } from './vocabularyEnrichment';
 
 describe('auditContentInventory', () => {
+  it('ships audited foundation and enrichment content beside the core inventory', () => {
+    expect(foundationVocabulary).toHaveLength(180);
+    expect(auditVocabularyEnrichment(vocabularyEnrichment, [...foundationVocabulary, ...learningVocabulary])).toEqual([]);
+  });
   it('reports every category below the approved minimum', () => {
     const errors = auditContentInventory({ vocabulary: [], collocations: [], grammarTopics: [], listeningSets: [], readingSets: [], translations: [], writingPrompts: [], mockExams: [] });
     expect(errors).toContain('vocabulary: expected at least 800, received 0');

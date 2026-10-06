@@ -1,0 +1,1441 @@
+[
+  {
+    "vocabularyId": "f0061",
+    "family": [
+      {
+        "word": "seeing",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "看见（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0062",
+    "family": [
+      {
+        "word": "thinking",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "认为（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0063",
+    "family": [
+      {
+        "word": "going",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "去（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0064",
+    "family": [
+      {
+        "word": "ways",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "方式（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0065",
+    "family": [
+      {
+        "word": "works",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "工作（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0066",
+    "family": [
+      {
+        "word": "years",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "年（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0067",
+    "family": [
+      {
+        "word": "worlds",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "世界（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0068",
+    "family": [
+      {
+        "word": "uses",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "使用（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0069",
+    "family": [
+      {
+        "word": "states",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "状态（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0070",
+    "family": [
+      {
+        "word": "schools",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "学校（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0071",
+    "family": [
+      {
+        "word": "governments",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "政府（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0072",
+    "family": [
+      {
+        "word": "systems",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "系统（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0073",
+    "family": [
+      {
+        "word": "weeks",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "星期（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0074",
+    "family": [
+      {
+        "word": "points",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "要点（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0075",
+    "family": [
+      {
+        "word": "supports",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "支持（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0076",
+    "family": [
+      {
+        "word": "services",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "服务（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0077",
+    "family": [
+      {
+        "word": "teams",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "团队（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0078",
+    "family": [
+      {
+        "word": "nationally",
+        "partOfSpeech": "ad.",
+        "meaningZh": "国家的地"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0079",
+    "family": [
+      {
+        "word": "developments",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "发展（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0080",
+    "family": [
+      {
+        "word": "traditions",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "传统（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0081",
+    "family": [
+      {
+        "word": "societies",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "社会（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0082",
+    "family": [
+      {
+        "word": "educate",
+        "partOfSpeech": "v.",
+        "meaningZh": "教育；培养"
+      },
+      {
+        "word": "educational",
+        "partOfSpeech": "a.",
+        "meaningZh": "教育的；有教育意义的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0083",
+    "family": [
+      {
+        "word": "technologies",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "技术（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0084",
+    "family": [
+      {
+        "word": "economy",
+        "partOfSpeech": "n.",
+        "meaningZh": "经济；节约"
+      },
+      {
+        "word": "economically",
+        "partOfSpeech": "ad.",
+        "meaningZh": "在经济上；节约地"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0085",
+    "family": [
+      {
+        "word": "responsible",
+        "partOfSpeech": "a.",
+        "meaningZh": "负责的；有责任的"
+      },
+      {
+        "word": "responsibly",
+        "partOfSpeech": "ad.",
+        "meaningZh": "负责任地"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0086",
+    "family": [
+      {
+        "word": "researcher",
+        "partOfSpeech": "n.",
+        "meaningZh": "研究人员"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0087",
+    "family": [
+      {
+        "word": "achieving",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "实现（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0088",
+    "family": [
+      {
+        "word": "results",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "结果（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0089",
+    "family": [
+      {
+        "word": "solutions",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "解决办法（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0090",
+    "family": [
+      {
+        "word": "resources",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "资源（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0091",
+    "family": [
+      {
+        "word": "rights",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "权利（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0092",
+    "family": [
+      {
+        "word": "backs",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "背部（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0093",
+    "family": [
+      {
+        "word": "sameness",
+        "partOfSpeech": "n.",
+        "meaningZh": "相同；相似"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0094",
+    "family": [],
+    "confusables": [
+      {
+        "word": "other",
+        "distinctionZh": "another 表示“另一个”，常接单数名词；other 表示“其他的”，可接复数名词。",
+        "example": "Other students joined the activity."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0095",
+    "family": [
+      {
+        "word": "surrounding",
+        "partOfSpeech": "a.",
+        "meaningZh": "周围的；附近的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0096",
+    "family": [
+      {
+        "word": "whiles",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "当……时（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0097",
+    "family": [],
+    "confusables": [
+      {
+        "word": "once",
+        "distinctionZh": "again 表示“再次”；once 表示“一次、曾经”。",
+        "example": "Please read the sentence once."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0098",
+    "family": [],
+    "confusables": [
+      {
+        "word": "for",
+        "distinctionZh": "against 表示“反对”；for 可表示“支持”。",
+        "example": "Most students voted for the plan."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0099",
+    "family": [],
+    "confusables": [
+      {
+        "word": "within",
+        "distinctionZh": "without 表示“没有”；within 表示“在……之内”。",
+        "example": "Finish the task within one hour."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0100",
+    "family": [
+      {
+        "word": "underlying",
+        "partOfSpeech": "a.",
+        "meaningZh": "潜在的；根本的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0101",
+    "family": [],
+    "confusables": [
+      {
+        "word": "by",
+        "distinctionZh": "until 强调动作持续到某时；by 强调不迟于某个截止时间。",
+        "example": "Submit the report by Friday."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0102",
+    "family": [
+      {
+        "word": "inform",
+        "partOfSpeech": "v.",
+        "meaningZh": "通知；告知"
+      },
+      {
+        "word": "informative",
+        "partOfSpeech": "a.",
+        "meaningZh": "提供有用信息的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0103",
+    "family": [
+      {
+        "word": "practices",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "练习（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0104",
+    "family": [
+      {
+        "word": "knowledgeable",
+        "partOfSpeech": "a.",
+        "meaningZh": "知识渊博的；了解情况的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0105",
+    "family": [
+      {
+        "word": "abilities",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "能力（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0106",
+    "family": [
+      {
+        "word": "activities",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "活动（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0107",
+    "family": [
+      {
+        "word": "students",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "学生（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0108",
+    "family": [
+      {
+        "word": "teachers",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "教师（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0109",
+    "family": [
+      {
+        "word": "universities",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "大学（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0110",
+    "family": [
+      {
+        "word": "todays",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "今天（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0111",
+    "family": [
+      {
+        "word": "tomorrows",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "明天（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0112",
+    "family": [
+      {
+        "word": "yesterdays",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "昨天（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0113",
+    "family": [
+      {
+        "word": "youth",
+        "partOfSpeech": "n.",
+        "meaningZh": "青年时期；年轻人"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0114",
+    "family": [
+      {
+        "word": "socially",
+        "partOfSpeech": "ad.",
+        "meaningZh": "社会的地"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0115",
+    "family": [
+      {
+        "word": "globally",
+        "partOfSpeech": "ad.",
+        "meaningZh": "全球的地"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0116",
+    "family": [
+      {
+        "word": "traditionally",
+        "partOfSpeech": "ad.",
+        "meaningZh": "传统的地"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0117",
+    "family": [
+      {
+        "word": "differently",
+        "partOfSpeech": "ad.",
+        "meaningZh": "不同的地"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0118",
+    "family": [
+      {
+        "word": "surely",
+        "partOfSpeech": "ad.",
+        "meaningZh": "确信的地"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0119",
+    "family": [],
+    "confusables": [
+      {
+        "word": "best",
+        "distinctionZh": "better 是比较级“更好”；best 是最高级“最好”。",
+        "example": "This is the best solution."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0120",
+    "family": [],
+    "confusables": [
+      {
+        "word": "better",
+        "distinctionZh": "best 是最高级“最好”；better 是比较级“更好”。",
+        "example": "The second method is better."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0121",
+    "family": [
+      {
+        "word": "smaller",
+        "partOfSpeech": "a.",
+        "meaningZh": "更小的；较少的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0122",
+    "family": [
+      {
+        "word": "likelihood",
+        "partOfSpeech": "n.",
+        "meaningZh": "可能性"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0123",
+    "family": [
+      {
+        "word": "quick",
+        "partOfSpeech": "a.",
+        "meaningZh": "迅速地的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0124",
+    "family": [
+      {
+        "word": "slow",
+        "partOfSpeech": "a.",
+        "meaningZh": "缓慢地的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0125",
+    "family": [
+      {
+        "word": "usual",
+        "partOfSpeech": "a.",
+        "meaningZh": "通常的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0126",
+    "family": [
+      {
+        "word": "sometime",
+        "partOfSpeech": "ad.",
+        "meaningZh": "在某个时候；曾经"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0127",
+    "family": [],
+    "confusables": [
+      {
+        "word": "usually",
+        "distinctionZh": "always 表示“总是”；usually 表示“通常”，频率较低。",
+        "example": "She usually studies in the library."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0128",
+    "family": [],
+    "confusables": [
+      {
+        "word": "yet",
+        "distinctionZh": "already 常用于肯定句表示“已经”；yet 常用于疑问句或否定句表示“已经、还”。",
+        "example": "Have you finished the task yet?"
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0129",
+    "family": [
+      {
+        "word": "stills",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "仍然（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0130",
+    "family": [],
+    "confusables": [
+      {
+        "word": "too",
+        "distinctionZh": "also 常位于实义动词前；too 表示“也”时常放在句末。",
+        "example": "The activity is useful, too."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0131",
+    "family": [
+      {
+        "word": "though",
+        "partOfSpeech": "conj./ad.",
+        "meaningZh": "虽然；不过"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0132",
+    "family": [],
+    "confusables": [
+      {
+        "word": "for",
+        "distinctionZh": "since 后接时间起点；for 后接一段时间。",
+        "example": "They have studied for two hours."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0133",
+    "family": [],
+    "confusables": [
+      {
+        "word": "if",
+        "distinctionZh": "whether 可与 or not 连用并可引导主语从句；if 常表示“如果”或口语中的“是否”。",
+        "example": "I do not know if he will come."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0134",
+    "family": [],
+    "confusables": [
+      {
+        "word": "between",
+        "distinctionZh": "among 通常表示三者及以上“在……之中”；between 常表示两者之间。",
+        "example": "The agreement was made between the two schools."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0135",
+    "family": [
+      {
+        "word": "throughs",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "穿过（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0136",
+    "family": [
+      {
+        "word": "crossing",
+        "partOfSpeech": "n.",
+        "meaningZh": "横越；十字路口"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0137",
+    "family": [
+      {
+        "word": "behinds",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "在……后面（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0138",
+    "family": [],
+    "confusables": [
+      {
+        "word": "over",
+        "distinctionZh": "above 强调位置较高；over 还可表示覆盖或跨越。",
+        "example": "A bridge runs over the river."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0139",
+    "family": [],
+    "confusables": [
+      {
+        "word": "every",
+        "distinctionZh": "each 强调逐个个体；every 强调整体中的每一个。",
+        "example": "Every student received a notice."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0140",
+    "family": [
+      {
+        "word": "everything",
+        "partOfSpeech": "pron.",
+        "meaningZh": "每件事；一切"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0141",
+    "family": [],
+    "confusables": [
+      {
+        "word": "many",
+        "distinctionZh": "several 表示“几个、若干”；many 表示数量较多。",
+        "example": "Many students attended the lecture."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0142",
+    "family": [
+      {
+        "word": "fewer",
+        "partOfSpeech": "det./pron.",
+        "meaningZh": "较少的；较少的人或事物"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0143",
+    "family": [],
+    "confusables": [
+      {
+        "word": "much",
+        "distinctionZh": "many 修饰可数名词复数；much 修饰不可数名词。",
+        "example": "The project requires much time."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0144",
+    "family": [],
+    "confusables": [
+      {
+        "word": "many",
+        "distinctionZh": "much 修饰不可数名词；many 修饰可数名词复数。",
+        "example": "Many people support the plan."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0145",
+    "family": [
+      {
+        "word": "mores",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "更多（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0146",
+    "family": [
+      {
+        "word": "mostly",
+        "partOfSpeech": "ad.",
+        "meaningZh": "主要地；通常"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0147",
+    "family": [
+      {
+        "word": "lesser",
+        "partOfSpeech": "a.",
+        "meaningZh": "较小的；次要的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0148",
+    "family": [],
+    "confusables": [
+      {
+        "word": "less",
+        "distinctionZh": "least 表示“最少”；less 表示“较少”。",
+        "example": "The new method uses less energy."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0149",
+    "family": [
+      {
+        "word": "somethings",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "某事（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0150",
+    "family": [
+      {
+        "word": "somebody",
+        "partOfSpeech": "pron.",
+        "meaningZh": "某人"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0151",
+    "family": [
+      {
+        "word": "seeming",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "似乎（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0152",
+    "family": [
+      {
+        "word": "trying",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "尝试（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0153",
+    "family": [
+      {
+        "word": "asking",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "询问（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0154",
+    "family": [
+      {
+        "word": "starting",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "开始（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0155",
+    "family": [
+      {
+        "word": "stopping",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "停止（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0156",
+    "family": [
+      {
+        "word": "teaching",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "教（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0157",
+    "family": [
+      {
+        "word": "studies",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "学习（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0158",
+    "family": [
+      {
+        "word": "writing",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "写（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0159",
+    "family": [
+      {
+        "word": "speaking",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "说话（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0160",
+    "family": [
+      {
+        "word": "understanding",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "理解（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0161",
+    "family": [
+      {
+        "word": "forgetting",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "忘记（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0162",
+    "family": [
+      {
+        "word": "joining",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "参加（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0163",
+    "family": [
+      {
+        "word": "returning",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "返回（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0164",
+    "family": [
+      {
+        "word": "allowing",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "允许（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0165",
+    "family": [
+      {
+        "word": "suggesting",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "建议（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0166",
+    "family": [
+      {
+        "word": "sharing",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "分享（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0167",
+    "family": [
+      {
+        "word": "avoiding",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "避免（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0168",
+    "family": [
+      {
+        "word": "accepting",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "接受（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0169",
+    "family": [
+      {
+        "word": "spending",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "花费（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0170",
+    "family": [
+      {
+        "word": "saving",
+        "partOfSpeech": "v.-ing",
+        "meaningZh": "节省（进行形式）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0171",
+    "family": [
+      {
+        "word": "rising",
+        "partOfSpeech": "a.",
+        "meaningZh": "上升的；增长的"
+      }
+    ],
+    "confusables": [
+      {
+        "word": "raise",
+        "distinctionZh": "rise 是不及物动词“上升”；raise 是及物动词“提高”。",
+        "example": "The activity can raise students’ confidence."
+      },
+      {
+        "word": "arise",
+        "distinctionZh": "rise 强调位置或数量上升；arise 表示问题或情况“出现”。",
+        "example": "New problems may arise during the project."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "f0172",
+    "family": [
+      {
+        "word": "answers",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "答案（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0173",
+    "family": [
+      {
+        "word": "responsibility",
+        "partOfSpeech": "n.",
+        "meaningZh": "责任；职责"
+      },
+      {
+        "word": "responsibly",
+        "partOfSpeech": "ad.",
+        "meaningZh": "负责任地"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0174",
+    "family": [
+      {
+        "word": "tests",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "测试（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0175",
+    "family": [
+      {
+        "word": "exams",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "考试（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0176",
+    "family": [
+      {
+        "word": "skills",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "技能（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0177",
+    "family": [
+      {
+        "word": "successes",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "成功（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0178",
+    "family": [
+      {
+        "word": "failures",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "失败（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0179",
+    "family": [
+      {
+        "word": "decisions",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "决定（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "f0180",
+    "family": [
+      {
+        "word": "attentions",
+        "partOfSpeech": "n.pl.",
+        "meaningZh": "注意（复数）"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "v0100",
+    "family": [
+      {
+        "word": "development",
+        "partOfSpeech": "n.",
+        "meaningZh": "发展；开发"
+      },
+      {
+        "word": "developmental",
+        "partOfSpeech": "a.",
+        "meaningZh": "发展的；成长的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "v0203",
+    "family": [
+      {
+        "word": "economic",
+        "partOfSpeech": "a.",
+        "meaningZh": "经济的；经济学的"
+      },
+      {
+        "word": "economical",
+        "partOfSpeech": "a.",
+        "meaningZh": "节约的；经济实惠的"
+      }
+    ],
+    "confusables": []
+  },
+  {
+    "vocabularyId": "v0296",
+    "family": [
+      {
+        "word": "affected",
+        "partOfSpeech": "a.",
+        "meaningZh": "受到影响的"
+      }
+    ],
+    "confusables": [
+      {
+        "word": "effect",
+        "distinctionZh": "affect 通常作动词表示“影响”；effect 通常作名词表示“结果或影响”。",
+        "example": "The change had a positive effect on students."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "v0598",
+    "family": [
+      {
+        "word": "adaptation",
+        "partOfSpeech": "n.",
+        "meaningZh": "适应；改编"
+      }
+    ],
+    "confusables": [
+      {
+        "word": "adopt",
+        "distinctionZh": "adapt 表示“适应或改编”；adopt 表示“采用或收养”。",
+        "example": "The school decided to adopt the new method."
+      }
+    ]
+  },
+  {
+    "vocabularyId": "v0361",
+    "family": [
+      {
+        "word": "accessible",
+        "partOfSpeech": "a.",
+        "meaningZh": "可进入的；易获得的"
+      }
+    ],
+    "confusables": [
+      {
+        "word": "assess",
+        "distinctionZh": "access 表示“进入或获取”；assess 表示“评估”。",
+        "example": "Teachers assess progress through regular tasks."
+      }
+    ]
+  }
+]
