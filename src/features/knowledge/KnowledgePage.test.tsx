@@ -164,6 +164,29 @@ describe('KnowledgePage', () => {
     expect(repository.saveAttemptOnce).toHaveBeenCalledWith(expect.objectContaining({ correct: false }));
   });
 
+  it('adds only the wrong learned word from a multi-target translation', async () => {
+    const repository = {
+      getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [
+        { id: 'knowledge:v0164', itemId: 'v0164', status: 'review', favorite: false, reviewStage: 1, updatedAt: '2026-09-24T08:00:00.000Z' },
+        { id: 'knowledge:v0218', itemId: 'v0218', status: 'review', favorite: false, reviewStage: 1, updatedAt: '2026-09-24T08:00:00.000Z' },
+      ] }),
+      upsertKnowledgeState: vi.fn().mockResolvedValue(undefined),
+      upsertReviewCard: vi.fn().mockResolvedValue(undefined),
+      saveAttemptOnce: vi.fn().mockResolvedValue(undefined),
+    } as unknown as LearningRepository;
+    render(<KnowledgePage repository={repository} random={() => 0} />);
+
+    await userEvent.click(await screen.findByRole('button', { name: '开始多词短句' }));
+    await userEvent.type(screen.getByRole('textbox', { name: '英文短句答案' }), 'Chinese culture has a long story.');
+    await userEvent.click(screen.getByRole('button', { name: '提交中译英' }));
+
+    expect(await screen.findByText(/1 个目标词已加入中译英错题复习/)).toBeVisible();
+    expect(repository.upsertReviewCard).toHaveBeenCalledTimes(1);
+    expect(repository.upsertReviewCard).toHaveBeenCalledWith(expect.objectContaining({ wordId: 'v0218', format: 'word-translation' }));
+    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v0164', status: 'review', reviewStage: 2 }));
+    expect(repository.upsertKnowledgeState).toHaveBeenCalledWith(expect.objectContaining({ itemId: 'v0218', status: 'review', reviewStage: 0 }));
+  });
+
   it('finishes a one-word aggregate round with a visible summary instead of repeating it', async () => {
     const repository = {
       getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [

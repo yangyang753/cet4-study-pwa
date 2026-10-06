@@ -161,7 +161,7 @@ export function KnowledgePage({ repository = defaultRepository, random = Math.ra
 
   const submitLearnedTranslation = async ({ attemptId: translationAttemptId, exercise: translationExercise, answer, grade }: LearnedWordTranslationSubmission) => {
     const now = new Date().toISOString();
-    const failedIds = new Set(grade.sentenceComplete && grade.meaningComplete ? grade.missingWordIds : translationExercise.targets.map((target) => target.wordId));
+    const failedIds = new Set(grade.failedWordIds);
     await repository.saveAttemptOnce({
       id: translationAttemptId, userId: 'local-learner', questionId: translationExercise.id,
       response: answer, correct: grade.correct, score: grade.correct ? 1 : 0, durationSeconds: 0,
