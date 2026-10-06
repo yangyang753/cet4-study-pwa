@@ -14,6 +14,45 @@ const state = (index: number, extra: Partial<KnowledgeState> = {}): KnowledgeSta
 });
 
 describe('vocabulary workload', () => {
+  it('calculates foundation and core work from separate catalogs and states', () => {
+    const mixed = [
+      { ...entry(1), layer: 'core' as const },
+      { ...entry(2), id: 'f0001', layer: 'foundation' as const },
+      { ...entry(3), id: 'f0002', layer: 'foundation' as const },
+    ];
+    const unrelatedCoreState = [state(1, { status: 'mastered' })];
+
+    const foundation = buildVocabularyWorkload(mixed, unrelatedCoreState, '2026-10-06', '2026-12-12', 60, { layer: 'foundation' });
+    const core = buildVocabularyWorkload(mixed, unrelatedCoreState, '2026-10-06', '2026-12-12', 60, { layer: 'core' });
+
+    expect(foundation.newWords.map((word) => word.id)).toEqual(['f0001', 'f0002']);
+    expect(foundation.unseenWordCount).toBe(2);
+    expect(core.unseenWordCount).toBe(0);
+  });
+
+  it('turns a severe overdue backlog into a review-only day', () => {
+    const entries = Array.from({ length: 100 }, (_, i) => entry(i));
+    const states = entries.slice(0, 80).map((_, i) => state(i, { status: 'review', nextReviewAt: '2026-09-01T00:00:00.000Z' }));
+    const result = buildVocabularyWorkload(entries, states, '2026-10-06', '2026-12-12', 60);
+    expect(result.reviewOnlyDay).toBe(true);
+    expect(result.newWords).toEqual([]);
+    expect(result.dueWords.length).toBeGreaterThan(0);
+  });
+
+  it('recalls only the selected layer words learned on the preceding day', () => {
+    const mixed = [
+      { ...entry(1), layer: 'core' as const },
+      { ...entry(2), id: 'f0001', layer: 'foundation' as const },
+    ];
+    const states = [
+      state(1, { updatedAt: '2026-10-05T08:00:00.000Z', nextReviewAt: '2026-12-30T00:00:00.000Z' }),
+      { ...state(2, { updatedAt: '2026-10-05T09:00:00.000Z', nextReviewAt: '2026-12-30T00:00:00.000Z' }), id: 'knowledge:f0001', itemId: 'f0001' },
+    ];
+    const result = buildVocabularyWorkload(mixed, states, '2026-10-06', '2026-12-12', 60, { layer: 'foundation', completedVocabularySessions: 1 });
+    expect(result.reviewOnlyDay).toBe(true);
+    expect(result.dueWords.map((word) => word.id)).toEqual(['f0001']);
+  });
+
   it('alternates one acquisition day with one dedicated consolidation day', () => {
     const entries = Array.from({ length: 90 }, (_, i) => entry(i));
     const learned = [state(0, { status: 'review', nextReviewAt: '2026-12-30T00:00:00.000Z' })];

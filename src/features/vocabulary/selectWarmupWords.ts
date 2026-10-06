@@ -1,7 +1,8 @@
-import type { VocabularyEntry } from '../../domain/content';
+import type { VocabularyEntry, VocabularyLayer } from '../../domain/content';
 import type { KnowledgeState } from '../../domain/learning';
+import { vocabularyLayerOf } from './vocabularyLayer';
 
-export function selectWarmupWords(entries: VocabularyEntry[], states: KnowledgeState[], limit = 10): VocabularyEntry[] {
+export function selectWarmupWords(entries: VocabularyEntry[], states: KnowledgeState[], limit = 10, layer?: VocabularyLayer): VocabularyEntry[] {
   const stateById = new Map(states.map((state) => [state.itemId, state.status]));
   const rank = (entry: VocabularyEntry) => {
     const status = stateById.get(entry.id);
@@ -11,7 +12,8 @@ export function selectWarmupWords(entries: VocabularyEntry[], states: KnowledgeS
     return 3;
   };
 
-  return [...entries]
+  return entries
+    .filter((entry) => !layer || vocabularyLayerOf(entry.id) === layer)
     .sort((left, right) => rank(left) - rank(right))
     .slice(0, Math.max(0, limit));
 }

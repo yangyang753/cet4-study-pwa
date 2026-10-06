@@ -8,10 +8,11 @@ import { buildStrictVocabularyQuestions, gradeStrictVocabularyAnswer } from './s
 import { studyDate } from '../../lib/studyDate';
 import { learningVocabulary } from '../../content/vocabularyLearning';
 
-export function StrictVocabularyCheck({ repository, words, states, passedWordIds = [], now: fixedNow, onWordPassed, onComplete }: {
+export function StrictVocabularyCheck({ repository, words, states, knownWords = learningVocabulary, passedWordIds = [], now: fixedNow, onWordPassed, onComplete }: {
   repository: LearningRepository;
   words: VocabularyEntry[];
   states: KnowledgeState[];
+  knownWords?: VocabularyEntry[];
   passedWordIds?: string[];
   now?: string;
   onWordPassed?: (wordId: string) => void | Promise<void>;
@@ -32,7 +33,7 @@ export function StrictVocabularyCheck({ repository, words, states, passedWordIds
 
   async function submit() {
     if (!question || saving) return;
-    const grade = gradeStrictVocabularyAnswer(question, { english, chinese }, learningVocabulary);
+    const grade = gradeStrictVocabularyAnswer(question, { english, chinese }, knownWords);
     const now = fixedNow ?? new Date().toISOString();
     const current = stateById.get(question.word.id);
     setSaving(true);

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { LearningRepository } from '../../data/repositories/LearningRepository';
 import type { CachedPlan, VocabularySessionPhase, VocabularySessionProgress } from '../../data/localDb';
 import { learningVocabulary } from '../../content/vocabularyLearning';
-import type { VocabularyEntry } from '../../domain/content';
+import type { VocabularyEntry, VocabularyLayer } from '../../domain/content';
 import type { DashboardSnapshot } from '../../domain/learning';
 import { VocabularyWarmup } from './VocabularyWarmup';
 import { StrictVocabularyCheck } from './StrictVocabularyCheckView';
@@ -18,13 +18,16 @@ import { VocabularyRecallExercise } from './VocabularyRecallExercise';
 import collocationData from '../../../content/v1/collocations.json';
 import { buildCollocationWorkload, type CollocationEntry } from '../collocations/collocationPractice';
 import { CollocationCheck } from '../collocations/CollocationCheck';
+import { enrichmentFor } from '../../content/vocabularyEnrichment';
+import { EnrichmentRecallExercise } from './EnrichmentRecallExercise';
 
 type Phase = 'loading' | 'review' | VocabularySessionPhase;
 
-export function DailyVocabularySession({ repository, entries = learningVocabulary, collocationEntries = collocationData as CollocationEntry[], today, examDate, culturePrompts, random = Math.random, onComplete }: {
+export function DailyVocabularySession({ repository, entries = learningVocabulary, collocationEntries = collocationData as CollocationEntry[], layer = 'core', today, examDate, culturePrompts, random = Math.random, onComplete }: {
   repository: LearningRepository;
   entries?: VocabularyEntry[];
   collocationEntries?: CollocationEntry[];
+  layer?: VocabularyLayer;
   today: string;
   examDate?: string;
   culturePrompts?: CultureTranslationPrompt[];
@@ -42,8 +45,11 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
   const [strictPassedWordIds, setStrictPassedWordIds] = useState<string[]>([]);
   const [dailyCollocations, setDailyCollocations] = useState<CollocationEntry[]>([]);
   const [passedCollocationIds, setPassedCollocationIds] = useState<string[]>([]);
+  const [checkedEnrichmentWordIds, setCheckedEnrichmentWordIds] = useState<string[]>([]);
   const [cachedPlan, setCachedPlan] = useState<CachedPlan | null>(null);
   const dailyCulturePrompt = selectDailyCultureTranslation(culturePrompts ?? cultureTranslationBank, today);
+  const sessionProperty = layer === 'foundation' ? 'foundationVocabularySession' : 'vocabularySession';
+  const taskId = `${today}:${layer === 'foundation' ? 'foundation-vocabulary' : 'vocabulary'}`;
 
   useEffect(() => {
     let active = true;
@@ -53,36 +59,38 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
     ]).then(async ([value, savedPlan]) => {
       if (!active) return;
       let effectivePlan = savedPlan;
-      const legacyPhase = savedPlan?.vocabularySession?.phase;
+      const savedSession = savedPlan?.[sessionProperty];
+      const legacyPhase = layer === 'core' ? savedSession?.phase : undefined;
       if (legacyPhase && ['culture-review', 'culture-translation'].includes(legacyPhase)) {
-        const taskId = `${today}:vocabulary`;
         const now = new Date().toISOString();
         if (!value.completions.some((item) => item.taskId === taskId)) {
           await completeDailyTask(repository, 'vocabulary', today);
           await repository.upsertKnowledgeState({ id: `mastery:${taskId}`, itemId: taskId, status: 'mastered', favorite: false, updatedAt: now });
         }
         if (typeof repository.savePlan === 'function') {
-          effectivePlan = {
-            ...savedPlan,
-            vocabularySession: { ...savedPlan.vocabularySession!, phase: 'complete' },
+          const migratedPlan: CachedPlan = {
+            ...savedPlan!,
+            [sessionProperty]: { ...savedSession!, phase: 'complete' },
             updatedAt: now,
           };
-          await repository.savePlan(effectivePlan);
+          effectivePlan = migratedPlan;
+          await repository.savePlan(migratedPlan);
         }
       }
       if (!active) return;
       const next = buildVocabularyWorkload(entries, value.knowledgeStates ?? [], today, examDate ?? value.settings?.examDate ?? '2026-12-12', value.settings?.dailyMinutes ?? 60, {
-        cultureWordIds: dailyCulturePrompt.targetWordIds,
-        completedVocabularySessions: (value.completions ?? []).filter((item) => item.kind === 'vocabulary').length,
+        cultureWordIds: layer === 'core' ? dailyCulturePrompt.targetWordIds : [],
+        completedVocabularySessions: (value.completions ?? []).filter((item) => item.taskId.endsWith(layer === 'foundation' ? ':foundation-vocabulary' : ':vocabulary')).length,
+        layer,
       });
-      const nextCollocations = buildCollocationWorkload(collocationEntries, value.knowledgeStates ?? [], today, examDate ?? value.settings?.examDate ?? '2026-12-12', next.reviewOnlyDay);
+      const nextCollocations = layer === 'core' ? buildCollocationWorkload(collocationEntries, value.knowledgeStates ?? [], today, examDate ?? value.settings?.examDate ?? '2026-12-12', next.reviewOnlyDay) : { entries: [] };
       const byId = new Map(entries.map((word) => [word.id, word]));
       const collocationById = new Map(collocationEntries.map((item) => [item.id, item]));
       const recoveredWords = entries.filter((word) => {
         const state = value.knowledgeStates.find((item) => item.itemId === word.id);
         return state?.status === 'learning' && studyDate(new Date(state.updatedAt)) === today;
       });
-      const session = effectivePlan?.vocabularySession;
+      const session = effectivePlan?.[sessionProperty];
       const savedWords = session?.wordIds.map((id) => byId.get(id)).filter((word): word is VocabularyEntry => Boolean(word));
       const cohort = savedWords ?? (recoveredWords.length ? recoveredWords : next.newWords);
       const savedCollocations = session?.collocationIds?.map((id) => collocationById.get(id)).filter((item): item is CollocationEntry => Boolean(item));
@@ -99,11 +107,12 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
       setStrictPassedWordIds(session?.strictPassedWordIds ?? []);
       setDailyCollocations(collocationCohort);
       setPassedCollocationIds(session?.passedCollocationIds ?? []);
+      setCheckedEnrichmentWordIds(session?.checkedEnrichmentWordIds ?? []);
       setPhase(session ? resumedPhase : (next.dueWords.length || next.cultureWords.length) ? 'review' : resumedPhase);
       if (!session && cohort.length && typeof repository.savePlan === 'function') {
         const created: CachedPlan = {
           ...(effectivePlan ?? { id: `plan:${today}`, date: today, tasks: [] }),
-          vocabularySession: { wordIds: cohort.map((word) => word.id), collocationIds: collocationCohort.map((item) => item.id), learnedWordIds: learned, phase: recoveredWords.length ? 'testing' : 'learning' },
+          [sessionProperty]: { wordIds: cohort.map((word) => word.id), collocationIds: collocationCohort.map((item) => item.id), learnedWordIds: learned, phase: recoveredWords.length ? 'testing' : 'learning' },
           updatedAt: new Date().toISOString(),
         };
         await repository.savePlan(created);
@@ -112,22 +121,24 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
       if (session?.phase === 'complete') onComplete(cohort);
     }).catch(() => { if (active) setError('今日词汇计划读取失败，请刷新后重试。'); });
     return () => { active = false; };
-  }, [collocationEntries, dailyCulturePrompt.targetWordIds, entries, examDate, onComplete, repository, today]);
+  }, [collocationEntries, dailyCulturePrompt.targetWordIds, entries, examDate, layer, onComplete, repository, sessionProperty, taskId, today]);
 
   const reviewWords = useMemo(() => workload ? [...workload.dueWords, ...workload.cultureWords] : [], [workload]);
   const reviewWord = reviewWords[reviewIndex];
   const reviewState = snapshot?.knowledgeStates.find((item) => item.itemId === reviewWord?.id);
   const reviewExercise = useMemo(() => reviewWord ? buildWordReinforcement(reviewWord, random) : null, [random, reviewWord]);
+  const enrichmentWords = useMemo(() => dailyWords.filter((word) => Boolean(enrichmentFor(word.id))), [dailyWords]);
+  const enrichmentWord = enrichmentWords.find((word) => !checkedEnrichmentWordIds.includes(word.id));
 
   async function persistSession(phaseValue: VocabularySessionPhase, learnedIds = learnedWordIds, patch: Partial<VocabularySessionProgress> = {}) {
     const storedPlan = typeof repository.getPlan === 'function' ? await repository.getPlan(today) : null;
     const basePlan = storedPlan ?? cachedPlan ?? { id: `plan:${today}`, date: today, tasks: [], updatedAt: new Date().toISOString() };
     if (typeof repository.savePlan !== 'function') return;
     const vocabularySession: VocabularySessionProgress = {
-      ...basePlan.vocabularySession,
+      ...basePlan[sessionProperty],
       wordIds: dailyWords.map((word) => word.id), collocationIds: dailyCollocations.map((item) => item.id), learnedWordIds: learnedIds, phase: phaseValue, ...patch,
     };
-    const nextPlan = { ...basePlan, vocabularySession, updatedAt: new Date().toISOString() };
+    const nextPlan = { ...basePlan, [sessionProperty]: vocabularySession, updatedAt: new Date().toISOString() };
     await repository.savePlan(nextPlan);
     setCachedPlan(nextPlan);
   }
@@ -146,8 +157,8 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
     const now = new Date().toISOString();
     setError('');
     try {
-      const taskId = await completeDailyTask(repository, 'vocabulary', today);
-      await completeDailyTask(repository, 'collocation', today);
+      await repository.completeTask({ id: taskId, date: today, taskId, kind: 'vocabulary', completedAt: now });
+      if (layer === 'core') await completeDailyTask(repository, 'collocation', today);
       await repository.upsertKnowledgeState({ id: `mastery:${taskId}`, itemId: taskId, status: 'mastered', favorite: false, updatedAt: now });
       await persistSession('complete');
       setPhase('complete');
@@ -161,6 +172,26 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
     if (!dailyCollocations.length) { await completeVocabulary(); return; }
     await persistSession('collocations');
     setPhase('collocations');
+  }
+
+  async function beginEnrichment() {
+    if (!enrichmentWords.some((word) => !checkedEnrichmentWordIds.includes(word.id))) { await beginCollocations(); return; }
+    await persistSession('enrichment', learnedWordIds, { checkedEnrichmentWordIds });
+    setPhase('enrichment');
+  }
+
+  async function submitEnrichment(correct: boolean, vocabularyId: string) {
+    if (!snapshot) return;
+    const now = new Date().toISOString();
+    const current = snapshot.knowledgeStates.find((item) => item.itemId === vocabularyId) ?? {
+      id: `knowledge:${vocabularyId}`, itemId: vocabularyId, status: 'learning' as const, favorite: false, updatedAt: now,
+    };
+    await repository.upsertKnowledgeState(applyVocabularyReviewResult(current, correct, now));
+    if (!correct) await repository.upsertReviewCard(vocabularyReviewCard(vocabularyId, 'cloze', now));
+    const checked = [...new Set([...checkedEnrichmentWordIds, vocabularyId])];
+    setCheckedEnrichmentWordIds(checked);
+    await persistSession('enrichment', learnedWordIds, { checkedEnrichmentWordIds: checked });
+    if (enrichmentWords.every((word) => checked.includes(word.id))) await beginCollocations();
   }
 
   if (phase === 'loading') return <p role={error ? 'alert' : 'status'}>{error || '正在准备今日词汇计划…'}</p>;
@@ -192,28 +223,29 @@ export function DailyVocabularySession({ repository, entries = learningVocabular
 
   if (phase === 'learning') {
     if (!dailyWords.length) return <section className="vocabulary-warmup complete"><h1>{workload.reviewOnlyDay ? '今日是集中巩固日' : '今日没有新词'}</h1><p>旧词复习已经完成，接着巩固重点搭配。</p>{error && <p role="alert">{error}</p>}<button className="primary-action" onClick={() => void beginCollocations()}>{dailyCollocations.length ? '继续重点搭配' : '完成今日词汇学习'}</button></section>;
-    if (!warmupWords.length) return <StrictVocabularyCheck repository={repository} words={dailyWords} states={snapshot.knowledgeStates} passedWordIds={strictPassedWordIds} onWordPassed={async (wordId) => {
+    if (!warmupWords.length) return <StrictVocabularyCheck repository={repository} words={dailyWords} knownWords={entries} states={snapshot.knowledgeStates} passedWordIds={strictPassedWordIds} onWordPassed={async (wordId) => {
       const passed = [...new Set([...strictPassedWordIds, wordId])];
       await persistSession('testing', learnedWordIds, { strictPassedWordIds: passed });
       setStrictPassedWordIds(passed);
-    }} onComplete={() => void beginCollocations()} />;
-    return <VocabularyWarmup repository={repository} entries={warmupWords} limit={warmupWords.length} onWordLearned={async (wordId) => {
+    }} onComplete={() => void beginEnrichment()} />;
+    return <VocabularyWarmup repository={repository} entries={warmupWords} layer={layer} limit={warmupWords.length} onWordLearned={async (wordId) => {
       const nextLearned = [...new Set([...learnedWordIds, wordId])];
       await persistSession(nextLearned.length === dailyWords.length ? 'testing' : 'learning', nextLearned);
       setLearnedWordIds(nextLearned);
     }} onComplete={() => setPhase('testing')} />;
   }
 
-  if (phase === 'testing') return <StrictVocabularyCheck repository={repository} words={dailyWords} states={snapshot.knowledgeStates} passedWordIds={strictPassedWordIds} onWordPassed={async (wordId) => {
+  if (phase === 'testing') return <StrictVocabularyCheck repository={repository} words={dailyWords} knownWords={entries} states={snapshot.knowledgeStates} passedWordIds={strictPassedWordIds} onWordPassed={async (wordId) => {
     const passed = [...new Set([...strictPassedWordIds, wordId])];
     await persistSession('testing', learnedWordIds, { strictPassedWordIds: passed });
     setStrictPassedWordIds(passed);
-  }} onComplete={() => void beginCollocations()} />;
+  }} onComplete={() => void beginEnrichment()} />;
+  if (phase === 'enrichment' && enrichmentWord) return <section className="strict-vocabulary-check"><header><span>词族与易混词巩固</span><h1>把新词放进词族中记忆</h1><p>每题只隐藏一个目标；错误只回退当前单词。</p></header><EnrichmentRecallExercise key={enrichmentWord.id} word={enrichmentWord} enrichment={enrichmentFor(enrichmentWord.id)!} random={random} onSubmit={({ correct, vocabularyId }) => submitEnrichment(correct, vocabularyId)} /></section>;
   if (phase === 'collocations') return <CollocationCheck repository={repository} entries={dailyCollocations} states={snapshot.knowledgeStates} passedItemIds={passedCollocationIds} random={random} onItemPassed={async (itemId) => {
     const passed = [...new Set([...passedCollocationIds, itemId])];
     await persistSession('collocations', learnedWordIds, { passedCollocationIds: passed });
     setPassedCollocationIds(passed);
   }} onComplete={() => void completeVocabulary()} />;
-  if (phase === 'complete') return <section className="practice-summary"><h1>今日词汇与搭配训练已完成</h1><p>同一批高频词与重点搭配已经完成主动回忆检测，错误记录已进入错题复习。</p></section>;
+  if (phase === 'complete') return <section className="practice-summary"><h1>{layer === 'foundation' ? '今日基础必会词训练已完成' : '今日词汇与搭配训练已完成'}</h1><p>{layer === 'foundation' ? '基础词已经完成主动回忆检测；错误只进入基础必会词错题复习。' : '同一批高频词与重点搭配已经完成主动回忆检测，错误记录已进入错题复习。'}</p></section>;
   return <p role="alert">今日词汇训练状态无法识别，请返回今日学习重试。</p>;
 }

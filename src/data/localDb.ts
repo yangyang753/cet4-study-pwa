@@ -5,7 +5,7 @@ import type { KnowledgeState, ReviewCard, StudyTaskCompletion, UserSettings } fr
 import type { ExamSessionRecord } from '../domain/exam';
 import type { StudyTask } from '../features/planner/planDay';
 
-export type VocabularySessionPhase = 'learning' | 'testing' | 'culture-review' | 'culture-translation' | 'collocations' | 'complete';
+export type VocabularySessionPhase = 'learning' | 'testing' | 'enrichment' | 'culture-review' | 'culture-translation' | 'collocations' | 'complete';
 export interface VocabularySessionProgress {
   wordIds: string[];
   learnedWordIds: string[];
@@ -15,6 +15,7 @@ export interface VocabularySessionProgress {
   cultureDraft?: string;
   culturePassed?: boolean;
   passedCollocationIds?: string[];
+  checkedEnrichmentWordIds?: string[];
   collocationIds?: string[];
   phase: VocabularySessionPhase;
 }
@@ -23,6 +24,7 @@ export interface CachedPlan {
   date: string;
   tasks: StudyTask[];
   vocabularySession?: VocabularySessionProgress;
+  foundationVocabularySession?: VocabularySessionProgress;
   updatedAt: string;
 }
 export interface SyncCursorRecord { id: string; cursor: string; updatedAt: string }

@@ -7,7 +7,7 @@ import { VocabularyRecallExercise } from './VocabularyRecallExercise';
 
 const word: VocabularyEntry = {
   id: 'v1', word: 'passage', phonetic: "/'pæsɪdʒ/", partOfSpeech: 'n.',
-  meaningZh: '文章，段落', example: 'Read the passage.', derivatives: [], confusables: [],
+  meaningZh: '文章，段落', example: 'Read the passage.', exampleZh: '请仔细阅读这篇文章。', derivatives: [], confusables: [],
 };
 
 describe('VocabularyRecallExercise', () => {
@@ -40,7 +40,7 @@ describe('VocabularyRecallExercise', () => {
 
   it('keeps the only requested answer when persistence fails so the learner can retry', async () => {
     const onSubmit = vi.fn().mockRejectedValueOnce(new Error('storage')).mockResolvedValueOnce(undefined);
-    render(<VocabularyRecallExercise exercise={buildWordReinforcement(word, () => 0.99)} onSubmit={onSubmit} />);
+    render(<VocabularyRecallExercise exercise={buildWordReinforcement(word, () => 0.75)} onSubmit={onSubmit} />);
 
     await userEvent.type(screen.getByRole('textbox', { name: '英文答案' }), 'passage');
     expect(screen.getByText('文章，段落')).toBeVisible();
@@ -55,13 +55,27 @@ describe('VocabularyRecallExercise', () => {
 
   it('marks only the single hidden spelling field as forgotten', async () => {
     const onForgotten = vi.fn().mockResolvedValue(undefined);
-    render(<VocabularyRecallExercise exercise={buildWordReinforcement(word, () => 0.99)} onSubmit={vi.fn()} onForgotten={onForgotten} />);
+    render(<VocabularyRecallExercise exercise={buildWordReinforcement(word, () => 0.75)} onSubmit={vi.fn()} onForgotten={onForgotten} />);
 
     await userEvent.click(screen.getByRole('button', { name: '想不起来' }));
     expect(onForgotten).toHaveBeenCalledWith(expect.objectContaining({
       correct: false,
       spellingCorrect: false,
       missingMeanings: [],
+    }));
+  });
+
+  it('asks for one learned-word Chinese-to-English sentence without exposing the target', async () => {
+    const onSubmit = vi.fn().mockResolvedValue(undefined);
+    render(<VocabularyRecallExercise exercise={buildWordReinforcement(word, () => 0.9)} onSubmit={onSubmit} />);
+
+    expect(screen.getByText('请仔细阅读这篇文章。')).toBeVisible();
+    expect(screen.queryByText('Read the passage.')).not.toBeInTheDocument();
+    await userEvent.type(screen.getByRole('textbox', { name: '英文答案' }), 'Read the passage.');
+    await userEvent.click(screen.getByRole('button', { name: '提交词汇复习' }));
+
+    expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({
+      grade: expect.objectContaining({ correct: true, spellingCorrect: true }),
     }));
   });
 });

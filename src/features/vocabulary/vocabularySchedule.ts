@@ -1,6 +1,7 @@
-import type { VocabularyEntry } from '../../domain/content';
+import type { VocabularyEntry, VocabularyLayer } from '../../domain/content';
 import type { KnowledgeState } from '../../domain/learning';
 import { applyKnowledgeReviewResult } from '../mastery/knowledgeMastery';
+import { vocabularyLayerOf } from './vocabularyLayer';
 
 const DAY_MS = 86_400_000;
 const STABLE_REVIEW_SPACING_DAYS = 24;
@@ -70,12 +71,13 @@ export function buildVocabularyWorkload(
   today: string,
   examDate: string,
   dailyMinutes = 60,
-  options: { cultureWordIds?: string[]; completedVocabularySessions?: number } = {},
+  options: { cultureWordIds?: string[]; completedVocabularySessions?: number; layer?: VocabularyLayer } = {},
 ): VocabularyWorkload {
+  const scopedEntries = options.layer ? entries.filter((entry) => vocabularyLayerOf(entry.id) === options.layer) : entries;
   const stateById = new Map(states.map((item) => [item.itemId, item]));
-  const unstableWordCount = entries.filter((item) => stateById.get(item.id)?.status !== 'mastered').length;
+  const unstableWordCount = scopedEntries.filter((item) => stateById.get(item.id)?.status !== 'mastered').length;
   const cultureWordIds = new Set(options.cultureWordIds ?? []);
-  const unseen = entries
+  const unseen = scopedEntries
     .filter((item) => !stateById.has(item.id))
     .sort((left, right) => Number(cultureWordIds.has(right.id)) - Number(cultureWordIds.has(left.id)) || (right.frequency ?? 0) - (left.frequency ?? 0));
   const unseenWordCount = unseen.length;
@@ -90,12 +92,12 @@ export function buildVocabularyWorkload(
   const acquisitionDays = acquisitionDayCount(learningDays, completedVocabularySessions);
   const firstPassTargetDate = studyDate(addDays(examDate, -consolidationDays));
   const dailyKnowledgeCapacity = Math.max(10, Math.min(45, Math.floor(dailyMinutes * 0.75)));
-  const hasLearnedVocabulary = entries.some((entry) => stateById.has(entry.id));
-  const reviewOnlyDay = hasLearnedVocabulary && isReviewCycleSession(completedVocabularySessions);
+  const hasLearnedVocabulary = scopedEntries.some((entry) => stateById.has(entry.id));
+  const scheduledReviewOnlyDay = hasLearnedVocabulary && isReviewCycleSession(completedVocabularySessions);
   const requiredDailyWords = unseen.length === 0 ? 0 : Math.ceil(unseen.length / acquisitionDays);
   const baseNewWordQuota = unseen.length === 0 ? 0 : Math.min(dailyKnowledgeCapacity, Math.max(10, requiredDailyWords));
   const dueAt = dateMs(`${today}T23:59:59.999Z`);
-  const allDueWords = entries
+  const allDueWords = scopedEntries
     .map((word) => ({ word, state: stateById.get(word.id) }))
     .filter((item): item is { word: VocabularyEntry; state: KnowledgeState } => Boolean(item.state))
     .filter(({ state }) => dateMs(state.nextReviewAt ?? addDays(state.updatedAt, 1)) <= dueAt)
@@ -105,14 +107,15 @@ export function buildVocabularyWorkload(
       return leftDue - rightDue || (right.word.frequency ?? 0) - (left.word.frequency ?? 0);
     })
     .map(({ word }) => word);
+  const reviewOnlyDay = scheduledReviewOnlyDay || allDueWords.length > dailyKnowledgeCapacity * 1.5;
   const unseenCultureWordCount = unseen.filter((word) => cultureWordIds.has(word.id)).length;
-  const learnedNotDue = entries
+  const learnedNotDue = scopedEntries
     .map((word) => ({ word, state: stateById.get(word.id) }))
     .filter((item): item is { word: VocabularyEntry; state: KnowledgeState } => Boolean(item.state) && !allDueWords.some((word) => word.id === item.word.id))
     .sort((left, right) => (right.state.lapseCount ?? 0) - (left.state.lapseCount ?? 0) || dateMs(left.state.updatedAt) - dateMs(right.state.updatedAt))
     .map(({ word }) => word);
   const precedingDate = studyDate(addDays(today, -1));
-  const precedingDayWords = entries.filter((word) => {
+  const precedingDayWords = scopedEntries.filter((word) => {
     const updatedAt = stateById.get(word.id)?.updatedAt;
     return Boolean(updatedAt && studyDate(updatedAt) === precedingDate);
   });
@@ -123,7 +126,7 @@ export function buildVocabularyWorkload(
   const reviewCapacity = reviewOnlyDay ? dailyKnowledgeCapacity : Math.max(0, acquisitionReviewCap);
   const dueWords = reviewPool.slice(0, Math.max(0, reviewCapacity - unseenCultureWordCount));
   const occupied = new Set(dueWords.map((word) => word.id));
-  const cultureWords = entries.filter((word) => cultureWordIds.has(word.id) && stateById.has(word.id) && !occupied.has(word.id));
+  const cultureWords = scopedEntries.filter((word) => cultureWordIds.has(word.id) && stateById.has(word.id) && !occupied.has(word.id));
   const dueWordCount = allDueWords.length;
   const reviewBacklog = Math.max(0, dueWordCount - dueWords.filter((word) => allDueWords.some((due) => due.id === word.id)).length);
   const newWordQuota = reviewOnlyDay || dueWords.length + cultureWords.length >= dailyKnowledgeCapacity ? 0 : Math.min(baseNewWordQuota, dailyKnowledgeCapacity - dueWords.length - cultureWords.length);
@@ -132,7 +135,7 @@ export function buildVocabularyWorkload(
   const studyDays = calendarDaysForAcquisitionSessions(studySessions, completedVocabularySessions);
   const projectedCompletionDate = studyDate(addDays(today, studyDays));
   const estimatedMinutes = Math.min(dailyMinutes, Math.max(10, Math.ceil(newWordQuota * 1.2 + dueWords.length * 0.5 + 5)));
-  const remainingReviewStages = entries.reduce((total, item) => {
+  const remainingReviewStages = scopedEntries.reduce((total, item) => {
     const current = stateById.get(item.id);
     if (current?.status === 'mastered') return total;
     return total + Math.max(0, 4 - (current?.reviewStage ?? 0));

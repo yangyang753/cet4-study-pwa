@@ -2,13 +2,14 @@ import type { VocabularyEntry } from '../../domain/content';
 import { gradeStrictVocabularyAnswer, type StrictVocabularyGrade } from '../vocabulary/strictVocabularyCheck';
 import { learningVocabulary } from '../../content/vocabularyLearning';
 
-export type WordReinforcementKind = 'meaning' | 'spelling' | 'cloze';
+export type WordReinforcementKind = 'meaning' | 'spelling' | 'cloze' | 'translation';
 
 export interface WordReinforcement {
   id: string;
   kind: WordReinforcementKind;
   word: VocabularyEntry;
   cloze: string;
+  promptZh: string;
 }
 
 function randomCloze(value: string, random: () => number) {
@@ -24,11 +25,23 @@ function randomCloze(value: string, random: () => number) {
 
 export function buildWordReinforcement(word: VocabularyEntry, random: () => number = Math.random): WordReinforcement {
   const roll = random();
-  const kind: WordReinforcementKind = roll < 1 / 3 ? 'meaning' : roll < 2 / 3 ? 'spelling' : 'cloze';
-  return { id: `${word.id}:reinforcement:${kind}`, kind, word, cloze: randomCloze(word.word, random) };
+  const kind: WordReinforcementKind = roll < 0.25 ? 'meaning' : roll < 0.5 ? 'spelling' : roll < 0.8 ? 'cloze' : 'translation';
+  return {
+    id: `${word.id}:reinforcement:${kind}`,
+    kind,
+    word,
+    cloze: randomCloze(word.word, random),
+    promptZh: word.exampleZh?.trim() || `请用“${word.meaningZh.split(/[；，]/)[0]}”写一个英文句子。`,
+  };
 }
 
 export function gradeWordReinforcement(exercise: WordReinforcement, answer: { english: string; chinese: string }): StrictVocabularyGrade {
+  if (exercise.kind === 'translation') {
+    const target = exercise.word.word.toLowerCase();
+    const tokens: string[] = answer.english.toLowerCase().match(/[a-z]+(?:[-'][a-z]+)*/g) ?? [];
+    const correct = tokens.includes(target);
+    return { correct, spellingCorrect: correct, missingMeanings: [], unexpectedMeanings: [], matchedMeaningCount: 0, requiredMeaningCount: 0, recognizedMeanings: [], remainingMeanings: [] };
+  }
   const kind = exercise.kind === 'meaning' ? 'meaning' : 'spelling';
   return gradeStrictVocabularyAnswer({ id: exercise.id, kind, word: exercise.word, cloze: exercise.cloze }, answer, learningVocabulary);
 }

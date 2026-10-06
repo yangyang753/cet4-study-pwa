@@ -44,10 +44,11 @@ export function VocabularyRecallExercise({ exercise, result = null, feedback = '
   }
 
   return <article className="warmup-card review-practice-panel vocabulary-recall-exercise">
-    <span className="review-kind">词汇 · {exercise.kind === 'meaning' ? '核心词义' : exercise.kind === 'spelling' ? '完整拼写' : '单处挖空'}</span>
+    <span className="review-kind">词汇 · {exercise.kind === 'meaning' ? '核心词义' : exercise.kind === 'spelling' ? '完整拼写' : exercise.kind === 'translation' ? '中译英运用' : '单处挖空'}</span>
     {exercise.kind === 'meaning' && <><h2>{exercise.word.word}</h2><p>{exercise.word.phonetic}</p><p>写出你认识的常见意思；近义表达也可以，核心义较多时答对约 3 个即可。</p></>}
     {exercise.kind === 'spelling' && <><h2>{exercise.word.meaningZh}</h2><p>根据中文写出完整英文单词。</p></>}
     {exercise.kind === 'cloze' && <><h2>{exercise.cloze}</h2><p>{exercise.word.meaningZh}</p><p>根据完整中文提示，补全英文中唯一的一处空白。</p></>}
+    {exercise.kind === 'translation' && <><h2>{exercise.promptZh}</h2><p>译成英文；本题只检查是否正确使用目标词，不提前显示目标答案。</p></>}
     {needsEnglish && <label className="review-spelling-field">英文答案<input aria-label="英文答案" autoComplete="off" placeholder="输入完整英文答案" value={english} disabled={Boolean(result) || saving} onChange={(event) => setEnglish(event.target.value)} /></label>}
     {needsChinese && <label className="review-spelling-field">中文释义答案<textarea aria-label="中文释义答案" rows={4} placeholder="写出你记得的常见意思" value={chinese} disabled={Boolean(result) || saving} onChange={(event) => setChinese(event.target.value)} /></label>}
     {saveError && <p role="alert">{saveError}</p>}

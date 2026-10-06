@@ -15,6 +15,15 @@ const words = Array.from({ length: 14 }, (_, index): VocabularyEntry => ({
 }));
 
 describe('selectWarmupWords', () => {
+  it('never mixes foundation and core words when a layer is selected', () => {
+    const mixed = [
+      { ...words[0], layer: 'core' as const },
+      { ...words[1], id: 'f0001', layer: 'foundation' as const },
+    ];
+    expect(selectWarmupWords(mixed, [], 10, 'foundation').map((word) => word.id)).toEqual(['f0001']);
+    expect(selectWarmupWords(mixed, [], 10, 'core').map((word) => word.id)).toEqual(['v1']);
+  });
+
   it('puts review words first and mastered words after unseen words', () => {
     const states: KnowledgeState[] = [
       { id: 'knowledge:v3', itemId: 'v3', status: 'review', favorite: false, updatedAt: '2026-09-25T00:00:00.000Z' },

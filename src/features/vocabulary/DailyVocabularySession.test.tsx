@@ -26,6 +26,42 @@ function repository() {
 }
 
 describe('DailyVocabularySession', () => {
+  it('uses an independent saved session and completion id for foundation words', async () => {
+    const learningRepository = repository();
+    Object.assign(learningRepository, {
+      getPlan: vi.fn().mockResolvedValue({
+        id: 'plan:2026-09-25', date: '2026-09-25', tasks: [],
+        vocabularySession: { wordIds: ['v1'], learnedWordIds: ['v1'], strictPassedWordIds: ['v1'], phase: 'complete' },
+        foundationVocabularySession: { wordIds: ['f0001'], learnedWordIds: [], phase: 'learning' },
+        updatedAt: '2026-09-25T08:00:00.000Z',
+      }),
+    });
+    const foundation = [{ ...entries[0], id: 'f0001', word: 'see', layer: 'foundation' as const }];
+
+    render(<DailyVocabularySession layer="foundation" repository={learningRepository} entries={foundation} collocationEntries={[]} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
+
+    expect(await screen.findByRole('heading', { name: '先学基础必会词，再开始检测' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'see' })).toBeVisible();
+    expect(screen.queryByText('今日词汇与搭配训练已完成')).not.toBeInTheDocument();
+  });
+
+  it('completes only the foundation task and does not complete core vocabulary or collocations', async () => {
+    const learningRepository = repository();
+    vi.mocked(learningRepository.getDashboardSnapshot).mockResolvedValueOnce({
+      knowledgeStates: [{ id: 'knowledge:f0001', itemId: 'f0001', status: 'mastered', favorite: false, reviewStage: 4, nextReviewAt: '2026-12-20T00:00:00.000Z', updatedAt: '2026-09-23T00:00:00.000Z' }],
+      settings: { id: 'current', examDate: '2026-12-12', dailyMinutes: 60, playbackRate: 1, updatedAt: '2026-09-20T00:00:00.000Z' },
+      attempts: [], dueReviews: [], completions: [],
+    });
+    const foundation = [{ ...entries[0], id: 'f0001', word: 'see', layer: 'foundation' as const }];
+    render(<DailyVocabularySession layer="foundation" repository={learningRepository} entries={foundation} collocationEntries={[]} today="2026-09-25" examDate="2026-12-12" onComplete={() => undefined} />);
+
+    await userEvent.click(await screen.findByRole('button', { name: '完成今日词汇学习' }));
+
+    expect(await screen.findByRole('heading', { name: '今日基础必会词训练已完成' })).toBeVisible();
+    expect(learningRepository.completeTask).toHaveBeenCalledTimes(1);
+    expect(learningRepository.completeTask).toHaveBeenCalledWith(expect.objectContaining({ taskId: '2026-09-25:foundation-vocabulary', kind: 'vocabulary' }));
+  });
+
   it('continues the saved combined session with its assigned重点搭配 cohort', async () => {
     const learningRepository = repository();
     Object.assign(learningRepository, {

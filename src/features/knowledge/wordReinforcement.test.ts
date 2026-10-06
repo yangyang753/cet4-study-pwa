@@ -12,7 +12,7 @@ describe('word reinforcement', () => {
     expect(buildWordReinforcement(word, () => 0).kind).toBe('meaning');
     expect(buildWordReinforcement(word, () => 0.4).kind).toBe('spelling');
     expect(buildWordReinforcement(word, () => 0.75).kind).toBe('cloze');
-    expect(buildWordReinforcement(word, () => 0.99).kind).toBe('cloze');
+    expect(buildWordReinforcement(word, () => 0.99).kind).toBe('translation');
   });
 
   it('never hides both the English word and its Chinese meaning', () => {
@@ -53,7 +53,7 @@ describe('word reinforcement', () => {
 
   it('keeps a hyphenated word to one continuous blank', () => {
     const sequence = (...values: number[]) => () => values.shift() ?? 0;
-    const exercise = buildWordReinforcement({ ...word, id: 'v2', word: 'well-being' }, sequence(0.99, 0.99, 0));
+    const exercise = buildWordReinforcement({ ...word, id: 'v2', word: 'well-being' }, sequence(0.75, 0.99, 0));
     expect(exercise.kind).toBe('cloze');
     expect(exercise.cloze.match(/_+/g)).toHaveLength(1);
   });
