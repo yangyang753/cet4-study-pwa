@@ -8,7 +8,7 @@ describe('KnowledgePage', () => {
   beforeEach(() => localStorage.clear());
   it('presents the audited high-frequency inventory', () => {
     render(<KnowledgePage />);
-    expect(screen.getByText('800')).toBeInTheDocument();
+    expect(screen.getByText('852')).toBeInTheDocument();
     expect(screen.getByText('126')).toBeInTheDocument();
     expect(screen.getByText('15')).toBeInTheDocument();
     expect(screen.getByText(/原创仿真内容，不是历年官方真题/)).toBeInTheDocument();

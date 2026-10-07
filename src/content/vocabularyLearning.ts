@@ -2,6 +2,7 @@ import rawVocabulary from '../../content/v1/vocabulary.json';
 import commonMeaningData from '../../content/v1/vocabulary-common-meanings.json';
 import vocabularyExampleData from '../../content/v1/vocabulary-examples.json';
 import type { VocabularyEntry } from '../domain/content';
+import { supplementalVocabulary } from './vocabularySupplement';
 
 const commonMeanings = commonMeaningData as Record<string, string>;
 const naturalExamples = vocabularyExampleData as Record<string, Pick<VocabularyEntry, 'example' | 'exampleZh'>>;
@@ -307,13 +308,17 @@ export function qualityVocabularyEntry(entry: VocabularyEntry): VocabularyEntry 
   return { ...cleaned, ...contextualExample(cleaned) };
 }
 
-export const learningVocabulary: VocabularyEntry[] = (rawVocabulary as VocabularyEntry[]).map(qualityVocabularyEntry);
+export const learningVocabulary: VocabularyEntry[] = [
+  ...(rawVocabulary as VocabularyEntry[]).map(qualityVocabularyEntry),
+  ...supplementalVocabulary,
+];
 
 export function auditLearningVocabulary(entries: VocabularyEntry[]): string[] {
   const errors: string[] = [];
-  if (Object.keys(commonMeanings).length !== entries.length) errors.push(`common meanings: expected ${entries.length}, received ${Object.keys(commonMeanings).length}`);
+  if (Object.keys(commonMeanings).length !== rawVocabulary.length) errors.push(`common meanings: expected ${rawVocabulary.length}, received ${Object.keys(commonMeanings).length}`);
+  const sourceWords = new Set(rawVocabulary.map((entry) => entry.word.toLowerCase()));
   for (const entry of entries) {
-    if (!commonMeanings[entry.word.toLowerCase()]?.trim()) errors.push(`${entry.id}: common meaning source is missing`);
+    if (sourceWords.has(entry.word.toLowerCase()) && !commonMeanings[entry.word.toLowerCase()]?.trim()) errors.push(`${entry.id}: common meaning source is missing`);
     if (isSyntheticMetaExample(entry.example)) errors.push(`${entry.id}: synthetic meta example is visible`);
     if (/The lesson used|\(\s*=/i.test(entry.example)) errors.push(`${entry.id}: imported example contains dictionary scaffolding`);
     if (!entry.example.trim()) errors.push(`${entry.id}: example is missing`);

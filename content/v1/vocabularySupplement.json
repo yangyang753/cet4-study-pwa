@@ -1,0 +1,500 @@
+[
+  {
+    "id": "v0801",
+    "word": "evidence",
+    "phonetic": "/ˈevɪdəns/",
+    "partOfSpeech": "n.",
+    "meaningZh": "证据；迹象",
+    "example": "The report provides clear evidence for its conclusion.",
+    "exampleZh": "这份报告为其结论提供了明确证据。",
+    "derivatives": ["evident"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0802",
+    "word": "conclusion",
+    "phonetic": "/kənˈkluːʒən/",
+    "partOfSpeech": "n.",
+    "meaningZh": "结论；结束",
+    "example": "The researchers reached a different conclusion.",
+    "exampleZh": "研究人员得出了不同的结论。",
+    "derivatives": ["conclude"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0803",
+    "word": "survey",
+    "phonetic": "/ˈsɜːveɪ; səˈveɪ/",
+    "partOfSpeech": "n./v.",
+    "meaningZh": "调查；调查研究",
+    "example": "A recent survey found that many students read online.",
+    "exampleZh": "最近的一项调查发现，许多学生在网上阅读。",
+    "derivatives": [],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0804",
+    "word": "participant",
+    "phonetic": "/pɑːˈtɪsɪpənt/",
+    "partOfSpeech": "n.",
+    "meaningZh": "参与者；参加者",
+    "example": "Each participant completed a short interview.",
+    "exampleZh": "每位参与者都完成了一次简短访谈。",
+    "derivatives": ["participate", "participation"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0805",
+    "word": "volunteer",
+    "phonetic": "/ˌvɒlənˈtɪə(r)/",
+    "partOfSpeech": "n./v.",
+    "meaningZh": "志愿者；自愿做",
+    "example": "Many students volunteer in the local community.",
+    "exampleZh": "许多学生在当地社区参加志愿服务。",
+    "derivatives": ["voluntary"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0806",
+    "word": "instruction",
+    "phonetic": "/ɪnˈstrʌkʃən/",
+    "partOfSpeech": "n.",
+    "meaningZh": "指示，说明；教学",
+    "example": "Read each instruction carefully before answering.",
+    "exampleZh": "答题前请仔细阅读每一条说明。",
+    "derivatives": ["instruct", "instructor"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0807",
+    "word": "discussion",
+    "phonetic": "/dɪˈskʌʃən/",
+    "partOfSpeech": "n.",
+    "meaningZh": "讨论；谈论",
+    "example": "The discussion focused on campus safety.",
+    "exampleZh": "讨论集中在校园安全问题上。",
+    "derivatives": ["discuss"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0808",
+    "word": "equipment",
+    "phonetic": "/ɪˈkwɪpmənt/",
+    "partOfSpeech": "n.",
+    "meaningZh": "设备；器材",
+    "example": "The school bought new equipment for the laboratory.",
+    "exampleZh": "学校为实验室购买了新设备。",
+    "derivatives": ["equip"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0809",
+    "word": "feedback",
+    "phonetic": "/ˈfiːdbæk/",
+    "partOfSpeech": "n.",
+    "meaningZh": "反馈；意见",
+    "example": "Teacher feedback helps students improve their writing.",
+    "exampleZh": "老师的反馈帮助学生提高写作水平。",
+    "derivatives": [],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0810",
+    "word": "digital",
+    "phonetic": "/ˈdɪdʒɪtəl/",
+    "partOfSpeech": "adj.",
+    "meaningZh": "数字的；数码的",
+    "example": "Digital tools can make information easier to find.",
+    "exampleZh": "数字工具可以让信息更容易查找。",
+    "derivatives": ["digitally"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0811",
+    "word": "attendance",
+    "phonetic": "/əˈtendəns/",
+    "partOfSpeech": "n.",
+    "meaningZh": "出席；出勤率",
+    "example": "Regular attendance is required for this course.",
+    "exampleZh": "这门课程要求正常出勤。",
+    "derivatives": ["attend"],
+    "confusables": ["attention"],
+    "layer": "core"
+  },
+  {
+    "id": "v0812",
+    "word": "alternative",
+    "phonetic": "/ɔːlˈtɜːnətɪv/",
+    "partOfSpeech": "n./adj.",
+    "meaningZh": "替代方案；可供选择的",
+    "example": "Online study offers an alternative to evening classes.",
+    "exampleZh": "在线学习为夜校课程提供了另一种选择。",
+    "derivatives": ["alternatively"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0813",
+    "word": "register",
+    "phonetic": "/ˈredʒɪstə(r)/",
+    "partOfSpeech": "v./n.",
+    "meaningZh": "登记，注册；登记表",
+    "example": "Students must register for the activity online.",
+    "exampleZh": "学生必须在网上报名参加这项活动。",
+    "derivatives": ["registration"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0814",
+    "word": "festival",
+    "phonetic": "/ˈfestɪvəl/",
+    "partOfSpeech": "n.",
+    "meaningZh": "节日；庆典",
+    "example": "The Spring Festival is an important family celebration.",
+    "exampleZh": "春节是一个重要的家庭庆典。",
+    "derivatives": [],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0815",
+    "word": "heritage",
+    "phonetic": "/ˈherɪtɪdʒ/",
+    "partOfSpeech": "n.",
+    "meaningZh": "遗产；传统",
+    "example": "Museums help protect the nation's cultural heritage.",
+    "exampleZh": "博物馆帮助保护国家的文化遗产。",
+    "derivatives": [],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0816",
+    "word": "statement",
+    "phonetic": "/ˈsteɪtmənt/",
+    "partOfSpeech": "n.",
+    "meaningZh": "陈述；声明",
+    "example": "The final statement clearly explains the decision.",
+    "exampleZh": "最后的声明清楚地解释了这一决定。",
+    "derivatives": ["state"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0817",
+    "word": "short",
+    "phonetic": "/ʃɔːt/",
+    "partOfSpeech": "adj./adv.",
+    "meaningZh": "短的；不足的",
+    "example": "The teacher gave a short explanation before the test.",
+    "exampleZh": "考试前老师作了简短说明。",
+    "derivatives": ["shorten"],
+    "confusables": ["brief"],
+    "layer": "core"
+  },
+  {
+    "id": "v0818",
+    "word": "announce",
+    "phonetic": "/əˈnaʊns/",
+    "partOfSpeech": "v.",
+    "meaningZh": "宣布；通知",
+    "example": "The school announced the result on its website.",
+    "exampleZh": "学校在网站上公布了结果。",
+    "derivatives": ["announcement"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0819",
+    "word": "unrelated",
+    "phonetic": "/ˌʌnrɪˈleɪtɪd/",
+    "partOfSpeech": "adj.",
+    "meaningZh": "无关的；不相关的",
+    "example": "Please remove information unrelated to the main topic.",
+    "exampleZh": "请删除与主题无关的信息。",
+    "derivatives": ["relate", "related"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0820",
+    "word": "trial",
+    "phonetic": "/ˈtraɪəl/",
+    "partOfSpeech": "n.",
+    "meaningZh": "试验；审判",
+    "example": "The city began a one-month trial of the new bus route.",
+    "exampleZh": "这座城市开始对新公交线路进行为期一个月的试运行。",
+    "derivatives": ["try"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0821",
+    "word": "record",
+    "phonetic": "/ˈrekɔːd; rɪˈkɔːd/",
+    "partOfSpeech": "n./v.",
+    "meaningZh": "记录；录制；记载",
+    "example": "Students record their progress after each practice session.",
+    "exampleZh": "学生每次练习后记录自己的进步。",
+    "derivatives": ["recording"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0822",
+    "word": "comparison",
+    "phonetic": "/kəmˈpærɪsən/",
+    "partOfSpeech": "n.",
+    "meaningZh": "比较；对比",
+    "example": "The comparison shows a clear difference between the two plans.",
+    "exampleZh": "这项比较显示两个方案之间存在明显差异。",
+    "derivatives": ["compare"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0823",
+    "word": "action",
+    "phonetic": "/ˈækʃən/",
+    "partOfSpeech": "n.",
+    "meaningZh": "行动；行为；作用",
+    "example": "Immediate action can prevent the problem from becoming worse.",
+    "exampleZh": "立即采取行动可以防止问题恶化。",
+    "derivatives": ["act", "active"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0824",
+    "word": "difficulty",
+    "phonetic": "/ˈdɪfɪkəlti/",
+    "partOfSpeech": "n.",
+    "meaningZh": "困难；难题",
+    "example": "Many learners have difficulty understanding fast speech.",
+    "exampleZh": "许多学习者难以听懂快速讲话。",
+    "derivatives": ["difficult"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0825",
+    "word": "inference",
+    "phonetic": "/ˈɪnfərəns/",
+    "partOfSpeech": "n.",
+    "meaningZh": "推断；推论",
+    "example": "Readers can make this inference from the final paragraph.",
+    "exampleZh": "读者可以从最后一段作出这一推断。",
+    "derivatives": ["infer"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0826",
+    "word": "together",
+    "phonetic": "/təˈɡeðə(r)/",
+    "partOfSpeech": "adv.",
+    "meaningZh": "一起；共同",
+    "example": "The students worked together to complete the project.",
+    "exampleZh": "学生们共同完成了这个项目。",
+    "derivatives": [],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0827",
+    "word": "arrangement",
+    "phonetic": "/əˈreɪndʒmənt/",
+    "partOfSpeech": "n.",
+    "meaningZh": "安排；布置",
+    "example": "The new arrangement gives students more time to prepare.",
+    "exampleZh": "新的安排给学生更多准备时间。",
+    "derivatives": ["arrange"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0828",
+    "word": "advertisement",
+    "phonetic": "/ədˈvɜːtɪsmənt/",
+    "partOfSpeech": "n.",
+    "meaningZh": "广告；启事",
+    "example": "The advertisement provides details about the position.",
+    "exampleZh": "这则招聘启事提供了该职位的详细信息。",
+    "derivatives": ["advertise"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0829",
+    "word": "commercial",
+    "phonetic": "/kəˈmɜːʃəl/",
+    "partOfSpeech": "adj./n.",
+    "meaningZh": "商业的；电视广告",
+    "example": "The invention soon achieved commercial success.",
+    "exampleZh": "这项发明很快获得了商业成功。",
+    "derivatives": ["commerce"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0830",
+    "word": "invent",
+    "phonetic": "/ɪnˈvent/",
+    "partOfSpeech": "v.",
+    "meaningZh": "发明；创造",
+    "example": "Young engineers hope to invent a cheaper device.",
+    "exampleZh": "年轻工程师希望发明一种更便宜的设备。",
+    "derivatives": ["invention", "inventor"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0831",
+    "word": "online",
+    "phonetic": "/ˌɒnˈlaɪn/",
+    "partOfSpeech": "adj./adv.",
+    "meaningZh": "在线的；在网上",
+    "example": "More students now submit their assignments online.",
+    "exampleZh": "现在更多学生在网上提交作业。",
+    "derivatives": [],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0832",
+    "word": "travel",
+    "phonetic": "/ˈtrævəl/",
+    "partOfSpeech": "v./n.",
+    "meaningZh": "旅行；行进；传播",
+    "example": "Many students travel by train during the holiday.",
+    "exampleZh": "许多学生假期乘火车旅行。",
+    "derivatives": ["traveler"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0833",
+    "word": "supply",
+    "phonetic": "/səˈplaɪ/",
+    "partOfSpeech": "n./v.",
+    "meaningZh": "供应；供给；补给品",
+    "example": "The center can supply free learning materials to students.",
+    "exampleZh": "该中心向学生免费提供学习资料。",
+    "derivatives": ["supplier"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0834",
+    "word": "revise",
+    "phonetic": "/rɪˈvaɪz/",
+    "partOfSpeech": "v.",
+    "meaningZh": "修改；复习",
+    "example": "Students should revise their drafts before submission.",
+    "exampleZh": "学生提交前应修改自己的草稿。",
+    "derivatives": ["revision"],
+    "confusables": [],
+    "layer": "core"
+  },
+  {
+    "id": "v0835", "word": "preparation", "phonetic": "/ˌprepəˈreɪʃən/", "partOfSpeech": "n.",
+    "meaningZh": "准备；准备工作", "example": "Careful preparation can reduce exam stress.", "exampleZh": "认真准备可以减轻考试压力。",
+    "derivatives": ["prepare"], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0836", "word": "noun", "phonetic": "/naʊn/", "partOfSpeech": "n.",
+    "meaningZh": "名词", "example": "The word can be used as both a noun and a verb.", "exampleZh": "这个词既可作名词，也可作动词。",
+    "derivatives": [], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0837", "word": "two", "phonetic": "/tuː/", "partOfSpeech": "num.",
+    "meaningZh": "二；两个", "example": "The course includes two practice tests.", "exampleZh": "这门课程包括两次练习测试。",
+    "derivatives": ["twice", "second"], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0838", "word": "afternoon", "phonetic": "/ˌɑːftəˈnuːn/", "partOfSpeech": "n.",
+    "meaningZh": "下午", "example": "The lecture begins on Friday afternoon.", "exampleZh": "讲座于星期五下午开始。",
+    "derivatives": [], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0839", "word": "behavior", "phonetic": "/bɪˈheɪvjə/", "partOfSpeech": "n.",
+    "meaningZh": "行为；举止", "example": "Online behavior can affect a person's reputation.", "exampleZh": "网络行为会影响一个人的声誉。",
+    "derivatives": ["behave"], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0840", "word": "consistent", "phonetic": "/kənˈsɪstənt/", "partOfSpeech": "adj.",
+    "meaningZh": "一致的；持续稳定的", "example": "Consistent practice leads to steady progress.", "exampleZh": "持续练习会带来稳定进步。",
+    "derivatives": ["consistently", "consistency"], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0841", "word": "original", "phonetic": "/əˈrɪdʒənəl/", "partOfSpeech": "adj./n.",
+    "meaningZh": "最初的；原创的；原件", "example": "The original plan was changed because of the weather.", "exampleZh": "原计划因天气原因而改变。",
+    "derivatives": ["originally"], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0842", "word": "notice", "phonetic": "/ˈnəʊtɪs/", "partOfSpeech": "n./v.",
+    "meaningZh": "通知；注意到", "example": "Please read the notice before registering for the activity.", "exampleZh": "报名参加活动前请阅读通知。",
+    "derivatives": ["noticeable"], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0843", "word": "sentence", "phonetic": "/ˈsentəns/", "partOfSpeech": "n.",
+    "meaningZh": "句子；判决", "example": "The first sentence states the main idea of the paragraph.", "exampleZh": "第一句话说明了该段的主旨。",
+    "derivatives": [], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0844", "word": "show", "phonetic": "/ʃəʊ/", "partOfSpeech": "v./n.",
+    "meaningZh": "展示；表明；节目", "example": "The survey results show a clear change in attitudes.", "exampleZh": "调查结果表明人们的态度发生了明显变化。",
+    "derivatives": ["showed", "shown"], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0845", "word": "entire", "phonetic": "/ɪnˈtaɪə/", "partOfSpeech": "adj.",
+    "meaningZh": "整个的；全部的", "example": "The entire class took part in the discussion.", "exampleZh": "全班都参加了讨论。",
+    "derivatives": ["entirely"], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0846", "word": "term", "phonetic": "/tɜːm/", "partOfSpeech": "n./v.",
+    "meaningZh": "学期；术语；期限；称为", "example": "Students must complete the project by the end of the term.", "exampleZh": "学生必须在学期结束前完成项目。",
+    "derivatives": [], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0847", "word": "single", "phonetic": "/ˈsɪŋɡəl/", "partOfSpeech": "adj./n.",
+    "meaningZh": "单个的；单一的；单人房", "example": "A single mistake may change the meaning of the sentence.", "exampleZh": "一个错误就可能改变句子的意思。",
+    "derivatives": [], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0848", "word": "request", "phonetic": "/rɪˈkwest/", "partOfSpeech": "n./v.",
+    "meaningZh": "请求；要求", "example": "The teacher requested a short written response.", "exampleZh": "老师要求提交一份简短的书面回答。",
+    "derivatives": ["requested"], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0849", "word": "steady", "phonetic": "/ˈstedi/", "partOfSpeech": "adj./v.",
+    "meaningZh": "稳定的；持续的；使稳定", "example": "Steady effort is more useful than last-minute study.", "exampleZh": "持续努力比临时突击更有效。",
+    "derivatives": ["steadily", "steadier", "steadiest"], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0850", "word": "adjust", "phonetic": "/əˈdʒʌst/", "partOfSpeech": "v.",
+    "meaningZh": "调整；适应", "example": "The study plan will adjust to your recent performance.", "exampleZh": "学习计划会根据你近期的表现进行调整。",
+    "derivatives": ["adjustment"], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0851", "word": "noon", "phonetic": "/nuːn/", "partOfSpeech": "n.",
+    "meaningZh": "正午；中午", "example": "The library closes briefly at noon.", "exampleZh": "图书馆在中午短暂关闭。",
+    "derivatives": [], "confusables": [], "layer": "core"
+  },
+  {
+    "id": "v0852", "word": "obstacle", "phonetic": "/ˈɒbstəkəl/", "partOfSpeech": "n.",
+    "meaningZh": "障碍；阻碍", "example": "A lack of confidence can be an obstacle to learning.", "exampleZh": "缺乏信心可能成为学习的障碍。",
+    "derivatives": [], "confusables": [], "layer": "core"
+  }
+]

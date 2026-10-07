@@ -1,9 +1,29 @@
 import { describe, expect, it } from 'vitest';
 import rawVocabulary from '../../content/v1/vocabulary.json';
 import commonMeaningData from '../../content/v1/vocabulary-common-meanings.json';
+import { supplementalVocabulary } from './vocabularySupplement';
 import { auditLearningVocabulary, learningVocabulary, qualityVocabularyEntry } from './vocabularyLearning';
 
 describe('learner-facing vocabulary', () => {
+  it('adds the audited high-value words used throughout the practice corpus', () => {
+    const expected = [
+      'evidence', 'conclusion', 'survey', 'participant', 'volunteer', 'instruction',
+      'discussion', 'equipment', 'feedback', 'digital', 'attendance', 'alternative',
+      'register', 'festival', 'heritage',
+      'statement', 'short', 'announce', 'unrelated', 'trial', 'record', 'comparison',
+      'action', 'difficulty', 'inference', 'together', 'arrangement', 'advertisement',
+      'commercial', 'invent', 'online', 'travel', 'supply', 'revise',
+      'preparation', 'noun', 'two', 'afternoon', 'behavior', 'consistent', 'original',
+      'notice', 'sentence', 'show', 'entire', 'term', 'single', 'request', 'steady',
+      'adjust', 'noon', 'obstacle',
+    ];
+    expect(supplementalVocabulary.map((entry) => entry.word)).toEqual(expected);
+    expect(learningVocabulary).toHaveLength(852);
+    expect(expected.filter((word) => !learningVocabulary.some((entry) => entry.word === word))).toEqual([]);
+    expect(new Set(learningVocabulary.map((entry) => entry.id)).size).toBe(852);
+    expect(new Set(learningVocabulary.map((entry) => entry.word.toLowerCase())).size).toBe(852);
+    expect(supplementalVocabulary.every((entry) => entry.frequency === undefined)).toBe(true);
+  });
   it('repairs confirmed high-risk entries without mutating the licensed source', () => {
     const rawPassage = rawVocabulary.find((entry) => entry.word === 'passage');
     const passage = learningVocabulary.find((entry) => entry.word === 'passage');

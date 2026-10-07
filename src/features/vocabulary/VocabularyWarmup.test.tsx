@@ -27,6 +27,13 @@ describe('VocabularyWarmup', () => {
     expect(screen.getByText('词义1')).toBeVisible();
   });
 
+  it('shows common irregular forms with the revealed answer', async () => {
+    const irregular = [{ ...entries[0], word: 'be', derivatives: ['am', 'is', 'are', 'was', 'were', 'been', 'being'] }];
+    render(<VocabularyWarmup repository={repository()} entries={irregular} onComplete={() => undefined} />);
+    await userEvent.click(await screen.findByRole('button', { name: '显示释义' }));
+    expect(screen.getByText('常用词形：am、is、are、was、were、been、being')).toBeVisible();
+  });
+
   it('offers one neutral next-word action after revealing the meaning', async () => {
     const learningRepository = repository({
       getDashboardSnapshot: vi.fn().mockResolvedValue({ knowledgeStates: [

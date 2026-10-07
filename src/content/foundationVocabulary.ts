@@ -12,7 +12,7 @@ export function auditFoundationVocabulary(entries: VocabularyEntry[], core: Voca
   const ids = new Set<string>();
   const words = new Set<string>();
   const coreWords = new Set(core.map((entry) => entry.word.toLowerCase()));
-  if (entries.length !== 180) errors.push(`foundation vocabulary: expected 180, received ${entries.length}`);
+  if (entries.length !== 203) errors.push(`foundation vocabulary: expected 203, received ${entries.length}`);
   for (const entry of entries) {
     const word = entry.word.toLowerCase();
     if (!/^f\d{4}$/.test(entry.id)) errors.push(`${entry.id}: invalid foundation id`);

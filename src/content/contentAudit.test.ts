@@ -9,7 +9,7 @@ import { auditVocabularyEnrichment, vocabularyEnrichment } from './vocabularyEnr
 
 describe('auditContentInventory', () => {
   it('ships audited foundation and enrichment content beside the core inventory', () => {
-    expect(foundationVocabulary).toHaveLength(180);
+    expect(foundationVocabulary).toHaveLength(203);
     expect(auditVocabularyEnrichment(vocabularyEnrichment, [...foundationVocabulary, ...learningVocabulary])).toEqual([]);
   });
   it('reports every category below the approved minimum', () => {

@@ -51,7 +51,7 @@ describe('TodayPage', () => {
     render(<TodayPage today="2026-09-22" repository={repository()} />);
     expect(await screen.findByRole('link', { name: '开始基础必会词' })).toHaveAttribute('href', expect.stringContaining('practice/foundation-vocabulary'));
     expect(await screen.findByRole('link', { name: '学习高频词与搭配 →' })).toHaveAttribute('href', expect.stringContaining('practice/vocabulary'));
-    expect(screen.getByText(/基础必会词与 800 个高频词分层学习/)).toBeVisible();
+    expect(screen.getByText(/基础必会词与 852 个高频词分层学习/)).toBeVisible();
     expect(screen.getByRole('heading', { name: '中国文化中译英' }).closest('article')).toHaveTextContent('完成高频词后解锁');
   });
 
@@ -63,9 +63,9 @@ describe('TodayPage', () => {
       ],
     })} />);
     const foundation = await screen.findByRole('heading', { name: '基础必会词' });
-    expect(foundation.closest('article')).toHaveTextContent(/179 个未首轮学习/);
+    expect(foundation.closest('article')).toHaveTextContent(/202 个未首轮学习/);
     const core = screen.getByRole('heading', { name: '高频词汇与重点搭配' });
-    expect(core.closest('article')).toHaveTextContent(/799 个未首轮学习/);
+    expect(core.closest('article')).toHaveTextContent(/851 个未首轮学习/);
   });
 
   it('does not use a foundation completion to flip the core vocabulary review cycle', async () => {
@@ -242,8 +242,8 @@ describe('TodayPage', () => {
     })} />);
     expect(await screen.findByText('高频旧词巩固 1 个')).toBeVisible();
     expect(screen.getByText(/今日高频新词 \d+ 个/)).toBeVisible();
-    expect(screen.getByText('高频词未首轮学习 799 个')).toBeVisible();
-    expect(screen.getByText('高频词尚未稳定掌握 799 个')).toBeVisible();
+    expect(screen.getByText('高频词未首轮学习 851 个')).toBeVisible();
+    expect(screen.getByText('高频词尚未稳定掌握 851 个')).toBeVisible();
     expect(screen.getByText(/学习一天、第二天优先复习/)).toBeVisible();
     const vocabularyMinutes = Number(screen.getByRole('heading', { name: '高频词汇与重点搭配' }).closest('article')?.querySelector(':scope > b')?.textContent?.match(/\d+/)?.[0]);
     const foundationMinutes = Number(screen.getByRole('heading', { name: '基础必会词' }).closest('article')?.querySelector(':scope > b')?.textContent?.match(/\d+/)?.[0]);
@@ -252,7 +252,7 @@ describe('TodayPage', () => {
 
   it('warns when the capped daily pace cannot finish before the exam', async () => {
     render(<TodayPage today="2026-12-10" repository={repository()} />);
-    expect(await screen.findByText(/当前进度偏慢/)).toHaveTextContent('每天至少 800 个');
+    expect(await screen.findByText(/当前进度偏慢/)).toHaveTextContent('每天至少 852 个');
   });
 
   it('celebrates a completed high-frequency vocabulary list without assigning new words', async () => {
@@ -260,7 +260,7 @@ describe('TodayPage', () => {
       knowledgeStates: learningVocabulary.map((word) => ({ id: `knowledge:${word.id}`, itemId: word.id, status: 'mastered', favorite: false, nextReviewAt: '2026-12-30T00:00:00.000Z', updatedAt: '2026-09-25T00:00:00.000Z' })),
     })} />);
     expect(await screen.findByText('今日高频新词 0 个')).toBeVisible();
-    expect(screen.getByText('800 个高频词已完成首轮接触')).toBeVisible();
+    expect(screen.getByText('852 个高频词已完成首轮接触')).toBeVisible();
     expect(screen.getByText('高频词尚未稳定掌握 0 个')).toBeVisible();
   });
 });
